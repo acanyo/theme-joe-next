@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Aside from "../components/aside/Aside.astro";
+import "../styles/pages/photos.less";
+---
+
+<BaseLayout
+  title="(theme.config.photos.photos_title ?: '我的图库') + ' - ' + site.title"
+  pageClass="page-photos"
+>
+  <div class="joe_main">
+    <div class="joe_photos__type">
+      <div class="joe_photos__type-title">
+        <i class="jiewen joe-icon-tupian" aria-hidden="true"></i>&nbsp;
+        <span th:text="${theme.config.photos.photos_title ?: '我的图库'}"></span>
+      </div>
+      <nav class="joe_photos__filter" aria-label="图库分组">
+        <ul>
+          <li class="active">
+            <button type="button" data-joe-photo-filter="*">
+              全部
+            </button>
+          </li>
+          <li th:each="group : ${groups}">
+            <button
+              type="button"
+              th:attr="data-joe-photo-filter=${group.metadata.name}"
+              th:text="${group.spec.displayName}"
+            ></button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="wrapper">
+      <div
+        class="joe_photos__grid"
+        id="image-grid"
+        th:attr="data-next=${photos.hasNext() ? photos.nextUrl : ''}"
+      >
+        <figure
+          class="grid-item"
+          th:each="photo : ${photos.items}"
+          th:attr="data-group=${photo.spec.groupName}"
+          th:classappend="${theme.config.photos.enable_photos_effect ? 'joe-reveal' : ''}"
+        >
+          <img
+            loading="lazy"
+            th:src="${thumbnail.gen(photo.spec.url, 'm')}"
+            th:attr="data-full=${photo.spec.url}"
+            th:alt="${photo.spec.displayName}"
+            data-fallback="image"
+          />
+          <figcaption
+            th:if="${not #strings.isEmpty(photo.spec.displayName)}"
+            th:text="${photo.spec.displayName}"
+          ></figcaption>
+        </figure>
+      </div>
+      <div class="joe_loading" th:if="${photos.hasNext()}">
+        <img th:src="@{/assets/images/loading-ball.svg}" alt="加载中" />
+      </div>
+    </div>
+  </div>
+  <th-block th:if="${theme.config.aside.enable_photos_aside}">
+    <Aside />
+  </th-block>
+</BaseLayout>
+
+<script>
+  import "../scripts/pages/photos";
+</script>

@@ -1,0 +1,76 @@
+---
+/** 首页轮播。数据来源：指定文章、热门文章、自定义项（设置 carousel.banner_data_group） */
+import BannerSlide from "./BannerSlide.astro";
+
+const RANDOM_COVER = (key: string) =>
+  `(#strings.isEmpty(theme.config.home.post_thumbnail) ? (theme.config.basic.enable_random_img_api and not #strings.isEmpty(theme.config.basic.random_img_api_url) ? theme.config.basic.random_img_api_url + '?pageid=' + ${key} : '') : theme.config.home.post_thumbnail)`;
+const POST_VARS =
+  "cover = ${slidePost.spec.cover ?: " +
+  RANDOM_COVER("slidePost.metadata.name") +
+  "}, title = ${slidePost.spec.title}, excerpt = ${slidePost.status.excerpt}, href = ${slidePost.status.permalink}";
+const HOT_QUERY =
+  "postFinder.list({page: 1, size: #conversions.convert(slide.hot_post_num ?: 3, 'java.lang.Integer'), sort: {'stats.visit,desc'}}).items";
+---
+
+<div class="joe_index__banner">
+  <div class="swiper" data-joe-banner>
+    <div class="swiper-wrapper">
+      <th-block th:each="slide : ${theme.config.carousel.banner_data_group}">
+        <th-block th:switch="${slide.banner_section_type}">
+          <th-block
+            th:case="'post'"
+            th:with="slidePost = ${postFinder.getByName(slide.data_by_post)}"
+          >
+            <div
+              class="swiper-slide"
+              th:if="${slidePost != null}"
+              th:with={POST_VARS}
+            >
+              <BannerSlide />
+            </div>
+          </th-block>
+          <th-block th:case="'hot_post'">
+            <div
+              class="swiper-slide"
+              th:each={`slidePost : \${${HOT_QUERY}}`}
+              th:with={POST_VARS}
+            >
+              <BannerSlide />
+            </div>
+          </th-block>
+          <th-block
+            th:case="'custom'"
+            th:with="custom = ${slide.data_by_custom}"
+          >
+            <div
+              class="swiper-slide"
+              th:with={
+                "cover = ${custom?.banner_img ?: " +
+                RANDOM_COVER("custom?.banner_title") +
+                "}, title = ${custom?.banner_title}, excerpt = ${custom?.banner_subtitle}, href = ${custom?.banner_url}"
+              }
+            >
+              <BannerSlide />
+            </div>
+          </th-block>
+        </th-block>
+      </th-block>
+    </div>
+    <div
+      class="swiper-pagination"
+      th:if="${theme.config.carousel.enable_banner_pagination}"
+    ></div>
+    <th-block th:if="${theme.config.carousel.enable_banner_handle and theme.config.carousel.enable_banner_switch_button}">
+      <button
+        type="button"
+        class="swiper-button-next"
+        aria-label="下一张"
+      ></button>
+      <button
+        type="button"
+        class="swiper-button-prev"
+        aria-label="上一张"
+      ></button>
+    </th-block>
+  </div>
+</div>

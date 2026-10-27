@@ -1,0 +1,165 @@
+---
+/** 页脚：版权、备案、Powered by、云服务商、运行时间、RSS/站点地图、访问统计 */
+const CLOUD_PROVIDERS = [
+  { key: "aliyun", url: "https://www.aliyun.com" },
+  { key: "tencent", url: "https://cloud.tencent.com" },
+  { key: "baidu", url: "https://cloud.baidu.com" },
+  { key: "upyun", url: "https://www.upyun.com" },
+  { key: "qiniu", url: "https://www.qiniu.com" },
+  { key: "huawei", url: "https://www.huaweicloud.com" },
+  { key: "jinshan", url: "https://www.ksyun.com" },
+];
+---
+
+<footer
+  class="joe_footer"
+  th:if="${theme.config.footer.enable_footer}"
+  th:classappend="|${theme.config.footer.footer_position == 'fixed' ? 'fixed' : ''} ${theme.config.footer.enable_full_footer ? 'full' : ''}|"
+>
+  <div
+    class="joe_container"
+    th:classappend="${!theme.config.footer.enable_rss and !theme.config.footer.enable_sitemap} ? 'central' : ''"
+  >
+    <div class="item">
+      <p>
+        ©
+        <span th:text="${#strings.isEmpty(theme.config.footer.custom_birthday) ? '' : #strings.substring(theme.config.footer.custom_birthday, 0, 4) + ' - '}"></span>
+        <span th:text="${#dates.year(#dates.createNow())}"></span>
+        <a th:href="${site.url}" th:text="${site.title}"></a>
+        <th-block th:if="${theme.config.footer.enable_icp and not #strings.isEmpty(theme.config.basic.icp_police?.icp)}">
+          -
+          <a
+            class="icp"
+            th:href="${theme.config.basic.icp_police.icp_link ?: 'https://beian.miit.gov.cn/'}"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            th:text="${theme.config.basic.icp_police.icp}"
+          ></a>
+        </th-block>
+      </p>
+      <p class="site_powered" th:if="${theme.config.footer.enable_powerby}">
+        Powered by
+        <a
+          class="a-powered"
+          href="https://www.halo.run/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Halo
+        </a>
+        &nbsp;|&nbsp;Theme
+        <a
+          class="a-theme"
+          th:href="${theme.spec.repo}"
+          th:title="|${theme.spec.displayName} v${theme.spec.version}|"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Joe Next
+        </a>
+      </p>
+      <p
+        class="site_driven"
+        th:if="${theme.config.footer.driven_by != null and theme.config.footer.driven_by != 'none'}"
+      >
+        本站点由
+        <th-block th:switch="${theme.config.footer.driven_by}">
+          {CLOUD_PROVIDERS.map((p) => (
+            <a
+              th:case={`'${p.key}'`}
+              href={p.url}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+            >
+              <img
+                class={p.key}
+                th:src={`@{/assets/images/cloud/${p.key}.svg}`}
+                alt="云服务商"
+                data-fallback="image"
+              />
+            </a>
+          ))}
+          <a
+            th:case="'custom'"
+            th:href="${theme.config.footer.driven_by_custom_url}"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+          >
+            <img
+              class="custom"
+              th:src="${theme.config.footer.driven_by_custom_img}"
+              alt="云服务商"
+              data-fallback="image"
+            />
+          </a>
+        </th-block>
+        提供云服务
+      </p>
+      <div class="site_life" th:if="${theme.config.footer.enable_birthday}">
+        <i class="joe-font joe-icon-jiasu" aria-hidden="true"></i>已运行&nbsp;
+        <strong class="joe_run__day">00</strong> 天
+        <strong class="joe_run__hour">00</strong> 时
+        <strong class="joe_run__minute">00</strong> 分
+        <strong class="joe_run__second">00</strong> 秒
+      </div>
+      <p
+        class="site_police"
+        th:if="${theme.config.footer.enable_police and not #strings.isEmpty(theme.config.basic.icp_police?.police)}"
+      >
+        <a
+          th:href="${theme.config.basic.icp_police.gongan_link ?: 'https://beian.mps.gov.cn/#/query/webSearch'}"
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          th:text="${theme.config.basic.icp_police.police}"
+        ></a>
+      </p>
+    </div>
+    <div class="side-col">
+      <div
+        class="item"
+        th:if="${theme.config.footer.enable_rss or theme.config.footer.enable_sitemap}"
+      >
+        <a
+          th:if="${theme.config.footer.enable_rss}"
+          class="rss"
+          th:href="@{/rss.xml}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="joe-font joe-icon-rss-fill" aria-hidden="true"></i>&nbsp;RSS
+        </a>
+        <a
+          th:if="${theme.config.footer.enable_sitemap}"
+          th:href="@{/sitemap.xml}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          站点地图
+        </a>
+      </div>
+      <div
+        class="item busuanzi-statistic"
+        th:if="${theme.config.footer.enable_busuanzi}"
+      >
+        <span class="site-pv">
+          <i class="joe-font joe-icon-zhexiantu" aria-hidden="true"></i>访问量
+          <em id="busuanzi_value_site_pv">0</em>
+        </span>
+        <span class="site-uv">
+          <i class="joe-font joe-icon-monitor" aria-hidden="true"></i>访客量
+          <em id="busuanzi_value_site_uv">0</em>
+        </span>
+        <span class="site-page-pv">
+          <i class="joe-font joe-icon-dianji" aria-hidden="true"></i>本页访客
+          <em id="busuanzi_value_page_pv">0</em>
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
+<script
+  is:inline
+  th:if="${theme.config.footer.enable_busuanzi}"
+  async
+  src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"
+></script>

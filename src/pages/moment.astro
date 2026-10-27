@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Aside from "../components/aside/Aside.astro";
+import MomentHeader from "../components/moment/MomentHeader.astro";
+import MomentItem from "../components/moment/MomentItem.astro";
+import "../styles/pages/journals.less";
+---
+
+<BaseLayout
+  title="(theme.config.journals.journals_title ?: '我的动态') + ' - ' + site.title"
+  pageClass="page-journals"
+>
+  <div class="joe_main">
+    <div class="joe_detail">
+      <MomentHeader author="owner" />
+      <ul class="joe_journals__list">
+        <MomentItem />
+      </ul>
+    </div>
+  </div>
+  <th-block th:if="${theme.config.aside.enable_journals_aside}">
+    <Aside />
+  </th-block>
+</BaseLayout>
+
+<script>
+  import "../scripts/pages/moments";
+</script>

@@ -1,0 +1,77 @@
+---
+/**
+ * 标签 / 分类集合页的列表（卡片或标签样式）。
+ * 注意：Thymeleaf 会把表达式中的 `__x__` 当作预处理语法，因此 BEM 类名只能写在静态 class 中。
+ */
+interface Props {
+  kind: "tags" | "categories";
+}
+
+const { kind } = Astro.props;
+const CONFIG = {
+  tags: { group: "tags", item: "tag", items: "tags", defaultTitle: "全部标签" },
+  categories: {
+    group: "categories",
+    item: "category",
+    items: "categoryFinder.listAll()",
+    defaultTitle: "全部分类",
+  },
+}[kind];
+const cfg = (key: string) =>
+  `theme.config.${CONFIG.group}.${CONFIG.group}_${key}`;
+const v = CONFIG.item;
+const COVER = `${v}.spec.cover ?: (#strings.isEmpty(theme.config.home.post_thumbnail) ? (theme.config.basic.enable_random_img_api and not #strings.isEmpty(theme.config.basic.random_img_api_url) ? theme.config.basic.random_img_api_url + '?pageid=' + ${v}.metadata.name : '') : theme.config.home.post_thumbnail)`;
+const SHOW_NUM = `\${theme.config.${CONFIG.group}.enable_${CONFIG.group}_post_num}`;
+const NUM_TEXT = `|\${${v}.status.visiblePostCount ?: 0}篇|`;
+const NAME = `\${${v}.spec.displayName}`;
+const HREF = `@{\${${v}.status.permalink}}`;
+const EACH = `${v} : \${termList}`;
+---
+
+<div class="joe_index" th:with={`termList = \${${CONFIG.items}}`}>
+  <div class="joe_index__title">
+    <ul class="joe_index__title-title pl-15">
+      <li class="item active">
+        <span
+          th:text={`\${${cfg("title")} ?: '${CONFIG.defaultTitle}'}`}
+        ></span>
+        <span class="totals" th:text="${#lists.size(termList)}"></span>
+      </li>
+    </ul>
+  </div>
+  <div class:list={["joe_index__hot", kind === "categories" && "categories"]}>
+    <ul
+      class="joe_index__hot-list animated fadeIn"
+      th:if={`\${${cfg("type")} != 'tag'}`}
+    >
+      <li class="item" th:each={EACH}>
+        <a class="link" th:href={HREF} th:title={NAME}>
+          <figure class="inner" th:with={`cover = \${${COVER}}`}>
+            <em class="post-nums" th:if={SHOW_NUM} th:text={NUM_TEXT}></em>
+            <img
+              width="100%"
+              height="120"
+              class="image"
+              loading="lazy"
+              th:src="${#strings.isEmpty(cover) ? #theme.assets('/images/default_thumbnail.png') : thumbnail.gen(cover, 's')}"
+              th:alt={NAME}
+              data-fallback="thumbnail"
+            />
+            <figcaption class="title" th:text={NAME}></figcaption>
+          </figure>
+        </a>
+      </li>
+    </ul>
+    <ul
+      class="joe_index__hot-list-tag animated fadeIn"
+      th:if={`\${${cfg("type")} == 'tag'}`}
+    >
+      <li class="item" th:each={EACH}>
+        <a class="link" th:href={HREF} th:title={NAME}>
+          <span th:text={NAME}></span>
+          <em class="post-nums" th:if={SHOW_NUM} th:text={NUM_TEXT}></em>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

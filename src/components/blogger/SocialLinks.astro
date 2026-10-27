@@ -1,0 +1,44 @@
+---
+/**
+ * 博主社交账号列表。默认模式使用内置平台图标（th:switch 选择），
+ * 自定义模式直接输出用户填写的图标 HTML。
+ */
+import { SOCIAL_PLATFORMS } from "../../data/social-platforms";
+---
+
+<div
+  class="social-account"
+  th:if="${theme.config.blogger.enable_social and (not #lists.isEmpty(theme.config.blogger.socials) or not #lists.isEmpty(theme.config.blogger.custom_socials))}"
+>
+  <th-block
+    th:if="${theme.config.blogger.option_social_data != 'custom'}"
+    th:each="socials : ${theme.config.blogger.socials}"
+  >
+    <th-block th:switch="${socials.socials_select}">
+      {SOCIAL_PLATFORMS.map((platform) => (
+        <a
+          th:case={`'${platform.name}'`}
+          class={platform.name}
+          th:href={`\${${platform.href}}`}
+          target="_blank"
+          title={platform.title}
+          aria-label={platform.title}
+          rel="noopener noreferrer nofollow"
+          set:html={platform.svg}
+        />
+      ))}
+    </th-block>
+  </th-block>
+  <th-block th:if="${theme.config.blogger.option_social_data == 'custom'}">
+    <a
+      th:each="social : ${theme.config.blogger.custom_socials}"
+      class="custom_socials"
+      th:href="${social.socials_url}"
+      th:title="${social.socials_name}"
+      th:attr="aria-label=${social.socials_name}"
+      target="_blank"
+      rel="noopener noreferrer nofollow"
+      th:utext="${social.socials_icon}"
+    ></a>
+  </th-block>
+</div>

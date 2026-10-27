@@ -1,121 +1,95 @@
-# Theme Astro Starter
+# Joe Next
 
-面向 [Halo](https://www.halo.run/) 的主题脚手架：以 **Astro** 作为预渲染框架，将组件与页面编译为干净的 HTML，交由 **Thymeleaf** 在运行时完成数据渲染。
+基于 [Joe3](https://github.com/jiewenhuang/halo-theme-joe3.0) 重构的 [Halo](https://www.halo.run/) 2 主题。保留 Joe3 的视觉风格与设置项，前端代码使用 Astro + TypeScript 重写，不再依赖 jQuery 和手动拷贝的第三方库。
 
-官方主题开发指南：<https://docs.halo.run/developer-guide/theme/prepare>
+> 本主题由 Joe3 衍生，已获得原作者授权。Joe3 的前身为 qinhua 的 halo-theme-joe2.0。
 
-## 为什么选择 Astro？
+## 环境要求
 
-Halo 主题采用 Thymeleaf 纯后端渲染方案，传统上只能在 HTML 文件里直接写 Thymeleaf 语法。这对简单主题足够用，但若需要 Vue / React 组件或复杂的前端交互，就会很局限。
-
-Astro 的特点恰好弥补了这一短板：
-
-- **输出干净的 HTML**：Astro 不同于 SPA 框架，其默认产物是纯 HTML 文件，而不是 JS 包。Thymeleaf 的属性（`th:text`、`th:if`、`th:replace` 等）会作为普通 HTML 属性原样保留，两者互不干扰。
-- **Island 架构**：仅在真正需要交互的地方注入客户端 JS（Vue / React 组件），其余部分零 JS 开销。
-- **组件化开发体验**：通过 Astro 组件的 `slot` 与 `props` 在 **编译阶段** 组织布局与复用，最终产物是 Thymeleaf 可直接使用的 HTML 模板。
-
-## 何时选择此 Starter？
-
-| 场景                                                    | 推荐                                                                          |
-| ------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| 主题有较多前端交互，希望用 Vue / React 编写 Island 组件 | **本 Starter**                                                                |
-| 主题以静态展示为主，前端交互需求较少                    | [halo-dev/theme-vite-starter](https://github.com/halo-dev/theme-vite-starter) |
-
-## 技术栈
-
-| 类别    | 说明                                                                                                                                              |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 运行时  | Halo 使用 **Thymeleaf** 渲染主题；模板变量与 Finder API 随 Halo 版本演进，请以[官方文档](https://docs.halo.run/developer-guide/theme/prepare)为准 |
-| 预渲染  | **Astro**，将 `src/` 下的页面与组件编译为 `templates/` 下的纯 HTML                                                                                |
-| UI 框架 | **Vue 3**（通过 `@astrojs/vue` 集成，用于编写 Island 组件）                                                                                       |
-| 语言    | TypeScript（Astro 组件 frontmatter 支持）                                                                                                         |
-| 包管理  | **pnpm**                                                                                                                                          |
-
-## 核心概念：Astro 编译期 vs Thymeleaf 运行期
-
-理解这两个阶段的边界是使用本 Starter 的关键：
-
-```
-开发时                           构建后                    Halo 运行时
-─────────────────────────────    ──────────────────────    ──────────────────────────
-src/pages/index.astro        →   templates/index.html  →   Thymeleaf 注入数据渲染
-  Astro 组件 / slot / props         干净的 HTML +              th:text / th:if 生效
-  Vue Island 组件                   Thymeleaf 属性原样          客户端 JS 激活 Island
-```
-
-**重要限制**：
-
-- `slot`、`props` 是 Astro **编译期**的概念，Thymeleaf 运行时感知不到它们，也无法向 Astro 组件传递动态数据。
-- 在 Astro 组件中可以直接写 `th:text`、`th:if`、`th:replace` 等 Thymeleaf 属性——Astro 会将其视为普通 HTML 属性原样输出，Thymeleaf 在运行时才会处理它们。
-- Vue / React Island 组件（`client:*`）的数据来源是客户端（例如调用 Halo API），无法直接使用 Thymeleaf 的服务端变量。
-
-## 目录结构
-
-```
-.
-├── src/
-│   ├── pages/           # Astro 页面（编译为 templates/ 下的 HTML）
-│   │   ├── index.astro
-│   │   ├── post.astro
-│   │   ├── category.astro
-│   │   └── ...
-│   ├── layouts/
-│   │   └── Layout.astro # 全局布局组件
-│   ├── components/
-│   │   ├── Header.astro
-│   │   ├── Footer.astro
-│   │   ├── ThemeSwitcher.vue  # Vue Island 示例
-│   │   └── ...
-│   └── styles/          # 全局样式
-├── public/              # 原样复制到 templates/：静态资源或纯 Thymeleaf 模板均可放此处
-│   └── fragments/       # 纯 Thymeleaf 片段示例（不经 Astro 编译，直接输出）
-├── templates/           # Astro 构建产物（Halo 实际读取的模板目录）
-├── theme.yaml           # 主题元数据（必填）
-├── settings.yaml        # 控制台主题设置表单（可选）
-├── astro.config.mjs
-└── package.json
-```
-
-> **`templates/` 是构建产物**，不要直接在此目录手动修改；请修改 `src/` 后重新构建。
+- Halo `>= 2.22.2`
+- 开发：Node.js `22.23.4`（见 `.nvmrc`）、pnpm `10`
 
 ## 开发
 
 ```bash
-git clone https://github.com/halo-sigs/theme-astro-starter.git ~/halo2-dev/themes/astro-starter
-cd ~/halo2-dev/themes/astro-starter
+nvm use
 pnpm install
-pnpm dev
+pnpm dev        # 监听 src/ 变化并重新构建到 templates/
 ```
 
-`pnpm dev` 会启动 Astro 开发服务器并监听 `src/` 变更，实时重新生成 `templates/`。
+将主题目录放到 Halo 工作目录的 `themes/theme-joe-next/`，在控制台安装并启用。开发时建议关闭模板缓存：`SPRING_THYMELEAF_CACHE=false`。
 
-将主题目录链接或复制到 Halo 的 `themes/astro-starter/` 后，在控制台安装并启用主题即可预览。建议同时关闭 Thymeleaf 缓存以便热更新调试：
+| 命令           | 作用                                             |
+| -------------- | ------------------------------------------------ |
+| `pnpm build`   | 构建模板到 `templates/`                          |
+| `pnpm package` | 构建并打包为 `dist/theme-joe-next-<version>.zip` |
+| `pnpm check`   | TypeScript / Astro 类型检查                      |
+| `pnpm test`    | 单元测试（构建后处理逻辑）                       |
 
-```yaml
-# application.yaml
-spring:
-  thymeleaf:
-    cache: false
+## 目录结构
+
+```
+src/
+├── pages/              页面模板，每个文件对应一个 Halo 模板（index、post、archives…）
+├── layouts/            BaseLayout：head、导航、页脚、悬浮按钮、全局脚本
+├── components/
+│   ├── head/           配置注入、动态样式（主题色、字体、背景）
+│   ├── navbar/         顶部导航与移动端抽屉
+│   ├── aside/          侧栏及各侧栏组件
+│   ├── blogger/        博主卡片、社交账号
+│   ├── home/           首页轮播、大图、精品分类
+│   ├── list/           文章列表项、分页、分类/标签网格
+│   ├── post/           文章正文、分享、版权、评论
+│   ├── moment/         瞬间
+│   └── links/          友链
+├── scripts/
+│   ├── app.ts          全站脚本入口
+│   ├── pages/          页面专属脚本入口
+│   ├── features/       独立功能模块（明暗模式、导航、点赞、轮播…）
+│   ├── content/        正文处理（代码块、目录、灯箱、Waline）
+│   ├── core/           基础工具（DOM、配置、存储、提示）
+│   └── effects/        鼠标/背景特效（按需加载）
+├── styles/             Less 样式，按 base / layout / components / content / pages 拆分
+├── config/             前后端共享的配置契约与 SpEL 表达式
+└── data/               社交图标、内联 SVG 等静态数据
+public/assets/          运行时按路径引用的资源（头像框、鼠标皮肤、字体、默认图片）
+integrations/           Astro 构建后处理
 ```
 
-或通过环境变量：`SPRING_THYMELEAF_CACHE=false`
+## 关键约定
 
-## 构建
+**Astro 编译期 vs Thymeleaf 运行期。** `.astro` 文件在构建时展开为 HTML，`th:*` 属性原样输出，由 Halo 在请求时求值。组件的 props 只能是构建期常量，运行时数据一律通过 Thymeleaf 表达式取得。
 
-```bash
-pnpm build
-```
+**命名空间标签。** Astro 7 编译器不支持 `<th:block>`、`<halo:comment>`，源码中写作 `<th-block>`、`<halo-comment>`、`<halo-footer>`，构建后由 `integrations/thymeleaf-tags.ts` 还原。
 
-执行 Astro 构建，将 `src/` 编译输出到 `templates/`。构建完成后可将主题目录（含 `templates/`、`theme.yaml`、`settings.yaml` 等）打包为 ZIP 上传到 Halo 控制台，或使用 [`@halo-dev/theme-package-cli`](https://github.com/halo-dev/theme-package-cli) 完成打包。
+**布尔设置项。** 未保存过的设置值为 `null`，直接参与 `and` / `or` / `!` 会抛出异常。构建后处理会把 `src/config/boolean-settings.ts` 中列出的设置项改写为 `(x == true)`。在 `settings.yaml` 新增布尔字段时，需要同步更新该列表。
 
-## 其他脚本
+**避免 `__` 出现在表达式中。** Thymeleaf 把 `__x__` 视为预处理语法，BEM 类名（如 `joe_index__hot`）只能写在静态 `class` 中。
 
-| 命令          | 作用                    |
-| ------------- | ----------------------- |
-| `pnpm format` | Prettier 格式化所有文件 |
+**前端配置。** 浏览器端需要的设置项在 `src/config/theme-config.ts` 中声明，服务端一次性序列化注入页面，脚本通过 `getThemeConfig()` 读取类型安全的配置。新增字段只需修改这一个文件。
 
-## 注意事项
+**按需加载。** Swiper、PhotoSwipe、Waline、APlayer、vConsole、Prism 语言包、代码主题、鼠标/背景特效均在用到时才下载，样式通过 `loadStylesheet()` 插入，不会进入首屏 CSS。
 
-- Astro 配置中 `base` 需与 `theme.yaml` 的 `metadata.name` 保持一致（当前为 `astro-starter`），这决定了静态资源的引用路径。
-- `public/` 目录不仅可以存放图片、字体等静态资源，也可以存放**纯 Thymeleaf 模板**（例如 `public/fragments/post-list.html`）。这些文件会被 Astro 原样复制到 `templates/` 对应路径，不经过任何编译处理，适合编写不需要 Astro 组件化的 Thymeleaf 片段。
-- Vue Island 组件可通过 Halo 提供的 [API Client](https://www.npmjs.com/package/@halo-dev/api-client) 在客户端获取数据。
+## 插件集成
+
+| 功能                        | 插件                              | 未安装时               |
+| --------------------------- | --------------------------------- | ---------------------- |
+| 评论                        | 评论组件（或在设置中选择 Waline） | 不显示评论区           |
+| 搜索                        | 搜索组件 `PluginSearchWidget`     | 隐藏搜索按钮           |
+| 瞬间 `/moments`             | 瞬间 `PluginMoments`              | 路由不存在             |
+| 图库 `/photos`              | 图库 `PluginPhotos`               | 路由不存在             |
+| 友链 `/links`、友链页面模板 | 链接 `PluginLinks`                | 友链页面模板只显示正文 |
+| 朋友圈 `/friends`           | 朋友圈 `plugin-friends`           | 路由不存在             |
+| 代码高亮                    | 可选（如 shiki）                  | 使用主题内置 Prism     |
+
+## 相对 Joe3 的变化
+
+- **技术栈：** jQuery、Isotope、fancybox、Draggabilly、WOW.js、NProgress、Qmsg、ClipboardJS、lazysizes、Vue 2 均由原生 API 或 npm 包替代，第三方库通过 pnpm 管理并锁定版本。
+- **图标字体与资源本地化：** iconfont 不再依赖 at.alicdn.com，Font Awesome 已移除（Joe3 中未实际使用）。
+- **已移除：** 天气组件、百度收录检测、博主卡片彩带动画、PDF / DPlayer 短代码、「原始内容」渲染，以及 Joe3 中未被引用的库和模板（halo-comment、KaTeX、jquery-ui 等）。
+- **设置项：** 保持与 Joe3 相同的键名，便于迁移；删除了已被原生懒加载取代的「预载图」三项。
+- **修复：** 分类/标签/作者页分页地址、年度时间轴重复、作者页标题、`page_links` 在未安装链接插件时报错等 Joe3 遗留问题。
+
+## 许可证
+
+[CC BY-NC-SA 4.0](./LICENSE)，与 Joe3 保持一致。

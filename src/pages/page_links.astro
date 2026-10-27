@@ -1,0 +1,38 @@
+---
+/** 自定义页面模板「友链」：页面正文 + 友链列表（未安装链接插件时只显示正文） */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Actions from "../components/layout/Actions.astro";
+import Aside from "../components/aside/Aside.astro";
+import CommentSection from "../components/post/CommentSection.astro";
+import LinkGroups from "../components/links/LinkGroups.astro";
+import "../styles/pages/journals.less";
+---
+
+<BaseLayout
+  title="singlePage.spec.title + ' - ' + site.title"
+  pageClass="page-journals page-links page-sheet"
+>
+  <div class="joe_main">
+    <div class="joe_detail">
+      <h1
+        class="joe_detail__title txt-shadow"
+        th:text="${singlePage.spec.title}"
+      ></h1>
+      <article class="joe_detail__article animated fadeIn">
+        <th-block th:if="${pluginFinder.available('PluginLinks')}">
+          <LinkGroups groups="linkFinder.groupBy()" />
+        </th-block>
+        <div id="post-inner" th:utext="${singlePage.content.content}"></div>
+      </article>
+    </div>
+    <CommentSection subject="singlePage" kind="SinglePage" />
+  </div>
+  <th-block th:if="${theme.config.aside.enable_links_aside}">
+    <Aside />
+  </th-block>
+  <Actions slot="actions" randomLink editKind="page" />
+</BaseLayout>
+
+<script>
+  import "../scripts/pages/links";
+</script>

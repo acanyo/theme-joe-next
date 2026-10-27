@@ -1,0 +1,120 @@
+---
+/** 文章标签、分享、打赏 */
+import { POST_ICONS } from "../../data/post-icons";
+
+const SITE =
+  "#strings.endsWith(site.url, '/') ? #strings.substring(site.url, 0, #strings.length(site.url) - 1) : site.url";
+const SHARE_TEXT =
+  "'『' + post.spec.title + '』，作者：' + post.owner.displayName";
+const SHARES = [
+  {
+    key: "weibo",
+    title: "分享到新浪微博",
+    href: `'https://service.weibo.com/share/share.php?title=' + #uris.escapeQueryParam('分享：' + ${SHARE_TEXT} + '，原文链接：' + postUrl) + '&pic=' + #uris.escapeQueryParam(post.spec.cover ?: '')`,
+  },
+  {
+    key: "qzone",
+    title: "分享到QQ空间",
+    href: `'https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + #uris.escapeQueryParam(postUrl) + '&title=' + #uris.escapeQueryParam(${SHARE_TEXT})`,
+  },
+  {
+    key: "qq",
+    title: "分享到QQ",
+    href: `'https://connect.qq.com/widget/shareqq/index.html?url=' + #uris.escapeQueryParam(postUrl) + '&title=' + #uris.escapeQueryParam(${SHARE_TEXT})`,
+  },
+] as const;
+---
+
+<div
+  class="joe_detail__operate"
+  th:with={`postUrl = \${${SITE} + post.status.permalink}`}
+>
+  <div class="joe_detail__operate-tags">
+    <a
+      th:each="tag : ${post.tags}"
+      th:href="@{${tag.status.permalink}}"
+      th:text="${tag.spec.displayName}"
+    ></a>
+  </div>
+
+  <div
+    class="joe_detail__operate-share"
+    th:if="${theme.config.post.enable_share and #annotations.getOrDefault(post, 'enable_share', 'true') == 'true'}"
+  >
+    <i class="joe-font joe-icon-share" aria-hidden="true"></i>
+    <div class="share-icon-list">
+      <a
+        th:if="${theme.config.post.enable_share_link}"
+        class="icon-share-link"
+        href="javascript:;"
+        title="复制文章链接"
+        data-joe-share-link
+        th:attr="data-url=${postUrl}, data-title=${post.spec.title}, data-description=${post.status.excerpt}, data-author=${post.owner.displayName}, data-template=${theme.config.post.share_link_template}"
+        set:html={POST_ICONS.link}
+      />
+      {SHARES.map((share) => (
+        <a
+          th:if={`\${theme.config.post.enable_share_${share.key}}`}
+          th:href={`\${${share.href}}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={share.title}
+          set:html={POST_ICONS[share.key]}
+        />
+      ))}
+      <a
+        th:if="${theme.config.post.enable_share_weixin}"
+        href="javascript:;"
+        title="分享到微信"
+        data-joe-share-weixin
+        th:attr="data-url=${postUrl}"
+      >
+        <Fragment set:html={POST_ICONS.weixin} />
+        <div class="qrcode_wrapper animated bounceIn">
+          <div class="qrcode_wx"></div>
+          <p>微信扫一扫</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div
+    class="joe_donate"
+    th:if="${theme.config.post.enable_donate and #annotations.getOrDefault(post, 'enable_donate', 'true') == 'true'}"
+  >
+    <i class="joe-font joe-icon-shang" aria-hidden="true"></i>
+    <ol class="joe_donate_list">
+      <li th:if="${not #strings.isEmpty(theme.config.post.qrcode_zfb)}">
+        <p>支付宝打赏</p>
+        <img
+          th:src="${theme.config.post.qrcode_zfb}"
+          alt="支付宝收款码"
+          loading="lazy"
+          data-fallback="image"
+        />
+      </li>
+      <li th:if="${not #strings.isEmpty(theme.config.post.qrcode_wx)}">
+        <p>微信打赏</p>
+        <img
+          th:src="${theme.config.post.qrcode_wx}"
+          alt="微信收款码"
+          loading="lazy"
+          data-fallback="image"
+        />
+      </li>
+      <li th:if="${not #strings.isEmpty(theme.config.post.qrcode_qq)}">
+        <p>QQ打赏</p>
+        <img
+          th:src="${theme.config.post.qrcode_qq}"
+          alt="QQ收款码"
+          loading="lazy"
+          data-fallback="image"
+        />
+      </li>
+      <li
+        th:if="${not #strings.isEmpty(#strings.trim(theme.config.post.reward_code))}"
+        th:utext="${theme.config.post.reward_code}"
+      ></li>
+    </ol>
+  </div>
+</div>

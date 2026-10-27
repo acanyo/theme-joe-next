@@ -1,3 +1,5 @@
-templates/
 pnpm-lock.yaml
 pnpm-workspace.yaml
+templates/
+src/scripts/effects/
+src/data/

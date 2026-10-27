@@ -1,0 +1,189 @@
+---
+/**
+ * 侧栏简单组件集合：公告、打赏、图片、人生倒计时、最新回复、广告、自定义 HTML。
+ * 根据 `type` 渲染其一；数据来自当前侧栏配置项变量 `widget`。
+ */
+import AsideCard from "./AsideCard.astro";
+import { HALO_COMMENT_ENABLED, el } from "../../config/expressions";
+
+interface Props {
+  type:
+    | "notice"
+    | "reward"
+    | "picture"
+    | "lifetime"
+    | "newreply"
+    | "ads"
+    | "custom";
+}
+
+const { type } = Astro.props;
+
+/** 评论所属内容的访问地址 */
+const SUBJECT_LINK =
+  "comment.spec.subjectRef.kind == 'Post' ? postFinder.getByName(comment.spec.subjectRef.name)?.status?.permalink" +
+  " : (comment.spec.subjectRef.kind == 'SinglePage' ? singlePageFinder.getByName(comment.spec.subjectRef.name)?.status?.permalink" +
+  " : (comment.spec.subjectRef.kind == 'Moment' ? '/moments' : '/links'))";
+---
+
+{type === "notice" && (
+  <AsideCard
+    variant="notice"
+    icon="speaker"
+    titleExpr="widget.aside_notice?.notice_title ?: '网站公告'"
+  >
+    <div class="joe_aside__item-contain">
+      <div
+        class="notice_content"
+        th:utext="${widget.aside_notice?.site_notice}"
+      />
+    </div>
+  </AsideCard>
+)}
+
+{type === "reward" && (
+  <AsideCard
+    variant="reward"
+    icon="coffee"
+    title="请作者喝杯咖啡"
+    th:unless="${theme.config.other.enable_clean_mode}"
+  >
+    <div class="pay-tab-content">
+      <ul>
+        <li th:each="reward, stat : ${widget.aside_reward?.reward_list}">
+          <input
+            type="radio"
+            name="joe-reward"
+            th:id="|joe-reward-${stat.index}|"
+            th:checked="${stat.first}"
+          />
+          <label
+            th:for="|joe-reward-${stat.index}|"
+            th:text="${reward.reward_label}"
+          />
+          <div th:if="${reward.reward_type == 'image'}">
+            <img
+              class="reward-image"
+              th:src="${reward.reward_url}"
+              alt="打赏"
+              loading="lazy"
+            />
+          </div>
+          <div
+            th:if="${reward.reward_type == 'custom'}"
+            th:utext="${reward.reward_html}"
+          />
+        </li>
+      </ul>
+    </div>
+  </AsideCard>
+)}
+
+{type === "picture" && (
+  <AsideCard
+    variant="qrcode"
+    icon="qrcode"
+    titleExpr="widget.aside_picture?.qrcode_title"
+  >
+    <div class="joe_aside__item-contain">
+      <img
+        class="qrcode_img"
+        loading="lazy"
+        th:src="${widget.aside_picture?.qrcode_url}"
+        th:alt="${widget.aside_picture?.qrcode_title}"
+        data-fallback="image"
+      />
+      <p
+        class="qrcode_description"
+        th:if="${not #strings.isEmpty(widget.aside_picture?.qrcode_description)}"
+        th:text="${widget.aside_picture.qrcode_description}"
+      />
+    </div>
+  </AsideCard>
+)}
+
+{type === "lifetime" && (
+  <AsideCard variant="timelife" icon="shalou" title="人生倒计时">
+    <div class="joe_aside__item-contain" data-joe-lifetime />
+  </AsideCard>
+)}
+
+{type === "newreply" && (
+  <AsideCard
+    variant="newreply"
+    icon="message"
+    title="最新回复"
+    th:if={`\${!theme.config.other.enable_clean_mode and (${HALO_COMMENT_ENABLED})}`}
+  >
+    <ul
+      class="joe_aside__item-contain"
+      th:with="replies = ${commentFinder.list(null, 1, #conversions.convert(widget.aside_newreply?.show_newreply_num ?: 3, 'java.lang.Integer'))}"
+    >
+      <li class="item" th:each="comment : ${replies.items}">
+        <div class="user">
+          <img
+            width="35"
+            height="35"
+            class="avatar"
+            loading="lazy"
+            th:src="${comment.owner.avatar}"
+            alt="头像"
+            th:attr="data-text-avatar=${comment.owner.displayName}"
+            data-fallback="avatar"
+          />
+          <div class="info">
+            <div class="author" th:text="${comment.owner.displayName}" />
+            <time
+              class="date"
+              th:text="${#temporals.format(comment.spec.creationTime, 'yyyy-MM-dd HH:mm')}"
+            />
+          </div>
+        </div>
+        <div class="reply">
+          <a class="link aside-reply-content" th:href={el(SUBJECT_LINK)}>
+            <p th:utext="${comment.spec.content}" />
+          </a>
+        </div>
+      </li>
+    </ul>
+  </AsideCard>
+)}
+
+{type === "ads" && (
+  <th-block th:with="ads = ${widget.aside_ads}">
+    <section
+      class="joe_aside__item advert"
+      th:if="${ads?.aside_ads_type == 'img' and not #strings.isEmpty(ads?.aside_ads_img)}"
+    >
+      <a
+        class="joe_advert"
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        th:href="${ads.aside_ads_url}"
+        title="广告"
+      >
+        <img
+          class="omit"
+          width="100%"
+          loading="lazy"
+          th:src="${ads.aside_ads_img}"
+          alt="广告"
+          data-fallback="image"
+        />
+        <span class="icon">广告</span>
+      </a>
+    </section>
+    <section
+      class="joe_aside__item advert"
+      th:if="${ads?.aside_ads_type == 'code'}"
+      th:utext="${ads.aside_ads_code}"
+    />
+  </th-block>
+)}
+
+{type === "custom" && (
+  <section
+    class="joe_aside__item aside_custom"
+    th:utext="${widget.aside_custom?.aside_custom_code}"
+  />
+)}

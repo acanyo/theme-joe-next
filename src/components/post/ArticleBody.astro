@@ -1,0 +1,184 @@
+---
+/**
+ * 文章 / 页面正文的公共部分：标题、作者信息、过期提示、广告、正文、点赞。
+ * `subject` 为当前内容变量名：文章页为 "post"，独立页面为 "singlePage"。
+ */
+import {
+  HALO_COMMENT_ENABLED,
+  WALINE_ENABLED,
+  el,
+} from "../../config/expressions";
+import { POST_ICONS } from "../../data/post-icons";
+import PostAds from "./PostAds.astro";
+
+interface Props {
+  subject: "post" | "singlePage";
+}
+
+const { subject: s } = Astro.props;
+const isPost = s === "post";
+const ann = (key: string, fallback: string) =>
+  `#annotations.getOrDefault(${s}, '${key}', '${fallback}')`;
+const ARTICLE_CLASS = [
+  `${ann("img_align", "center")} + '-img'`,
+  `${ann("enable_copy", "true")} == 'false' or !theme.config.post.enable_copy ? 'uncopy' : ''`,
+  "theme.config.post.enable_indent ? 'indent' : ''",
+  "theme.config.code_block.enable_code_line_number and !theme.config.code_block.enable_code_newline ? 'line-numbers' : ''",
+  "theme.config.code_block.enable_single_code_select ? 'single_code_select' : ''",
+]
+  .map((expr) => `\${${expr}}`)
+  .join(" ");
+---
+
+<div
+  class="joe_detail"
+  th:attr={`data-cid=\${${s}.metadata.name}, data-kind=${isPost ? "Post" : "SinglePage"}, data-likes=\${${s}.stats.upvote}`}
+  th:with={`author = \${contributorFinder.getContributor(${s}.spec.owner)}`}
+>
+  {isPost && (
+    <div
+      class="joe_detail__category"
+      th:unless="${#lists.isEmpty(post.categories)}"
+    >
+      <a
+        th:each="category : ${post.categories}"
+        th:href="@{${category.status.permalink}}"
+        class="item"
+        th:title="${category.spec.displayName}"
+        th:text="${category.spec.displayName}"
+      />
+    </div>
+  )}
+  <div class="joe_detail-wrapper">
+    <h1
+      class="joe_detail__title"
+      th:classappend="${theme.config.post.enable_title_shadow ? 'txt-shadow' : ''}"
+      th:text={`\${${s}.spec.title}`}
+    ></h1>
+
+    <div
+      class="joe_detail__count"
+      th:if={`\${theme.config.post.enable_page_meta and ${ann("enable_page_meta", "true")} == 'true'}`}
+    >
+      <div class="joe_detail__count-information">
+        <img
+          width="35"
+          height="35"
+          class="avatar"
+          loading="lazy"
+          th:src="${author?.avatar}"
+          th:alt="${author?.displayName}"
+          th:attr="data-text-avatar=${author?.displayName}"
+          data-fallback="avatar"
+        />
+        <div class="meta">
+          <div class="author">
+            <a
+              class="link"
+              th:href="${#strings.isEmpty(theme.config.post.post_author_link) ? author?.permalink : theme.config.post.post_author_link}"
+              th:text="${author?.displayName}"
+            ></a>
+          </div>
+          <div class="item">
+            <time
+              class="text"
+              th:text={`\${#dates.format(${s}.spec.publishTime, 'yyyy-MM-dd')}`}
+            ></time>
+            <span class="line">/</span>
+            <span
+              class="text"
+              th:if={el(HALO_COMMENT_ENABLED)}
+              th:text={`|\${${s}.stats.comment} 评论|`}
+            ></span>
+            <span class="text" th:if={el(WALINE_ENABLED)}>
+              <span
+                class="waline-comment-count"
+                th:attr={`data-path=@{\${${s}.status.permalink}}`}
+              >
+                0
+              </span>{" "}
+              评论
+            </span>
+            <span class="line">/</span>
+            <span class="text" th:text={`|\${${s}.stats.upvote} 点赞|`}></span>
+            <span class="line">/</span>
+            <span class="text" th:text={`|\${${s}.stats.visit} 阅读|`}></span>
+            <span class="line">/</span>
+            <span class="text" data-joe-word-count>
+              0 字
+            </span>
+          </div>
+        </div>
+      </div>
+      <time
+        class="joe_detail__count-created"
+        th:text={`\${#dates.format(${s}.status.lastModifyTime, 'MM/dd')}`}
+      ></time>
+    </div>
+
+    <div
+      class="joe_detail__overdue"
+      th:if={`\${theme.config.post.enable_passage_tips and ${ann("enable_passage_tips", "true")} == 'true'}`}
+      th:with={`staleDays = \${(#dates.createNow().getTime() - ${s}.status.lastModifyTime.toEpochMilli()) / 86400000}`}
+    >
+      <div class="joe_detail__overdue-wrapper">
+        <div class="title">
+          <Fragment set:html={POST_ICONS.tip} />
+          <span class="text">温馨提示：</span>
+        </div>
+        <div class="content">
+          <th-block th:if="${staleDays >= #conversions.convert(theme.config.post.days ?: 30, 'java.lang.Integer')}">
+            <th-block
+              th:if="${theme.config.post.days_type}"
+              th:text={`|本文最后更新于 \${#dates.format(${s}.status.lastModifyTime, 'yyyy-MM-dd')}，若内容或图片失效，请留言反馈。|`}
+            ></th-block>
+            <th-block
+              th:unless="${theme.config.post.days_type}"
+              th:text="|本文最后更新于 ${staleDays} 天前，若内容或图片失效，请留言反馈。|"
+            ></th-block>
+          </th-block>
+          <span th:text="${theme.config.post.passage_tips_content ?: '部分素材来自网络，若不小心影响到您的利益，请联系我们删除。'}"></span>
+        </div>
+      </div>
+    </div>
+
+    {isPost && <PostAds position="top" />}
+
+    <article
+      class={`joe_detail__article animated fadeIn`}
+      th:classappend={`|${ARTICLE_CLASS}|`}
+    >
+      <div
+        id="post-inner"
+        th:if={`\${${ann("use_raw_content", "false")} != 'true'}`}
+        th:utext={`\${${s}.content.content}`}
+      ></div>
+      <div
+        id="post-inner"
+        th:if={`\${${ann("use_raw_content", "false")} == 'true'}`}
+        class="joe_raw_content"
+        th:text={`\${${s}.content.content}`}
+      ></div>
+    </article>
+
+    {isPost && (
+      <div
+        class="joe_detail__agree"
+        th:if="${theme.config.post.enable_like and #annotations.getOrDefault(post, 'enable_like', 'true') == 'true'}"
+      >
+        <button type="button" class="agree" data-joe-like aria-label="点赞">
+          <span class="icon">
+            <i class="joe-font joe-icon-like icon-like" aria-hidden="true" />
+            <i
+              class="joe-font joe-icon-like-fill icon-unlike"
+              aria-hidden="true"
+            />
+          </span>
+          <span class="nums" th:text="${post.stats.upvote}">
+            0
+          </span>
+        </button>
+      </div>
+    )}
+  </div>
+</div>

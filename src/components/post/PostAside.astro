@@ -1,0 +1,49 @@
+---
+/** 文章页侧栏：博主卡片、目录、相关文章、侧栏广告 */
+import BloggerCard from "../blogger/BloggerCard.astro";
+import AsideCard from "../aside/AsideCard.astro";
+import PostAds from "./PostAds.astro";
+
+const RELATED_SIZE =
+  "#conversions.convert(theme.config.post.relate_post_max ?: 5, 'java.lang.Integer')";
+const RELATED = `#lists.isEmpty(post.categories) ? postFinder.listByTag(1, ${RELATED_SIZE}, post.tags[0].metadata.name) : postFinder.listByCategory(1, ${RELATED_SIZE}, post.categories[0].metadata.name)`;
+---
+
+<aside class="joe_aside">
+  <th-block th:if="${theme.config.blogger.show_blogger}">
+    <BloggerCard />
+  </th-block>
+  <div class="joe_aside_post">
+    <div
+      class="toc-container"
+      th:if="${theme.config.post.enable_toc and #annotations.getOrDefault(post, 'enable_toc', 'true') == 'true'}"
+    >
+      <h3 class="toc-header">
+        <i class="jiewen joe-icon-mulu" aria-hidden="true"></i>文章目录
+      </h3>
+      <nav id="js-toc" class="toc" aria-label="文章目录"></nav>
+    </div>
+    <th-block th:if="${theme.config.post.enable_relate_post and (not #lists.isEmpty(post.categories) or not #lists.isEmpty(post.tags))}">
+      <AsideCard variant="newest" icon="huo" title="相关文章">
+        <div class="joe_aside__item-contain">
+          <ul class="list" th:with={`related = \${${RELATED}}`}>
+            <li
+              class="item"
+              th:each="item : ${related.items}"
+              th:if="${item.metadata.name != post.metadata.name}"
+            >
+              <a
+                class="link"
+                th:href="@{${item.status.permalink}}"
+                th:title="${item.spec.title}"
+                th:text="${item.spec.title}"
+              ></a>
+              <i class="joe-font joe-icon-link" aria-hidden="true"></i>
+            </li>
+          </ul>
+        </div>
+      </AsideCard>
+    </th-block>
+    <PostAds position="aside" />
+  </div>
+</aside>

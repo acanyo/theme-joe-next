@@ -1,0 +1,28 @@
+.social-account {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-top: 10px;
+  text-align: center;
+  font-size: 14px;
+  border-top: 1px solid var(--classC);
+
+  a {
+    transform: scale(0.9);
+    display: inline-block;
+    margin: 0 2px;
+    font-size: 0;
+    color: var(--minor);
+    transition: transform 0.2s;
+
+    img {
+      display: inline-block;
+      height: 20px;
+      border-radius: 3px;
+    }
+
+    &:hover {
+      transform: scale(1);
+    }
+  }
+}

@@ -1,0 +1,125 @@
+---
+/** 侧栏：博主信息卡片 */
+import SocialLinks from "./SocialLinks.astro";
+import {
+  BLOGGER_NAME,
+  HALO_COMMENT_ENABLED,
+  WALINE_ENABLED,
+  el,
+} from "../../config/expressions";
+
+/** 概览统计项：A/B/C/D 四种组合 */
+const OVERVIEW = {
+  A: ["category", "tag", "post"],
+  B: ["category", "tag", "comment"],
+  C: ["category", "post", "comment"],
+  D: ["tag", "post", "comment"],
+} as const;
+
+const STAT_LABEL = {
+  category: "分类数",
+  tag: "标签数",
+  post: "文章数",
+  comment: "评论数",
+} as const;
+const STAT_VALUE = {
+  category: "stats.category",
+  tag: "#lists.size(tagFinder.listAll())",
+  post: "stats.post",
+  comment: "stats.comment",
+} as const;
+---
+
+<section class="joe_aside__item author">
+  <img
+    width="100%"
+    height="120"
+    class="image"
+    loading="lazy"
+    th:src="${theme.config.blogger.author_bg ?: #theme.assets('/images/author_bg.jpg')}"
+    alt=""
+    data-fallback="image"
+  />
+  <div class="user">
+    <div
+      class="avatar_wrapper"
+      th:classappend="${theme.config.blogger.avatar_type == 'round' ? 'round' : 'circle'}"
+    >
+      <img
+        class="avatar"
+        loading="lazy"
+        th:src="${theme.config.blogger.avatar ?: theme.config.blogger.default_avatar}"
+        alt="博主头像"
+        th:attr={`data-text-avatar=${el(BLOGGER_NAME)}`}
+        data-fallback="avatar"
+      />
+      <img
+        th:if="${theme.config.blogger.avatar_frame != null and theme.config.blogger.avatar_frame != '0'}"
+        th:class="|avatar_frame ${theme.config.blogger.avatar_frame}|"
+        th:src="@{/assets/frame/{name}.png(name=${theme.config.blogger.avatar_frame})}"
+        alt=""
+      />
+      <img
+        th:if="${theme.config.blogger.avatar_widget != null and theme.config.blogger.avatar_widget != '0'}"
+        th:class="|avatar_widget ${theme.config.blogger.avatar_widget}|"
+        th:src="@{/assets/widget/{name}.gif(name=${theme.config.blogger.avatar_widget})}"
+        alt=""
+      />
+    </div>
+    <a class="link" th:href="${site.url}">
+      <span th:text={el(BLOGGER_NAME)}></span>
+      <img
+        th:if="${theme.config.blogger.enable_blogger_level}"
+        class="level"
+        th:src="@{/assets/images/level_1.svg}"
+        alt="博主等级"
+      />
+    </a>
+    <p
+      class="motto joe_motto"
+      th:if="${not #strings.isEmpty(theme.config.blogger.motto)}"
+      th:text="${theme.config.blogger.motto}"
+    ></p>
+    <img
+      th:if="${#strings.isEmpty(theme.config.blogger.motto) and theme.config.blogger.enable_day_words}"
+      class="motto_day_words"
+      height="14"
+      alt="每日一句"
+      src="https://v2.jinrishici.com/one.svg?font-size=14&spacing=2&color=grey"
+    />
+  </div>
+
+  <div class="count" th:with="stats = ${siteStatsFinder.getStats()}">
+    <th-block th:switch="${theme.config.blogger.overview_type ?: 'C'}">
+      {Object.entries(OVERVIEW).map(([type, items]) => (
+        <th-block th:case={`'${type}'`}>
+          {items.map((stat) =>
+            stat === "comment" ? (
+              <>
+                <div class="item" th:if={el(HALO_COMMENT_ENABLED)}>
+                  <span class="num" th:text={el(STAT_VALUE.comment)}>
+                    0
+                  </span>
+                  <span>{STAT_LABEL.comment}</span>
+                </div>
+                <div class="item waline-comment" th:if={el(WALINE_ENABLED)}>
+                  <span class="num">0</span>
+                  <span>{STAT_LABEL.comment}</span>
+                </div>
+              </>
+            ) : (
+              <div class="item">
+                <span class="num" th:text={el(STAT_VALUE[stat])}>
+                  0
+                </span>
+                <span>{STAT_LABEL[stat]}</span>
+              </div>
+            ),
+          )}
+        </th-block>
+      ))}
+    </th-block>
+  </div>
+
+  <SocialLinks />
+</section>

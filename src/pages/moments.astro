@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Aside from "../components/aside/Aside.astro";
+import Pagination from "../components/list/Pagination.astro";
+import MomentHeader from "../components/moment/MomentHeader.astro";
+import MomentItem from "../components/moment/MomentItem.astro";
+import "../styles/pages/journals.less";
+---
+
+<BaseLayout
+  title="(theme.config.journals.journals_title ?: '我的动态') + ' - ' + site.title"
+  pageClass="page-journals"
+>
+  <div class="joe_main">
+    <div class="joe_detail">
+      <MomentHeader author="blogger" />
+      <ul class="joe_journals__list">
+        <th-block th:each="moment, iter : ${moments.items}">
+          <MomentItem />
+        </th-block>
+      </ul>
+      <p
+        class="joe_journals__empty"
+        th:if="${#lists.isEmpty(moments.items)}"
+        th:text="${theme.config.journals.journals_empty_text ?: '暂无动态'}"
+      ></p>
+      <Pagination result="moments" />
+    </div>
+  </div>
+  <th-block th:if="${theme.config.aside.enable_journals_aside}">
+    <Aside />
+  </th-block>
+</BaseLayout>
+
+<script>
+  import "../scripts/pages/moments";
+</script>

@@ -1,0 +1,49 @@
+---
+/**
+ * 公共 <head>。SEO 描述、关键词由 Halo 注入，这里不重复输出。
+ */
+import ConfigScript from "./ConfigScript.astro";
+import DynamicStyle from "./DynamicStyle.astro";
+import WalineConfig from "./WalineConfig.astro";
+import "../../styles/index.less";
+
+interface Props {
+  /** 页面标题的 SpEL 表达式（不含 `${}`），为空时使用站点标题 */
+  title?: string;
+}
+
+const { title = "site.title" } = Astro.props;
+---
+
+<meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+/>
+<meta name="renderer" content="webkit" />
+<meta name="format-detection" content="telephone=no,email=no" />
+<title th:text={`\${${title}}`}></title>
+<link
+  rel="icon"
+  th:if="${not #strings.isEmpty(site.favicon)}"
+  th:href="${site.favicon}"
+/>
+<link
+  rel="apple-touch-icon"
+  th:if="${not #strings.isEmpty(site.favicon)}"
+  th:href="${site.favicon}"
+/>
+<link
+  rel="stylesheet"
+  th:if="${not #strings.isEmpty(theme.config.custom.iconfont)}"
+  th:href="${theme.config.custom.iconfont}"
+/>
+<link
+  rel="stylesheet"
+  th:if="${theme.config.theme.cursor_skin != null and theme.config.theme.cursor_skin != 'off' and !theme.config.other.enable_clean_mode}"
+  th:href="${#theme.assets('/cursor/' + theme.config.theme.cursor_skin + '/style.css')}"
+/>
+<ConfigScript />
+<DynamicStyle />
+<WalineConfig />
+<slot />

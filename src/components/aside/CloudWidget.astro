@@ -1,0 +1,60 @@
+---
+/**
+ * 标签云 / 分类云。3D 模式由前端脚本（features/tag-cloud.ts）把列表渲染为球形云，
+ * 列表模式直接展示。`widget` 为当前侧栏配置项变量（th:each 的循环变量）。
+ */
+import AsideCard from "./AsideCard.astro";
+
+interface Props {
+  kind: "tag" | "category";
+}
+
+const { kind } = Astro.props;
+const CONFIG = {
+  tag: {
+    title: "标签云",
+    id: "tags-cloud",
+    data: "widget.aside_tag_cloud",
+    prefix: "tag_cloud",
+    more: "/tags",
+    list: "tagFinder",
+  },
+  category: {
+    title: "分类云",
+    id: "categories-cloud",
+    data: "widget.aside_category_cloud",
+    prefix: "category_cloud",
+    more: "/categories",
+    list: "categoryFinder",
+  },
+}[kind];
+
+const opts = (key: string) => `${CONFIG.data}?.${CONFIG.prefix}_${key}`;
+const items = `${opts("num_type")} == 'all' ? ${CONFIG.list}.listAll() : ${CONFIG.list}.list(1, #conversions.convert(${opts("num")} ?: 15, 'java.lang.Integer')).items`;
+---
+
+<AsideCard
+  variant="tags-cloud"
+  icon="tag"
+  title={CONFIG.title}
+  moreHref={CONFIG.more}
+  id={CONFIG.id}
+>
+  <div
+    class="joe_aside__item-contain"
+    th:with={`cloudIs3d = \${${opts("type")} == '3d'}`}
+  >
+    <div
+      class:list={[`${kind === "tag" ? "tags" : "categories"}-cloud-list`]}
+      th:classappend={`\${${opts("width")} == 'responsive' ? 'responsive' : 'static'}`}
+      th:attr="data-cloud-3d=${cloudIs3d}"
+    >
+      <a
+        th:each={`entry : \${${items}}`}
+        th:href="@{${entry.status.permalink}}"
+        th:title="${entry.spec.displayName}"
+        th:text="${entry.spec.displayName}"
+      ></a>
+    </div>
+  </div>
+</AsideCard>

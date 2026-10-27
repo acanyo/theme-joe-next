@@ -1,25 +1,26 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Actions from "../components/layout/Actions.astro";
+import Aside from "../components/aside/Aside.astro";
+import ArticleBody from "../components/post/ArticleBody.astro";
+import CommentSection from "../components/post/CommentSection.astro";
+import "../styles/pages/post.less";
 ---
 
-<Layout contentClass="prose">
-  <Fragment slot="head">
-    <title th:text="|${singlePage.spec.title} - ${site.title}|"></title>
-  </Fragment>
-
-  <div class="page-heading">
-    <h1 th:text="${singlePage.spec.title}"></h1>
-    <p class="page-meta">
-      <span
-        th:text="${#dates.format(singlePage.spec.publishTime, 'yyyy-MM-dd')}"
-      ></span>
-    </p>
+<BaseLayout
+  title="singlePage.spec.title + ' - ' + site.title"
+  pageClass="page-post page-sheet"
+>
+  <div class="joe_main joe_post">
+    <ArticleBody subject="singlePage" />
+    <CommentSection subject="singlePage" kind="SinglePage" />
   </div>
+  <th-block th:if="${theme.config.aside.enable_sheet_aside}">
+    <Aside />
+  </th-block>
+  <Actions slot="actions" editKind="page" />
+</BaseLayout>
 
-  <div th:utext="${singlePage.content.content}"></div>
-
-  <halo:comment
-    group="content.halo.run"
-    kind="SinglePage"
-    th:attr="name=${singlePage.metadata.name}"></halo:comment>
-</Layout>
+<script>
+  import "../scripts/pages/post";
+</script>

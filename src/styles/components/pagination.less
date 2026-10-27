@@ -1,0 +1,55 @@
+.joe_pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 36px;
+  padding-bottom: 30px;
+
+  li {
+    margin-left: 5px;
+    user-select: none;
+    overflow: hidden;
+    background: var(--sib-background);
+    border-radius: 3px;
+    box-shadow: var(--box-shadow-pager);
+
+    a {
+      display: block;
+      height: 32px;
+      line-height: 32px;
+      padding: 0 14px;
+      color: var(--main);
+
+      &:hover {
+        color: #fff;
+        background: var(--theme);
+      }
+    }
+
+    &.prev {
+      border-radius: 6px 3px 3px 6px;
+    }
+
+    &.next {
+      border-radius: 3px 6px 6px 3px;
+    }
+
+    &.active {
+      font-weight: 600;
+      background: var(--theme);
+      box-shadow: 0 3px 20px -2px var(--theme);
+
+      a {
+        color: #fff;
+      }
+    }
+
+    &.disabled {
+      pointer-events: none;
+
+      a {
+        color: var(--classA);
+      }
+    }
+  }
+}

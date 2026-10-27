@@ -1,0 +1,85 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Aside from "../components/aside/Aside.astro";
+import Pagination from "../components/list/Pagination.astro";
+import "../styles/pages/friends.less";
+---
+
+<BaseLayout
+  title="(theme.config.friends.friends_title ?: '朋友圈') + ' - ' + site.title"
+  pageClass="page-friends"
+>
+  <div class="joe_main">
+    <div class="joe_detail">
+      <h1
+        class="joe_detail__title txt-shadow"
+        th:text="${theme.config.friends.friends_title ?: '朋友圈'}"
+      ></h1>
+      <a
+        class="joe_friend_add"
+        th:if="${theme.config.friends.enable_friend_add}"
+        sec:authorize="isAuthenticated()"
+        th:href="@{/console/friends}"
+        target="_blank"
+        rel="nofollow"
+        aria-label="管理朋友圈"
+      >
+        <i class="joe-font joe-icon-edit" aria-hidden="true"></i>
+      </a>
+      <ul class="joe_friends__list">
+        <li
+          class="joe_friend__item"
+          th:each="item : ${friends.items}"
+          th:with="spec = ${item.spec}"
+          th:classappend="${theme.config.friends.enable_friend_effect ? 'joe-reveal' : ''}"
+          th:attr="data-reveal=${theme.config.friends.friend_list_effect_class}"
+        >
+          <p class="joe_friend_info">
+            <img
+              class="joe_friend_info_logo"
+              loading="lazy"
+              th:src="${spec.logo}"
+              th:alt="${spec.author}"
+              th:attr="data-text-avatar=${spec.author}"
+              data-fallback="link"
+            />
+            <a
+              class="joe_friend_info_author"
+              th:text="${spec.author}"
+              th:href="${spec.authorUrl}"
+              target="_blank"
+              rel="noopener noreferrer"
+            ></a>
+            <time
+              class="joe_friend_info_pubDate"
+              th:text="${#dates.format(spec.pubDate, 'yyyy-MM-dd')}"
+            ></time>
+          </p>
+          <div class="joe_friend_block">
+            <div class="joe_friend_body">
+              <h2 class="joe_friend_content_title">
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  th:href="${spec.postLink}"
+                  th:text="${spec.title}"
+                ></a>
+              </h2>
+              <div
+                class="joe_friend_content_description"
+                th:text="${spec.description}"
+              ></div>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <p class="joe_friends__empty" th:if="${#lists.isEmpty(friends.items)}">
+        暂无订阅内容
+      </p>
+      <Pagination result="friends" />
+    </div>
+  </div>
+  <th-block th:if="${theme.config.aside.enable_friends_aside}">
+    <Aside />
+  </th-block>
+</BaseLayout>

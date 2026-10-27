@@ -1,0 +1,39 @@
+---
+/** 文章页广告位（顶部 / 底部 / 侧栏），数据来自设置 ads.* */
+interface Props {
+  position: "top" | "bottom" | "aside";
+}
+
+const { position } = Astro.props;
+const kind = `theme.config.ads.enable_ads_${position}`;
+const list = `theme.config.ads.ads_${position}`;
+---
+
+<th-block
+  th:if={`\${${kind} != null and ${kind} != 'none'}`}
+  th:each={`ad : \${${list}}`}
+>
+  <section class="joe_advert-large">
+    <a
+      th:if={`\${${kind} == 'img'}`}
+      target="_blank"
+      rel="noopener noreferrer nofollow"
+      th:href="${ad.ads_url}"
+      title="广告"
+    >
+      <img
+        class="omit"
+        width="100%"
+        loading="lazy"
+        th:src="${ad.ads_img}"
+        alt="广告"
+        data-fallback="image"
+      />
+      <span class="icon">广告</span>
+    </a>
+    <th-block
+      th:if={`\${${kind} == 'code'}`}
+      th:utext="${ad.ads_code}"
+    ></th-block>
+  </section>
+</th-block>
