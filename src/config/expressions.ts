@@ -8,10 +8,6 @@
 /** 评论是否可用：由 Halo 判定（已安装并启用评论组件插件，且未被全局关闭） */
 export const COMMENT_ENABLED = "haloCommentEnabled == true";
 
-/** 「评论后可见」是否对当前访问者生效（作者本人、评论不可用时不限制） */
-export const READ_LIMIT_ACTIVE = (subject: string): string =>
-  `#annotations.getOrDefault(${subject}, 'enable_read_limit', 'false') == 'true' and (${COMMENT_ENABLED}) and #authentication.name != ${subject}.spec.owner`;
-
 /** 博主显示名：昵称为空时回退到站点标题 */
 export const BLOGGER_NAME = "theme.config.blogger.nickname ?: site.title";
 

@@ -3,12 +3,7 @@
  * 文章 / 页面正文的公共部分：标题、作者信息、过期提示、广告、正文、点赞。
  * `subject` 为当前内容变量名：文章页为 "post"，独立页面为 "singlePage"。
  */
-import {
-  COMMENT_ENABLED,
-  READ_LIMIT_ACTIVE,
-  el,
-} from "../../config/expressions";
-import ReadLimit from "./ReadLimit.astro";
+import { COMMENT_ENABLED, el } from "../../config/expressions";
 import { POST_ICONS } from "../../data/post-icons";
 import PostAds from "./PostAds.astro";
 
@@ -26,7 +21,6 @@ const ARTICLE_CLASS = [
   "theme.config.post.enable_indent ? 'indent' : ''",
   "theme.config.code_block.enable_code_line_number and !theme.config.code_block.enable_code_newline ? 'line-numbers' : ''",
   "theme.config.code_block.enable_single_code_select ? 'single_code_select' : ''",
-  `(${READ_LIMIT_ACTIVE(s)}) ? 'limited' : ''`,
 ]
   .map((expr) => `\${${expr}}`)
   .join(" ");
@@ -153,7 +147,6 @@ const ARTICLE_CLASS = [
         class="joe_raw_content"
         th:text={`\${${s}.content.content}`}
       ></div>
-      <ReadLimit subject={s} kind={isPost ? "Post" : "SinglePage"} />
     </article>
 
     {isPost && (

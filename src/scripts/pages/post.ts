@@ -4,7 +4,6 @@ import { initCodeBlocks } from "../content/code-block";
 import { initShortcodes } from "../content/shortcodes";
 import { initGallery } from "../content/gallery";
 import { initAsideOperate } from "../content/aside-operate";
-import { initReadLimit } from "../content/read-limit";
 import {
   ensureHeadingIds,
   initCopyright,
@@ -23,7 +22,6 @@ onReady(() => {
   initToc();
   initLike();
   initAsideOperate();
-  void initReadLimit();
   initShare();
   initCopyright();
   initProgressBar();

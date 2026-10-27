@@ -89,7 +89,6 @@ integrations/           Astro 构建后处理
 - **技术栈：** jQuery、Isotope、fancybox、Draggabilly、WOW.js、NProgress、Qmsg、ClipboardJS、lazysizes、Vue 2 均由原生 API 或 npm 包替代，第三方库通过 pnpm 管理并锁定版本。
 - **图标字体与资源本地化：** iconfont 不再依赖 at.alicdn.com，Font Awesome 已移除（Joe3 中未实际使用）。
 - **评论：** 只使用 Halo 评论扩展点（评论组件插件），不再内置 Waline。
-- **评论后可见：** 改为通过 Halo 公开评论接口与邮箱哈希判断当前用户是否已评论，不再劫持 `window.fetch`。正文仍会输出到页面，这是阅读体验上的限制而非权限控制。
 - **已移除：** 天气组件、百度收录检测、PDF 短代码，以及 Joe3 中未被引用的库和模板（halo-comment、KaTeX、jquery-ui 等）。视频短代码改用原生 `<video>` + hls.js，不再使用 DPlayer 的 iframe 页面。
 - **设置项：** 保持与 Joe3 相同的键名，便于迁移；删除了已不再生效的设置（预载图、外部资源地址、旧版自定义 CSS/JS、Waline 等）。
 - **修复：** 分类/标签/作者页分页地址、年度时间轴重复、作者页标题、`page_links` 在未安装链接插件时报错等 Joe3 遗留问题。
