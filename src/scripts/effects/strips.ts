@@ -22,7 +22,10 @@ export default function start(card: HTMLElement): void {
   const ctx = canvas?.getContext("2d");
   if (!canvas || !ctx) return;
 
-  const count = window.innerWidth >= 988 ? 150 : 75;
+  // Joe3 在整个窗口范围内生成 150（窄屏 75）片彩带，只有落在卡片画布里的可见。
+  // 这里直接在画布内生成，按「画布面积 / 窗口面积」折算数量，保持与 Joe3 相同的视觉密度。
+  const base = window.innerWidth >= 988 ? 150 : 75;
+  let count = 0;
   let particles: Particle[] = [];
   let angle = 0;
   let active = false;
@@ -31,12 +34,14 @@ export default function start(card: HTMLElement): void {
   const resize = () => {
     canvas.width = card.clientWidth;
     canvas.height = card.clientHeight;
+    const ratio = (canvas.width * canvas.height) / (window.innerWidth * window.innerHeight);
+    count = Math.max(6, Math.round(base * ratio));
   };
   const spawn = (fromTop: boolean): Particle => ({
     x: Math.random() * canvas.width,
     y: fromTop ? -10 : Math.random() * canvas.height - canvas.height,
     r: 10 + Math.random() * 20,
-    d: Math.random() * count + 10,
+    d: Math.random() * base + 10,
     color: COLORS[Math.floor(Math.random() * COLORS.length)] as string,
     tilt: Math.random() * 10 - 10,
     tiltAngle: 0,
