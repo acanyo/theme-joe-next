@@ -46,6 +46,11 @@ const TITLE = "theme.config.archives.archives_title ?: '文章归档'";
             <div class="joe_archives-title">
               <i class="jiewen joe-icon-riqi" aria-hidden="true"></i>列表
             </div>
+            <p
+              class="joe_archives__empty"
+              th:if="${#lists.isEmpty(archives.items)}"
+              th:text="${theme.config.archives.archives_empty_text ?: '暂无文章数据'}"
+            ></p>
             <ul class="joe_archives-list">
               <th-block th:each="archive : ${archives.items}">
                 <th-block th:each="month : ${archive.months}">

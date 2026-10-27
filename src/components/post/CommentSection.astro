@@ -4,7 +4,12 @@
  * `subject` 为当前内容变量名；`kind` 为评论主体类型。
  */
 import { POST_ICONS } from "../../data/post-icons";
-import { WALINE_ENABLED, el } from "../../config/expressions";
+import {
+  ANY_COMMENT_ENABLED,
+  HALO_COMMENT_ENABLED,
+  WALINE_ENABLED,
+  el,
+} from "../../config/expressions";
 
 interface Props {
   subject: string;
@@ -18,7 +23,7 @@ const enabledGlobally =
   "!theme.config.other.enable_clean_mode and theme.config.post.enable_comment";
 ---
 
-<div class="joe_comment">
+<div class="joe_comment" th:if={el(ANY_COMMENT_ENABLED)}>
   <div
     class="joe_comment__close"
     th:unless={`\${${enabledGlobally} and ${enabledForSubject}}`}
@@ -35,7 +40,7 @@ const enabledGlobally =
     <div class="box_title">
       <h2>评论区</h2>
     </div>
-    <div th:if={`\${haloCommentEnabled and !(${WALINE_ENABLED})}`}>
+    <div th:if={el(HALO_COMMENT_ENABLED)}>
       <halo-comment
         group={group}
         kind={kind}
