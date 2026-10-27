@@ -48,7 +48,9 @@ import "../styles/pages/post.less";
     <CommentSection subject="post" kind="Post" />
   </div>
 
-  <PostAside />
+  <th-block th:if="${theme.config.aside.enable_post_aside and #annotations.getOrDefault(post, 'enable_aside', 'true') == 'true'}">
+    <PostAside />
+  </th-block>
 
   <div
     slot="before"

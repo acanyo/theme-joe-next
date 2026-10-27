@@ -972,7 +972,8 @@
         }
       }
 
-      &:hover {
+      &:hover,
+      &:focus-within {
         width: auto;
         overflow: initial;
         background: var(--classD);
@@ -989,7 +990,10 @@
         }
       }
 
-      #share_to_weixin:hover .qrcode_wrapper {
+      #share_to_weixin:hover .qrcode_wrapper,
+      #share_to_weixin:focus .qrcode_wrapper,
+      [data-joe-share-weixin]:hover .qrcode_wrapper,
+      [data-joe-share-weixin]:focus .qrcode_wrapper {
         display: block;
       }
     }

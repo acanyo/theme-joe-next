@@ -5,6 +5,7 @@ import Actions from "../components/layout/Actions.astro";
 import Aside from "../components/aside/Aside.astro";
 import LinkGroups from "../components/links/LinkGroups.astro";
 import {
+  ANY_COMMENT_ENABLED,
   HALO_COMMENT_ENABLED,
   WALINE_ENABLED,
   el,
@@ -35,14 +36,14 @@ import "../styles/pages/journals.less";
     </div>
     <div
       class="joe_comment"
-      th:if="${theme.config.links.enable_links_comment and !theme.config.other.enable_clean_mode}"
+      th:if={`\${theme.config.links.enable_links_comment and !theme.config.other.enable_clean_mode and (${ANY_COMMENT_ENABLED})}`}
     >
       <div class="joe_comment_box">
         <div class="box_title">
           <h2>评论区</h2>
         </div>
         <halo-comment
-          th:if={el(`haloCommentEnabled and ${HALO_COMMENT_ENABLED}`)}
+          th:if={el(HALO_COMMENT_ENABLED)}
           group="plugin.halo.run"
           kind="Plugin"
           name="PluginLinks"

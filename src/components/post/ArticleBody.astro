@@ -20,7 +20,7 @@ const isPost = s === "post";
 const ann = (key: string, fallback: string) =>
   `#annotations.getOrDefault(${s}, '${key}', '${fallback}')`;
 const ARTICLE_CLASS = [
-  `${ann("img_align", "center")} + '-img'`,
+  `#annotations.getOrDefault(${s}, 'img_align', theme.config.post.post_img_align ?: 'center') + '-img'`,
   `${ann("enable_copy", "true")} == 'false' or !theme.config.post.enable_copy ? 'uncopy' : ''`,
   "theme.config.post.enable_indent ? 'indent' : ''",
   "theme.config.code_block.enable_code_line_number and !theme.config.code_block.enable_code_newline ? 'line-numbers' : ''",
@@ -147,6 +147,7 @@ const ARTICLE_CLASS = [
     <article
       class={`joe_detail__article animated fadeIn`}
       th:classappend={`|${ARTICLE_CLASS}|`}
+      th:style={`|--img-max-width: \${#annotations.getOrDefault(${s}, 'img_max_width', theme.config.post.img_max_width ?: '100%')}|`}
     >
       <div
         id="post-inner"

@@ -10,9 +10,11 @@ import "../../styles/index.less";
 interface Props {
   /** 页面标题的 SpEL 表达式（不含 `${}`），为空时使用站点标题 */
   title?: string;
+  /** 额外的输出条件（布局契约中 head 由调用方提供时不输出标题） */
+  titleIf?: string;
 }
 
-const { title = "site.title" } = Astro.props;
+const { title = "site.title", titleIf } = Astro.props;
 ---
 
 <meta charset="utf-8" />
@@ -22,7 +24,10 @@ const { title = "site.title" } = Astro.props;
 />
 <meta name="renderer" content="webkit" />
 <meta name="format-detection" content="telephone=no,email=no" />
-<title th:text={`\${${title}}`}></title>
+<title
+  th:if={titleIf ? `\${${titleIf}}` : undefined}
+  th:text={`\${${title}}`}
+></title>
 <link
   rel="icon"
   th:if="${not #strings.isEmpty(site.favicon)}"

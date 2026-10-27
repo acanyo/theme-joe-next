@@ -15,6 +15,7 @@ type ThymeleafAttribute =
   | "datetime"
   | "each"
   | "for"
+  | "fragment"
   | "href"
   | "id"
   | "if"

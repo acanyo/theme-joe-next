@@ -9,8 +9,11 @@
 export const WALINE_ENABLED =
   "theme.config.basic.comment_option == 'waline' and #strings.trim(theme.config.basic.waline.waline_serverURL) != ''";
 
-/** 是否使用 Halo 内置评论体系 */
-export const HALO_COMMENT_ENABLED = `!(${WALINE_ENABLED})`;
+/** 是否使用 Halo 评论扩展点（未选择 Waline，且 Halo 判定评论可用，例如已安装评论插件） */
+export const HALO_COMMENT_ENABLED = `!(${WALINE_ENABLED}) and haloCommentEnabled == true`;
+
+/** 是否有任一评论系统可用 */
+export const ANY_COMMENT_ENABLED = `(${WALINE_ENABLED}) or haloCommentEnabled == true`;
 
 /** 博主显示名：昵称为空时回退到站点标题 */
 export const BLOGGER_NAME = "theme.config.blogger.nickname ?: site.title";

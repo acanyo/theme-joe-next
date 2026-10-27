@@ -761,7 +761,7 @@ hr {
 // 新版瀑布流（CSS 多列布局，替代 Isotope）
 .joe_photos__grid {
   column-count: 3;
-  column-gap: 10px;
+  column-gap: var(--photos-gap, 10px);
 
   @media (max-width: 992px) {
     column-count: 2;
@@ -773,7 +773,7 @@ hr {
 
   .grid-item {
     position: relative;
-    margin: 0 0 10px;
+    margin: 0 0 var(--photos-gap, 10px);
     overflow: hidden;
     break-inside: avoid;
     border-radius: var(--radius-inner);

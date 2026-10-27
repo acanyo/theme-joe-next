@@ -1,0 +1,41 @@
+---
+/**
+ * Halo 页面布局契约（2.26+）：templates/layout.html 提供 `html(head, content)` 片段，
+ * 让插件自带的前台页面复用主题外壳（导航、页脚、样式、明暗模式）。
+ *
+ * - head：调用方提供的头部片段，通常包含 <title>；为空时输出站点标题。
+ * - content：调用方提供的正文片段。
+ *
+ * 主题自身页面不使用此布局。
+ */
+import Head from "../components/head/Head.astro";
+import Navbar from "../components/navbar/Navbar.astro";
+import Footer from "../components/layout/Footer.astro";
+import Actions from "../components/layout/Actions.astro";
+---
+
+<!doctype html>
+<html th:lang="${#locale.toLanguageTag}" th:fragment="html (head, content)">
+  <head>
+    <Head title="site.title" titleIf="head == null" />
+    <th-block th:if="${head != null}" th:replace="${head}"></th-block>
+  </head>
+  <body>
+    <div id="Joe">
+      <Navbar />
+      <div class="joe_container joe_main_container page-plugin">
+        <div class="joe_main">
+          <div class="joe_detail joe_plugin_page">
+            <th-block th:replace="${content}"></th-block>
+          </div>
+        </div>
+      </div>
+      <Actions />
+      <Footer />
+    </div>
+    <halo-footer></halo-footer>
+    <script>
+      import "../scripts/app";
+    </script>
+  </body>
+</html>
