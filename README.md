@@ -19,12 +19,14 @@ pnpm dev        # 监听 src/ 变化并重新构建到 templates/
 
 将主题目录放到 Halo 工作目录的 `themes/theme-joe-next/`，在控制台安装并启用。开发时建议关闭模板缓存：`SPRING_THYMELEAF_CACHE=false`。
 
-| 命令           | 作用                                             |
-| -------------- | ------------------------------------------------ |
-| `pnpm build`   | 构建模板到 `templates/`                          |
-| `pnpm package` | 构建并打包为 `dist/theme-joe-next-<version>.zip` |
-| `pnpm check`   | TypeScript / Astro 类型检查                      |
-| `pnpm test`    | 单元测试（构建后处理逻辑）                       |
+| 命令 | 作用 |
+| --- | --- |
+| `pnpm build` | 构建模板并打包为 `dist/theme-joe-next-<version>.zip` |
+| `pnpm build:templates` | 仅构建模板到 `templates/`（开发调试用） |
+| `pnpm check` | TypeScript / Astro 类型检查 |
+| `pnpm test` | 单元测试 |
+
+发布：在 GitHub 创建 Release 后，CD 工作流会自动构建并把主题包上传到 Release 附件。
 
 ## 目录结构
 
