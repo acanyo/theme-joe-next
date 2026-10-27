@@ -64,19 +64,22 @@ export function initShare(): void {
   const weixin = $("[data-joe-share-weixin]");
   const qrcode = weixin ? $(".qrcode_wx", weixin) : null;
   if (weixin && qrcode) {
-    weixin.addEventListener(
-      "mouseenter",
-      async () => {
-        const { toCanvas } = await import("qrcode");
-        const canvas = document.createElement("canvas");
-        await toCanvas(canvas, weixin.dataset.url || location.href, {
-          width: 140,
-          margin: 1,
-        });
-        qrcode.replaceChildren(canvas);
-      },
-      { once: true },
-    );
+    let rendered = false;
+    const render = async () => {
+      if (rendered) return;
+      rendered = true;
+      const { toCanvas } = await import("qrcode");
+      const canvas = document.createElement("canvas");
+      await toCanvas(canvas, weixin.dataset.url || location.href, {
+        width: 140,
+        margin: 1,
+      });
+      canvas.setAttribute("aria-label", "文章链接二维码");
+      qrcode.replaceChildren(canvas);
+    };
+    // 悬停或键盘聚焦时生成二维码
+    weixin.addEventListener("mouseenter", () => void render());
+    weixin.addEventListener("focus", () => void render());
   }
 }
 
