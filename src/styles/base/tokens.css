@@ -1,4 +1,4 @@
-// 全局CSS变量
+/* 全局CSS变量*/
 html {
   --font-default:
     "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
@@ -14,7 +14,7 @@ html {
   --routine: #606266;
   --title: #333;
   --sib: #f2f6fc;
-  --minor: #6d7076; // Joe3: #909399（调整至 WCAG AA 对比度）
+  --minor: #6d7076; /* Joe3: #909399（调整至 WCAG AA 对比度）*/
   --seat: #c0c4cc;
   --classA: #dcdfe6;
   --classB: #e4e7ed;
@@ -30,7 +30,7 @@ html {
   --classL: #666;
   --classM: #2d2e37;
   --quote: #50bfff;
-  --code: #1767c2; // Joe3: #409eff（行内代码对比度）
+  --code: #1767c2; /* Joe3: #409eff（行内代码对比度）*/
   --code-background: #e8f3ff;
   --overdue-border: #ffbb76;
   --overdue-background: #fffcef;
@@ -73,10 +73,10 @@ html {
     --sib-background: #303030;
     --glass-background: rgba(0, 0, 0, 0.65);
     --main: #999;
-    --routine: #aeaeae; // Joe3: #888
+    --routine: #aeaeae; /* Joe3: #888*/
     --title: #ddd;
     --sib: #3a3a3a;
-    --minor: #979797; // Joe3: #777
+    --minor: #979797; /* Joe3: #777*/
     --seat: #666;
     --classA: #515253;
     --classB: #454545;
@@ -124,7 +124,7 @@ html {
     --animation-notice: twinkle-night 1s ease infinite alternate;
     background: var(--background);
 
-    // 暗黑模式下需要修改的样式
+    /* 暗黑模式下需要修改的样式*/
     body:after {
       background: #2b2b2b;
       z-index: -200;
@@ -199,31 +199,19 @@ html {
       .aplayer-lrc {
         &:before {
           height: 5px;
-          background: -webkit-linear-gradient(
-            180deg,
-            rgba(0, 0, 0, 0.3) 0,
-            rgba(0, 0, 0, 0)
-          );
           background: linear-gradient(
             180deg,
             rgba(0, 0, 0, 0.3) 0,
             rgba(0, 0, 0, 0)
           );
-          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#cc000000", endColorstr="#00000000", GradientType=0);
         }
 
         &:after {
-          background: -webkit-linear-gradient(
-            180deg,
-            rgba(0, 0, 0, 0) 0,
-            rgba(0, 0, 0, 0.3)
-          );
           background: linear-gradient(
             180deg,
             rgba(0, 0, 0, 0) 0,
             rgba(0, 0, 0, 0.3)
           );
-          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00000000", endColorstr="#cc000000", GradientType=0);
         }
       }
     }

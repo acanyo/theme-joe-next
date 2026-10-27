@@ -51,7 +51,7 @@ src/
 │   ├── content/        正文处理（代码块、目录、灯箱、短代码）
 │   ├── core/           基础工具（DOM、配置、存储、提示）
 │   └── effects/        鼠标/背景特效（按需加载）
-├── styles/             Less 样式，按 base / layout / components / content / pages 拆分
+├── styles/             原生 CSS（嵌套语法），按 base / layout / components / content / pages 拆分
 ├── config/             前后端共享的配置契约与 SpEL 表达式
 └── data/               社交图标、内联 SVG 等静态数据
 public/assets/          运行时按路径引用的资源（头像框、鼠标皮肤、字体、默认图片）

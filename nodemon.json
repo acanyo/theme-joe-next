@@ -1,5 +1,5 @@
 {
   "verbose": false,
   "watch": ["src/**/*", "public/**/*", "integrations/**/*"],
-  "ext": "astro,ts,less,css,html"
+  "ext": "astro,ts,css,html"
 }

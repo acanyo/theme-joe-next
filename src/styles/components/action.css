@@ -3,9 +3,10 @@
   position: fixed;
   bottom: 90px;
   right: 30px;
-  z-index: 90;
+  z-index: 90
+}
 
-  &_item {
+.joe_action_item {
     position: relative;
     display: flex;
     align-items: center;
@@ -91,4 +92,3 @@
       }
     }
   }
-}

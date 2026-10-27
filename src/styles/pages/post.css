@@ -1,9 +1,9 @@
 /* 文章页面的样式 */
 .joe_bread {
   margin: 20px auto 0;
-  padding: 15px 15px 0;
-
-  &__bread {
+  padding: 15px 15px 0
+}
+.joe_bread__bread {
     display: flex;
     align-items: center;
 
@@ -35,7 +35,6 @@
       }
     }
   }
-}
 
 .joe_post {
   position: relative;
@@ -45,12 +44,14 @@
     right: 10px;
     top: 14px;
   }
+}
 
-  &__pagination {
+.joe_post__pagination {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between
+  }
 
-    &-item {
+.joe_post__pagination-item {
       margin-bottom: 15px;
 
       a {
@@ -74,8 +75,6 @@
         margin-left: auto;
       }
     }
-  }
-}
 
 .joe_detail__title {
   margin-bottom: 30px;
@@ -244,7 +243,7 @@
   }
 
   .is-collapsible {
-    // max-height: 1000px;
+    /* max-height: 1000px;*/
     overflow: hidden;
     transition: all 300ms ease-in-out;
   }
@@ -300,7 +299,7 @@
     box-shadow: 0 0 0 0 var(--theme);
   }
 }
-// 评论区 GIF 位置及大小调整
+/* 评论区 GIF 位置及大小调整*/
 .wl-gif-popup.display {
   bottom: 100% !important;
   top: auto !important;

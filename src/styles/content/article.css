@@ -37,8 +37,9 @@
       color: #c50a00;
     }
   }
+}
 
-  &__category {
+.joe_detail__category {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
@@ -65,27 +66,27 @@
       &:last-child {
         margin-right: 0;
       }
+    }
 
-      &-0 {
+.item-0 {
         background: #0396ff;
       }
 
-      &-1 {
+.item-1 {
         background: #ea5455;
       }
 
-      &-2 {
+.item-2 {
         background: #7367f0;
       }
 
-      &-3 {
+.item-3 {
         background: #28c76f;
       }
 
-      &-4 {
+.item-4 {
         background: #9f44d3;
       }
-    }
 
     .edit {
       color: var(--minor);
@@ -97,7 +98,7 @@
     }
   }
 
-  &__title {
+.joe_detail__title {
     font-size: 24px;
     color: var(--classF);
     text-align: center;
@@ -110,7 +111,7 @@
     }
   }
 
-  &__count {
+.joe_detail__count {
     position: relative;
     display: flex;
     align-items: center;
@@ -129,8 +130,9 @@
       border-radius: 1.5px;
       background: var(--theme);
     }
+  }
 
-    &-information {
+.joe_detail__count-information {
       display: flex;
       align-items: center;
 
@@ -178,19 +180,19 @@
       }
     }
 
-    &-created {
+.joe_detail__count-created {
       font-size: 32px;
       line-height: 42px;
       color: var(--routine);
       user-select: none;
       text-shadow: var(--text-shadow);
     }
+
+.joe_detail__overdue {
+    padding-top: 5px
   }
 
-  &__overdue {
-    padding-top: 5px;
-
-    &-wrapper {
+.joe_detail__overdue-wrapper {
       padding: 15px;
       color: #db7c22;
       border: 1px solid var(--overdue-border);
@@ -220,9 +222,8 @@
         clip-path: circle(75%);
       }
     }
-  }
 
-  &__article {
+.joe_detail__article {
     padding: 10px 0;
     font-size: 15px;
     word-break: break-word;
@@ -468,11 +469,11 @@
       }
     }
 
-    // 控制带删除线的a标签是否可点击
-    // del>a {
-    //   pointer-events: none;
-    //   cursor: not-allowed;
-    // }
+    /* 控制带删除线的a标签是否可点击*/
+    /* del>a {*/
+    /*   pointer-events: none;*/
+    /*   cursor: not-allowed;*/
+    /* }*/
 
     span[data-fancybox] {
       display: block;
@@ -613,8 +614,9 @@
         }
       }
     }
+  }
 
-    &-video {
+.joe_detail__article-video {
       margin-bottom: 18px;
 
       .play,
@@ -709,7 +711,7 @@
       }
     }
 
-    &-protected {
+.joe_detail__article-protected {
       display: flex;
       justify-content: center;
       background: repeating-linear-gradient(
@@ -755,9 +757,8 @@
         }
       }
     }
-  }
 
-  &__agree {
+.joe_detail__agree {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -814,14 +815,15 @@
     }
   }
 
-  &__operate {
+.joe_detail__operate {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
     padding-top: 20px;
-    color: var(--routine);
+    color: var(--routine)
+  }
 
-    &-tags {
+.joe_detail__operate-tags {
       display: flex;
       flex: 1;
       align-items: center;
@@ -893,7 +895,7 @@
       }
     }
 
-    &-share {
+.joe_detail__operate-share {
       position: relative;
       top: 1px;
       z-index: 10;
@@ -997,7 +999,8 @@
         display: block;
       }
     }
-  }
+
+.joe_detail {
 
   .joe_donate {
     position: relative;
@@ -1079,8 +1082,9 @@
       }
     }
   }
+}
 
-  &__copyright {
+.joe_detail__copyright {
     padding-top: 15px;
     border-top: 1px solid var(--classC);
 
@@ -1118,10 +1122,11 @@
     }
   }
 
-  &__related {
-    padding-top: 15px;
+.joe_detail__related {
+    padding-top: 15px
+  }
 
-    &-title {
+.joe_detail__related-title {
       position: relative;
       font-size: 18px;
       font-weight: 500;
@@ -1141,7 +1146,7 @@
       }
     }
 
-    &-content {
+.joe_detail__related-content {
       display: grid;
       gap: 15px;
       grid-template-columns: repeat(4, 1fr);
@@ -1178,15 +1183,15 @@
         }
       }
     }
-  }
 
-  &__friends {
+.joe_detail__friends {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 15px
+  }
 
-    &-item {
+.joe_detail__friends-item {
       list-style: none !important;
       line-height: 1.5 !important;
 
@@ -1203,7 +1208,7 @@
 
         &:hover {
           transform: translate3d(0, -2px, 0) scale(1.01);
-          // box-shadow: 0 34px 20px -24px rgba(136, 161, 206, 0.3);
+          /* box-shadow: 0 34px 20px -24px rgba(136, 161, 206, 0.3);*/
         }
 
         .title {
@@ -1251,7 +1256,8 @@
         }
       }
     }
-  }
+
+.joe_detail {
 
   .link-requirement {
     padding-left: 30px;

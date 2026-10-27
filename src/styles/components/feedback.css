@@ -51,14 +51,17 @@
   padding: 50px 0;
   user-select: none;
   font-style: italic;
-  color: var(--routine);
+  color: var(--routine)
+}
 
-  &-icon {
+.joe_empty-icon {
     width: 90px;
     height: 90px;
     margin-bottom: 20px;
     fill: var(--routine);
   }
+
+.joe_empty {
 
   &.mini {
     padding: 20px 0;
@@ -69,7 +72,7 @@
   }
 }
 
-// 顶部加载进度条（替代 nprogress）
+/* 顶部加载进度条（替代 nprogress）*/
 .joe_loading_bar {
   position: fixed;
   top: 0;
@@ -95,7 +98,7 @@
   }
 }
 
-// 消息提示（替代 Qmsg）
+/* 消息提示（替代 Qmsg）*/
 .joe_toast {
   position: fixed;
   top: 20px;
@@ -106,9 +109,9 @@
   align-items: center;
   gap: 10px;
   transform: translateX(-50%);
-  pointer-events: none;
-
-  &__item {
+  pointer-events: none
+}
+.joe_toast__item {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -129,8 +132,7 @@
       transform: translateY(0);
     }
   }
-
-  &__icon {
+.joe_toast__icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -140,6 +142,7 @@
     color: #fff;
     border-radius: 50%;
   }
+.joe_toast {
 
   .is-success .joe_toast__icon {
     background: #67c23a;
@@ -155,7 +158,7 @@
   }
 }
 
-// 进入视口时触发的动画（替代 WOW.js）
+/* 进入视口时触发的动画（替代 WOW.js）*/
 .joe-reveal {
   visibility: hidden;
 

@@ -1,5 +1,4 @@
-.joe {
-  &_journal_add {
+.joe_journal_add {
     position: absolute;
     top: 14px;
     right: 14px;
@@ -16,24 +15,19 @@
     }
   }
 
-  &_journals__list {
+.joe_journals__list {
     padding: 10px 0 20px;
 
     &.hidden {
       visibility: hidden;
     }
 
-    &.effect {
-      &_journal {
-        &__item {
+&.effect_journal__item {
           visibility: hidden;
         }
-      }
-    }
   }
 
-  &_journal {
-    &__item {
+.joe_journal__item {
       position: relative;
       padding: 0 0 30px 40px;
 
@@ -55,7 +49,7 @@
       }
     }
 
-    &_date {
+.joe_journal_date {
       position: relative;
       left: -36px;
       z-index: 1;
@@ -74,7 +68,7 @@
       }
     }
 
-    &_block {
+.joe_journal_block {
       position: relative;
       z-index: 2;
       box-sizing: border-box;
@@ -90,7 +84,7 @@
       transition: box-shadow 0.2s;
     }
 
-    &_body {
+.joe_journal_body {
       position: relative;
       box-sizing: content-box;
       max-height: 300px;
@@ -294,11 +288,11 @@
           }
         }
 
-        // 控制带删除线的a标签是否可点击
-        // del>a {
-        //   pointer-events: none;
-        //   cursor: not-allowed;
-        // }
+        /* 控制带删除线的a标签是否可点击*/
+        /* del>a {*/
+        /*   pointer-events: none;*/
+        /*   cursor: not-allowed;*/
+        /* }*/
 
         hr {
           border: none;
@@ -442,7 +436,7 @@
       }
     }
 
-    &_footer {
+.joe_journal_footer {
       padding: 12px 0 2px;
 
       .footer-wrap.open {
@@ -458,7 +452,7 @@
       }
     }
 
-    &_operate_item {
+.joe_journal_operate_item {
       margin-right: 8px;
       font-size: 0;
       user-select: none;
@@ -532,11 +526,9 @@
       }
     }
 
-    &_comment {
+.joe_journal_comment {
       display: none;
     }
-  }
-}
 
 .joe_pagination {
   padding: 0 0 20px 0;

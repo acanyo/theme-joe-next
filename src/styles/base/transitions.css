@@ -1,8 +1,8 @@
-// 页面切换动画。
-// - native：浏览器原生跨页过渡。`@view-transition` 是文档级规则，无法按属性选择开关，
-//   因此由服务端仅在设置为 native 时输出（见 components/head/DynamicStyle.astro），这里只定义动画样式。
-// - swup：无刷新切换，内容区域淡出 → 替换 → 淡入（swup 在 <html> 上添加的状态类）。
-// 系统开启「减少动态效果」时两种模式都不做动画。
+/* 页面切换动画。*/
+/* - native：浏览器原生跨页过渡。`@view-transition` 是文档级规则，无法按属性选择开关，*/
+/*   因此由服务端仅在设置为 native 时输出（见 components/head/DynamicStyle.astro），这里只定义动画样式。*/
+/* - swup：无刷新切换，内容区域淡出 → 替换 → 淡入（swup 在 <html> 上添加的状态类）。*/
+/* 系统开启「减少动态效果」时两种模式都不做动画。*/
 
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-old(root) {
@@ -13,7 +13,7 @@
     animation: joe-page-in 0.28s ease-out both;
   }
 
-  // 导航栏在原生过渡中保持不动
+  /* 导航栏在原生过渡中保持不动*/
   html[data-transition="native"] .joe_header__above {
     view-transition-name: joe-header;
   }
@@ -52,7 +52,7 @@
   }
 }
 
-// swup 进度条（加载较慢时显示）
+/* swup 进度条（加载较慢时显示）*/
 .swup-progress-bar {
   height: var(--loading-bar-height, 3px);
   background: var(--loading-bar, var(--theme));

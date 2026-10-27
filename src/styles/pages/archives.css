@@ -1,6 +1,5 @@
 /* 搜索页的样式 */
-.joe_archives {
-  &-title {
+.joe_archives-title {
     height: 40px;
     margin-bottom: 20px;
     line-height: 40px;
@@ -17,14 +16,13 @@
       color: var(--minor);
     }
   }
-
-  &__basic {
+.joe_archives__basic {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-    margin-bottom: 15px;
-
-    &-item {
+    margin-bottom: 15px
+  }
+.joe_archives__basic-item {
       &.list {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -94,9 +92,7 @@
         }
       }
     }
-  }
-
-  &__lately {
+.joe_archives__lately {
     margin-bottom: 15px;
     background: var(--background);
     border-radius: var(--radius-wrap);
@@ -121,14 +117,13 @@
       }
     }
   }
-
-  &__server {
+.joe_archives__server {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-    margin-bottom: 15px;
-
-    &-item {
+    margin-bottom: 15px
+  }
+.joe_archives__server-item {
       background: var(--background);
       box-shadow: var(--box-shadow);
       border-radius: var(--radius-wrap);
@@ -162,9 +157,7 @@
         }
       }
     }
-  }
-
-  &__filing {
+.joe_archives__filing {
     background: var(--background);
     box-shadow: var(--box-shadow);
     border-radius: var(--radius-wrap);
@@ -175,7 +168,7 @@
       height: 45px;
       font-weight: bold;
       padding: 0 12px;
-      // border-bottom: 1px solid var(--classC);
+      /* border-bottom: 1px solid var(--classC);*/
       color: var(--theme);
       justify-content: space-between;
       user-select: none;
@@ -186,8 +179,7 @@
       overflow: hidden;
     }
   }
-
-  &__category {
+.joe_archives__category {
     margin-bottom: 20px;
 
     .joe_category-list {
@@ -203,7 +195,7 @@
         color: var(--routine);
         background: var(--classH);
         border: 1px solid var(--classB);
-        // transition: background 0.2s;
+        /* transition: background 0.2s;*/
 
         a {
           display: block;
@@ -247,8 +239,7 @@
       }
     }
   }
-
-  &__wrapper {
+.joe_archives__wrapper {
     animation-delay: 0.2s;
 
     .joe_archives-list {
@@ -433,4 +424,3 @@
       }
     }
   }
-}

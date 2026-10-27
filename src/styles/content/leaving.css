@@ -1,8 +1,9 @@
 .joe_leaving {
   position: relative;
-  padding-top: 15px;
+  padding-top: 15px
+}
 
-  &-list {
+.joe_leaving-list {
     position: relative;
     height: 500px;
 
@@ -91,12 +92,14 @@
         font-size: 13px;
       }
 
-      // &:hover {
-      //   transition: transform 0.25s;
-      //   transform: rotate(-5deg)
-      // }
+      /* &:hover {*/
+      /*   transition: transform 0.25s;*/
+      /*   transform: rotate(-5deg)*/
+      /* }*/
     }
   }
+
+.joe_leaving {
 
   .joe_loading {
     position: absolute;
@@ -104,12 +107,12 @@
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
   }
+}
 
-  &-none {
+.joe_leaving-none {
     display: none;
     padding: 15px 0;
     text-align: center;
     user-select: none;
     color: var(--minor);
   }
-}

@@ -5,8 +5,9 @@
   &.hide {
     display: none;
   }
+}
 
-  &__item {
+.joe_aside__item {
     position: relative;
     width: 280px;
     margin-bottom: 15px;
@@ -20,8 +21,9 @@
       margin-bottom: 0;
       transition: top 0.35s;
     }
+  }
 
-    &-title {
+.joe_aside__item-title {
       position: relative;
       display: flex;
       align-items: center;
@@ -48,10 +50,12 @@
       }
     }
 
-    &-contain {
+.joe_aside__item-contain {
       position: relative;
       padding: 15px;
     }
+
+.joe_aside__item {
 
     &.author {
       background: var(--background);
@@ -745,9 +749,10 @@
 
         .progress {
           display: flex;
-          align-items: center;
+          align-items: center
+        }
 
-          &-bar {
+.progress-bar {
             height: 10px;
             border-radius: 5px;
             overflow: hidden;
@@ -755,16 +760,18 @@
             width: 0;
             min-width: 0;
             flex: 1;
-            margin-right: 5px;
+            margin-right: 5px
+          }
 
-            &-inner {
+.progress-bar-inner {
               width: 0;
               height: 100%;
               border-radius: 5px;
               transition: width 0.35s;
-              animation: progress 750ms linear infinite;
+              animation: progress 750ms linear infinite
+            }
 
-              &-0 {
+.progress-bar-inner-0 {
                 background: #bde6ff;
                 background-image: linear-gradient(
                   135deg,
@@ -779,7 +786,7 @@
                 background-size: 30px 30px;
               }
 
-              &-1 {
+.progress-bar-inner-1 {
                 background: #ffd980;
                 background-image: linear-gradient(
                   135deg,
@@ -794,7 +801,7 @@
                 background-size: 30px 30px;
               }
 
-              &-2 {
+.progress-bar-inner-2 {
                 background: #ffa9a9;
                 background-image: linear-gradient(
                   135deg,
@@ -809,7 +816,7 @@
                 background-size: 30px 30px;
               }
 
-              &-3 {
+.progress-bar-inner-3 {
                 background: #67c23a;
                 background-image: linear-gradient(
                   135deg,
@@ -823,14 +830,11 @@
                 );
                 background-size: 30px 30px;
               }
-            }
-          }
 
-          &-percentage {
+.progress-percentage {
             width: 38px;
             color: var(--minor);
           }
-        }
       }
     }
 
@@ -1172,7 +1176,9 @@
         }
       }
 
-      .cloud-list {
+      .cloud-list,
+.tags-cloud-list,
+.categories-cloud-list {
         font-size: 0;
 
         a {
@@ -1185,7 +1191,6 @@
           color: var(--minor);
           text-decoration: none;
           overflow: hidden;
-          -o-text-overflow: ellipsis;
           text-overflow: ellipsis;
           white-space: nowrap;
           text-align: center;
@@ -1211,20 +1216,14 @@
         }
       }
 
-      .tags-cloud-list {
-        .cloud-list();
-      }
-
-      .categories-cloud-list {
-        .cloud-list();
-      }
-
       .empty {
         text-align: center;
         color: var(--routine);
       }
     }
   }
+
+.joe_aside {
 
   .speaker-anim-icon {
     position: relative;

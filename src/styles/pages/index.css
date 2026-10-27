@@ -1,8 +1,8 @@
 /* 首页样式 */
 .joe_index {
-  overflow: hidden;
-
-  &__banner {
+  overflow: hidden
+}
+.joe_index__banner {
     padding: 15px 15px 5px;
     background: var(--background);
 
@@ -147,8 +147,8 @@
         }
       }
     }
-
-    &-recommend {
+  }
+.joe_index__banner-recommend {
       display: flex;
       flex-direction: column;
       width: 270px;
@@ -241,8 +241,7 @@
         }
       }
     }
-
-    &-empty {
+.joe_index__banner-empty {
       position: relative;
       width: 100%;
       overflow: hidden;
@@ -276,16 +275,13 @@
         );
       }
     }
-  }
-
-  &__article {
+.joe_index__article {
     padding: 0 15px;
   }
-
-  &__ad {
-    padding-top: 15px;
-
-    &-link {
+.joe_index__ad {
+    padding-top: 15px
+  }
+.joe_index__ad-link {
       position: relative;
       display: block;
 
@@ -314,12 +310,10 @@
         pointer-events: none;
       }
     }
-  }
+.joe_index {
 
-  .joe_list {
-    &__item {
+.joe_list__item {
       will-change: transform;
       background: var(--background);
     }
-  }
 }

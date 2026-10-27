@@ -75,9 +75,6 @@ importers:
       '@types/qrcode':
         specifier: 1.5.6
         version: 1.5.6
-      less:
-        specifier: 4.9.1
-        version: 4.9.1
       nodemon:
         specifier: 3.1.14
         version: 3.1.14
@@ -3475,6 +3472,7 @@ snapshots:
   copy-anything@3.0.5:
     dependencies:
       is-what: 4.1.16
+    optional: true
 
   copy-text-to-clipboard@3.2.2: {}
 
@@ -3808,7 +3806,8 @@ snapshots:
 
   is-stream@2.0.1: {}
 
-  is-what@4.1.16: {}
+  is-what@4.1.16:
+    optional: true
 
   isarray@1.0.0: {}
 
@@ -3856,6 +3855,7 @@ snapshots:
       source-map: 0.6.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   lightningcss-android-arm64@1.33.0:
     optional: true
@@ -4077,7 +4077,8 @@ snapshots:
 
   package-manager-detector@1.9.0: {}
 
-  parse-node-version@1.0.1: {}
+  parse-node-version@1.0.1:
+    optional: true
 
   path-browserify@1.0.1: {}
 

@@ -1,4 +1,4 @@
-//首页大图
+/*首页大图*/
 /* 额外补充大图样式*/
 .evan-big-banner {
   position: relative;
@@ -41,7 +41,6 @@
   }
 
   img {
-    -o-object-fit: cover;
     object-fit: cover;
   }
 
@@ -97,39 +96,29 @@
       fill: var(--wave-color);
 
       .parallax > use {
-        -webkit-animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5)
-          infinite;
         animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
       }
 
       .parallax > use:first-child {
-        -webkit-animation-delay: -2s;
         animation-delay: -2s;
-        -webkit-animation-duration: 7s;
         animation-duration: 7s;
         opacity: 0.9;
       }
 
       .parallax > use:nth-child(2) {
-        -webkit-animation-delay: -3s;
         animation-delay: -3s;
-        -webkit-animation-duration: 10s;
         animation-duration: 10s;
         opacity: 0.8;
       }
 
       .parallax > use:nth-child(3) {
-        -webkit-animation-delay: -4s;
         animation-delay: -4s;
-        -webkit-animation-duration: 13s;
         animation-duration: 13s;
         opacity: 0.9;
       }
 
       .parallax > use:nth-child(4) {
-        -webkit-animation-delay: -5s;
         animation-delay: -5s;
-        -webkit-animation-duration: 20s;
         animation-duration: 20s;
       }
     }
@@ -285,7 +274,7 @@
 }
 
 .evan-friends {
-  // 其他相关样式...
+  /* 其他相关样式...*/
 
   .sub-text {
     word-break: break-all;
@@ -429,7 +418,7 @@
   }
 }
 
-// 首页全屏模式（原为内联 style）
+/* 首页全屏模式（原为内联 style）*/
 .evan-big-banner.is-fullscreen {
   height: calc(100vh - 60px);
   margin-top: initial;

@@ -1,13 +1,13 @@
-.joe_photos {
-  &__type {
+.joe_photos__type {
     position: relative;
     margin-bottom: 15px;
     padding: 60px 15px 15px;
     background: var(--background);
     border-radius: var(--radius-wrap);
-    box-shadow: var(--box-shadow);
+    box-shadow: var(--box-shadow)
+  }
 
-    &-title {
+.joe_photos__type-title {
       position: absolute;
       top: 15px;
       left: -10px;
@@ -37,7 +37,7 @@
       }
     }
 
-    &-list {
+.joe_photos__type-list {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
       gap: 10px;
@@ -83,9 +83,8 @@
         user-select: none;
       }
     }
-  }
 
-  &__gallery {
+.joe_photos__gallery {
     position: relative;
     width: 100% !important;
     margin: 0 auto;
@@ -189,22 +188,22 @@
         content: "";
       }
 
-      // &::after {
-      //   position: absolute;
-      //   top: 0;
-      //   left: 0;
-      //   z-index: 3;
-      //   width: 100%;
-      //   height: 100%;
-      //   background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSIgdmlld0JveD0iMCAwIDQ1IDQ1IiBzdHJva2U9IiNmZmYiPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMSAxKSIgc3Ryb2tlLXdpZHRoPSIyIj48Y2lyY2xlIGN4PSIyMiIgY3k9IjIyIiByPSI2IiBzdHJva2Utb3BhY2l0eT0iMCI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49IjEuNXMiIGR1cj0iM3MiIHZhbHVlcz0iNjsyMiIgY2FsY01vZGU9ImxpbmVhciIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48YW5pbWF0ZSBhdHRyaWJ1dGVOYW1lPSJzdHJva2Utb3BhY2l0eSIgYmVnaW49IjEuNXMiIGR1cj0iM3MiIHZhbHVlcz0iMTswIiBjYWxjTW9kZT0ibGluZWFyIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIvPjxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9InN0cm9rZS13aWR0aCIgYmVnaW49IjEuNXMiIGR1cj0iM3MiIHZhbHVlcz0iMjswIiBjYWxjTW9kZT0ibGluZWFyIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjIyIiBjeT0iMjIiIHI9IjYiIHN0cm9rZS1vcGFjaXR5PSIwIj48YW5pbWF0ZSBhdHRyaWJ1dGVOYW1lPSJyIiBiZWdpbj0iM3MiIGR1cj0iM3MiIHZhbHVlcz0iNjsyMiIgY2FsY01vZGU9ImxpbmVhciIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48YW5pbWF0ZSBhdHRyaWJ1dGVOYW1lPSJzdHJva2Utb3BhY2l0eSIgYmVnaW49IjNzIiBkdXI9IjNzIiB2YWx1ZXM9IjE7MCIgY2FsY01vZGU9ImxpbmVhciIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48YW5pbWF0ZSBhdHRyaWJ1dGVOYW1lPSJzdHJva2Utd2lkdGgiIGJlZ2luPSIzcyIgZHVyPSIzcyIgdmFsdWVzPSIyOzAiIGNhbGNNb2RlPSJsaW5lYXIiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjIiIGN5PSIyMiIgcj0iOCI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49IjBzIiBkdXI9IjEuNXMiIHZhbHVlcz0iNjsxOzI7Mzs0OzU7NiIgY2FsY01vZGU9ImxpbmVhciIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48L2NpcmNsZT48L2c+PC9zdmc+);
-      //   background-repeat: no-repeat;
-      //   background-position: right bottom;
-      //   background-size: 20% auto;
-      //   transform: scale(2);
-      //   opacity: 0;
-      //   transition: transform 0.35s, opacity 0.35s;
-      //   content: "";
-      // }
+      /* &::after {*/
+      /*   position: absolute;*/
+      /*   top: 0;*/
+      /*   left: 0;*/
+      /*   z-index: 3;*/
+      /*   width: 100%;*/
+      /*   height: 100%;*/
+      /*   background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSIgdmlld0JveD0iMCAwIDQ1IDQ1IiBzdHJva2U9IiNmZmYiPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMSAxKSIgc3Ryb2tlLXdpZHRoPSIyIj48Y2lyY2xlIGN4PSIyMiIgY3k9IjIyIiByPSI2IiBzdHJva2Utb3BhY2l0eT0iMCI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49IjEuNXMiIGR1cj0iM3MiIHZhbHVlcz0iNjsyMiIgY2FsY01vZGU9ImxpbmVhciIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48YW5pbWF0ZSBhdHRyaWJ1dGVOYW1lPSJzdHJva2Utb3BhY2l0eSIgYmVnaW49IjEuNXMiIGR1cj0iM3MiIHZhbHVlcz0iMTswIiBjYWxjTW9kZT0ibGluZWFyIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIvPjxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9InN0cm9rZS13aWR0aCIgYmVnaW49IjEuNXMiIGR1cj0iM3MiIHZhbHVlcz0iMjswIiBjYWxjTW9kZT0ibGluZWFyIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjIyIiBjeT0iMjIiIHI9IjYiIHN0cm9rZS1vcGFjaXR5PSIwIj48YW5pbWF0ZSBhdHRyaWJ1dGVOYW1lPSJyIiBiZWdpbj0iM3MiIGR1cj0iM3MiIHZhbHVlcz0iNjsyMiIgY2FsY01vZGU9ImxpbmVhciIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48YW5pbWF0ZSBhdHRyaWJ1dGVOYW1lPSJzdHJva2Utb3BhY2l0eSIgYmVnaW49IjNzIiBkdXI9IjNzIiB2YWx1ZXM9IjE7MCIgY2FsY01vZGU9ImxpbmVhciIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48YW5pbWF0ZSBhdHRyaWJ1dGVOYW1lPSJzdHJva2Utd2lkdGgiIGJlZ2luPSIzcyIgZHVyPSIzcyIgdmFsdWVzPSIyOzAiIGNhbGNNb2RlPSJsaW5lYXIiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjIiIGN5PSIyMiIgcj0iOCI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49IjBzIiBkdXI9IjEuNXMiIHZhbHVlcz0iNjsxOzI7Mzs0OzU7NiIgY2FsY01vZGU9ImxpbmVhciIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48L2NpcmNsZT48L2c+PC9zdmc+);*/
+      /*   background-repeat: no-repeat;*/
+      /*   background-position: right bottom;*/
+      /*   background-size: 20% auto;*/
+      /*   transform: scale(2);*/
+      /*   opacity: 0;*/
+      /*   transition: transform 0.35s, opacity 0.35s;*/
+      /*   content: "";*/
+      /* }*/
 
       &:hover {
         img {
@@ -216,10 +215,10 @@
           backdrop-filter: blur(1px);
         }
 
-        // &::after {
-        //   transform: scale(1);
-        //   opacity: 1;
-        // }
+        /* &::after {*/
+        /*   transform: scale(1);*/
+        /*   opacity: 1;*/
+        /* }*/
 
         .info {
           opacity: 1;
@@ -235,12 +234,12 @@
       width: 30%;
     }
 
-    // .jg-spinner {
-    //   display: none;
-    // }
+    /* .jg-spinner {*/
+    /*   display: none;*/
+    /* }*/
   }
 
-  &__list {
+.joe_photos__list {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
@@ -418,7 +417,7 @@
     }
   }
 
-  &__filter {
+.joe_photos__filter {
     position: relative;
     top: 12px;
     display: block;
@@ -477,7 +476,7 @@
     }
   }
 
-  &__layout-switch {
+.joe_photos__layout-switch {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -497,13 +496,14 @@
     }
   }
 
-  &__pagination {
+.joe_photos__pagination {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding-top: 15px;
+    padding-top: 15px
+  }
 
-    &-item {
+.joe_photos__pagination-item {
       height: 32px;
       margin-left: 5px;
       padding: 0 15px;
@@ -540,8 +540,6 @@
         }
       }
     }
-  }
-}
 :root {
   --main-bg-color: #ff7675;
 }
@@ -554,7 +552,6 @@
 
 html {
   background: #f4f4f4;
-  -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -624,9 +621,10 @@ hr {
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.2s ease-in-out;
+  transition: box-shadow 0.2s ease-in-out
+}
 
-  &__picture {
+.card__picture {
     display: block;
     width: 100%;
     height: auto;
@@ -634,48 +632,47 @@ hr {
     border-top-right-radius: 6px;
   }
 
-  &-infos {
+.card-infos {
     padding: 20px;
     background: #fff;
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
   }
 
-  &__title {
+.card__title {
     font-size: 1.8rem;
     font-weight: 600;
     line-height: 1.4;
     margin: 0 0 10px;
   }
 
-  &__text {
+.card__text {
     font-size: 1.4rem;
     font-weight: 300;
     margin: 0;
-    color: #86888a;
+    color: #86888a
+  }
 
-    &--high {
+.card__text--high {
       font-weight: 600;
     }
-  }
-}
 
 .header {
   background: var(--main-bg-color);
   height: 160px;
-  display: flex;
+  display: flex
+}
 
-  &__title {
+.header__title {
     margin: auto;
     font-weight: 300;
     font-size: 3.2rem;
-    color: #fff;
+    color: #fff
+  }
 
-    &--high {
+.header__title--high {
       font-weight: 600;
     }
-  }
-}
 
 .sortable__nav {
   display: flex;
@@ -758,7 +755,7 @@ hr {
   }
 }
 
-// 新版瀑布流（CSS 多列布局，替代 Isotope）
+/* 新版瀑布流（CSS 多列布局，替代 Isotope）*/
 .joe_photos__grid {
   column-count: 3;
   column-gap: var(--photos-gap, 10px);
@@ -807,7 +804,7 @@ hr {
   }
 }
 
-// 分组筛选按钮沿用原 <a> 的样式
+/* 分组筛选按钮沿用原 <a> 的样式*/
 .joe_photos__filter li button {
   appearance: none;
   display: block;

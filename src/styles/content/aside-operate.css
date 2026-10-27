@@ -1,6 +1,6 @@
-// 文章左侧悬浮操作栏（点赞、评论、分享、打赏）。
-// 宽屏下文章左侧有足够空间时显示，否则由正文下方的操作区替代（见 scripts/content/aside-operate.ts）。
-// 内部按钮使用 <button>，重置浏览器默认样式。
+/* 文章左侧悬浮操作栏（点赞、评论、分享、打赏）。*/
+/* 宽屏下文章左侧有足够空间时显示，否则由正文下方的操作区替代（见 scripts/content/aside-operate.ts）。*/
+/* 内部按钮使用 <button>，重置浏览器默认样式。*/
 .aside_operations {
   display: none;
   position: fixed;

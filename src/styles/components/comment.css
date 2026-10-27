@@ -22,9 +22,10 @@
   padding: 20px;
   background: var(--background);
   border-radius: var(--radius-wrap);
-  box-shadow: var(--box-shadow);
+  box-shadow: var(--box-shadow)
+}
 
-  &__title {
+.joe_comment__title {
     font-weight: 500;
     text-align: center;
     font-size: 24px;
@@ -35,20 +36,19 @@
     padding-bottom: 15px;
   }
 
-  &__close {
+.joe_comment__close {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--routine);
+    color: var(--routine)
+  }
 
-    &-icon {
+.joe_comment__close-icon {
       fill: var(--routine);
       margin-right: 5px;
     }
-  }
 
-  &__respond {
-    &-type {
+.joe_comment__respond-type {
       display: flex;
       align-items: center;
       justify-content: flex-end;
@@ -78,7 +78,7 @@
       }
     }
 
-    &-form {
+.joe_comment__respond-form {
       border-radius: 6px 0 6px 6px;
       background: var(--classD);
 
@@ -203,16 +203,16 @@
             right: 10px;
             cursor: pointer;
             fill: var(--minor);
-            user-select: none;
+            user-select: none
+          }
 
-            &-undo {
+.icon-undo {
               top: 10px;
             }
 
-            &-animate {
+.icon-animate {
               bottom: 10px;
             }
-          }
 
           canvas {
             background: var(--background);
@@ -278,13 +278,14 @@
         }
       }
     }
-  }
+
+.joe_comment {
 
   .comment-list {
-    padding-top: 15px;
+    padding-top: 15px
+  }
 
-    &__item {
-      &-contain {
+.comment-list__item-contain {
         .term {
           display: flex;
           margin-bottom: 15px;
@@ -404,7 +405,7 @@
         }
       }
 
-      &-children {
+.comment-list__item-children {
         padding-left: 63px;
 
         .comment-list__item-children {
@@ -412,12 +413,16 @@
         }
       }
 
+.comment-list__item {
+
       .joe_comment__respond {
         margin-left: 63px;
         margin-bottom: 15px;
         animation: showComment 0.5s;
       }
     }
+
+.comment-list {
 
     .comment-list {
       padding-top: 0;

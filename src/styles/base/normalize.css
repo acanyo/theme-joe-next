@@ -7,8 +7,8 @@
 }
 
 html {
-  // font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
-  //   "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  /* font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",*/
+  /*   "Microsoft YaHei", "微软雅黑", Arial, sans-serif;*/
   &.disable-scroll {
     height: 100vh;
     overflow: hidden;
@@ -30,13 +30,13 @@ body {
 }
 
 ::-webkit-scrollbar {
-  // width: 8px;
+  /* width: 8px;*/
   height: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
-  // background: var(--seat);
+  /* background: var(--seat);*/
 }
 
 ::-webkit-scrollbar-track {
@@ -127,7 +127,7 @@ table {
 a[title="站长统计"] {
   display: none;
 }
-// 交互元素统一使用 <button>（可聚焦、可键盘操作），这里去掉浏览器默认外观
+/* 交互元素统一使用 <button>（可聚焦、可键盘操作），这里去掉浏览器默认外观*/
 .joe_header__above-slideicon,
 .joe_header__above-searchicon,
 .joe_header__above-search .submit,

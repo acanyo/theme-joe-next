@@ -1,5 +1,4 @@
-.joe {
-  &_friend_add {
+.joe_friend_add {
     position: absolute;
     top: 14px;
     right: 14px;
@@ -16,7 +15,7 @@
     }
   }
 
-  &_friends__list {
+.joe_friends__list {
     padding: 10px 0 20px;
 
     &.hidden {
@@ -24,8 +23,7 @@
     }
   }
 
-  &_friend {
-    &__item {
+.joe_friend__item {
       position: relative;
       padding: 0 0 30px 40px;
 
@@ -47,7 +45,7 @@
       }
     }
 
-    &_info {
+.joe_friend_info {
       display: flex;
       justify-content: left;
       background: var(--background);
@@ -57,9 +55,10 @@
       left: -36px;
       line-height: 34px;
       position: relative;
-      z-index: 1;
+      z-index: 1
+    }
 
-      &_logo {
+.joe_friend_info_logo {
         height: 35px;
         width: 35px;
         border-radius: 50%;
@@ -69,17 +68,16 @@
         margin: 0 10px 0 -10px;
       }
 
-      &_author {
+.joe_friend_info_author {
         color: var(--theme);
         font-weight: 500;
       }
 
-      &_pubDate {
+.joe_friend_info_pubDate {
         margin: 0 10px;
       }
-    }
 
-    &_block {
+.joe_friend_block {
       position: relative;
       z-index: 2;
       box-sizing: border-box;
@@ -95,7 +93,7 @@
       transition: box-shadow 0.2s;
     }
 
-    &_body {
+.joe_friend_body {
       position: relative;
       box-sizing: content-box;
       overflow: hidden;
@@ -105,8 +103,7 @@
       transition: height 0.2s;
     }
 
-    &_content {
-      &_title {
+.joe_friend_content_title {
         margin-bottom: 8px;
         text-align: center;
 
@@ -115,7 +112,7 @@
         }
       }
 
-      &_description {
+.joe_friend_content_description {
         line-height: 1.5;
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -124,9 +121,6 @@
         text-indent: 2em;
         text-align: justify;
       }
-    }
-  }
-}
 
 .joe_pagination {
   padding: 0 0 20px 0;
