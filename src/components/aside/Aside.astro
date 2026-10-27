@@ -1,0 +1,62 @@
+---
+/**
+ * 侧栏容器：按设置 `aside.enable_outpost_aside` 的顺序渲染组件。
+ * 页面级开关（如 aside.enable_tags_aside）由各页面自行判断。
+ */
+import BloggerCard from "../blogger/BloggerCard.astro";
+import CloudWidget from "./CloudWidget.astro";
+import PostListWidget from "./PostListWidget.astro";
+import SimpleWidget from "./SimpleWidget.astro";
+import MusicWidget from "./MusicWidget.astro";
+---
+
+<aside
+  class="joe_aside"
+  th:classappend="${theme.config.aside.aside_position == 'left' ? 'pos_left' : ''}"
+>
+  <slot name="top" />
+  <th-block th:each="widget : ${theme.config.aside.enable_outpost_aside}">
+    <th-block th:switch="${widget.template_aside}">
+      <th-block th:case="'enable_blogger'">
+        <BloggerCard />
+      </th-block>
+      <th-block th:case="'enable_notice'">
+        <SimpleWidget type="notice" />
+      </th-block>
+      <th-block th:case="'enable_reward'">
+        <SimpleWidget type="reward" />
+      </th-block>
+      <th-block th:case="'enable_picture'">
+        <SimpleWidget type="picture" />
+      </th-block>
+      <th-block th:case="'enable_music_player'">
+        <MusicWidget />
+      </th-block>
+      <th-block th:case="'enable_newest_post'">
+        <PostListWidget kind="newest" />
+      </th-block>
+      <th-block th:case="'enable_hot_post'">
+        <PostListWidget kind="hot" />
+      </th-block>
+      <th-block th:case="'enable_lifetime'">
+        <SimpleWidget type="lifetime" />
+      </th-block>
+      <th-block th:case="'show_newreply'">
+        <SimpleWidget type="newreply" />
+      </th-block>
+      <th-block th:case="'enable_tag_cloud'">
+        <CloudWidget kind="tag" />
+      </th-block>
+      <th-block th:case="'enable_category_cloud'">
+        <CloudWidget kind="category" />
+      </th-block>
+      <th-block th:case="'enable_ads_aside'">
+        <SimpleWidget type="ads" />
+      </th-block>
+      <th-block th:case="'enable_custom'">
+        <SimpleWidget type="custom" />
+      </th-block>
+    </th-block>
+  </th-block>
+  <slot />
+</aside>

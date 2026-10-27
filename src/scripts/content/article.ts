@@ -1,0 +1,185 @@
+/**
+ * 文章页交互：点赞、分享、复制版权、阅读进度、目录、字数统计、评论定位。
+ */
+import tocbot from "tocbot";
+import { $, $$, headerOffset, isMobile } from "../core/dom";
+import { getThemeConfig } from "../core/config";
+import { copyText } from "../core/clipboard";
+import { bindUpvoteButton } from "../features/upvote";
+import { closeOverlays, openTocDrawer } from "../features/navigation";
+
+function fillTemplate(template: string, vars: Record<string, string>): string {
+  return template.replace(
+    /\{(\w+)\}/g,
+    (match, key: string) => vars[key] ?? match,
+  );
+}
+
+function siteVars(): Record<string, string> {
+  const config = getThemeConfig();
+  return {
+    BlogTitle: config.siteTitle,
+    BlogUrl: location.origin,
+    postUrl: location.href,
+    postTitle: $(".joe_detail__title")?.textContent?.trim() ?? document.title,
+    postDescription:
+      document.querySelector<HTMLMetaElement>("meta[name=description]")
+        ?.content ?? "",
+    postAuthor:
+      $(".joe_detail__count .author .link")?.textContent?.trim() ?? "",
+  };
+}
+
+/** 文章 / 页面点赞 */
+export function initLike(): void {
+  const detail = $(".joe_detail");
+  const button = $("[data-joe-like]");
+  if (!detail || !button) return;
+  bindUpvoteButton(button, {
+    group: "content.halo.run",
+    plural: detail.dataset.kind === "SinglePage" ? "singlepages" : "posts",
+    name: detail.dataset.cid ?? "",
+  });
+}
+
+export function initShare(): void {
+  $$("[data-joe-share-link]").forEach((link) =>
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      const template = link.dataset.template?.trim();
+      const vars = {
+        ...siteVars(),
+        postUrl: link.dataset.url || location.href,
+      };
+      let text = vars.postUrl;
+      if (template) {
+        text = fillTemplate(template, vars);
+        if (!template.includes("{postUrl}"))
+          text += ` ，文章链接: ${vars.postUrl}`;
+      }
+      void copyText(text, "文章链接已复制");
+    }),
+  );
+
+  const weixin = $("[data-joe-share-weixin]");
+  const qrcode = weixin ? $(".qrcode_wx", weixin) : null;
+  if (weixin && qrcode) {
+    weixin.addEventListener(
+      "mouseenter",
+      async () => {
+        const { toCanvas } = await import("qrcode");
+        const canvas = document.createElement("canvas");
+        await toCanvas(canvas, weixin.dataset.url || location.href, {
+          width: 140,
+          margin: 1,
+        });
+        qrcode.replaceChildren(canvas);
+      },
+      { once: true },
+    );
+  }
+}
+
+/** 复制正文时附加版权信息 */
+export function initCopyright(): void {
+  const article = $(".joe_detail__article");
+  const config = getThemeConfig();
+  if (
+    !article ||
+    article.classList.contains("uncopy") ||
+    !config.post.copyRightText
+  )
+    return;
+  article.addEventListener("copy", (event) => {
+    const selection =
+      window
+        .getSelection()
+        ?.toString()
+        .replace(/<已自动折叠>/g, "") ?? "";
+    if (!selection || !event.clipboardData) return;
+    event.preventDefault();
+    event.clipboardData.setData(
+      "text/plain",
+      selection + fillTemplate(config.post.copyRightText, siteVars()),
+    );
+  });
+}
+
+export function initProgressBar(): void {
+  const bar = $(".joe_progress_bar");
+  if (!bar) return;
+  const update = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = `${max > 0 ? Math.min(1, window.scrollY / max) * 100 : 0}%`;
+  };
+  update();
+  document.addEventListener("scroll", () => requestAnimationFrame(update), {
+    passive: true,
+  });
+}
+
+export function initWordCount(): void {
+  const target = $("[data-joe-word-count]");
+  const content = $("#post-inner");
+  if (!target || !content) return;
+  const count = content.innerText.match(/[一-龥a-zA-Z0-9]/g)?.length ?? 0;
+  target.textContent = `${count} 字`;
+}
+
+export function initToc(): void {
+  const container = $(".toc-container");
+  const mobile = isMobile();
+  if (!container && !mobile) return;
+  const tocSelector = mobile ? "#js-toc-mobile" : "#js-toc";
+  if (!$(tocSelector)) return;
+  if ($(".joe_raw_content")) {
+    $(tocSelector)!.innerHTML =
+      '<div class="toc-nodata">暂不支持解析原始内容目录</div>';
+    return;
+  }
+  const offset = headerOffset();
+  tocbot.init({
+    tocSelector,
+    contentSelector: ".joe_detail__article",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    ignoreSelector: ".js-toc-ignore",
+    collapseDepth: getThemeConfig().post.tocDepth,
+    hasInnerContainers: true,
+    headingsOffset: offset,
+    scrollSmoothOffset: -offset,
+    scrollSmooth: true,
+    positionFixedSelector: ".toc-container",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+    onClick: () => mobile && closeOverlays(),
+  });
+  if (!$(tocSelector)?.children.length) {
+    $(tocSelector)!.innerHTML = '<div class="toc-nodata">暂无目录</div>';
+  }
+  if (mobile) {
+    const button = $(".joe_action .toc");
+    if (button) {
+      button.style.display = "flex";
+      button.addEventListener("click", () => openTocDrawer());
+    }
+  }
+}
+
+/** Halo 文章标题未设置 id 时补齐，保证目录锚点可用 */
+export function ensureHeadingIds(): void {
+  $$<HTMLElement>(".joe_detail__article :is(h1,h2,h3,h4,h5,h6)").forEach(
+    (heading, index) => {
+      if (!heading.id) heading.id = `heading-${index}`;
+    },
+  );
+}
+
+export function scrollToHash(): void {
+  const hash = decodeURIComponent(location.hash);
+  if (!hash) return;
+  const target = document.getElementById(hash.slice(1));
+  if (target)
+    window.scrollTo({
+      top: target.getBoundingClientRect().top + window.scrollY - headerOffset(),
+    });
+}

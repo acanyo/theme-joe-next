@@ -1,0 +1,74 @@
+---
+/**
+ * 所有页面共用的外层布局：<head>、导航、主体、页脚、悬浮按钮、全局脚本。
+ *
+ * 页面通过 slot 提供内容：
+ * - 默认 slot：主体内容（位于 .joe_container 内）
+ * - "before"：容器之前的整宽内容，如首页大图、面包屑
+ * - "head"：额外的 <head> 内容
+ * - "actions"：自定义悬浮按钮（默认使用 <Actions />）
+ */
+import Head from "../components/head/Head.astro";
+import Navbar from "../components/navbar/Navbar.astro";
+import Footer from "../components/layout/Footer.astro";
+import Actions from "../components/layout/Actions.astro";
+import BigBanner from "../components/home/BigBanner.astro";
+import "../styles/pages/big-banner.less";
+
+interface Props {
+  /** 页面标题 SpEL 表达式（不含 `${}`） */
+  title?: string;
+  /** 主体容器附加类名，例如 "page-index"、"page-post" */
+  pageClass: string;
+  /** 是否渲染容器（错误页等全屏页面可关闭） */
+  container?: boolean;
+  /** 首屏大图：首页为全屏模式，列表页为普通模式，文章页等不显示 */
+  bigBanner?: "fullscreen" | "normal" | false;
+  /** 大图标题表达式（默认站点标题） */
+  heading?: string;
+}
+
+const {
+  title,
+  pageClass,
+  container = true,
+  bigBanner = false,
+  heading,
+} = Astro.props;
+---
+
+<!doctype html>
+<html th:lang="${#locale.toLanguageTag}">
+  <head>
+    <Head title={title}>
+      <slot name="head" />
+    </Head>
+  </head>
+  <body>
+    <div id="Joe">
+      <Navbar />
+      {bigBanner && (
+        <th-block th:if="${theme.config.beauty.enable_big_banner}">
+          <BigBanner fullscreen={bigBanner === "fullscreen"} title={heading} />
+        </th-block>
+      )}
+      <slot name="before" />
+      {container ? (
+        <div
+          class:list={["joe_container joe_main_container", pageClass]}
+          th:classappend="|${theme.config.theme.enable_show_in_up ? 'animated showInUp' : ''} ${theme.config.aside.aside_position == 'left' ? 'revert' : ''}|"
+        >
+          <slot />
+        </div>
+      ) : (
+        <slot />
+      )}
+      {Astro.slots.has("actions") ? <slot name="actions" /> : <Actions />}
+      <Footer />
+    </div>
+    <halo-footer></halo-footer>
+    <script>
+      import "../scripts/app";
+    </script>
+  </body>
+</html>

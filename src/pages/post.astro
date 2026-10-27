@@ -1,26 +1,64 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Actions from "../components/layout/Actions.astro";
+import ArticleBody from "../components/post/ArticleBody.astro";
+import Breadcrumb from "../components/post/Breadcrumb.astro";
+import CommentSection from "../components/post/CommentSection.astro";
+import PostAds from "../components/post/PostAds.astro";
+import PostAside from "../components/post/PostAside.astro";
+import PostCopyright from "../components/post/PostCopyright.astro";
+import PostOperate from "../components/post/PostOperate.astro";
+import "../styles/pages/post.less";
 ---
 
-<Layout contentClass="prose">
-  <Fragment slot="head">
-    <title th:text="|${post.spec.title} - ${site.title}|"></title>
-  </Fragment>
+<BaseLayout title="post.spec.title + ' - ' + site.title" pageClass="page-post">
+  <Breadcrumb slot="before" />
 
-  <div class="page-heading">
-    <h1 th:text="${post.spec.title}"></h1>
-    <p class="page-meta">
-      <span th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
-      ></span>
-    </p>
+  <div class="joe_main joe_post">
+    <ArticleBody subject="post" />
+    <PostOperate />
+    <PostCopyright />
+    <PostAds position="bottom" />
+
+    <ul
+      class="joe_post__pagination"
+      th:with="cursor = ${postFinder.cursor(post.metadata.name)}"
+    >
+      <li
+        class="joe_post__pagination-item prev"
+        th:if="${cursor.hasPrevious()}"
+      >
+        <a
+          th:href="@{${cursor.previous.status.permalink}}"
+          th:title="${cursor.previous.spec.title}"
+        >
+          上一篇
+        </a>
+      </li>
+      <li class="joe_post__pagination-item next" th:if="${cursor.hasNext()}">
+        <a
+          th:href="@{${cursor.next.status.permalink}}"
+          th:title="${cursor.next.spec.title}"
+        >
+          下一篇
+        </a>
+      </li>
+    </ul>
+
+    <CommentSection subject="post" kind="Post" />
   </div>
 
-  <th:block th:utext="${post.content.content}"></th:block>
+  <PostAside />
 
-  <halo:comment
-    group="content.halo.run"
-    kind="Post"
-    th:attr="name=${post.metadata.name}"
-  >
-  </halo:comment>
-</Layout>
+  <div
+    slot="before"
+    class="joe_progress_bar"
+    th:if="${theme.config.post.enable_progress_bar}"
+    th:style="|background: ${theme.config.post.progress_bar_bgc ?: 'var(--theme)'}|"
+  ></div>
+  <Actions slot="actions" editKind="post" toc />
+</BaseLayout>
+
+<script>
+  import "../scripts/pages/post";
+</script>

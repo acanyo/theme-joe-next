@@ -1,22 +1,20 @@
 // @ts-check
 import { defineConfig } from "astro/config";
+import thymeleafTags from "./integrations/thymeleaf-tags.ts";
 
-import vue from "@astrojs/vue";
-import Icons from "unplugin-icons/vite";
-
+// base 必须与 theme.yaml 的 metadata.name 一致（Halo 主题静态资源路径为 /themes/<name>/assets）
 export default defineConfig({
-  base: "/themes/astro-starter",
+  base: "/themes/theme-joe-next",
   build: {
     assets: "assets",
     format: "file",
   },
   outDir: "./templates",
-  integrations: [vue()],
+  integrations: [thymeleafTags()],
   vite: {
-    plugins: [
-      Icons({
-        compiler: "vue3",
-      }),
-    ],
+    build: {
+      // 体积较大的依赖（hls.js、vConsole）均为按需动态加载，不影响首屏
+      chunkSizeWarningLimit: 600,
+    },
   },
 });

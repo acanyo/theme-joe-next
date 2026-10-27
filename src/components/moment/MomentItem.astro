@@ -1,0 +1,131 @@
+---
+/**
+ * 单条瞬间。依赖循环变量 `moment`（与可选的 `iter`）。
+ * 评论使用 Halo 评论扩展点，按需展开；Waline 模式由前端挂载。
+ */
+import {
+  HALO_COMMENT_ENABLED,
+  WALINE_ENABLED,
+  el,
+} from "../../config/expressions";
+---
+
+<li
+  class="joe_journal__item"
+  th:classappend="${theme.config.journals.enable_journal_effect ? 'joe-reveal' : ''}"
+  th:attr="data-reveal=${theme.config.journals.journal_list_effect_class}, data-cid=${moment.metadata.name}"
+  th:with="content = ${moment.spec.content}"
+>
+  <p class="joe_journal_date">
+    <i class="joe-font joe-icon-feather" aria-hidden="true"></i>
+    <time
+      class="joe_journal-posttime"
+      th:datetime="${#dates.format(moment.spec.releaseTime, 'yyyy-MM-dd''T''HH:mm:ss')}"
+      th:text="${#dates.format(moment.spec.releaseTime, 'yyyy/MM/dd HH:mm')}"
+    ></time>
+  </p>
+  <div class="joe_journal_block">
+    <div
+      class="joe_journal_body"
+      th:style="|max-height: ${theme.config.journals.journal_block_height ?: 300}px|"
+      th:classappend="${theme.config.code_block.enable_code_line_number and !theme.config.code_block.enable_code_newline ? 'line-numbers' : ''}"
+    >
+      <div class="content-wrp">
+        <th-block th:utext="${content.html}"></th-block>
+        <th-block th:each="media : ${content.medium}">
+          <img
+            th:if="${media.type.name == 'PHOTO'}"
+            th:src="${media.url}"
+            alt=""
+            loading="lazy"
+            data-fallback="image"
+          />
+          <video
+            th:if="${media.type.name == 'VIDEO'}"
+            th:src="${media.url}"
+            controls
+            preload="metadata"
+          ></video>
+          <audio
+            th:if="${media.type.name == 'AUDIO'}"
+            th:src="${media.url}"
+            controls
+            preload="none"
+          ></audio>
+        </th-block>
+      </div>
+      <button
+        type="button"
+        class="joe_journal_operate_item journal_content_expander"
+        aria-label="展开全文"
+      >
+        <i class="joe-font joe-icon-arrow-down" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div
+      class="joe_journal_footer"
+      th:if="${theme.config.journals.enable_like_journal or theme.config.journals.enable_comment_journal}"
+    >
+      <div class="footer-wrap">
+        <button
+          type="button"
+          class="joe_journal_operate_item like"
+          th:if="${theme.config.journals.enable_like_journal}"
+          data-joe-moment-like
+          aria-label="点赞"
+        >
+          <i
+            class="joe-font joe-icon-xihuan icon-like journal-like"
+            aria-hidden="true"
+          ></i>
+          <i
+            class="joe-font joe-icon-xihuan-fill icon-unlike journal-unlike"
+            aria-hidden="true"
+          ></i>
+          <em class="nums journal-likes-num" th:text="${moment.stats.upvote}">
+            0
+          </em>
+        </button>
+        <th-block th:if="${theme.config.journals.enable_comment_journal and !theme.config.other.enable_clean_mode}">
+          <button
+            type="button"
+            class="joe_journal_operate_item comment"
+            data-joe-moment-comment
+            aria-label="评论"
+          >
+            <i
+              class="joe-font joe-icon-message journal-comment"
+              aria-hidden="true"
+            ></i>
+            <em
+              th:if={el(HALO_COMMENT_ENABLED)}
+              th:text="${moment.stats.totalComment}"
+            >
+              0
+            </em>
+            <em
+              th:if={el(WALINE_ENABLED)}
+              class="waline-comment-count"
+              th:attr="data-path=|/moments/${moment.metadata.name}|"
+            >
+              0
+            </em>
+          </button>
+          <div class="joe_journal_comment">
+            <halo-comment
+              th:if={el(HALO_COMMENT_ENABLED)}
+              group="moment.halo.run"
+              kind="Moment"
+              th:attr="name=${moment.metadata.name}"
+            ></halo-comment>
+            <div
+              th:if={el(WALINE_ENABLED)}
+              data-joe-waline
+              th:attr="data-path=|/moments/${moment.metadata.name}|"
+            ></div>
+          </div>
+        </th-block>
+      </div>
+    </div>
+  </div>
+</li>

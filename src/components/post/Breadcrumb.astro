@@ -1,0 +1,28 @@
+---
+/** 文章面包屑 */
+---
+
+<div class="joe_container joe_bread">
+  <nav aria-label="面包屑">
+    <ul class="joe_bread__bread">
+      <li class="item">
+        <i class="jiewen joe-icon-shouye" aria-hidden="true"></i>
+        <a th:href="@{/}" class="link">
+          首页
+        </a>
+      </li>
+      <li class="line">/</li>
+      <li class="item">
+        <a
+          th:if="${not #lists.isEmpty(post.categories)}"
+          class="link"
+          th:href="@{${post.categories[0].status.permalink}}"
+          th:text="${post.categories[0].spec.displayName}"
+        ></a>
+        <span th:if="${#lists.isEmpty(post.categories)}">未分类</span>
+      </li>
+      <li class="line">/</li>
+      <li class="item">正文</li>
+    </ul>
+  </nav>
+</div>

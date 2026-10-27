@@ -1,0 +1,159 @@
+---
+/**
+ * 顶部导航。菜单来源：设置中选择的菜单，未选择时使用 Halo 主菜单。
+ * 桌面端最多渲染三级菜单，移动端侧栏同样三级。
+ */
+import MenuLink from "./MenuLink.astro";
+import MobileDrawer from "./MobileDrawer.astro";
+
+const MENU =
+  "#strings.isEmpty(theme.config.navbar.menu) ? menuFinder.getPrimary() : menuFinder.getByName(theme.config.navbar.menu)";
+---
+
+<header class="joe_header" th:with={`navMenu = \${${MENU}}`}>
+  <div
+    class="joe_header__above"
+    th:classappend="|${theme.config.theme.enable_show_in_up ? 'topInDown' : ''} ${theme.config.navbar.enable_fixed_header ? 'fixed' : ''} ${theme.config.navbar.enable_fixed_header and theme.config.navbar.enable_glass_blur ? 'glass' : ''}|"
+  >
+    <div
+      class="joe_container joe_header_container"
+      th:classappend="${theme.config.navbar.enable_full_header ? 'full' : ''}"
+    >
+      <button
+        type="button"
+        class="joe_header__above-slideicon"
+        aria-label="打开菜单"
+      >
+        <i class="joe-font joe-icon-caidan" aria-hidden="true"></i>
+      </button>
+
+      <a
+        th:if="${theme.config.navbar.show_logo}"
+        class="joe_header__above-logo"
+        th:title="${site.title}"
+        th:href="${#strings.isEmpty(theme.config.navbar.logo_link) ? site.url : (theme.config.navbar.logo_link == '#' ? 'javascript:;' : theme.config.navbar.logo_link)}"
+      >
+        <img
+          th:src="${site.logo}"
+          th:alt="${site.title}"
+          th:style="|border-radius: ${theme.config.navbar.logo_radius ?: '4px'}|"
+          data-fallback="avatar"
+        />
+      </a>
+
+      <nav
+        class="joe_header__above-nav"
+        aria-label="主导航"
+        th:classappend="|${theme.config.navbar.enable_active_shadow ? 'active-shadow' : ''} ${theme.config.navbar.enable_icon_animate ? 'active-animate' : ''}|"
+      >
+        <th-block
+          th:if="${navMenu != null}"
+          th:each="menuItem : ${navMenu.menuItems}"
+        >
+          <MenuLink
+            item="menuItem"
+            withIcon
+            th:if="${#lists.isEmpty(menuItem.children)}"
+          />
+          <div
+            class="joe_dropdown"
+            data-trigger="hover"
+            th:unless="${#lists.isEmpty(menuItem.children)}"
+          >
+            <div class="joe_dropdown__link">
+              <MenuLink item="menuItem" withIcon />
+              <i
+                class="joe-font joe-icon-arrow-down joe_dropdown__link-icon"
+                aria-hidden="true"
+              ></i>
+            </div>
+            <ul class="joe_dropdown__menu">
+              <li
+                th:each="childMenu : ${menuItem.children}"
+                th:classappend="${#lists.isEmpty(childMenu.children)} ? '' : 'joe_nav_sub-li'"
+              >
+                <MenuLink item="childMenu" withIcon />
+                <ol
+                  class="joe_nav_sub"
+                  th:unless="${#lists.isEmpty(childMenu.children)}"
+                >
+                  <li th:each="subMenu : ${childMenu.children}">
+                    <MenuLink item="subMenu" withIcon />
+                  </li>
+                </ol>
+              </li>
+            </ul>
+          </div>
+        </th-block>
+      </nav>
+
+      <div class="joe_header__above-search">
+        <button
+          type="button"
+          class="submit"
+          aria-label="搜索"
+          data-joe-search
+          th:if="${pluginFinder.available('PluginSearchWidget')}"
+        >
+          <i class="joe-font joe-icon-search" aria-hidden="true"></i>
+        </button>
+        <div class="nav_login" th:if="${theme.config.navbar.nav_login}">
+          <a
+            class="login_before"
+            sec:authorize="isAnonymous()"
+            th:href="@{/login}"
+            title="登录"
+          >
+            <i class="jiewen joe-icon-zhanghao" aria-hidden="true"></i>
+          </a>
+          <a
+            class="login_after"
+            sec:authorize="isAuthenticated()"
+            th:href="@{/uc}"
+            th:with="me = ${contributorFinder.getContributor(#authentication.name)}"
+            th:title="${me?.displayName}"
+          >
+            <img
+              th:src="${me?.avatar}"
+              th:alt="${me?.displayName}"
+              th:attr="data-text-avatar=${me?.displayName}"
+              data-fallback="avatar"
+            />
+          </a>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="joe_header__above-searchicon"
+        aria-label="搜索"
+        data-joe-search
+        th:if="${pluginFinder.available('PluginSearchWidget')}"
+      >
+        <i class="joe-font joe-icon-search" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <MobileDrawer />
+
+  <div class="joe_header__toc" aria-label="文章目录">
+    <div class="joe_header__toc-wrap">
+      <div class="toc_top">
+        <h3>
+          目 录<span>CONTENT</span>
+        </h3>
+        <img
+          width="100%"
+          height="150"
+          th:src="${theme.config.blogger.author_bg ?: #theme.assets('/images/context_bg.png')}"
+          alt=""
+          data-fallback="image"
+        />
+      </div>
+      <div id="js-toc-mobile" class="toc"></div>
+    </div>
+  </div>
+
+  <div class="joe_header__mask"></div>
+</header>

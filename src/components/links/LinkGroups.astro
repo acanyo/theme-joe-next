@@ -1,0 +1,108 @@
+---
+/**
+ * 友链分组列表。`groups` 为当前作用域中的分组列表表达式：
+ * 插件路由（links.html）使用模板变量 groups，自定义页面（page_links.html）使用 linkFinder.groupBy()。
+ * 分组与链接的排序在前端按设置执行（features/link-sort.ts）。
+ */
+import { POST_ICONS } from "../../data/post-icons";
+
+interface Props {
+  groups: string;
+}
+
+const { groups } = Astro.props;
+const COLORS = [
+  "#F8D800",
+  "#0396FF",
+  "#EA5455",
+  "#7367F0",
+  "#32CCBC",
+  "#F6416C",
+  "#32B76E",
+  "#9F44D3",
+  "#F55555",
+  "#736EFE",
+  "#E96D71",
+  "#DE4313",
+  "#D939CD",
+  "#4C83FF",
+  "#F072B6",
+  "#C346C2",
+  "#5961F9",
+  "#FD6585",
+  "#5569E8",
+  "#FFC600",
+  "#FA742B",
+  "#5151E5",
+  "#BB4E75",
+  "#4DA037",
+  "#15D1E2",
+];
+const COLOR_LIST = `#strings.arraySplit('${COLORS.join(",")}', ',')`;
+---
+
+<div
+  class="joe_links"
+  data-joe-links
+  th:attr="data-group-sort=${theme.config.links.links_group_default_sort}, data-link-sort=${theme.config.links.links_default_sort}"
+  th:with={`linkColors = \${${COLOR_LIST}}`}
+>
+  <h3>友链列表</h3>
+  <th-block th:each={`group : \${${groups}}`}>
+    <div
+      class="links-group"
+      th:if="${not #strings.isEmpty(group.spec.displayName) and #annotations.getOrDefault(group, 'link_group_enable_show', 'true') != 'false'}"
+      th:attr="data-sort=${#annotations.getOrDefault(group, 'link_group_sort_seq', '0')}, data-created=${group.metadata.creationTimestamp}"
+    >
+      <h5 th:text="${group.spec.displayName}"></h5>
+      <ul class="joe_detail__friends evan-friends">
+        <li
+          class="joe_detail__friends-item"
+          th:each="link, iter : ${group.links}"
+          th:if="${#annotations.getOrDefault(link, 'link_enable_show', 'true') != 'false'}"
+          th:attr="data-sort=${#annotations.getOrDefault(link, 'link_sort_seq', '0')}, data-created=${link.metadata.creationTimestamp}"
+        >
+          <a
+            class="contain"
+            th:href="${link.spec.url}"
+            target="_blank"
+            rel="noopener noreferrer"
+            th:style="|--fcolor: ${linkColors[iter.index % linkColors.length]}|"
+          >
+            <div class="evan-f-left">
+              <div class="f-avatar">
+                <img
+                  width="40"
+                  height="40"
+                  class="avatar"
+                  loading="lazy"
+                  th:src="${link.spec.logo ?: theme.config.links.links_default_logo}"
+                  th:alt="${link.spec.displayName}"
+                  th:attr="data-text-avatar=${link.spec.displayName}"
+                  data-fallback="link"
+                />
+              </div>
+            </div>
+            <div class="evan-f-right">
+              <span class="title">
+                <span
+                  class="sub-text"
+                  th:title="${link.spec.displayName}"
+                  th:text="${link.spec.displayName}"
+                ></span>
+                <Fragment set:html={POST_ICONS.linkArrow} />
+              </span>
+              <div class="content">
+                <div
+                  class="desc"
+                  th:title="${link.spec.description}"
+                  th:text="${link.spec.description}"
+                ></div>
+              </div>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </th-block>
+</div>

@@ -1,0 +1,40 @@
+body {
+  cursor: url(pointer.cur), auto;
+}
+a {
+  cursor: url(link.cur), auto;
+}
+a:active {
+  cursor: url(person.cur), auto;
+}
+p {
+  cursor: url(pointer.cur), auto;
+}
+.joe_index__title-title .item {
+  cursor: url(link.cur), auto;
+}
+.joe_index__title-title.default .item {
+  cursor: url(pointer.cur), auto;
+}
+.joe_index__banner .swiper-slide .item {
+  cursor: url(pointer.cur), auto !important;
+}
+.joe_index__banner .swiper-slide .item.clickable {
+  cursor: url(link.cur), auto !important;
+}
+.joe_index__banner .swiper-button-prev,
+.joe_index__banner .swiper-button-next {
+  cursor: url(link.cur), auto;
+}
+.joe_header .joe_header__above .joe_header__above-nav .item {
+  cursor: url(link.cur), auto !important;
+}
+.joe_header .joe_header__above .submit {
+  cursor: url(link.cur), auto;
+}
+.joe_action .joe_action_item {
+  cursor: url(link.cur), auto;
+}
+.joe_load {
+  cursor: url(link.cur), auto;
+}

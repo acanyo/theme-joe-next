@@ -1,0 +1,30 @@
+---
+/** 轮播单项。依赖外层定义的 cover / title / excerpt / href 变量 */
+---
+
+<a
+  class="item"
+  th:classappend="${#strings.isEmpty(href) ? '' : 'clickable'}"
+  th:href="${#strings.isEmpty(href) ? 'javascript:;' : href}"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <img
+    width="100%"
+    height="100%"
+    class="thumbnail"
+    loading="lazy"
+    th:src="${#strings.isEmpty(cover) ? #theme.assets('/images/default_thumbnail.png') : thumbnail.gen(cover, 'l')}"
+    th:alt="${title}"
+    data-fallback="thumbnail"
+  />
+  <div class="title-row">
+    <h3 class="title" th:text="${title}"></h3>
+    <p
+      class="subtitle"
+      th:if="${not #strings.isEmpty(excerpt)}"
+      th:text="${excerpt}"
+    ></p>
+  </div>
+  <i class="joe-font joe-icon-zhifeiji" aria-hidden="true"></i>
+</a>

@@ -1,0 +1,70 @@
+---
+/**
+ * 通用分页。适用于 Halo 所有 UrlContextListResult（posts、archives、moments 等）。
+ *
+ * 页码链接基于结果对象的 prevUrl 推导路由前缀（去掉末尾 /page/N），
+ * 因此首页、分类、标签、作者、归档等路由都能生成正确地址。
+ */
+interface Props {
+  /** 分页结果变量名，如 "posts"、"archives" */
+  result?: string;
+}
+
+const { result = "posts" } = Astro.props;
+const r = result;
+// 路由前缀：'/categories/foo/page/2' -> '/categories/foo'，'/' -> ''
+const BASE = `#strings.endsWith(${r}.prevUrl, '/') ? #strings.substring(${r}.prevUrl, 0, #strings.length(${r}.prevUrl) - 1) : (#strings.contains(${r}.prevUrl, '/page/') ? #strings.substringBefore(${r}.prevUrl, '/page/') : ${r}.prevUrl)`;
+const pageUrl = (n: string) =>
+  `${n} == 1 ? (#strings.isEmpty(pageBase) ? '/' : pageBase) : pageBase + '/page/' + ${n}`;
+// 当前页附近的页码窗口（最多 5 个），仅用三元表达式，避免 T() 类型引用
+const WINDOW_START = `${r}.page - 2 < 1 ? 1 : (${r}.page + 2 > ${r}.totalPages ? (${r}.totalPages - 4 < 1 ? 1 : ${r}.totalPages - 4) : ${r}.page - 2)`;
+const WINDOW_END = `winStart + 4 > ${r}.totalPages ? ${r}.totalPages : winStart + 4`;
+---
+
+<th-block
+  th:if={`\${${r}.totalPages > 1}`}
+  th:with={`pageBase = \${${BASE}}, winStart = \${${WINDOW_START}}`}
+>
+  <nav aria-label="分页" th:with={`winEnd = \${${WINDOW_END}}`}>
+    <ul class="joe_pagination">
+      <li
+        class="prev"
+        th:classappend={`\${${r}.hasPrevious() ? '' : 'disabled'}`}
+      >
+        <a th:href={`@{\${${r}.prevUrl}}`} aria-label="上一页">
+          <i class="joe-font joe-icon-prev" aria-hidden="true"></i>
+        </a>
+      </li>
+      <li th:if="${winStart > 1}">
+        <a th:href={`@{\${${pageUrl("1")}}}`}>1</a>
+      </li>
+      <li th:if="${winStart > 2}">
+        <span class="ellipsis">…</span>
+      </li>
+      <li
+        th:each="n : ${#numbers.sequence(winStart, winEnd)}"
+        th:classappend={`\${n == ${r}.page ? 'active' : ''}`}
+      >
+        <a
+          th:href={`@{\${${pageUrl("n")}}}`}
+          th:text="${n}"
+          th:attr={`aria-current=\${n == ${r}.page ? 'page' : null}`}
+        ></a>
+      </li>
+      <li th:if={`\${winEnd < ${r}.totalPages - 1}`}>
+        <span class="ellipsis">…</span>
+      </li>
+      <li th:if={`\${winEnd < ${r}.totalPages}`}>
+        <a
+          th:href={`@{\${${pageUrl(`${r}.totalPages`)}}}`}
+          th:text={`\${${r}.totalPages}`}
+        ></a>
+      </li>
+      <li class="next" th:classappend={`\${${r}.hasNext() ? '' : 'disabled'}`}>
+        <a th:href={`@{\${${r}.nextUrl}}`} aria-label="下一页">
+          <i class="joe-font joe-icon-next" aria-hidden="true"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</th-block>

@@ -2,6 +2,5 @@
   "emmet.includeLanguages": {
     "astro": "html"
   },
-  "i18n-ally.localesPaths": ["demo-themes/theme-earth/i18n"],
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

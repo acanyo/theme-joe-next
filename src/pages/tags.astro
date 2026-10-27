@@ -1,21 +1,20 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Aside from "../components/aside/Aside.astro";
+import TermGrid from "../components/list/TermGrid.astro";
+import "../styles/pages/index.less";
 ---
 
-<Layout pageTitle="标签">
-  <Fragment slot="head">
-    <title th:text="|标签 - ${site.title}|"></title>
-  </Fragment>
-
-  <div class="tag-cloud" role="list" aria-label="Tag list">
-    <a
-      th:each="tag : ${tags}"
-      class="tag-pill"
-      role="listitem"
-      th:href="@{${tag.status.permalink}}"
-    >
-      <span th:text="${tag.spec.displayName}"></span>
-      <span class="tag-pill__count" th:text="${tag.postCount}"></span>
-    </a>
+<BaseLayout
+  bigBanner="normal"
+  heading="(theme.config.tags.tags_title ?: '全部标签')"
+  title="(theme.config.tags.tags_title ?: '全部标签') + ' - ' + site.title"
+  pageClass="page-tags"
+>
+  <div class="joe_main">
+    <TermGrid kind="tags" />
   </div>
-</Layout>
+  <th-block th:if="${theme.config.aside.enable_tags_aside}">
+    <Aside />
+  </th-block>
+</BaseLayout>

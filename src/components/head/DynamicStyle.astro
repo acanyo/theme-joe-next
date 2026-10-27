@@ -1,0 +1,52 @@
+---
+/**
+ * 依赖主题设置的 CSS 变量与样式（主题色、字体、背景图、滚动条等）。
+ * 使用 Thymeleaf 文本内联，在请求时生成；静态样式全部在 src/styles 中。
+ */
+const css = `
+[# th:if="\${theme.config.other.rip_mode}"]
+html { filter: grayscale(100%); }
+[/]
+[# th:if="\${#strings.isEmpty(theme.config.custom.custom_font) and theme.config.theme.web_font != 'off'}"]
+@font-face {
+  font-family: "Joe Font";
+  font-display: swap;
+  src: url("[(\${#theme.assets('/fonts/' + theme.config.theme.web_font)})]") format("woff2");
+}
+[/]
+[# th:if="\${not #strings.isEmpty(theme.config.custom.custom_font)}"]
+@font-face {
+  font-family: "Joe Font";
+  font-display: swap;
+  src: url("[(\${theme.config.custom.custom_font})]") format("woff2");
+}
+[/]
+html body {
+  --theme: [(\${theme.config.basic.mode_color_light ?: '#fb6c28'})];
+  --waline-theme-color: var(--theme);
+  --waline-active-color: var(--theme);
+  --wave-color: [(\${theme.config.beauty.light_color ?: '#fff'})];
+  --scroll-bar: [(\${theme.config.theme.scrollbar_color ?: '#c0c4cc'})];
+  --loading-bar: [(\${theme.config.theme.loading_bar_color ?: 'var(--theme)'})];
+  --loading-bar-height: [(\${theme.config.theme.loading_bar_height ?: '3px'})];
+  --content-max-width: [(\${theme.config.basic.content_max_width ?: 1400})]px;
+}
+html[data-mode="dark"] body {
+  --theme: [(\${theme.config.basic.mode_color_dark ?: '#9999ff'})];
+  --wave-color: [(\${theme.config.beauty.dark_color ?: '#fff'})];
+  --scroll-bar: [(\${theme.config.theme.scrollbar_color ?: '#666'})];
+}
+::-webkit-scrollbar { width: [(\${theme.config.theme.scrollbar_width ?: '8px'})]; }
+[# th:if="\${theme.config.basic.enable_background_light and not #strings.isEmpty(theme.config.basic.background_light_mode)}"]
+html[data-mode="light"] body::before { background-image: url("[(\${theme.config.basic.background_light_mode})]"); }
+[/]
+[# th:if="\${theme.config.basic.enable_background_dark and not #strings.isEmpty(theme.config.basic.background_dark_mode)}"]
+html[data-mode="dark"] body::before { background-image: url("[(\${theme.config.basic.background_dark_mode})]"); }
+[/]
+[# th:if="\${not #strings.isEmpty(theme.config.beauty.big_banner_Photos)}"]
+html body { --joe-big-banner-image: url("[(\${theme.config.beauty.big_banner_Photos})]"); }
+[/]
+`;
+---
+
+<style is:inline th:inline="text" set:html={css} />

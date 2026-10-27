@@ -1,18 +1,29 @@
 apiVersion: theme.halo.run/v1alpha1
 kind: Theme
 metadata:
-  name: astro-starter
+  name: theme-joe-next
 spec:
-  displayName: Astro Starter
+  displayName: Joe Next
   author:
-    name: Your Name
-    website: https://github.com/YourName
-  description: A starter theme for Halo.
-  logo: https://www.halo.run/logo
-  homepage: https://github.com/halo-sigs/theme-astro-starter
-  issues: https://github.com/halo-sigs/theme-astro-starter/issues
-  version: "1.0.0"
-  requires: ">=2.0.0"
+    name: Handsome
+    website: https://github.com/acanyo
+  description: 基于 Joe3 重构的 Halo 2 主题，使用 Astro + TypeScript 构建。
+  logo: https://wmimg.com/i/70/2023/08/64d3c41d5bde2.webp
+  homepage: https://github.com/acanyo/theme-joe-next
+  repo: https://github.com/acanyo/theme-joe-next
+  issues: https://github.com/acanyo/theme-joe-next/issues
+  settingName: theme-joe-next-setting
+  configMapName: theme-joe-next-configMap
+  version: 0.1.0
+  requires: ">=2.22.2"
   license:
-    - name: "GPL-3.0"
-      url: "https://www.gnu.org/licenses/gpl-3.0.en.html"
+    - name: CC BY-NC-SA 4.0
+      url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+  customTemplates:
+    page:
+      - name: 留言板
+        description: 留言板页面
+        file: page_leaving.html
+      - name: 友链
+        description: 友情链接页面（需要链接插件）
+        file: page_links.html

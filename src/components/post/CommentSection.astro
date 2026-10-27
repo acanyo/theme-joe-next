@@ -1,0 +1,52 @@
+---
+/**
+ * 评论区。优先使用 Halo 评论扩展点（halo:comment），选择 Waline 时由前端脚本挂载。
+ * `subject` 为当前内容变量名；`kind` 为评论主体类型。
+ */
+import { POST_ICONS } from "../../data/post-icons";
+import { WALINE_ENABLED, el } from "../../config/expressions";
+
+interface Props {
+  subject: string;
+  kind: "Post" | "SinglePage";
+  group?: string;
+}
+
+const { subject, kind, group = "content.halo.run" } = Astro.props;
+const enabledForSubject = `#annotations.getOrDefault(${subject}, 'enable_comment', 'true') == 'true'`;
+const enabledGlobally =
+  "!theme.config.other.enable_clean_mode and theme.config.post.enable_comment";
+---
+
+<div class="joe_comment">
+  <div
+    class="joe_comment__close"
+    th:unless={`\${${enabledGlobally} and ${enabledForSubject}}`}
+  >
+    <Fragment set:html={POST_ICONS.commentClosed} />
+    <span
+      th:text={`\${${enabledGlobally} ? '博主关闭了当前页面的评论' : '博主关闭了所有页面的评论'}`}
+    ></span>
+  </div>
+  <div
+    class="joe_comment_box"
+    th:if={`\${${enabledGlobally} and ${enabledForSubject}}`}
+  >
+    <div class="box_title">
+      <h2>评论区</h2>
+    </div>
+    <div th:if={`\${haloCommentEnabled and !(${WALINE_ENABLED})}`}>
+      <halo-comment
+        group={group}
+        kind={kind}
+        th:attr={`name=\${${subject}.metadata.name}`}
+      ></halo-comment>
+    </div>
+    <div
+      th:if={el(WALINE_ENABLED)}
+      id="waline"
+      data-joe-waline
+      th:attr={`data-path=\${${subject}.status.permalink}`}
+    ></div>
+  </div>
+</div>

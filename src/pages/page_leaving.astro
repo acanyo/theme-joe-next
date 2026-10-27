@@ -1,0 +1,77 @@
+---
+/** 自定义页面模板「留言板」：最近留言以可拖拽便签展示，下方为评论区 */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Actions from "../components/layout/Actions.astro";
+import Aside from "../components/aside/Aside.astro";
+import CommentSection from "../components/post/CommentSection.astro";
+import { HALO_COMMENT_ENABLED, el } from "../config/expressions";
+import "../styles/content/leaving.less";
+
+/** 留言来源：全站最新评论，或仅当前页面的评论 */
+const COMMENTS =
+  "theme.config.leaving.message_source == false ? commentFinder.list({'kind': 'SinglePage', 'group': 'content.halo.run', 'name': singlePage.metadata.name}, 1, 20) : commentFinder.list(null, 1, 20)";
+---
+
+<BaseLayout
+  title="singlePage.spec.title + ' - ' + site.title"
+  pageClass="page-sheet page-leaving"
+>
+  <div class="joe_main">
+    <div class="joe_detail">
+      <h1
+        class="joe_detail__title"
+        th:classappend="${theme.config.post.enable_title_shadow ? 'txt-shadow' : ''}"
+        th:text="${singlePage.spec.title}"
+      ></h1>
+      <article class="joe_detail__article animated fadeIn">
+        <div
+          class="joe_leaving"
+          th:if={el(HALO_COMMENT_ENABLED)}
+          th:with={`notes = \${${COMMENTS}}`}
+        >
+          <ul
+            class="joe_leaving-list"
+            th:unless="${#lists.isEmpty(notes.items)}"
+          >
+            <li class="item" th:each="note : ${notes.items}">
+              <div class="user">
+                <img
+                  class="avatar"
+                  loading="lazy"
+                  th:src="${note.owner.avatar}"
+                  alt=""
+                  th:attr="data-text-avatar=${note.owner.displayName}"
+                  data-fallback="avatar"
+                />
+                <div class="nickname" th:text="${note.owner.displayName}"></div>
+                <time
+                  class="date"
+                  th:text="${#dates.format(note.metadata.creationTimestamp, 'yyyy-MM-dd')}"
+                ></time>
+              </div>
+              <div class="wrapper">
+                <div
+                  class="content leaving-content"
+                  th:utext="${note.spec.content}"
+                ></div>
+              </div>
+            </li>
+          </ul>
+          <div class="joe_leaving-none" th:if="${#lists.isEmpty(notes.items)}">
+            暂无留言，期待第一个脚印。
+          </div>
+        </div>
+        <div id="post-inner" th:utext="${singlePage.content.content}"></div>
+      </article>
+    </div>
+    <CommentSection subject="singlePage" kind="SinglePage" />
+  </div>
+  <th-block th:if="${#annotations.getOrDefault(singlePage, 'enable_aside', 'true') == 'true' and theme.config.aside.enable_sheet_aside}">
+    <Aside />
+  </th-block>
+  <Actions slot="actions" editKind="page" />
+</BaseLayout>
+
+<script>
+  import "../scripts/pages/leaving";
+</script>

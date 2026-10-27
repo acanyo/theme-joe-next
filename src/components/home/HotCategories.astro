@@ -1,0 +1,80 @@
+---
+/** 首页「精品分类」：指定分类或自定义入口（设置 home.data_hot_category） */
+const FALLBACK = "#theme.assets('/images/hot_cover1.jpg')";
+---
+
+<div class="joe_index__hot">
+  <div class="joe_index__title">
+    <ul class="joe_index__title-title default">
+      <li class="item active">精品分类</li>
+    </ul>
+    <div class="joe_index__title-notice">
+      <a th:href="@{/categories}">
+        <i class="joe-font joe-icon-application" aria-hidden="true"></i>全部分类
+      </a>
+    </div>
+  </div>
+  <ul class="joe_index__hot-list hotlist">
+    <th-block th:each="hot : ${theme.config.home.data_hot_category}">
+      <th-block th:switch="${hot.hot_category_section_type}">
+        <th-block
+          th:case="'category'"
+          th:with="category = ${categoryFinder.getByName(hot.data_by_category?.category)}"
+        >
+          <li class="item animated fadeIn" th:if="${category != null}">
+            <a
+              class="link"
+              th:href="@{${category.status.permalink}}"
+              th:title="${category.spec.displayName}"
+            >
+              <figure class="inner">
+                <img
+                  width="100%"
+                  height="120"
+                  class="image"
+                  loading="lazy"
+                  th:src={`\${category.spec.cover ?: ${FALLBACK}}`}
+                  th:alt="${category.spec.displayName}"
+                  data-fallback="thumbnail"
+                />
+                <figcaption
+                  class="title"
+                  th:text="${category.spec.displayName}"
+                ></figcaption>
+              </figure>
+            </a>
+          </li>
+        </th-block>
+        <li
+          class="item animated fadeIn"
+          th:case="'custom'"
+          th:with="custom = ${hot.data_by_custom}"
+        >
+          <a
+            class="link"
+            th:href="${custom?.hot_custom_url}"
+            th:title="${custom?.hot_custom_title}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <figure class="inner">
+              <img
+                width="100%"
+                height="120"
+                class="image"
+                loading="lazy"
+                th:src={`\${custom?.hot_custom_img ?: ${FALLBACK}}`}
+                th:alt="${custom?.hot_custom_title}"
+                data-fallback="thumbnail"
+              />
+              <figcaption
+                class="title"
+                th:text="${custom?.hot_custom_title}"
+              ></figcaption>
+            </figure>
+          </a>
+        </li>
+      </th-block>
+    </th-block>
+  </ul>
+</div>

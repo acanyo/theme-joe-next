@@ -1,0 +1,66 @@
+---
+/** 链接插件提供的 /links 路由 */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Actions from "../components/layout/Actions.astro";
+import Aside from "../components/aside/Aside.astro";
+import LinkGroups from "../components/links/LinkGroups.astro";
+import {
+  HALO_COMMENT_ENABLED,
+  WALINE_ENABLED,
+  el,
+} from "../config/expressions";
+import "../styles/pages/journals.less";
+---
+
+<BaseLayout
+  bigBanner="normal"
+  heading="(theme.config.links.links_title ?: '友情链接')"
+  title="(theme.config.links.links_title ?: '友情链接') + ' - ' + site.title"
+  pageClass="page-journals page-links"
+>
+  <div class="joe_main">
+    <div class="joe_detail">
+      <h1
+        class="joe_detail__title txt-shadow"
+        th:text="${theme.config.links.links_title ?: '友情链接'}"
+      ></h1>
+      <article class="joe_detail__article animated fadeIn">
+        <LinkGroups groups="groups" />
+        <div
+          class="links-article"
+          th:if="${not #strings.isEmpty(theme.config.links.links_article)}"
+          th:utext="${theme.config.links.links_article}"
+        ></div>
+      </article>
+    </div>
+    <div
+      class="joe_comment"
+      th:if="${theme.config.links.enable_links_comment and !theme.config.other.enable_clean_mode}"
+    >
+      <div class="joe_comment_box">
+        <div class="box_title">
+          <h2>评论区</h2>
+        </div>
+        <halo-comment
+          th:if={el(`haloCommentEnabled and ${HALO_COMMENT_ENABLED}`)}
+          group="plugin.halo.run"
+          kind="Plugin"
+          name="PluginLinks"
+        ></halo-comment>
+        <div
+          th:if={el(WALINE_ENABLED)}
+          data-joe-waline
+          data-path="/links"
+        ></div>
+      </div>
+    </div>
+  </div>
+  <th-block th:if="${theme.config.aside.enable_links_aside}">
+    <Aside />
+  </th-block>
+  <Actions slot="actions" randomLink />
+</BaseLayout>
+
+<script>
+  import "../scripts/pages/links";
+</script>

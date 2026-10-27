@@ -1,0 +1,55 @@
+---
+/** 文章版权声明 */
+import { POST_ICONS } from "../../data/post-icons";
+
+const SITE =
+  "#strings.endsWith(site.url, '/') ? #strings.substring(site.url, 0, #strings.length(site.url) - 1) : site.url";
+---
+
+<div class="joe_detail__copyright">
+  <div class="content">
+    <div class="item">
+      <Fragment set:html={POST_ICONS.copyrightAuthor} />
+      <span>版权归属：</span>
+      <span
+        class="text"
+        th:text="${contributorFinder.getContributor(post.spec.owner)?.displayName}"
+      ></span>
+    </div>
+    <div class="item">
+      <Fragment set:html={POST_ICONS.copyrightLink} />
+      <span>本文链接：</span>
+      <span class="text">
+        <a
+          class="link"
+          th:href="@{${post.status.permalink}}"
+          th:text={`\${${SITE} + post.status.permalink}`}
+        ></a>
+      </span>
+    </div>
+    <div class="item">
+      <Fragment set:html={POST_ICONS.copyrightLicense} />
+      <span>许可协议：</span>
+      <span
+        class="text"
+        th:if="${not #strings.isEmpty(theme.config.post.passage_rights_content)}"
+        th:text="${theme.config.post.passage_rights_content}"
+      ></span>
+      <span
+        class="text"
+        th:if="${#strings.isEmpty(theme.config.post.passage_rights_content)}"
+      >
+        本文使用《
+        <a
+          class="link"
+          href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans"
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+        >
+          署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0)
+        </a>
+        》协议授权
+      </span>
+    </div>
+  </div>
+</div>

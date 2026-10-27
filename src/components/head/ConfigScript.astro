@@ -1,0 +1,39 @@
+---
+/**
+ * 服务端配置注入。
+ *
+ * 一次性把前端需要的主题设置序列化为 `window.__JOE_CONFIG__`，并在首屏绘制前
+ * 根据主题模式写入 `data-mode` / `data-color-scheme`，避免闪烁。
+ * 浏览器端代码通过 `src/scripts/core/config.ts` 读取，不直接访问此全局变量。
+ */
+import { buildServerConfigExpression } from "../../config/theme-config";
+
+const configScript = `
+window.__JOE_CONFIG__ = {
+  raw: /*[[\${ ${buildServerConfigExpression()} }]]*/ {},
+  assetsBase: /*[[\${#theme.assets('/')}]]*/ "/",
+};
+(function () {
+  var cfg = window.__JOE_CONFIG__.raw;
+  var mode = cfg.themeMode;
+  try {
+    if (mode === "auto") {
+      var scope = String(cfg.lightTimeScope || "5:00~19:00").split("~");
+      var toMinutes = function (s) { var p = s.split(":"); return (+p[0]) * 60 + (+p[1] || 0); };
+      var now = new Date();
+      var current = now.getHours() * 60 + now.getMinutes();
+      mode = current >= toMinutes(scope[0]) && current <= toMinutes(scope[1]) ? "light" : "dark";
+    } else if (mode === "user" || !mode) {
+      mode = localStorage.getItem("data-mode") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    }
+  } catch (e) {
+    mode = "light";
+  }
+  var root = document.documentElement;
+  root.setAttribute("data-mode", mode);
+  root.setAttribute("data-color-scheme", mode);
+})();
+`;
+---
+
+<script is:inline th:inline="javascript" set:html={configScript} />

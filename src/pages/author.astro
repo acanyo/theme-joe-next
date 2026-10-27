@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostArchive from "../components/list/PostArchive.astro";
+---
+
+<BaseLayout
+  bigBanner="normal"
+  heading="(author.spec.displayName)"
+  title="author.spec.displayName + ' - ' + site.title"
+  pageClass="page-author"
+>
+  <PostArchive name="author.spec.displayName" />
+</BaseLayout>

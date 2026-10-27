@@ -1,0 +1,36 @@
+---
+/**
+ * 单个导航链接。`item` 为当前作用域中菜单项变量名（构建期常量），
+ * 例如 "menuItem"、"childMenu"。其余属性（如 th:if）原样透传到 <a>。
+ */
+interface Props {
+  item: string;
+  /** 是否显示菜单图标（桌面导航显示，侧栏不显示） */
+  withIcon?: boolean;
+  class?: string;
+  [attr: string]: unknown;
+}
+
+const {
+  item,
+  withIcon = false,
+  class: className = "item",
+  ...rest
+} = Astro.props;
+---
+
+<a
+  class={className}
+  th:href={`@{\${${item}.status.href}}`}
+  th:target={`\${${item}.spec.target?.value}`}
+  th:title={`\${${item}.status.displayName}`}
+  {...rest}
+>
+  {withIcon && (
+    <i
+      th:if="${theme.config.navbar.enable_navbar_icon}"
+      th:class={`|m-icon \${#annotations.getOrDefault(${item}, 'icon', 'jiewen joe-icon-zuzhijiagou')}|`}
+    />
+  )}
+  <span th:text={`\${${item}.status.displayName}`}></span>
+</a>

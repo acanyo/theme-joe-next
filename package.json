@@ -1,13 +1,19 @@
 {
+  "name": "theme-joe-next",
+  "private": true,
   "type": "module",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.23.4"
   },
+  "packageManager": "pnpm@10.26.0",
   "scripts": {
     "dev": "nodemon --config nodemon.json --exec 'astro build'",
     "build": "astro build",
-    "astro": "astro",
-    "format": "prettier --write ."
+    "package": "pnpm build && theme-package",
+    "check": "astro check",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "format": "prettier --write .",
+    "astro": "astro"
   },
   "prettier": {
     "plugins": [
@@ -23,20 +29,28 @@
     ]
   },
   "dependencies": {
-    "@astrojs/mdx": "^5.0.3",
-    "@astrojs/rss": "^4.0.18",
-    "@astrojs/vue": "^6.0.1",
-    "@halo-dev/api-client": "^2.23.0",
-    "astro": "^6.1.4",
-    "ky": "^2.0.0",
-    "sharp": "^0.34.5",
-    "vue": "^3.5.32"
+    "@waline/client": "3.16.1",
+    "animate.css": "4.1.1",
+    "aplayer": "1.10.1",
+    "astro": "7.4.2",
+    "hls.js": "1.7.3",
+    "photoswipe": "5.4.4",
+    "prism-themes": "1.9.0",
+    "prismjs": "1.30.0",
+    "qrcode": "1.5.4",
+    "swiper": "14.3.0",
+    "tocbot": "4.36.8",
+    "vconsole": "3.15.1"
   },
   "devDependencies": {
-    "@iconify-json/mingcute": "^1.2.7",
-    "nodemon": "^3.1.14",
-    "prettier": "3.8.1",
-    "prettier-plugin-astro": "0.14.1",
-    "unplugin-icons": "^23.0.1"
+    "@astrojs/check": "0.9.12",
+    "@halo-dev/theme-package-cli": "1.1.1",
+    "@types/prismjs": "1.26.6",
+    "@types/qrcode": "1.5.6",
+    "less": "4.9.1",
+    "nodemon": "3.1.14",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.2",
+    "typescript": "5.9.3"
   }
 }

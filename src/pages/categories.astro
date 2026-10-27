@@ -1,22 +1,20 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Aside from "../components/aside/Aside.astro";
+import TermGrid from "../components/list/TermGrid.astro";
+import "../styles/pages/index.less";
 ---
 
-<Layout pageTitle="分类">
-  <Fragment slot="head">
-    <title th:text="|分类 - ${site.title}|"></title>
-  </Fragment>
-
-  <nav class="taxonomy-list" aria-label="Category list">
-    <div th:each="category : ${categories}" class="taxonomy-list__item">
-      <a
-        class="taxonomy-list__link"
-        th:href="@{${category.status.permalink}}"
-        th:text="${category.spec.displayName}"
-      >
-      </a>
-      <span class="taxonomy-list__count" th:text="|${category.postCount} 篇|">
-      </span>
-    </div>
-  </nav>
-</Layout>
+<BaseLayout
+  bigBanner="normal"
+  heading="(theme.config.categories.categories_title ?: '全部分类')"
+  title="(theme.config.categories.categories_title ?: '全部分类') + ' - ' + site.title"
+  pageClass="page-categories"
+>
+  <div class="joe_main">
+    <TermGrid kind="categories" />
+  </div>
+  <th-block th:if="${theme.config.aside.enable_categories_aside}">
+    <Aside />
+  </th-block>
+</BaseLayout>

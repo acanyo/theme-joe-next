@@ -1,65 +1,134 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Aside from "../components/aside/Aside.astro";
+import Pagination from "../components/list/Pagination.astro";
+import "../styles/pages/archives.less";
+
+const TITLE = "theme.config.archives.archives_title ?: '文章归档'";
 ---
 
-<Layout pageTitle="归档">
-  <Fragment slot="head">
-    <title th:text="|归档 - ${site.title}|"></title>
-  </Fragment>
-
-  <section class="archive-list" aria-label="Archive list">
-    <th:block th:each="archive : ${archives.items}">
-      <th:block th:each="month : ${archive.months}">
-        <div class="archive-group">
-          <h2
-            class="archive-group__year"
-            th:text="|${archive.year} · ${month.month}|"
-          >
-          </h2>
-          <ul class="archive-group__items">
-            <li th:each="post : ${month.posts}" class="archive-entry">
-              <span
-                class="archive-entry__date"
-                th:text="${#dates.format(post.spec.publishTime, 'MM/dd')}"
-              ></span>
-              <div>
-                <h3 class="archive-entry__title">
-                  <a
-                    th:href="@{${post.status.permalink}}"
-                    th:text="${post.spec.title}"></a>
-                </h3>
-                <p
-                  class="archive-entry__summary"
-                  th:text="${post.status.excerpt}"
-                >
-                </p>
-              </div>
+<BaseLayout
+  bigBanner="normal"
+  heading="(theme.config.archives.archives_title ?: '文章归档')"
+  title={`(${TITLE}) + ' - ' + site.title`}
+  pageClass="page-archives"
+>
+  <div class="joe_main">
+    <div class="joe_index joe_archives__filing">
+      <div class="title" th:text={`\${${TITLE}}`}></div>
+      <div class="content">
+        <div
+          class="joe_archives__category animated fadeIn"
+          th:if="${theme.config.archives.enable_archives_category}"
+        >
+          <div class="joe_archives-title">
+            <i class="joe-font joe-icon-fenlei" aria-hidden="true"></i>分类
+          </div>
+          <ul class="joe_category-list">
+            <li class="item" th:each="category : ${categoryFinder.listAll()}">
+              <a
+                class="link"
+                th:href="@{${category.status.permalink}}"
+                th:title="${category.spec.displayName}"
+              >
+                <span th:text="${category.spec.displayName}"></span>
+                <em th:text="${category.status.visiblePostCount ?: 0}"></em>
+              </a>
             </li>
           </ul>
         </div>
-      </th:block>
-    </th:block>
 
-    <div th:if="${archives.total == 0}" class="archive-empty">暂无文章。</div>
-  </section>
+        <div
+          class="joe_archives__wrapper animated fadeIn"
+          th:with="byMonth = ${theme.config.archives.archives_timeline_metric != 'year'}"
+        >
+          <th-block th:if="${theme.config.archives.archives_list_type == 'list'}">
+            <div class="joe_archives-title">
+              <i class="jiewen joe-icon-riqi" aria-hidden="true"></i>列表
+            </div>
+            <ul class="joe_archives-list">
+              <th-block th:each="archive : ${archives.items}">
+                <th-block th:each="month : ${archive.months}">
+                  <li class="item" th:each="post : ${month.posts}">
+                    <a
+                      th:title="${post.spec.title}"
+                      th:href="@{${post.status.permalink}}"
+                      th:text="${post.spec.title}"
+                    ></a>
+                    <time th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"></time>
+                  </li>
+                </th-block>
+              </th-block>
+            </ul>
+            <Pagination result="archives" />
+          </th-block>
 
-  <nav
-    th:if="${archives.totalPages gt 1}"
-    class="pagination"
-    aria-label="Pagination"
-  >
-    <a
-      th:if="${archives.hasPrevious()}"
-      th:href="@{${archives.prevUrl}}"
-      class="pagination__prev">&larr; 较新</a
-    >
-    <span
-      class="pagination__info"
-      th:text="|${archives.page} / ${archives.totalPages}|"></span>
-    <a
-      th:if="${archives.hasNext()}"
-      th:href="@{${archives.nextUrl}}"
-      class="pagination__next">较旧 &rarr;</a
-    >
-  </nav>
-</Layout>
+          <th-block th:unless="${theme.config.archives.archives_list_type == 'list'}">
+            <div class="joe_archives-title">
+              <i class="joe-font joe-icon-timeline" aria-hidden="true"></i>
+              时间轴<em th:text="${byMonth ? '（月）' : '（年）'}"></em>
+            </div>
+            <ul
+              class="joe_archives-timelist"
+              th:with="allArchives = ${postFinder.archives(1, 9999)}"
+            >
+              <th-block th:each="archive : ${allArchives.items}">
+                <th-block th:if="${byMonth}">
+                  <li class="item" th:each="month : ${archive.months}">
+                    <div class="wrapper">
+                      <div class="panel in">
+                        <span th:text="|${archive.year} 年 ${month.month} 月|"></span>
+                        <i
+                          class="joe-font joe-icon-arrow-down"
+                          aria-hidden="true"
+                        ></i>
+                      </div>
+                      <ol class="panel-body">
+                        <li th:each="post : ${month.posts}">
+                          <a
+                            th:title="${post.spec.title}"
+                            th:href="@{${post.status.permalink}}"
+                            th:text="|${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}：${post.spec.title}|"
+                          ></a>
+                        </li>
+                      </ol>
+                    </div>
+                  </li>
+                </th-block>
+                <li class="item" th:unless="${byMonth}">
+                  <div class="wrapper">
+                    <div class="panel in">
+                      <span th:text="|${archive.year} 年|"></span>
+                      <i
+                        class="joe-font joe-icon-arrow-down"
+                        aria-hidden="true"
+                      ></i>
+                    </div>
+                    <ol class="panel-body">
+                      <th-block th:each="month : ${archive.months}">
+                        <li th:each="post : ${month.posts}">
+                          <a
+                            th:title="${post.spec.title}"
+                            th:href="@{${post.status.permalink}}"
+                            th:text="|${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}：${post.spec.title}|"
+                          ></a>
+                        </li>
+                      </th-block>
+                    </ol>
+                  </div>
+                </li>
+              </th-block>
+            </ul>
+          </th-block>
+        </div>
+      </div>
+    </div>
+  </div>
+  <th-block th:if="${theme.config.aside.enable_archives_aside}">
+    <Aside />
+  </th-block>
+</BaseLayout>
+
+<script>
+  import "../scripts/pages/archives";
+</script>

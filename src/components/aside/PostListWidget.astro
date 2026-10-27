@@ -1,0 +1,39 @@
+---
+/** 侧栏文章列表：最新文章 / 热门文章 */
+import AsideCard from "./AsideCard.astro";
+
+interface Props {
+  kind: "newest" | "hot";
+}
+
+const { kind } = Astro.props;
+const SOURCES = {
+  newest: {
+    title: "最新文章",
+    size: "theme.config.aside.set_newest_post_num",
+    sort: "'spec.publishTime,desc'",
+  },
+  hot: {
+    title: "热门文章",
+    size: "theme.config.aside.set_hot_post_num",
+    sort: "'stats.visit,desc'",
+  },
+};
+const source = SOURCES[kind];
+const query = `postFinder.list({page: 1, size: #conversions.convert(${source.size} ?: 5, 'java.lang.Integer'), sort: {${source.sort}, 'metadata.creationTimestamp,asc'}})`;
+---
+
+<AsideCard variant="newest" icon="huo" title={source.title}>
+  <div class="joe_aside__item-contain">
+    <ul class="list" th:with={`asidePosts = \${${query}}`}>
+      <li class="item" th:each="asidePost : ${asidePosts.items}">
+        <a
+          class="link"
+          th:href="@{${asidePost.status.permalink}}"
+          th:text="${asidePost.spec.title}"
+        ></a>
+        <i class="joe-font joe-icon-link" aria-hidden="true"></i>
+      </li>
+    </ul>
+  </div>
+</AsideCard>

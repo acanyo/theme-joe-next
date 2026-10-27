@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="'页面未找到 - ' + site.title" pageClass="page-404">
+  <div class="joe_main">
+    <div class="joe_page_404">
+      <img
+        th:src="@{/assets/images/404.svg}"
+        alt="404"
+        width="360"
+        height="270"
+      />
+      <h1>抱歉，您访问的页面不存在</h1>
+      <p>可能已被删除、更名或暂时不可用。</p>
+      <a class="joe_page_404__home" th:href="@{/}">
+        返回首页
+      </a>
+    </div>
+  </div>
+</BaseLayout>
