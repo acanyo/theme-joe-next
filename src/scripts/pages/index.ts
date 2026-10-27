@@ -1,10 +1,9 @@
 /** 首页：轮播、大图、加载更多 */
-import { $, headerOffset, onIdle, onReady } from "../core/dom";
+import { $, headerOffset, onReady } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { initBanner } from "../features/banner";
 import { initBigBanner } from "../features/big-banner";
 import { initReveal } from "../features/reveal";
-import { initWalineCount } from "../content/waline";
 
 /** 「查看更多」：抓取下一页并追加文章；开启自动加载时进入视口即触发 */
 function initLoadMore(): void {
@@ -62,4 +61,3 @@ onReady(() => {
   initLoadMore();
   void initBanner();
 });
-onIdle(() => void initWalineCount());

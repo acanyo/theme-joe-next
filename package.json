@@ -29,7 +29,6 @@
     ]
   },
   "dependencies": {
-    "@waline/client": "3.16.1",
     "animate.css": "4.1.1",
     "aplayer": "1.10.1",
     "astro": "7.4.2",

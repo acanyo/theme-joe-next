@@ -1,9 +1,10 @@
 /** 文章页入口 */
-import { onIdle, onReady } from "../core/dom";
+import { onReady } from "../core/dom";
 import { initCodeBlocks } from "../content/code-block";
 import { initShortcodes } from "../content/shortcodes";
 import { initGallery } from "../content/gallery";
-import { initWaline, initWalineCount } from "../content/waline";
+import { initAsideOperate } from "../content/aside-operate";
+import { initReadLimit } from "../content/read-limit";
 import {
   ensureHeadingIds,
   initCopyright,
@@ -21,15 +22,17 @@ onReady(() => {
   initWordCount();
   initToc();
   initLike();
+  initAsideOperate();
+  void initReadLimit();
   initShare();
   initCopyright();
   initProgressBar();
   initGallery();
-  void initCodeBlocks();
+  // 文章元数据可单独关闭长代码自动折叠
+  void initCodeBlocks({
+    foldLong:
+      document.querySelector<HTMLElement>(".joe_detail")?.dataset
+        .foldLongCode !== "false",
+  });
   scrollToHash();
-});
-
-onIdle(() => {
-  void initWaline();
-  void initWalineCount();
 });

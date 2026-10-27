@@ -3,7 +3,7 @@
  * 文章列表项。依赖循环变量 `post` 与 `iter`（th:each="post, iter : ...")。
  * 首页可开启进入视口动画（data-reveal）。
  */
-import { HALO_COMMENT_ENABLED, el } from "../../config/expressions";
+import { COMMENT_ENABLED, el } from "../../config/expressions";
 
 interface Props {
   /** 是否启用首页列表动画设置 */
@@ -80,7 +80,7 @@ const COVER =
           <i class="joe-font joe-icon-eye" aria-hidden="true"></i>
           <span th:text="${post.stats.visit}">0</span>
         </li>
-        <li th:if={el(HALO_COMMENT_ENABLED)}>
+        <li th:if={el(COMMENT_ENABLED)}>
           <i class="joe-font joe-icon-message" aria-hidden="true"></i>
           <span th:text="${post.stats.comment}">0</span>
         </li>

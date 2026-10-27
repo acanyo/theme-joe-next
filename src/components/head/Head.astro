@@ -4,7 +4,6 @@
  */
 import ConfigScript from "./ConfigScript.astro";
 import DynamicStyle from "./DynamicStyle.astro";
-import WalineConfig from "./WalineConfig.astro";
 import "../../styles/index.less";
 
 interface Props {
@@ -50,5 +49,4 @@ const { title = "site.title", titleIf } = Astro.props;
 />
 <ConfigScript />
 <DynamicStyle />
-<WalineConfig />
 <slot />

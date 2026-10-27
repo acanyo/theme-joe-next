@@ -23,101 +23,6 @@ spec:
               label: 浅色模式
             - value: dark
               label: 暗黑模式
-        - $formkit: radio
-          name: comment_option
-          id: comment_option
-          key: comment_option
-          value: default
-          label: 评论系统
-          help: "选择使用的评论系统"
-          options:
-            - value: default
-              label: 默认
-            - value: waline
-              label: Waline
-        - $formkit: group
-          name: waline
-          id: waline
-          key: waline
-          if: "$get(comment_option).value === 'waline'"
-          label: Waline 设置
-          children:
-            - $formkit: text
-              name: waline_serverURL
-              id: waline_serverURL
-              key: waline_serverURL
-              label: Waline 服务端地址
-              value: ""
-              help: "Waline 服务端地址，如 https://waline-server.herokuapp.com 不要加结尾反斜杠"
-            - $formkit: text
-              name: waline_css
-              id: waline_css
-              key: waline_css
-              label: Waline CSS地址
-              value: "https://unpkg.com/@waline/client@v2/dist/waline.css"
-              help: Waline 的主样式地址
-            - $formkit: text
-              name: waline_js_comment
-              id: waline_js_comment
-              key: waline_js_comment
-              label: 用于评论的 JS 地址
-              value: "https://unpkg.com/@waline/client@v2/dist/waline.mjs"
-              help: Waline 的评论 JS 地址
-            - $formkit: text
-              name: waline_js_leaving
-              id: waline_js_leaving
-              key: waline_js_leaving
-              label: 功能 JS
-              value: "https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.mjs"
-              help: 用于加载留言板和最新评论的 JS 地址
-            - $formkit: text
-              name: waline_js_list
-              id: waline_js_list
-              key: waline_js_list
-              label: 列表 JS
-              value: "https://unpkg.com/@waline/client@v2/dist/comment.mjs"
-              help: 首页加载显示评论数的 JS 地址
-            - $formkit: code
-              name: waline_config_basic_json
-              id: waline_config_basic_json
-              key: waline_config_basic_json
-              label: Waline 基础配置
-              value: ""
-              help: "Waline 基础配置（json格式），更多配置项请参考 Waline官网：https://waline.js.org"
-              language: json
-            - $formkit: radio
-              name: waline_config_imageUpload_option
-              id: waline_config_imageUpload_option
-              key: waline_config_imageUpload_option
-              value: default
-              label: Waline 图片上传配置
-              help: "选择图片上传方式"
-              options:
-                - value: default
-                  label: 默认
-                - value: lskypro
-                  label: 兰空图床
-            - $formkit: group
-              name: lskypro
-              id: lskypro
-              key: lskypro
-              if: "$get(waline_config_imageUpload_option).value === 'lskypro'"
-              label: 兰空图床上传 设置
-              children:
-                - $formkit: text
-                  name: lskypro_apiURL
-                  id: lskypro_apiURL
-                  key: lskypro_apiURL
-                  label: 兰空图床 服务端地址
-                  value: ""
-                  help: "兰空图床 服务端地址，如 https://img.example.com/api/v1/upload 不要加结尾反斜杠"
-                - $formkit: text
-                  name: lskypro_apiTOKEN
-                  id: lskypro_apiTOKEN
-                  key: lskypro_apiTOKEN
-                  label: 兰空图床 Token
-                  value: ""
-                  help: "兰空图床 Token，如 2|1bJbwlqBfnggmOMEZqXT5XusaIwqiZjCDs7r1Ob5"
         - $formkit: color
           name: mode_color_light
           id: mode_color_light
@@ -1316,6 +1221,13 @@ spec:
               label: 向日葵
             - value: "swirl-heart"
               label: 上升的心
+        - $formkit: switch
+          value: false
+          name: enable_strips
+          id: enable_strips
+          key: enable_strips
+          label: 展示彩带动画
+          help: 鼠标移入博主卡片时撒彩带（移动端与「减少动态效果」系统设置下不显示）
 
     - group: code_block
       label: 代码块

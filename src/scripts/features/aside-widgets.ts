@@ -179,7 +179,19 @@ function initMusic(): void {
   players.forEach((el) => observer.observe(el));
 }
 
+/** 博主卡片彩带动画：仅在开启设置（渲染了 canvas）时加载 */
+function initStrips(): void {
+  const cards = $$("[data-joe-blogger-card]").filter((card) =>
+    card.querySelector("canvas.joe_strips"),
+  );
+  if (!cards.length || isMobile()) return;
+  void import("../effects/strips").then(({ default: start }) =>
+    cards.forEach((card) => start(card)),
+  );
+}
+
 export function initAsideWidgets(): void {
+  initStrips();
   initClouds();
   initLifetime();
   initMusic();

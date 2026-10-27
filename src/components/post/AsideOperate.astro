@@ -1,0 +1,68 @@
+---
+/**
+ * 文章左侧悬浮操作栏：点赞、评论、分享、打赏。
+ * 仅在宽屏且文章左侧留有足够空间时显示（scripts/content/aside-operate.ts 控制），
+ * 此时正文下方的点赞、分享、打赏会被隐藏，避免重复。
+ */
+import DonateList from "./DonateList.astro";
+import ShareLinks from "./ShareLinks.astro";
+import {
+  COMMENT_ENABLED,
+  DONATE_ENABLED,
+  LIKE_ENABLED,
+  POST_URL,
+  SHARE_ENABLED,
+  el,
+} from "../../config/expressions";
+import "../../styles/content/aside-operate.less";
+---
+
+<ul
+  class="aside_operations"
+  data-joe-aside-operate
+  th:with={`postUrl = ${el(POST_URL)}`}
+>
+  <li class="post-operate-like" th:if={el(LIKE_ENABLED)}>
+    <button type="button" data-joe-like aria-label="点赞">
+      <i class="joe-font joe-icon-dianzan icon-like" aria-hidden="true"></i>
+      <i
+        class="joe-font joe-icon-dianzan-fill icon-unlike"
+        aria-hidden="true"
+      ></i>
+      <span
+        class="nums"
+        th:classappend="${post.stats.upvote > 0} ? 'visible'"
+        th:text="${post.stats.upvote}"
+      >
+        0
+      </span>
+    </button>
+  </li>
+  <li
+    class="post-operate-comment"
+    th:if={`\${!theme.config.other.enable_clean_mode and theme.config.post.enable_comment and (${COMMENT_ENABLED})}`}
+  >
+    <button type="button" data-joe-goto-comment aria-label="前往评论区">
+      <i class="joe-font joe-icon-message" aria-hidden="true"></i>
+      <span
+        class="visible"
+        th:if="${post.stats.comment > 0}"
+        th:text="${post.stats.comment}"
+      ></span>
+    </button>
+  </li>
+  <li class="post-operate-share" th:if={el(SHARE_ENABLED)}>
+    <button type="button" aria-label="分享" aria-haspopup="true">
+      <i class="joe-font joe-icon-huifu" aria-hidden="true"></i>
+    </button>
+    <ShareLinks />
+  </li>
+  <li class="post-operate-donate" th:if={el(DONATE_ENABLED)}>
+    <button type="button" aria-label="打赏" aria-haspopup="true">
+      <i class="joe-font joe-icon-shang" aria-hidden="true"></i>
+    </button>
+    <div class="joe_donate">
+      <DonateList />
+    </div>
+  </li>
+</ul>

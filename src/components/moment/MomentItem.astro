@@ -1,13 +1,9 @@
 ---
 /**
  * 单条瞬间。依赖循环变量 `moment`（与可选的 `iter`）。
- * 评论使用 Halo 评论扩展点，按需展开；Waline 模式由前端挂载。
+ * 评论使用 Halo 评论扩展点，按需展开。
  */
-import {
-  HALO_COMMENT_ENABLED,
-  WALINE_ENABLED,
-  el,
-} from "../../config/expressions";
+import { COMMENT_ENABLED, el } from "../../config/expressions";
 ---
 
 <li
@@ -98,31 +94,19 @@ import {
               aria-hidden="true"
             ></i>
             <em
-              th:if={el(HALO_COMMENT_ENABLED)}
+              th:if={el(COMMENT_ENABLED)}
               th:text="${moment.stats.totalComment}"
-            >
-              0
-            </em>
-            <em
-              th:if={el(WALINE_ENABLED)}
-              class="waline-comment-count"
-              th:attr="data-path=|/moments/${moment.metadata.name}|"
             >
               0
             </em>
           </button>
           <div class="joe_journal_comment">
             <halo-comment
-              th:if={el(HALO_COMMENT_ENABLED)}
+              th:if={el(COMMENT_ENABLED)}
               group="moment.halo.run"
               kind="Moment"
               th:attr="name=${moment.metadata.name}"
             ></halo-comment>
-            <div
-              th:if={el(WALINE_ENABLED)}
-              data-joe-waline
-              th:attr="data-path=|/moments/${moment.metadata.name}|"
-            ></div>
           </div>
         </th-block>
       </div>

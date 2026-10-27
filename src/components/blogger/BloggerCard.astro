@@ -1,12 +1,7 @@
 ---
 /** 侧栏：博主信息卡片 */
 import SocialLinks from "./SocialLinks.astro";
-import {
-  BLOGGER_NAME,
-  HALO_COMMENT_ENABLED,
-  WALINE_ENABLED,
-  el,
-} from "../../config/expressions";
+import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
 
 /** 概览统计项：A/B/C/D 四种组合 */
 const OVERVIEW = {
@@ -30,7 +25,7 @@ const STAT_VALUE = {
 } as const;
 ---
 
-<section class="joe_aside__item author">
+<section class="joe_aside__item author" data-joe-blogger-card>
   <img
     width="100%"
     height="120"
@@ -96,14 +91,10 @@ const STAT_VALUE = {
           {items.map((stat) =>
             stat === "comment" ? (
               <>
-                <div class="item" th:if={el(HALO_COMMENT_ENABLED)}>
+                <div class="item" th:if={el(COMMENT_ENABLED)}>
                   <span class="num" th:text={el(STAT_VALUE.comment)}>
                     0
                   </span>
-                  <span>{STAT_LABEL.comment}</span>
-                </div>
-                <div class="item waline-comment" th:if={el(WALINE_ENABLED)}>
-                  <span class="num">0</span>
                   <span>{STAT_LABEL.comment}</span>
                 </div>
               </>
@@ -122,4 +113,9 @@ const STAT_VALUE = {
   </div>
 
   <SocialLinks />
+  <canvas
+    class="joe_strips"
+    th:if="${theme.config.blogger.enable_strips}"
+    aria-hidden="true"
+  ></canvas>
 </section>

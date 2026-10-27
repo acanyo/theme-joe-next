@@ -1,0 +1,56 @@
+---
+/**
+ * 「评论后可见」遮罩（文章/页面元数据 enable_read_limit）。
+ *
+ * - 作者本人或评论不可用时不渲染。
+ * - 未登录：提示登录后评论。
+ * - 已登录：提示评论；前端（scripts/content/read-limit.ts）查询当前用户是否已评论，
+ *   已评论或评论成功后移除遮罩。
+ *
+ * 注意：正文已完整输出到页面，这是体验层面的「评论后可见」，并非权限控制。
+ */
+import { READ_LIMIT_ACTIVE } from "../../config/expressions";
+
+interface Props {
+  subject: "post" | "singlePage";
+  kind: "Post" | "SinglePage";
+}
+
+const { subject: s, kind } = Astro.props;
+---
+
+<div
+  class="joe_read_limited"
+  th:if={`\${${READ_LIMIT_ACTIVE(s)}}`}
+  data-joe-read-limit
+  th:attr={`data-kind=${kind}, data-name=\${${s}.metadata.name}, data-user=\${#authentication.name}`}
+>
+  <p>
+    <i
+      class="joe-font joe-icon-locker"
+      style="color: #f5840d"
+      aria-hidden="true"
+    ></i>
+    <th-block sec:authorize="isAnonymous()">
+      &nbsp;此处内容仅
+      <a
+        class="joe_read_limited__button need-login"
+        th:href={`@{/login(redirect_uri=\${${s}.status.permalink})}`}
+      >
+        登录后评论
+      </a>
+      后可见
+    </th-block>
+    <th-block sec:authorize="isAuthenticated()">
+      &nbsp;此处内容仅
+      <button
+        type="button"
+        class="joe_read_limited__button logined"
+        data-joe-goto-comment
+      >
+        评论
+      </button>
+      后可见
+    </th-block>
+  </p>
+</div>

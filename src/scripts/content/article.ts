@@ -5,7 +5,7 @@ import tocbot from "tocbot";
 import { $, $$, headerOffset, isMobile } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { copyText } from "../core/clipboard";
-import { bindUpvoteButton } from "../features/upvote";
+import { bindUpvoteButtons } from "../features/upvote";
 import { closeOverlays, openTocDrawer } from "../features/navigation";
 
 function fillTemplate(template: string, vars: Record<string, string>): string {
@@ -30,12 +30,12 @@ function siteVars(): Record<string, string> {
   };
 }
 
-/** 文章 / 页面点赞 */
+/** 文章 / 页面点赞（正文下方与左侧悬浮栏可能同时存在，计数保持同步） */
 export function initLike(): void {
   const detail = $(".joe_detail");
-  const button = $("[data-joe-like]");
-  if (!detail || !button) return;
-  bindUpvoteButton(button, {
+  const buttons = $$("[data-joe-like]");
+  if (!detail || !buttons.length) return;
+  bindUpvoteButtons(buttons, {
     group: "content.halo.run",
     plural: detail.dataset.kind === "SinglePage" ? "singlepages" : "posts",
     name: detail.dataset.cid ?? "",
@@ -61,9 +61,10 @@ export function initShare(): void {
     }),
   );
 
-  const weixin = $("[data-joe-share-weixin]");
-  const qrcode = weixin ? $(".qrcode_wx", weixin) : null;
-  if (weixin && qrcode) {
+  // 微信二维码：悬停或键盘聚焦时才生成
+  $$("[data-joe-share-weixin]").forEach((weixin) => {
+    const qrcode = $(".qrcode_wx", weixin);
+    if (!qrcode) return;
     let rendered = false;
     const render = async () => {
       if (rendered) return;
@@ -77,10 +78,9 @@ export function initShare(): void {
       canvas.setAttribute("aria-label", "文章链接二维码");
       qrcode.replaceChildren(canvas);
     };
-    // 悬停或键盘聚焦时生成二维码
     weixin.addEventListener("mouseenter", () => void render());
     weixin.addEventListener("focus", () => void render());
-  }
+  });
 }
 
 /** 复制正文时附加版权信息 */
@@ -146,7 +146,7 @@ export function initToc(): void {
     contentSelector: ".joe_detail__article",
     headingSelector: "h1, h2, h3, h4, h5, h6",
     ignoreSelector: ".js-toc-ignore",
-    collapseDepth: getThemeConfig().post.tocDepth,
+    collapseDepth: tocDepth(),
     hasInnerContainers: true,
     headingsOffset: offset,
     scrollSmoothOffset: -offset,
@@ -166,6 +166,12 @@ export function initToc(): void {
       button.addEventListener("click", () => openTocDrawer());
     }
   }
+}
+
+/** 目录展开层级：文章元数据 toc_depth 优先，其次主题设置 */
+function tocDepth(): number {
+  const own = Number.parseInt($(".joe_detail")?.dataset.tocDepth ?? "", 10);
+  return Number.isFinite(own) ? own : getThemeConfig().post.tocDepth;
 }
 
 /** Halo 文章标题未设置 id 时补齐，保证目录锚点可用 */

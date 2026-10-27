@@ -1,0 +1,26 @@
+---
+/** 打赏二维码列表（正文下方操作区与左侧悬浮栏共用） */
+const QRCODES = [
+  { key: "qrcode_zfb", label: "支付宝打赏", alt: "支付宝收款码" },
+  { key: "qrcode_wx", label: "微信打赏", alt: "微信收款码" },
+  { key: "qrcode_qq", label: "QQ打赏", alt: "QQ收款码" },
+] as const;
+---
+
+<ol class="joe_donate_list">
+  {QRCODES.map((qr) => (
+    <li th:if={`\${not #strings.isEmpty(theme.config.post.${qr.key})}`}>
+      <p>{qr.label}</p>
+      <img
+        th:src={`\${theme.config.post.${qr.key}}`}
+        alt={qr.alt}
+        loading="lazy"
+        data-fallback="image"
+      />
+    </li>
+  ))}
+  <li
+    th:if="${not #strings.isEmpty(#strings.trim(theme.config.post.reward_code))}"
+    th:utext="${theme.config.post.reward_code}"
+  ></li>
+</ol>
