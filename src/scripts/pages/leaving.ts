@@ -1,6 +1,5 @@
 /** 留言板：随机位置与配色的便签，支持拖拽（Pointer Events，替代 Draggabilly） */
-import { $, $$, onIdle, onReady } from "../core/dom";
-import { initWaline } from "../content/waline";
+import { $, $$, onReady } from "../core/dom";
 
 const COLORS = [
   "#dcc10c",
@@ -86,4 +85,3 @@ onReady(() => {
   const list = $(".joe_leaving-list");
   if (list) layoutNotes(list);
 });
-onIdle(() => void initWaline());

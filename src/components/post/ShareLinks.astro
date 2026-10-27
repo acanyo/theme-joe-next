@@ -1,0 +1,66 @@
+---
+/**
+ * 文章分享链接列表（复制链接、微博、QQ 空间、QQ、微信二维码）。
+ * 正文下方操作区与左侧悬浮栏共用；需在外层定义 `postUrl` 变量。
+ * 交互逻辑见 scripts/content/article.ts 的 initShare（按 data 属性绑定，支持多处实例）。
+ */
+import { POST_ICONS } from "../../data/post-icons";
+
+const SHARE_TEXT =
+  "'『' + post.spec.title + '』，作者：' + post.owner.displayName";
+const SHARES = [
+  {
+    key: "weibo",
+    title: "分享到新浪微博",
+    href: `'https://service.weibo.com/share/share.php?title=' + #uris.escapeQueryParam('分享：' + ${SHARE_TEXT} + '，原文链接：' + postUrl) + '&pic=' + #uris.escapeQueryParam(post.spec.cover ?: '')`,
+  },
+  {
+    key: "qzone",
+    title: "分享到QQ空间",
+    href: `'https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + #uris.escapeQueryParam(postUrl) + '&title=' + #uris.escapeQueryParam(${SHARE_TEXT})`,
+  },
+  {
+    key: "qq",
+    title: "分享到QQ",
+    href: `'https://connect.qq.com/widget/shareqq/index.html?url=' + #uris.escapeQueryParam(postUrl) + '&title=' + #uris.escapeQueryParam(${SHARE_TEXT})`,
+  },
+] as const;
+---
+
+<div class="share-icon-list">
+  <a
+    th:if="${theme.config.post.enable_share_link}"
+    class="icon-share-link"
+    href="javascript:;"
+    title="复制文章链接"
+    aria-label="复制文章链接"
+    data-joe-share-link
+    th:attr="data-url=${postUrl}, data-title=${post.spec.title}, data-description=${post.status.excerpt}, data-author=${post.owner.displayName}, data-template=${theme.config.post.share_link_template}"
+    set:html={POST_ICONS.link}
+  />
+  {SHARES.map((share) => (
+    <a
+      th:if={`\${theme.config.post.enable_share_${share.key}}`}
+      th:href={`\${${share.href}}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      title={share.title}
+      aria-label={share.title}
+      set:html={POST_ICONS[share.key]}
+    />
+  ))}
+  <a
+    th:if="${theme.config.post.enable_share_weixin}"
+    href="javascript:;"
+    title="分享到微信"
+    aria-label="分享到微信"
+    data-joe-share-weixin
+    th:attr="data-url=${postUrl}"
+  >
+    <Fragment set:html={POST_ICONS.weixin} />
+    <div class="qrcode_wrapper animated bounceIn">
+      <div class="qrcode_wx"></div>
+      <p>微信扫一扫</p>
+    </div>
+  </a>
+</div>

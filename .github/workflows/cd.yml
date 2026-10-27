@@ -1,0 +1,16 @@
+name: CD
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  cd:
+    uses: halo-sigs/reusable-workflows/.github/workflows/theme-cd.yaml@v5
+    permissions:
+      contents: write
+    with:
+      node-version: "22.23.4"
+      pnpm-version: "10"
+      # 尚未上架 Halo 应用市场：上架后填写 app-id 并配置 HALO_PAT 密钥，再移除此项
+      skip-appstore-release: true

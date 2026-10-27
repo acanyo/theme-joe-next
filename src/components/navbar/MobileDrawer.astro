@@ -4,11 +4,7 @@
  * 依赖 Navbar 中定义的 `navMenu` 变量。
  */
 import SocialLinks from "../blogger/SocialLinks.astro";
-import {
-  BLOGGER_NAME,
-  HALO_COMMENT_ENABLED,
-  el,
-} from "../../config/expressions";
+import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
 ---
 
 <div class="joe_header__slideout">
@@ -68,7 +64,7 @@ import {
           个标签
         </span>
       </li>
-      <li class="item" th:if={el(HALO_COMMENT_ENABLED)}>
+      <li class="item" th:if={el(COMMENT_ENABLED)}>
         <i class="joe-font joe-icon-message" aria-hidden="true"></i>
         <span>
           累计收到 <strong th:text="${stats.comment}">0</strong> 条评论

@@ -1,9 +1,8 @@
 /** 瞬间页：内容展开、点赞、评论展开、代码高亮、图片灯箱、相对时间 */
-import { $, $$, onIdle, onReady } from "../core/dom";
+import { $, $$, onReady } from "../core/dom";
 import { initCodeBlocks } from "../content/code-block";
 import { initShortcodes } from "../content/shortcodes";
 import { initGallery } from "../content/gallery";
-import { initWaline, initWalineCount } from "../content/waline";
 import { bindUpvoteButton } from "../features/upvote";
 import { timeAgo } from "../core/time";
 
@@ -45,9 +44,4 @@ onReady(() => {
   initItems();
   initGallery(".joe_journal_body img");
   void initCodeBlocks({ foldLong: false });
-});
-
-onIdle(() => {
-  void initWaline();
-  void initWalineCount();
 });

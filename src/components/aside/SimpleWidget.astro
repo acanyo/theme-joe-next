@@ -4,7 +4,7 @@
  * 根据 `type` 渲染其一；数据来自当前侧栏配置项变量 `widget`。
  */
 import AsideCard from "./AsideCard.astro";
-import { HALO_COMMENT_ENABLED, el } from "../../config/expressions";
+import { COMMENT_ENABLED, el } from "../../config/expressions";
 
 interface Props {
   type:
@@ -113,7 +113,7 @@ const SUBJECT_LINK =
     variant="newreply"
     icon="message"
     title="最新回复"
-    th:if={`\${!theme.config.other.enable_clean_mode and (${HALO_COMMENT_ENABLED})}`}
+    th:if={`\${!theme.config.other.enable_clean_mode and (${COMMENT_ENABLED})}`}
   >
     <ul
       class="joe_aside__item-contain"

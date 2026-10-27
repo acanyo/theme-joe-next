@@ -3,11 +3,7 @@
  * 文章 / 页面正文的公共部分：标题、作者信息、过期提示、广告、正文、点赞。
  * `subject` 为当前内容变量名：文章页为 "post"，独立页面为 "singlePage"。
  */
-import {
-  HALO_COMMENT_ENABLED,
-  WALINE_ENABLED,
-  el,
-} from "../../config/expressions";
+import { COMMENT_ENABLED, el } from "../../config/expressions";
 import { POST_ICONS } from "../../data/post-icons";
 import PostAds from "./PostAds.astro";
 
@@ -20,7 +16,7 @@ const isPost = s === "post";
 const ann = (key: string, fallback: string) =>
   `#annotations.getOrDefault(${s}, '${key}', '${fallback}')`;
 const ARTICLE_CLASS = [
-  `${ann("img_align", "center")} + '-img'`,
+  `#annotations.getOrDefault(${s}, 'img_align', theme.config.post.post_img_align ?: 'center') + '-img'`,
   `${ann("enable_copy", "true")} == 'false' or !theme.config.post.enable_copy ? 'uncopy' : ''`,
   "theme.config.post.enable_indent ? 'indent' : ''",
   "theme.config.code_block.enable_code_line_number and !theme.config.code_block.enable_code_newline ? 'line-numbers' : ''",
@@ -32,7 +28,7 @@ const ARTICLE_CLASS = [
 
 <div
   class="joe_detail"
-  th:attr={`data-cid=\${${s}.metadata.name}, data-kind=${isPost ? "Post" : "SinglePage"}, data-likes=\${${s}.stats.upvote}`}
+  th:attr={`data-cid=\${${s}.metadata.name}, data-kind=${isPost ? "Post" : "SinglePage"}, data-likes=\${${s}.stats.upvote}, data-toc-depth=\${#annotations.getOrDefault(${s}, 'toc_depth', '')}, data-fold-long-code=\${#annotations.getOrDefault(${s}, 'enable_fold_long_code', 'true')}`}
   th:with={`author = \${contributorFinder.getContributor(${s}.spec.owner)}`}
 >
   {isPost && (
@@ -87,18 +83,9 @@ const ARTICLE_CLASS = [
             <span class="line">/</span>
             <span
               class="text"
-              th:if={el(HALO_COMMENT_ENABLED)}
+              th:if={el(COMMENT_ENABLED)}
               th:text={`|\${${s}.stats.comment} 评论|`}
             ></span>
-            <span class="text" th:if={el(WALINE_ENABLED)}>
-              <span
-                class="waline-comment-count"
-                th:attr={`data-path=@{\${${s}.status.permalink}}`}
-              >
-                0
-              </span>{" "}
-              评论
-            </span>
             <span class="line">/</span>
             <span class="text" th:text={`|\${${s}.stats.upvote} 点赞|`}></span>
             <span class="line">/</span>
@@ -147,6 +134,7 @@ const ARTICLE_CLASS = [
     <article
       class={`joe_detail__article animated fadeIn`}
       th:classappend={`|${ARTICLE_CLASS}|`}
+      th:style={`|--img-max-width: \${#annotations.getOrDefault(${s}, 'img_max_width', theme.config.post.img_max_width ?: '100%')}|`}
     >
       <div
         id="post-inner"

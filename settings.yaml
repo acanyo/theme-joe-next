@@ -23,121 +23,6 @@ spec:
               label: 浅色模式
             - value: dark
               label: 暗黑模式
-        - $formkit: radio
-          name: comment_option
-          id: comment_option
-          key: comment_option
-          value: default
-          label: 评论系统
-          help: "选择使用的评论系统"
-          options:
-            - value: default
-              label: 默认
-            - value: waline
-              label: Waline
-        - $formkit: group
-          name: waline
-          id: waline
-          key: waline
-          if: "$get(comment_option).value === 'waline'"
-          label: Waline 设置
-          children:
-            - $formkit: text
-              name: waline_serverURL
-              id: waline_serverURL
-              key: waline_serverURL
-              label: Waline 服务端地址
-              value: ""
-              help: "Waline 服务端地址，如 https://waline-server.herokuapp.com 不要加结尾反斜杠"
-            - $formkit: text
-              name: waline_css
-              id: waline_css
-              key: waline_css
-              label: Waline CSS地址
-              value: "https://unpkg.com/@waline/client@v2/dist/waline.css"
-              help: Waline 的主样式地址
-            - $formkit: text
-              name: waline_js_comment
-              id: waline_js_comment
-              key: waline_js_comment
-              label: 用于评论的 JS 地址
-              value: "https://unpkg.com/@waline/client@v2/dist/waline.mjs"
-              help: Waline 的评论 JS 地址
-            - $formkit: text
-              name: waline_js_leaving
-              id: waline_js_leaving
-              key: waline_js_leaving
-              label: 功能 JS
-              value: "https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.mjs"
-              help: 用于加载留言板和最新评论的 JS 地址
-            - $formkit: text
-              name: waline_js_list
-              id: waline_js_list
-              key: waline_js_list
-              label: 列表 JS
-              value: "https://unpkg.com/@waline/client@v2/dist/comment.mjs"
-              help: 首页加载显示评论数的 JS 地址
-            - $formkit: code
-              name: waline_config_basic_json
-              id: waline_config_basic_json
-              key: waline_config_basic_json
-              label: Waline 基础配置
-              value: ""
-              help: "Waline 基础配置（json格式），更多配置项请参考 Waline官网：https://waline.js.org"
-              language: json
-            - $formkit: radio
-              name: waline_config_imageUpload_option
-              id: waline_config_imageUpload_option
-              key: waline_config_imageUpload_option
-              value: default
-              label: Waline 图片上传配置
-              help: "选择图片上传方式"
-              options:
-                - value: default
-                  label: 默认
-                - value: lskypro
-                  label: 兰空图床
-            - $formkit: group
-              name: lskypro
-              id: lskypro
-              key: lskypro
-              if: "$get(waline_config_imageUpload_option).value === 'lskypro'"
-              label: 兰空图床上传 设置
-              children:
-                - $formkit: text
-                  name: lskypro_apiURL
-                  id: lskypro_apiURL
-                  key: lskypro_apiURL
-                  label: 兰空图床 服务端地址
-                  value: ""
-                  help: "兰空图床 服务端地址，如 https://img.example.com/api/v1/upload 不要加结尾反斜杠"
-                - $formkit: text
-                  name: lskypro_apiTOKEN
-                  id: lskypro_apiTOKEN
-                  key: lskypro_apiTOKEN
-                  label: 兰空图床 Token
-                  value: ""
-                  help: "兰空图床 Token，如 2|1bJbwlqBfnggmOMEZqXT5XusaIwqiZjCDs7r1Ob5"
-        - $formkit: radio
-          name: enable_source_link
-          id: enable_source_link
-          key: enable_source_link
-          label: "是否使用外部资源地址"
-          help: "使用外部请将整个assets目录上传"
-          value: false
-          options:
-            - value: false
-              label: 默认
-            - value: true
-              label: 外部
-        - $formkit: text
-          if: "$get(enable_source_link).value == true"
-          name: source_link
-          id: source_link
-          key: source_link
-          label: 外部资源地址
-          value: ""
-          help: "如果你的资源地址是https://example.com/assets/js/min/index.min.js，那么这里填写https://example.com"
         - $formkit: color
           name: mode_color_light
           id: mode_color_light
@@ -1246,21 +1131,6 @@ spec:
               key: socials_icon
               label: svg代码或者图片(如果使用图片请输入完整img标签)
               validation: "required"
-        - $formkit: switch
-          value: false
-          name: enable_weather
-          id: enable_weather
-          key: enable_weather
-          label: 展示天气信息
-          help: "是否展示简约版天气信息，必须配置正确的token后才可生效"
-        - $formkit: text
-          name: weather_token
-          id: weather_token
-          key: weather_token
-          if: "$get(enable_weather).value === true"
-          label: 天气插件token
-          value: ""
-          help: "用于初始化天气插件，请通过 https://www.seniverse.com/widgetv3 生成自己的插件，然后复制其中的token值填到这里"
         - $formkit: select
           name: avatar_frame
           id: avatar_frame
@@ -1357,6 +1227,7 @@ spec:
           id: enable_strips
           key: enable_strips
           label: 展示彩带动画
+          help: 鼠标移入博主卡片时撒彩带（移动端与「减少动态效果」系统设置下不显示）
 
     - group: code_block
       label: 代码块
@@ -2853,12 +2724,6 @@ spec:
     - group: ads
       label: 广告
       formSchema:
-        - $formkit: switch
-          name: enable_ads
-          id: enable_ads
-          key: enable_ads
-          label: 开启广告
-          value: false
         - $formkit: select
           if: "$get(enable_ads).value == true"
           name: enable_ads_top
@@ -3039,22 +2904,6 @@ spec:
               label: 是
             - value: false
               label: 否
-
-        - $formkit: select
-          if: "$get(enable_footer).value == true"
-          name: footer_source
-          id: footer_source
-          key: footer_source
-          label: 页脚来源
-          value: "theme"
-          help: "设置页脚内容具体来自哪里，默认使用主题页脚，也可同时使用主题和后台配置的页脚。如果使用后台自定义页脚，建议复制主题的页脚 html 结构进行修改（/template/common/footer.ftl），然后粘贴到后台的页脚配置内（主题无法保证自定义页脚的样式及适配，请视具体情况设置，必要的时候请自行修改样式）"
-          options:
-            - value: theme
-              label: "主题页脚"
-            - value: backend
-              label: "后台页脚"
-            - value: both
-              label: "主题页脚 + 后台页脚"
         - $formkit: switch
           if: "$get(enable_footer).value == true"
           name: enable_birthday
@@ -3178,37 +3027,6 @@ spec:
           label: 字体图标链接
           value: ""
           help: "填入iconfont生成的图标链接，无需link标签，将插入head标签尾部"
-        - $formkit: code
-          name: custom_css
-          id: custom_css
-          key: custom_css
-          label: 自定义CSS
-          value: ""
-          help: "已不再生效，请使用 Halo 自带的代码注入代替，https://docs.halo.run/user-guide/settings#%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5"
-          language: css
-        - $formkit: code
-          name: custom_js_head
-          id: custom_js_head
-          key: custom_js_head
-          label: 自定义JS（head）
-          value: ""
-          help: "已不再生效，请使用 Halo 自带的代码注入代替，https://docs.halo.run/user-guide/settings#%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5"
-          language: javascript
-        - $formkit: text
-          name: custom_external_js_body
-          id: custom_external_js_body
-          key: custom_external_js_body
-          label: 外部JS链接（body）
-          value: ""
-          help: "已不再生效，请使用 Halo 自带的代码注入代替，https://docs.halo.run/user-guide/settings#%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5"
-        - $formkit: code
-          name: custom_js_body
-          id: custom_js_body
-          key: custom_js_body
-          label: 自定义JS（body）
-          value: ""
-          help: "已不再生效，请使用 Halo 自带的代码注入代替，https://docs.halo.run/user-guide/settings#%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5"
-          language: javascript
         - $formkit: switch
           name: show_loaded_time
           id: show_loaded_time
@@ -3237,19 +3055,6 @@ spec:
           key: enable_clean_mode
           label: 绿色模式
           value: false
-        - $formkit: switch
-          name: check_baidu_collect
-          id: check_baidu_collect
-          key: check_baidu_collect
-          label: 检查百度收录情况
-        - $formkit: text
-          if: "$get(check_baidu_collect).value == true"
-          name: baidu_token
-          id: baidu_token
-          key: baidu_token
-          label: 百度推送Token
-          value: ""
-          help: "文章页未收录时会自动将当前链接推送给百度加快收录，Token在百度收录平台注册账号获取（必须启用“检查百度收录”并填入token才生效），https://ziyuan.baidu.com/linksubmit"
         - $formkit: switch
           name: enable_console_theme
           id: enable_console_theme

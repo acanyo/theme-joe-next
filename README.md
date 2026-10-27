@@ -19,12 +19,14 @@ pnpm dev        # 监听 src/ 变化并重新构建到 templates/
 
 将主题目录放到 Halo 工作目录的 `themes/theme-joe-next/`，在控制台安装并启用。开发时建议关闭模板缓存：`SPRING_THYMELEAF_CACHE=false`。
 
-| 命令           | 作用                                             |
-| -------------- | ------------------------------------------------ |
-| `pnpm build`   | 构建模板到 `templates/`                          |
-| `pnpm package` | 构建并打包为 `dist/theme-joe-next-<version>.zip` |
-| `pnpm check`   | TypeScript / Astro 类型检查                      |
-| `pnpm test`    | 单元测试（构建后处理逻辑）                       |
+| 命令                   | 作用                                                 |
+| ---------------------- | ---------------------------------------------------- |
+| `pnpm build`           | 构建模板并打包为 `dist/theme-joe-next-<version>.zip` |
+| `pnpm build:templates` | 仅构建模板到 `templates/`（开发调试用）              |
+| `pnpm check`           | TypeScript / Astro 类型检查                          |
+| `pnpm test`            | 单元测试                                             |
+
+发布：在 GitHub 创建 Release 后，CD 工作流会自动构建并把主题包上传到 Release 附件。
 
 ## 目录结构
 
@@ -46,7 +48,7 @@ src/
 │   ├── app.ts          全站脚本入口
 │   ├── pages/          页面专属脚本入口
 │   ├── features/       独立功能模块（明暗模式、导航、点赞、轮播…）
-│   ├── content/        正文处理（代码块、目录、灯箱、Waline）
+│   ├── content/        正文处理（代码块、目录、灯箱、短代码）
 │   ├── core/           基础工具（DOM、配置、存储、提示）
 │   └── effects/        鼠标/背景特效（按需加载）
 ├── styles/             Less 样式，按 base / layout / components / content / pages 拆分
@@ -68,26 +70,27 @@ integrations/           Astro 构建后处理
 
 **前端配置。** 浏览器端需要的设置项在 `src/config/theme-config.ts` 中声明，服务端一次性序列化注入页面，脚本通过 `getThemeConfig()` 读取类型安全的配置。新增字段只需修改这一个文件。
 
-**按需加载。** Swiper、PhotoSwipe、Waline、APlayer、vConsole、Prism 语言包、代码主题、鼠标/背景特效均在用到时才下载，样式通过 `loadStylesheet()` 插入，不会进入首屏 CSS。
+**按需加载。** Swiper、PhotoSwipe、APlayer、vConsole、Prism 语言包、代码主题、鼠标/背景特效均在用到时才下载，样式通过 `loadStylesheet()` 插入，不会进入首屏 CSS。
 
 ## 插件集成
 
-| 功能                        | 插件                              | 未安装时               |
-| --------------------------- | --------------------------------- | ---------------------- |
-| 评论                        | 评论组件（或在设置中选择 Waline） | 不显示评论区           |
-| 搜索                        | 搜索组件 `PluginSearchWidget`     | 隐藏搜索按钮           |
-| 瞬间 `/moments`             | 瞬间 `PluginMoments`              | 路由不存在             |
-| 图库 `/photos`              | 图库 `PluginPhotos`               | 路由不存在             |
-| 友链 `/links`、友链页面模板 | 链接 `PluginLinks`                | 友链页面模板只显示正文 |
-| 朋友圈 `/friends`           | 朋友圈 `plugin-friends`           | 路由不存在             |
-| 代码高亮                    | 可选（如 shiki）                  | 使用主题内置 Prism     |
+| 功能                        | 插件                           | 未安装时               |
+| --------------------------- | ------------------------------ | ---------------------- |
+| 评论                        | 评论组件 `PluginCommentWidget` | 不显示评论区           |
+| 搜索                        | 搜索组件 `PluginSearchWidget`  | 隐藏搜索按钮           |
+| 瞬间 `/moments`             | 瞬间 `PluginMoments`           | 路由不存在             |
+| 图库 `/photos`              | 图库 `PluginPhotos`            | 路由不存在             |
+| 友链 `/links`、友链页面模板 | 链接 `PluginLinks`             | 友链页面模板只显示正文 |
+| 朋友圈 `/friends`           | 朋友圈 `plugin-friends`        | 路由不存在             |
+| 代码高亮                    | 可选（如 shiki）               | 使用主题内置 Prism     |
 
 ## 相对 Joe3 的变化
 
 - **技术栈：** jQuery、Isotope、fancybox、Draggabilly、WOW.js、NProgress、Qmsg、ClipboardJS、lazysizes、Vue 2 均由原生 API 或 npm 包替代，第三方库通过 pnpm 管理并锁定版本。
 - **图标字体与资源本地化：** iconfont 不再依赖 at.alicdn.com，Font Awesome 已移除（Joe3 中未实际使用）。
-- **已移除：** 天气组件、百度收录检测、博主卡片彩带动画、PDF / DPlayer 短代码、「原始内容」渲染，以及 Joe3 中未被引用的库和模板（halo-comment、KaTeX、jquery-ui 等）。
-- **设置项：** 保持与 Joe3 相同的键名，便于迁移；删除了已被原生懒加载取代的「预载图」三项。
+- **评论：** 只使用 Halo 评论扩展点（评论组件插件），不再内置 Waline。
+- **已移除：** 天气组件、百度收录检测、PDF 短代码，以及 Joe3 中未被引用的库和模板（halo-comment、KaTeX、jquery-ui 等）。视频短代码改用原生 `<video>` + hls.js，不再使用 DPlayer 的 iframe 页面。
+- **设置项：** 保持与 Joe3 相同的键名，便于迁移；删除了已不再生效的设置（预载图、外部资源地址、旧版自定义 CSS/JS、Waline 等）。
 - **修复：** 分类/标签/作者页分页地址、年度时间轴重复、作者页标题、`page_links` 在未安装链接插件时报错等 Joe3 遗留问题。
 
 ## 许可证

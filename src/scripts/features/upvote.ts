@@ -43,31 +43,49 @@ export async function upvote(target: UpvoteTarget): Promise<boolean> {
 }
 
 /**
- * 绑定点赞按钮。按钮需包含 `.nums` 计数元素，可选 `.icon-like` / `.icon-unlike` 图标。
+ * 绑定同一内容的一组点赞按钮（如正文下方与悬浮栏），点赞后所有按钮的状态与计数同步更新。
+ * 按钮需包含 `.nums` 计数元素，可选 `.icon-like` / `.icon-unlike` 图标。
  */
-export function bindUpvoteButton(
-  button: HTMLElement,
+export function bindUpvoteButtons(
+  buttons: HTMLElement[],
   target: UpvoteTarget,
 ): void {
-  const counter = button.querySelector<HTMLElement>(".nums");
   const render = () => {
     const active = hasUpvoted(target);
-    button.classList.toggle("active", active);
-    button.querySelector(".icon-like")?.classList.toggle("active", !active);
-    button.querySelector(".icon-unlike")?.classList.toggle("active", active);
+    for (const button of buttons) {
+      button.classList.toggle("active", active);
+      button.querySelector(".icon-like")?.classList.toggle("active", !active);
+      button.querySelector(".icon-unlike")?.classList.toggle("active", active);
+    }
+  };
+  const increment = () => {
+    for (const button of buttons) {
+      const counter = button.querySelector<HTMLElement>(".nums");
+      if (!counter) continue;
+      counter.textContent = String(Number(counter.textContent || 0) + 1);
+      counter.classList.add("visible");
+    }
   };
   render();
   let busy = false;
-  button.addEventListener("click", async (event) => {
+  const onClick = async (event: Event) => {
     event.stopPropagation();
     if (busy) return;
     busy = true;
     if (await upvote(target)) {
-      if (counter)
-        counter.textContent = String(Number(counter.textContent || 0) + 1);
+      increment();
       render();
       notify.success("感谢您的点赞");
     }
     busy = false;
-  });
+  };
+  buttons.forEach((button) => button.addEventListener("click", onClick));
+}
+
+/** 绑定单个点赞按钮 */
+export function bindUpvoteButton(
+  button: HTMLElement,
+  target: UpvoteTarget,
+): void {
+  bindUpvoteButtons([button], target);
 }

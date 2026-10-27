@@ -36,6 +36,7 @@ import "../styles/pages/photos.less";
         class="joe_photos__grid"
         id="image-grid"
         th:attr="data-next=${photos.hasNext() ? photos.nextUrl : ''}"
+        th:style="|--photos-gap: ${theme.config.photos.photos_gap ?: 10}px|"
       >
         <figure
           class="grid-item"
