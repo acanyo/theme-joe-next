@@ -3,6 +3,7 @@
  */
 import { $, $$, isMobile } from "../core/dom";
 import { fetchMeting, loadAPlayer } from "../content/aplayer";
+import { loop, observe } from "../core/lifecycle";
 
 const CLOUD_COLORS = [
   "#F8D800",
@@ -60,7 +61,7 @@ function renderCloud3d(list: HTMLElement): void {
     speedY = ((event.clientX - rect.left) / size - 0.5) * -0.02;
   });
 
-  const rotate = () => {
+  loop(() => {
     const [sx, cx, sy, cy] = [
       Math.sin(speedX),
       Math.cos(speedX),
@@ -79,10 +80,8 @@ function renderCloud3d(list: HTMLElement): void {
       p.el.style.opacity = String(0.35 + 0.65 * scale);
       p.el.style.zIndex = String(Math.round(scale * 100));
     }
-    requestAnimationFrame(rotate);
-  };
+  });
   list.replaceWith(cloud);
-  rotate();
 }
 
 function initClouds(): void {
@@ -167,7 +166,7 @@ async function mountMusic(el: HTMLElement): Promise<void> {
 function initMusic(): void {
   const players = $$("[data-joe-music]");
   if (!players.length) return;
-  const observer = new IntersectionObserver((entries) => {
+  const observer = observe((entries) => {
     for (const entry of entries) {
       if (!entry.isIntersecting) continue;
       observer.unobserve(entry.target);

@@ -9,6 +9,7 @@ import "../styles/pages/journals.less";
 ---
 
 <BaseLayout
+  pageScript="links"
   title="singlePage.spec.title + ' - ' + site.title"
   pageClass="page-journals page-links page-sheet"
 >
@@ -32,7 +33,3 @@ import "../styles/pages/journals.less";
   </th-block>
   <Actions slot="actions" randomLink editKind="page" />
 </BaseLayout>
-
-<script>
-  import "../scripts/pages/links";
-</script>

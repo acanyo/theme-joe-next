@@ -4,6 +4,9 @@
  * 使用 Thymeleaf 文本内联，在请求时生成；静态样式全部在 src/styles 中。
  */
 const css = `
+[# th:if="\${(theme.config.theme.page_transition ?: 'native') == 'native'}"]
+@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }
+[/]
 [# th:if="\${theme.config.other.rip_mode}"]
 html { filter: grayscale(100%); }
 [/]

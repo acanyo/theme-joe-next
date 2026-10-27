@@ -569,6 +569,28 @@ spec:
               label: 当前页
             - value: new
               label: 新标签
+        - $formkit: select
+          name: page_transition
+          id: page_transition
+          key: page_transition
+          label: 页面切换方式
+          value: native
+          help: 原生过渡：浏览器自带的跨页面淡入淡出，仍是整页加载，最稳定（Chrome / Edge / Safari 18+ 生效，其他浏览器无影响）。无刷新切换（swup）：只替换内容区域，切换更快、页面不闪白，并预加载链接；如遇插件兼容问题可切回原生过渡。
+          options:
+            - value: none
+              label: 关闭
+            - value: native
+              label: 原生过渡（推荐）
+            - value: swup
+              label: 无刷新切换（swup）
+        - $formkit: switch
+          name: swup_preload
+          id: swup_preload
+          key: swup_preload
+          label: 预加载链接
+          value: true
+          if: $get(page_transition).value === 'swup'
+          help: 鼠标悬停或触摸链接时提前请求页面，点击后几乎立即切换
         - $formkit: switch
           name: enable_show_in_up
           id: enable_show_in_up

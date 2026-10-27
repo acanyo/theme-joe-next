@@ -8,6 +8,24 @@ importers:
 
   .:
     dependencies:
+      '@swup/a11y-plugin':
+        specifier: 5.2.1
+        version: 5.2.1(swup@4.10.0)
+      '@swup/head-plugin':
+        specifier: 2.3.1
+        version: 2.3.1(swup@4.10.0)
+      '@swup/preload-plugin':
+        specifier: 3.2.12
+        version: 3.2.12(swup@4.10.0)
+      '@swup/progress-plugin':
+        specifier: 3.2.0
+        version: 3.2.0(swup@4.10.0)
+      '@swup/scripts-plugin':
+        specifier: 2.1.0
+        version: 2.1.0(swup@4.10.0)
+      '@swup/scroll-plugin':
+        specifier: 4.0.0
+        version: 4.0.0
       animate.css:
         specifier: 4.1.1
         version: 4.1.1
@@ -35,6 +53,9 @@ importers:
       swiper:
         specifier: 14.3.0
         version: 14.3.0
+      swup:
+        specifier: 4.10.0
+        version: 4.10.0
       tocbot:
         specifier: 4.36.8
         version: 4.36.8
@@ -759,6 +780,37 @@ packages:
   '@shikijs/vscode-textmate@10.0.2':
     resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
 
+  '@swup/a11y-plugin@5.2.1':
+    resolution: {integrity: sha512-n7gphzG+LBuE1RZVYpMxVELqDVFtUNhbehoVZsUiKXaAEkQV64YASe42XmffRnwzmLVtNHBFOSUKd21whctUBg==}
+    peerDependencies:
+      swup: ^4.0.0
+
+  '@swup/head-plugin@2.3.1':
+    resolution: {integrity: sha512-kdv60fO9c0/3+K40f7Fj/uV34nSuuPeCsld83J5uVVFizOmoovA737C5M1Iqac5Spf2GLU7q+mhN6AbohSIBjA==}
+    peerDependencies:
+      swup: ^4.6.0
+
+  '@swup/plugin@4.0.0':
+    resolution: {integrity: sha512-3Kq31BJxnzoPg643YxGoWQggoU6VPKZpdE5CqqmP7wwkpCYTzkRmrfcQ29mGhsSS7xfS7D33iZoBiwY+wPoo2A==}
+
+  '@swup/preload-plugin@3.2.12':
+    resolution: {integrity: sha512-syDXSjN9ltEenkAhOtRx0yxJWNBSmZncZUNmiuZbtoImdwMTL6/GJue1LOCzRxemOE1wttui1SkgqJyEcu6UIA==}
+    peerDependencies:
+      swup: ^4.0.0
+
+  '@swup/progress-plugin@3.2.0':
+    resolution: {integrity: sha512-Ur+D4+aee9swR6pn7JbEyGMwVP1BTcN5ygjlno7IaSQ/vMZbuJ73po1RkKlIi86p+/PZ+1kynkH4K4eMZuHKKg==}
+    peerDependencies:
+      swup: ^4.0.0
+
+  '@swup/scripts-plugin@2.1.0':
+    resolution: {integrity: sha512-JSMFsFCN9gn4q3m1Ccv0gq3gwRoZl6UGALOQO3OeQ8wOIq9vPC5dcUD3CMBuaPanksjR4GC8ZoukIjHrlT52fg==}
+    peerDependencies:
+      swup: ^4.2.0
+
+  '@swup/scroll-plugin@4.0.0':
+    resolution: {integrity: sha512-13cR7zVGanAVgdJwszTPuyZxJ8cVo0ylGgVsf2OF/hZUzEpvmrd0pMdo3d4v8O6c+bB/np6hpCHPDLxkmL40xg==}
+
   '@tybys/wasm-util@0.10.4':
     resolution: {integrity: sha512-W3c4gRigFS0T/Ma4qIYF3GDAc5AQdHb1yL5znJT1Zv1YaD9Kitx656wBjvr19qbiosmZT8lWDM5BEMynUqX65A==}
 
@@ -1064,6 +1116,9 @@ packages:
     resolution: {integrity: sha512-6FqVXeETqWPoGcfzrXb37E50NP0LXT8kAMu5ooZayhWWdgEY4lBEEcbQNXtkuKQsGduxiIcI4gOTsxTmuq/bSg==}
     engines: {node: '>= 14'}
 
+  compute-scroll-into-view@3.1.1:
+    resolution: {integrity: sha512-VRhuHOLoKYOy4UbilLbUzbYg93XLjv2PncJC50EuTWPA3gaja1UjBsUP/D/9/juV3vQFr6XBEzn9KCAHdUvOHw==}
+
   cookie-es@1.2.3:
     resolution: {integrity: sha512-lXVyvUvrNXblMqzIRrxHb57UUVmqsSWlxqt3XIjCkUP0wDAf6uicO6KMbEgYrMNtEvWgWHwe42CKxPu9MYAnWw==}
 
@@ -1143,6 +1198,9 @@ packages:
 
   defu@6.1.6:
     resolution: {integrity: sha512-f8mefEW4WIVg4LckePx3mALjQSPQgFlg9U8yaPdlsbdYcHQyj9n2zL2LJEA52smeYxOvmd/nB7TpMtHGMTHcug==}
+
+  delegate-it@6.4.0:
+    resolution: {integrity: sha512-NbMljKgnyvQQFLRx3hjPs2x++R3GzIZgvtINq/Q7PzxiC58CSG+N2RT8x4qF7JhkFZI4h9zZ1BszoJYdYREkbA==}
 
   dequal@2.0.3:
     resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
@@ -1279,6 +1337,9 @@ packages:
 
   fnv1a-64@0.1.2:
     resolution: {integrity: sha512-mJbcILTPybAR1jdOwt/lVv8N2cffeJFFP+gVbSAwLEx1ujXH27RpPd8Rokec/KX9c76UYIB6Co+H4lQzxPnJfA==}
+
+  focus-options-polyfill@1.6.0:
+    resolution: {integrity: sha512-uyrAmLZrPnUItQY5wTdg31TO9GGZRGsh/jmohUg9oLmLi/sw5y7LlTV/mwyd6rvbxIOGwmRiv6LcTS8w7Bk9NQ==}
 
   fontace@0.4.1:
     resolution: {integrity: sha512-lDMvbAzSnHmbYMTEld5qdtvNH2/pWpICOqpean9IgC7vUbUJc3k+k5Dokp85CegamqQpFbXf0rAVkbzpyTA8aw==}
@@ -1707,6 +1768,9 @@ packages:
     resolution: {integrity: sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==}
     engines: {node: '>=16 || 14 >=14.18'}
 
+  path-to-regexp@6.3.0:
+    resolution: {integrity: sha512-Yhpw4T9C6hPpgPeA28us07OJeqZ5EzQTkbfwuhsUg0c237RomFoETJgmp2sa3F/41gfLE6G5cqcYwznmeEeOlQ==}
+
   path@0.12.7:
     resolution: {integrity: sha512-aXXC6s+1w7otVF9UletFkFcDsJeO7lSZBPUQhtb5O0xJe8LtYhj/GxldoL09bBj9+ZmE2hNoHqQSFMN5fikh4Q==}
 
@@ -1992,6 +2056,9 @@ packages:
     resolution: {integrity: sha512-qw0Xv1+sylM8KCQxWxV2iYAK2G6XjFGPZ/8F1baEsY8DK4A3sTnLx6jUJ0G71rDbVQ05JHMWkcWmJ5NvlxZO0w==}
     engines: {node: '>= 4.7.0'}
 
+  swup@4.10.0:
+    resolution: {integrity: sha512-bzl5u94ovy5YDc+6No28De2TgMWK47Ym0uuMpN9kmzu+NWm3/mhQrmRPjArsFpfVTWO1nMFUZrKRwpRjS6eNJg==}
+
   tar-stream@3.2.2:
     resolution: {integrity: sha512-+8NeqHRjQWH9nYlwo2gamAMImZCVzI4UoEgDpWorBt9OEfppiZn+uSkskzQKPWIZyji/C8fpWO7u69G0DX0tbg==}
 
@@ -2038,6 +2105,9 @@ packages:
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
+
+  typed-query-selector@2.12.3:
+    resolution: {integrity: sha512-/dtuMZyutHLlrxWhhC1uib00ELUr2dZ8C9B8YzZYsJmeE3V56OxRblrSM2UaF142pcMtak7ehZ6+poWGeehNIg==}
 
   typesafe-path@0.2.2:
     resolution: {integrity: sha512-OJabfkAg1WLZSqJAJ0Z6Sdt3utnbzr/jh+NAHoyWHJe8CMSy79Gm085094M9nvTPy22KzTVn5Zq5mbapCI/hPA==}
@@ -2975,6 +3045,41 @@ snapshots:
 
   '@shikijs/vscode-textmate@10.0.2': {}
 
+  '@swup/a11y-plugin@5.2.1(swup@4.10.0)':
+    dependencies:
+      '@swup/plugin': 4.0.0
+      focus-options-polyfill: 1.6.0
+      swup: 4.10.0
+
+  '@swup/head-plugin@2.3.1(swup@4.10.0)':
+    dependencies:
+      '@swup/plugin': 4.0.0
+      swup: 4.10.0
+
+  '@swup/plugin@4.0.0':
+    dependencies:
+      swup: 4.10.0
+
+  '@swup/preload-plugin@3.2.12(swup@4.10.0)':
+    dependencies:
+      '@swup/plugin': 4.0.0
+      swup: 4.10.0
+
+  '@swup/progress-plugin@3.2.0(swup@4.10.0)':
+    dependencies:
+      '@swup/plugin': 4.0.0
+      swup: 4.10.0
+
+  '@swup/scripts-plugin@2.1.0(swup@4.10.0)':
+    dependencies:
+      '@swup/plugin': 4.0.0
+      swup: 4.10.0
+
+  '@swup/scroll-plugin@4.0.0':
+    dependencies:
+      '@swup/plugin': 4.0.0
+      compute-scroll-into-view: 3.1.1
+
   '@tybys/wasm-util@0.10.4':
     dependencies:
       tslib: 2.8.1
@@ -3361,6 +3466,8 @@ snapshots:
       normalize-path: 3.0.0
       readable-stream: 4.8.0
 
+  compute-scroll-into-view@3.1.1: {}
+
   cookie-es@1.2.3: {}
 
   cookie@2.0.1: {}
@@ -3430,6 +3537,10 @@ snapshots:
   decamelize@1.2.0: {}
 
   defu@6.1.6: {}
+
+  delegate-it@6.4.0:
+    dependencies:
+      typed-query-selector: 2.12.3
 
   dequal@2.0.3: {}
 
@@ -3567,6 +3678,8 @@ snapshots:
   flattie@1.1.1: {}
 
   fnv1a-64@0.1.2: {}
+
+  focus-options-polyfill@1.6.0: {}
 
   fontace@0.4.1:
     dependencies:
@@ -3977,6 +4090,8 @@ snapshots:
       lru-cache: 10.4.3
       minipass: 7.1.3
 
+  path-to-regexp@6.3.0: {}
+
   path@0.12.7:
     dependencies:
       process: 0.11.10
@@ -4310,6 +4425,11 @@ snapshots:
 
   swiper@14.3.0: {}
 
+  swup@4.10.0:
+    dependencies:
+      delegate-it: 6.4.0
+      path-to-regexp: 6.3.0
+
   tar-stream@3.2.2:
     dependencies:
       b4a: 1.9.0
@@ -4360,6 +4480,8 @@ snapshots:
   trough@2.2.0: {}
 
   tslib@2.8.1: {}
+
+  typed-query-selector@2.12.3: {}
 
   typesafe-path@0.2.2: {}
 

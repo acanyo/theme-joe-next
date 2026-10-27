@@ -2,6 +2,7 @@
 import { $ } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { loadStylesheet } from "../core/stylesheet";
+import { onCleanup } from "../core/lifecycle";
 import swiperCss from "swiper/css/bundle?url";
 
 export async function initBanner(): Promise<void> {
@@ -13,7 +14,7 @@ export async function initBanner(): Promise<void> {
     import("swiper/modules"),
     loadStylesheet(swiperCss),
   ]);
-  new Swiper(el, {
+  const swiper = new Swiper(el, {
     modules: [
       modules.Autoplay,
       modules.Pagination,
@@ -40,4 +41,5 @@ export async function initBanner(): Promise<void> {
       prevEl: ".swiper-button-prev",
     },
   });
+  onCleanup(() => swiper.destroy(true, true));
 }

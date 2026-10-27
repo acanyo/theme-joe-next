@@ -50,6 +50,7 @@ function initRuntime(): void {
     if (fields.second) fields.second.textContent = pad(rest % 60);
   };
   tick();
+  // 页脚常驻（不在 swup 容器内），计时器贯穿整个会话
   setInterval(tick, 1000);
 }
 

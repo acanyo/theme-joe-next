@@ -8,6 +8,7 @@ const TITLE = "theme.config.archives.archives_title ?: '文章归档'";
 ---
 
 <BaseLayout
+  pageScript="archives"
   bigBanner="normal"
   heading="(theme.config.archives.archives_title ?: '文章归档')"
   title={`(${TITLE}) + ' - ' + site.title`}
@@ -133,7 +134,3 @@ const TITLE = "theme.config.archives.archives_title ?: '文章归档'";
     <Aside />
   </th-block>
 </BaseLayout>
-
-<script>
-  import "../scripts/pages/archives";
-</script>

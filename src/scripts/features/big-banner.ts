@@ -1,5 +1,6 @@
 /** 首屏大图：打字机标题 + 一言轮播（原 EvanBigBanner，去除 jQuery） */
 import { $ } from "../core/dom";
+import { every, later } from "../core/lifecycle";
 
 const PRINT_INTERVAL = 300;
 const HITOKOTO_API = "https://v1.hitokoto.cn";
@@ -15,13 +16,13 @@ function typewriter(target: HTMLElement, text: string): void {
     if (index < text.length) {
       target.textContent = text.slice(0, ++index);
       target.appendChild(caret);
-      setTimeout(tick, PRINT_INTERVAL);
+      later(PRINT_INTERVAL, tick);
     } else {
-      setInterval(
+      every(
+        PRINT_INTERVAL,
         () =>
           (caret.style.visibility =
             caret.style.visibility === "hidden" ? "visible" : "hidden"),
-        PRINT_INTERVAL,
       );
     }
   };
@@ -45,7 +46,7 @@ async function rotateHitokoto(
     }
   };
   await show();
-  setInterval(() => void show(), HITOKOTO_ROTATE);
+  every(HITOKOTO_ROTATE, () => void show());
 }
 
 export function initBigBanner(): void {

@@ -4,6 +4,7 @@
  */
 import "animate.css/animate.min.css";
 import { $$ } from "../core/dom";
+import { observe } from "../core/lifecycle";
 
 export function initReveal(root: ParentNode = document): void {
   const targets = $$<HTMLElement>(".joe-reveal:not(.animated)", root);
@@ -12,7 +13,7 @@ export function initReveal(root: ParentNode = document): void {
     targets.forEach(show);
     return;
   }
-  const observer = new IntersectionObserver(
+  const observer = observe(
     (entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;

@@ -12,7 +12,11 @@ import PostOperate from "../components/post/PostOperate.astro";
 import "../styles/pages/post.less";
 ---
 
-<BaseLayout title="post.spec.title + ' - ' + site.title" pageClass="page-post">
+<BaseLayout
+  pageScript="post"
+  title="post.spec.title + ' - ' + site.title"
+  pageClass="page-post"
+>
   <Breadcrumb slot="before" />
 
   <div class="joe_main joe_post">
@@ -62,7 +66,3 @@ import "../styles/pages/post.less";
   ></div>
   <Actions slot="actions" editKind="post" toc />
 </BaseLayout>
-
-<script>
-  import "../scripts/pages/post";
-</script>

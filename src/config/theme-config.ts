@@ -18,6 +18,8 @@ export const SERVER_CONFIG_FIELDS = {
   enableBack2topSmooth: "theme.config.theme.enable_back2top_smooth",
   enableFixedHeader: "theme.config.navbar.enable_fixed_header",
   linkBehavior: "theme.config.theme.link_behavior",
+  pageTransition: "theme.config.theme.page_transition",
+  swupPreload: "theme.config.theme.swup_preload",
   cursorEffect: "theme.config.theme.cursor_effect",
   backdrop: "theme.config.theme.backdrop",
   enableOffscreenTip: "theme.config.theme.enable_offscreen_tip",
@@ -101,6 +103,8 @@ export interface ThemeConfig {
   enableBack2topSmooth: boolean;
   enableFixedHeader: boolean;
   linkBehavior: "default" | "current" | "new";
+  pageTransition: "none" | "native" | "swup";
+  swupPreload: boolean;
   cursorEffect: string;
   backdrop: string;
   enableOffscreenTip: boolean;
@@ -225,6 +229,12 @@ export function normalizeThemeConfig(
     enableBack2top: toBool(raw.enableBack2top, true),
     enableBack2topSmooth: toBool(raw.enableBack2topSmooth, true),
     enableFixedHeader: toBool(raw.enableFixedHeader, true),
+    pageTransition: (["none", "native", "swup"].includes(
+      toStr(raw.pageTransition),
+    )
+      ? toStr(raw.pageTransition)
+      : "native") as ThemeConfig["pageTransition"],
+    swupPreload: toBool(raw.swupPreload, true),
     linkBehavior: (["default", "current", "new"].includes(linkBehavior)
       ? linkBehavior
       : "default") as ThemeConfig["linkBehavior"],

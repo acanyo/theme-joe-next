@@ -8,7 +8,7 @@ import HotCategories from "../components/home/HotCategories.astro";
 import "../styles/pages/index.less";
 ---
 
-<BaseLayout pageClass="page-index" bigBanner="fullscreen">
+<BaseLayout pageScript="index" pageClass="page-index" bigBanner="fullscreen">
   <div class="joe_main">
     <div class="joe_index">
       <th-block th:if="${theme.config.carousel.enable_banner and not #lists.isEmpty(theme.config.carousel.banner_data_group)}">
@@ -64,7 +64,3 @@ import "../styles/pages/index.less";
     <Aside />
   </th-block>
 </BaseLayout>
-
-<script>
-  import "../scripts/pages/index";
-</script>

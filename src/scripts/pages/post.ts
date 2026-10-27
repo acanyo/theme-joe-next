@@ -1,5 +1,4 @@
 /** 文章页入口 */
-import { onReady } from "../core/dom";
 import { initCodeBlocks } from "../content/code-block";
 import { initShortcodes } from "../content/shortcodes";
 import { initGallery } from "../content/gallery";
@@ -15,7 +14,7 @@ import {
   scrollToHash,
 } from "../content/article";
 
-onReady(() => {
+export default function init(): void {
   initShortcodes();
   ensureHeadingIds();
   initWordCount();
@@ -33,4 +32,4 @@ onReady(() => {
         .foldLongCode !== "false",
   });
   scrollToHash();
-});
+}

@@ -8,6 +8,7 @@ import "../styles/pages/post.less";
 ---
 
 <BaseLayout
+  pageScript="post"
   title="singlePage.spec.title + ' - ' + site.title"
   pageClass="page-post page-sheet"
 >
@@ -20,7 +21,3 @@ import "../styles/pages/post.less";
   </th-block>
   <Actions slot="actions" editKind="page" />
 </BaseLayout>
-
-<script>
-  import "../scripts/pages/post";
-</script>

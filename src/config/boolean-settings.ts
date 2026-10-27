@@ -113,4 +113,5 @@ export const BOOLEAN_SETTINGS: readonly string[] = [
   "other.enable_clean_mode",
   "other.check_baidu_collect",
   "other.enable_console_theme",
+  "theme.swup_preload",
 ];

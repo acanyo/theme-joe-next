@@ -40,13 +40,15 @@ function initEffects(): void {
 
 function initOffscreenTitle(): void {
   const config = getThemeConfig();
-  if (isMobile() || !config.enableOffscreenTip || location.pathname !== "/")
-    return;
-  const original = document.title;
+  if (isMobile() || !config.enableOffscreenTip) return;
+  // 只绑定一次，切页后读取当时的路径与标题（无刷新切页时页面会变化）
+  let original = "";
   let timer: ReturnType<typeof setTimeout> | undefined;
   document.addEventListener("visibilitychange", () => {
+    if (location.pathname !== "/") return;
     clearTimeout(timer);
     if (document.hidden) {
+      original = document.title;
       document.title = config.offscreenTitleLeave || "歪，你去哪里了？";
     } else {
       document.title = config.offscreenTitleBack || "(つェ⊂)咦，又回来了!";

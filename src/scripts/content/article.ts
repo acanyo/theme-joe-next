@@ -7,6 +7,7 @@ import { getThemeConfig } from "../core/config";
 import { copyText } from "../core/clipboard";
 import { bindUpvoteButtons } from "../features/upvote";
 import { closeOverlays, openTocDrawer } from "../features/navigation";
+import { listen, onCleanup } from "../core/lifecycle";
 
 function fillTemplate(template: string, vars: Record<string, string>): string {
   return template.replace(
@@ -116,7 +117,7 @@ export function initProgressBar(): void {
     bar.style.width = `${max > 0 ? Math.min(1, window.scrollY / max) * 100 : 0}%`;
   };
   update();
-  document.addEventListener("scroll", () => requestAnimationFrame(update), {
+  listen(document, "scroll", () => requestAnimationFrame(update), {
     passive: true,
   });
 }
@@ -141,6 +142,7 @@ export function initToc(): void {
     return;
   }
   const offset = headerOffset();
+  onCleanup(() => tocbot.destroy());
   tocbot.init({
     tocSelector,
     contentSelector: ".joe_detail__article",
