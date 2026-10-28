@@ -383,6 +383,10 @@
   }
 }
 
+.joe_list {
+  container: joe-list / inline-size;
+}
+
 .joe_list__item {
   position: relative;
   width: 100%;
@@ -624,8 +628,8 @@
   }
 }
 
-/* 响应式 */
-@media (max-width: 1200px) {
+/* 响应式：按列表自身宽度（容器查询），有无侧栏时都能得到合适的布局 */
+@container joe-list (max-width: 845px) {
   .joe_list__item {
     &.default {
       .thumbnail {
@@ -636,7 +640,7 @@
   }
 }
 
-@media (max-width: 1200px) {
+@container joe-list (max-width: 845px) {
   .joe_list__item {
     &.default {
       .meta {
@@ -654,7 +658,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@container joe-list (max-width: 600px) {
   .joe_list__item {
     .information {
       .title {
@@ -728,7 +732,7 @@
   }
 }
 
-@media (max-width: 500px) {
+@container joe-list (max-width: 470px) {
   .joe_list__item {
     padding: 12px 0;
 
@@ -803,6 +807,9 @@
     }
   }
 
+}
+
+@media (max-width: 500px) {
   .joe_archive {
     border-radius: 0;
   }
