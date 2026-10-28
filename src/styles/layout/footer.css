@@ -180,3 +180,43 @@
     }
   }
 }
+
+/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+@media (max-width: 768px) {
+  html .joe_footer {
+    .joe_container {
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 10px;
+      padding-bottom: 10px;
+
+      > .item {
+        padding: 5px 0;
+        text-align: center;
+      }
+
+      .side-col {
+        align-items: center;
+      }
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  html .joe_footer {
+    .joe_container {
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: 0;
+
+      > .item {
+        padding: 5px 0;
+        text-align: center;
+      }
+
+      .site_life {
+        margin: 0;
+      }
+    }
+  }
+}

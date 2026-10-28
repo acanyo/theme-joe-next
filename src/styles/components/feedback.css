@@ -80,41 +80,40 @@
   align-items: center;
   gap: 10px;
   transform: translateX(-50%);
-  pointer-events: none
+  pointer-events: none;
 }
 .joe_toast__item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    font-size: 14px;
-    color: var(--text-primary);
-    background: var(--bg-page);
-    border-radius: var(--radius-wrap);
-    box-shadow: var(--shadow);
-    opacity: 0;
-    transform: translateY(-10px);
-    transition:
-      opacity 0.25s,
-      transform 0.25s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  border-radius: var(--radius-wrap);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition:
+    opacity 0.25s,
+    transform 0.25s;
 
-    &.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 .joe_toast__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-    font-size: 12px;
-    color: #fff;
-    border-radius: 50%;
-  }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  color: #fff;
+  border-radius: 50%;
+}
 .joe_toast {
-
   .is-success .joe_toast__icon {
     background: #67c23a;
   }

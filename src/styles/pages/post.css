@@ -1,40 +1,40 @@
 /* 文章页面的样式 */
 .joe_bread {
   margin: 20px auto 0;
-  padding: 15px 15px 0
+  padding: 15px 15px 0;
 }
 .joe_bread__bread {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    .line {
-      color: var(--text-placeholder);
-      padding: 0 5px;
+  .line {
+    color: var(--text-placeholder);
+    padding: 0 5px;
+  }
+
+  .item {
+    color: var(--text-secondary);
+    white-space: nowrap;
+
+    .link {
+      color: var(--text-regular);
+      transition: color 0.35s;
+
+      &:hover {
+        color: var(--theme);
+      }
     }
 
-    .item {
-      color: var(--text-secondary);
-      white-space: nowrap;
+    .joe-font {
+      margin-right: 3px;
+    }
 
-      .link {
-        color: var(--text-regular);
-        transition: color 0.35s;
-
-        &:hover {
-          color: var(--theme);
-        }
-      }
-
-      .joe-font {
-        margin-right: 3px;
-      }
-
-      &:first-child {
-        display: flex;
-        align-items: center;
-      }
+    &:first-child {
+      display: flex;
+      align-items: center;
     }
   }
+}
 
 .joe_post {
   position: relative;
@@ -47,34 +47,34 @@
 }
 
 .joe_post__pagination {
-    display: flex;
-    justify-content: space-between
-  }
+  display: flex;
+  justify-content: space-between;
+}
 
 .joe_post__pagination-item {
-      margin-bottom: 15px;
+  margin-bottom: 15px;
 
-      a {
-        display: block;
-        height: 32px;
-        line-height: 32px;
-        padding: 0 15px;
-        color: #fff;
-        font-size: 12px;
-        background: var(--theme);
-        border-radius: 3px;
-        box-shadow: var(--shadow);
+  a {
+    display: block;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 15px;
+    color: #fff;
+    font-size: 12px;
+    background: var(--theme);
+    border-radius: 3px;
+    box-shadow: var(--shadow);
 
-        &:hover {
-          animation: pulse 1s;
-          box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
-        }
-      }
-
-      &.next {
-        margin-left: auto;
-      }
+    &:hover {
+      animation: pulse 1s;
+      box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
     }
+  }
+
+  &.next {
+    margin-left: auto;
+  }
+}
 
 .joe_detail__title {
   margin-bottom: 30px;
@@ -253,3 +253,20 @@
   }
 }
 /* 评论区 GIF 位置及大小调整*/
+
+/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+@media (max-width: 992px) {
+  html .toc-container {
+    display: none;
+  }
+}
+@media (max-width: 500px) {
+  html .joe_bread {
+    margin: 0 auto;
+    padding: 15px 15px 0 5px;
+  }
+
+  html .joe_post__pagination {
+    padding: 0 10px;
+  }
+}

@@ -442,9 +442,88 @@ html body::before {
   }
 }
 .joe_page_404__home {
-    margin-top: 8px;
-    padding: 8px 24px;
-    color: #fff;
-    background: var(--theme);
-    border-radius: 20px;
+  margin-top: 8px;
+  padding: 8px 24px;
+  color: #fff;
+  background: var(--theme);
+  border-radius: 20px;
+}
+
+/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+@media (max-width: 768px) {
+  html .joe_main {
+    .code-toolbar {
+      pre[class*="language-"] {
+        &.c_hover_tools {
+          .code-expander,
+          .copy-button {
+            pointer-events: auto;
+            opacity: 1;
+          }
+        }
+      }
+    }
   }
+}
+
+@media (max-width: 500px) {
+  html .joe_main {
+    padding-bottom: 0;
+  }
+
+  html .joe_main_container {
+    padding: 0;
+    margin: 15px auto 20px !important;
+  }
+
+  html .joe_main {
+    .code-toolbar {
+      .toolbar .toolbar-item span {
+        font-size: 13px;
+      }
+
+      pre[class*="language-"] {
+        font-size: 13px !important;
+
+        &:before {
+          left: 10px !important;
+          box-shadow:
+            16px 0 #fdbc40,
+            32px 0 #35cd4b !important;
+        }
+
+        &:after {
+          top: 30px !important;
+        }
+
+        &.line-numbers {
+          .line-numbers-rows {
+            width: 2.4em !important;
+          }
+
+          code {
+            padding: 12px 12px 12px 40px;
+          }
+        }
+      }
+    }
+  }
+
+  html .page-index {
+    margin-top: 0 !important;
+
+    .joe_main {
+      padding-top: 0;
+    }
+  }
+
+  html .page-links {
+    .links-group {
+      padding-left: 0 !important;
+    }
+
+    .joe_detail__friends {
+      padding-left: 0;
+    }
+  }
+}

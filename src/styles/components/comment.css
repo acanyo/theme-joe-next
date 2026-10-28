@@ -22,24 +22,37 @@
   padding: 20px;
   background: var(--bg-page);
   border-radius: var(--radius-wrap);
-  box-shadow: var(--shadow)
+  box-shadow: var(--shadow);
 }
 
 .joe_comment__close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-regular)
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-regular);
+}
 
 .joe_comment__close-icon {
-      fill: var(--text-regular);
-      margin-right: 5px;
-    }
+  fill: var(--text-regular);
+  margin-right: 5px;
+}
 
 .joe_comment {
-
   .joe_pagination {
     padding-top: 0;
+  }
+}
+
+/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+@media (max-width: 500px) {
+  html .joe_comment {
+    padding: 15px;
+
+    .joe_comment_box {
+      h2 {
+        padding: 20px 100px;
+        font-size: 16px;
+      }
+    }
   }
 }
