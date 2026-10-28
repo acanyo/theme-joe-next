@@ -154,12 +154,11 @@ function initHeaderScroll(): void {
 }
 
 /**
- * 浮岛导航（navbar.style = islands）的附加交互，经典样式下不执行：
- * - 页面顶部时 .is-top（透明），离开顶部后浮起
- * - 向下滚动时 .is-down：中间菜单收起，文章页换成文章标题（.show-title），首页等显示站点名；
- *   Logo 与右侧工具保留，向上滚动恢复菜单
- * - 右侧阅读进度圆环（--read 0~100），离开顶部后出现，点击回到顶部
- * - 菜单下方的主题色滑块停在当前项、随鼠标滑到悬停项
+ * 阅读条导航（navbar.style = islands）的附加交互，经典样式下不执行：
+ * - 页面顶部时 .is-top（透明），离开顶部后是一整条玻璃条
+ * - 文章页向下阅读时 .is-reading：中间一段由菜单换成当前章节（见 nav-chapter.ts），向上滚动恢复菜单
+ * - 底边阅读进度线（--read 0~1）
+ * - 当前菜单项下方的主题色下划线随鼠标在菜单项之间滑动（--bar-x / --bar-w）
  */
 const isIslands = () => !!$(".joe_header--islands");
 
@@ -173,58 +172,41 @@ function initIslandsScroll(): void {
     header.classList.toggle("is-top", y < 24);
     // 忽略细微抖动，避免触控板惯性滚动时来回切换
     if (Math.abs(delta) > 4) {
-      const down = delta > 0 && y > 120;
-      header.classList.toggle("is-down", down);
-      header.classList.toggle("show-title", down && y > 240);
+      const hasChapter = !$(".joe_header__chapter")?.hidden;
+      header.classList.toggle("is-reading", hasChapter && delta > 0 && y > 240);
       lastY = y;
     }
     if (y < 24) {
-      header.classList.remove("is-down", "show-title");
+      header.classList.remove("is-reading");
       lastY = y;
     }
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    const read = max > 0 ? Math.round(Math.min(1, y / max) * 100) : 0;
-    header.style.setProperty("--read", String(read));
-    const value = $(".joe_header__progress .value", header);
-    if (value) value.textContent = String(read);
+    header.style.setProperty(
+      "--read",
+      (max > 0 ? Math.min(1, y / max) : 0).toFixed(4),
+    );
   };
-  $(".joe_header__progress", header)?.addEventListener("click", () =>
-    window.scrollTo({ top: 0, behavior: "smooth" }),
-  );
   update();
-  document.addEventListener("scroll", throttle(update, 80), { passive: true });
+  document.addEventListener("scroll", throttle(update, 50), { passive: true });
   refreshIslands = update;
 }
 
 let refreshIslands = (): void => {};
 
-/** 把当前页面的标题写入导航中间的标题胶囊（切页后调用）；没有文章标题的页面显示站点名 */
-function syncPageTitle(): void {
-  const button = $<HTMLButtonElement>(".joe_header__page-title");
-  if (!button) return;
-  button.textContent =
-    $("#swup")?.dataset.joeTitle || button.dataset.siteTitle || "";
-}
-
-function initPageTitle(): void {
-  $(".joe_header__page-title")?.addEventListener("click", () =>
-    window.scrollTo({ top: 0, behavior: "smooth" }),
-  );
-}
-
-function initNavPill(): void {
+/** 菜单下方的主题色下划线：停在当前项，鼠标悬停时滑到对应项 */
+function initNavBar(): void {
   const nav = $(".joe_header__above-nav");
   if (!nav || !isIslands()) return;
   const moveTo = (item: HTMLElement | null) => {
     if (!item) {
-      nav.style.setProperty("--pill-o", "0");
+      nav.style.setProperty("--bar-o", "0");
       return;
     }
     const navBox = nav.getBoundingClientRect();
     const box = item.getBoundingClientRect();
-    nav.style.setProperty("--pill-x", `${box.left - navBox.left}px`);
-    nav.style.setProperty("--pill-w", `${box.width}px`);
-    nav.style.setProperty("--pill-o", "1");
+    nav.style.setProperty("--bar-x", `${box.left - navBox.left + 14}px`);
+    nav.style.setProperty("--bar-w", `${Math.max(0, box.width - 28)}px`);
+    nav.style.setProperty("--bar-o", "1");
   };
   // 当前项可能是一级链接，也可能在某个下拉菜单里（此时停在整个下拉项上）
   const current = () => {
@@ -234,12 +216,12 @@ function initNavPill(): void {
   for (const item of $$<HTMLElement>(":scope > a.item, :scope > .joe_dropdown", nav))
     item.addEventListener("mouseenter", () => moveTo(item));
   nav.addEventListener("mouseleave", () => moveTo(current()));
-  pillToCurrent = () => moveTo(current());
-  void document.fonts?.ready.then(() => pillToCurrent());
-  window.addEventListener("resize", throttle(() => pillToCurrent(), 150));
+  barToCurrent = () => moveTo(current());
+  void document.fonts?.ready.then(() => barToCurrent());
+  window.addEventListener("resize", throttle(() => barToCurrent(), 150));
 }
 
-let pillToCurrent = (): void => {};
+let barToCurrent = (): void => {};
 
 function initSearch(): void {
   $$("[data-joe-search]").forEach((button) =>
@@ -255,19 +237,16 @@ export function initNavigation(): void {
   initDrawer();
   initHeaderScroll();
   initSearch();
-  initPageTitle();
-  syncPageTitle();
   initIslandsScroll();
   highlightCurrentMenu();
-  initNavPill();
+  initNavBar();
 }
 
 /** 切页后同步导航状态 */
 export function refreshNavigation(): void {
   highlightCurrentMenu();
-  syncPageTitle();
   refreshIslands();
-  pillToCurrent();
+  barToCurrent();
   if (document.documentElement.classList.contains("disable-scroll"))
     closeOverlays(false);
 }

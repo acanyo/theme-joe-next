@@ -18,6 +18,7 @@ import { initImageFallback } from "./features/image-fallback";
 import { initLinkBehavior } from "./features/link-behavior";
 import { finishLoadingBar, startLoadingBar } from "./features/loading-bar";
 import { initNavigation, refreshNavigation } from "./features/navigation";
+import { initNavChapter } from "./features/nav-chapter";
 import { initReveal } from "./features/reveal";
 
 function initShell(): void {
@@ -27,6 +28,7 @@ function initShell(): void {
 }
 
 async function initPage(): Promise<void> {
+  initNavChapter();
   refreshNavigation();
   initActions();
   initLinkBehavior();

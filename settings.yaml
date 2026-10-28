@@ -339,10 +339,10 @@ spec:
           key: style
           label: 导航样式
           value: islands
-          help: 浮岛：Logo、菜单、工具按钮分成三块玻璃胶囊，页面顶部时透明，滚动后浮起；文章页滚动后中间显示文章标题。经典：Joe 原来的通栏导航
+          help: 阅读条：页面顶部时透明，滚动后是一整条玻璃条，底边显示阅读进度；文章页向下阅读时中间显示当前章节，点击可展开目录跳转。经典：Joe 原来的通栏导航
           options:
             - value: islands
-              label: 浮岛
+              label: 阅读条
             - value: classic
               label: 经典
         - $formkit: switch

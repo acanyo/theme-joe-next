@@ -4,10 +4,10 @@
  * 桌面端最多渲染三级菜单，移动端侧栏同样三级。
  *
  * 样式由设置 navbar.style 决定：
- * - islands（默认）：Logo / 菜单 / 工具按钮三块玻璃胶囊，页面顶部透明，滚动后浮起（styles/layout/islands.css）
+ * - islands（默认，「阅读条」）：页面顶部透明盖在大图上；滚动后是一整条玻璃条，
+ *   Logo · 菜单 · 工具三段以细线分隔，底边是阅读进度线（styles/layout/islands.css）
  * - classic：Joe 原来的通栏
- * 文章页滚动后，浮岛样式中间一块显示文章标题：标题来自 #swup 的 data-joe-title，
- * 由 navigation.ts 在每次进入页面时写入（无刷新切页时导航不会被替换）。
+ * 文章页向下阅读时，中间一段由菜单换成「当前章节」，点击展开迷你目录（features/nav-chapter.ts）。
  */
 import MenuLink from "./MenuLink.astro";
 import MobileDrawer from "./MobileDrawer.astro";
@@ -102,32 +102,23 @@ const MENU =
             </ul>
           </div>
         </th-block>
-        <button
-          type="button"
-          class="joe_header__page-title"
-          title="回到顶部"
-          th:attr="data-site-title=${site.title}"
-          th:text="${site.title}"
-        ></button>
+        <!-- 阅读条：当前章节（文章页向下阅读时替换菜单），点击展开迷你目录 -->
+        <div class="joe_header__chapter" hidden>
+          <button
+            type="button"
+            class="joe_header__chapter-current"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="index"></span>
+            <span class="name"></span>
+            <i class="joe-font joe-icon-arrow-down" aria-hidden="true"></i>
+          </button>
+          <ol class="joe_header__chapter-list" role="menu"></ol>
+        </div>
       </nav>
 
       <div class="joe_header__above-search">
-        <!-- 浮岛样式：阅读进度圆环，离开顶部后出现，点击回到顶部（features/navigation.ts） -->
-        <button
-          type="button"
-          class="joe_header__progress"
-          aria-label="回到顶部"
-          title="回到顶部"
-        >
-          <svg viewBox="0 0 36 36" aria-hidden="true">
-            <circle class="track" cx="18" cy="18" r="15"></circle>
-            <circle class="bar" cx="18" cy="18" r="15" pathLength="100"></circle>
-          </svg>
-          <span class="value">0</span>
-          <svg class="up" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 19V5M5 12l7-7 7 7"></path>
-          </svg>
-        </button>
         <button
           type="button"
           class="submit"
@@ -172,6 +163,8 @@ const MENU =
       >
         <i class="joe-font joe-icon-search" aria-hidden="true"></i>
       </button>
+      <!-- 阅读条底边的阅读进度线（宽度由 --read 驱动） -->
+      <span class="joe_header__read" aria-hidden="true"></span>
     </div>
   </div>
 
