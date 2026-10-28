@@ -7,6 +7,7 @@
 @import "./vendor/joe-font.css";
 @import "./vendor/jiewen.css";
 @import "./layout/base.css";
+@import "./layout/navbar.css";
 @import "./layout/header.css";
 @import "./layout/aside.css";
 @import "./layout/footer.css";

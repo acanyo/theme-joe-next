@@ -1,0 +1,391 @@
+/*
+ * 顶部导航：悬浮的液态玻璃胶囊。
+ *
+ * - 桌面端：居中胶囊，Logo · 菜单 · 操作按钮；当前菜单项下方有一块玻璃滑块随鼠标移动
+ * - 向下滚动时胶囊收窄上移，向上滚动恢复（.is-compact 由 navigation.ts 切换）
+ * - 下拉菜单是同材质的玻璃面板，展开时带弹性缩放
+ * - 移动端：两端是菜单 / 搜索按钮，中间 Logo
+ */
+
+.joe_header {
+  --nav-height: 56px;
+  --nav-top: 14px;
+  position: relative;
+  height: calc(var(--nav-height) + var(--nav-top) * 2);
+}
+
+.joe_header__above {
+  position: fixed;
+  top: var(--nav-top);
+  left: 0;
+  right: 0;
+  z-index: 6;
+  pointer-events: none;
+  transition: transform var(--dur-slow) var(--ease-spring);
+
+  &.active {
+    transform: translateY(calc(-100% - var(--nav-top) - 8px));
+  }
+
+  /* 胶囊本体 */
+  .joe_header_container {
+    pointer-events: auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: fit-content;
+    max-width: min(100% - 32px, 1120px);
+    height: var(--nav-height);
+    margin: 0 auto;
+    padding: 0 8px 0 10px;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--glass-shadow);
+    transition:
+      height var(--dur-slow) var(--ease-spring),
+      padding var(--dur-slow) var(--ease-spring),
+      background var(--dur-base) var(--ease-out);
+
+    &.full {
+      width: calc(100% - 32px);
+      max-width: none;
+    }
+  }
+
+  &.is-compact .joe_header_container {
+    height: 48px;
+    background: var(--glass-bg-strong);
+  }
+}
+
+/* Logo */
+.joe_header__above-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 6px;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  transition: scale var(--dur-base) var(--ease-spring);
+
+  &:active {
+    scale: 0.94;
+  }
+
+  img {
+    width: auto;
+    min-width: 32px;
+    max-width: 120px;
+    height: 32px;
+    object-fit: cover;
+  }
+
+  svg {
+    display: none;
+  }
+}
+
+/* 菜单 */
+.joe_header__above-nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  /* 跟随鼠标的玻璃滑块（位置由 navigation.ts 写入 --pill-x / --pill-w） */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 38px;
+    width: var(--pill-w, 0px);
+    translate: var(--pill-x, 0px) -50%;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--theme) 12%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme) 18%, transparent) inset;
+    opacity: var(--pill-o, 0);
+    transition:
+      translate var(--dur-slow) var(--ease-spring),
+      width var(--dur-slow) var(--ease-spring),
+      opacity var(--dur-base) var(--ease-out);
+    pointer-events: none;
+  }
+
+  .item {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    height: 38px;
+    padding: 0 14px;
+    font-size: 14.5px;
+    white-space: nowrap;
+    user-select: none;
+    border-radius: var(--radius-pill);
+    color: var(--text-regular);
+    transition: color var(--dur-base) var(--ease-out);
+
+    > i {
+      display: inline-block;
+      margin-right: 5px;
+      font-size: 17px;
+    }
+
+    &:hover,
+    &.current {
+      color: var(--text-title);
+    }
+
+    &.current {
+      font-weight: 600;
+    }
+  }
+
+  .joe_dropdown__link .item {
+    padding-right: 8px;
+  }
+}
+
+/* 下拉菜单：玻璃面板 */
+.joe_dropdown {
+  position: relative;
+}
+
+.joe_dropdown__link {
+  display: flex;
+  align-items: center;
+}
+
+.joe_dropdown__link-icon {
+  position: relative;
+  z-index: 1;
+  margin: 0 8px 0 -4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: rotate var(--dur-base) var(--ease-spring);
+}
+
+.joe_dropdown__menu,
+.joe_nav_sub {
+  position: absolute;
+  z-index: 5;
+  min-width: 150px;
+  max-width: 220px;
+  padding: 6px;
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 18px;
+  box-shadow: var(--glass-shadow);
+  visibility: hidden;
+  opacity: 0;
+  scale: 0.92;
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    scale var(--dur-slow) var(--ease-spring),
+    visibility var(--dur-base);
+
+  a.item {
+    display: block;
+    height: auto;
+    padding: 9px 12px;
+    line-height: 1.4;
+    font-size: 14px;
+    border-radius: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-regular);
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out);
+
+    &:hover,
+    &.current {
+      color: var(--theme);
+      background: color-mix(in srgb, var(--theme) 10%, transparent);
+    }
+  }
+}
+
+.joe_dropdown__menu {
+  top: calc(100% + 10px);
+  left: 50%;
+  translate: -50% 0;
+  transform-origin: top center;
+
+  /* 让鼠标从菜单项移到面板时不会断开 hover */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -14px 0 auto;
+    height: 14px;
+  }
+}
+
+.joe_dropdown.active {
+  .joe_dropdown__link-icon {
+    rotate: 180deg;
+  }
+
+  .joe_dropdown__menu {
+    visibility: visible;
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.joe_nav_sub-li {
+  position: relative;
+
+  &:hover > .joe_nav_sub {
+    visibility: visible;
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.joe_nav_sub {
+  top: -6px;
+  left: calc(100% + 8px);
+  transform-origin: left top;
+}
+
+/* 右侧操作区 */
+.joe_header__above-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+
+  .submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    color: var(--text-regular);
+    background: color-mix(in srgb, var(--text-title) 5%, transparent);
+    transition:
+      color var(--dur-base) var(--ease-out),
+      background var(--dur-base) var(--ease-out),
+      scale var(--dur-base) var(--ease-spring);
+
+    i {
+      font-size: 17px;
+    }
+
+    &:hover {
+      color: var(--theme);
+      background: color-mix(in srgb, var(--theme) 12%, transparent);
+    }
+
+    &:active {
+      scale: 0.9;
+    }
+  }
+}
+
+.nav_login a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 20px;
+  color: var(--text-regular);
+  background: color-mix(in srgb, var(--text-title) 5%, transparent);
+  transition:
+    color var(--dur-base) var(--ease-out),
+    background var(--dur-base) var(--ease-out);
+
+  &:hover {
+    color: var(--theme);
+    background: color-mix(in srgb, var(--theme) 12%, transparent);
+  }
+
+  img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+/* 移动端按钮 */
+.joe_header__above-slideicon,
+.joe_header__above-searchicon {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-size: 20px;
+  color: var(--text-regular);
+  transition: scale var(--dur-base) var(--ease-spring);
+
+  &:active {
+    scale: 0.88;
+  }
+}
+
+@media (max-width: 992px) {
+  .joe_header__above-nav .item {
+    padding: 0 10px;
+
+    > i {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .joe_header {
+    --nav-height: 52px;
+    --nav-top: 10px;
+  }
+
+  .joe_header__above {
+    .joe_header_container,
+    .joe_header_container.full {
+      width: calc(100% - 20px);
+      justify-content: space-between;
+      padding: 0 6px;
+    }
+
+    &.is-compact .joe_header_container {
+      height: 46px;
+    }
+  }
+
+  .joe_header__above-nav,
+  .joe_header__above-search {
+    display: none;
+  }
+
+  .joe_header__above-logo {
+    margin: 0;
+  }
+
+  .joe_header__above-slideicon,
+  .joe_header__above-searchicon {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .joe_header__above,
+  .joe_header__above .joe_header_container,
+  .joe_header__above-nav::before,
+  .joe_dropdown__menu,
+  .joe_nav_sub {
+    transition-duration: 0s;
+  }
+}

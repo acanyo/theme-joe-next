@@ -81,7 +81,7 @@ function openOverlay(target: HTMLElement | null): void {
 export function closeOverlays(restoreScroll = true): void {
   document.documentElement.classList.remove("disable-scroll");
   $(".joe_header__mask")?.classList.remove("active", "slideout");
-  $$(".joe_header__slideout, .joe_header__searchout, .joe_header__toc").forEach(
+  $$(".joe_header__slideout, .joe_header__toc").forEach(
     (el) => el.classList.remove("active"),
   );
   if (restoreScroll) window.scrollTo({ top: savedScroll });
@@ -131,26 +131,60 @@ function initDrawer(): void {
   });
 }
 
+/**
+ * 滚动时：离开顶部后胶囊收紧（.is-compact）；未开启吸顶时，向下滚动隐藏、向上滚动显示（.active）。
+ * 侧栏吸顶位置由 CSS 变量 --sticky-top 控制，这里只同步导航是否隐藏。
+ */
 function initHeaderScroll(): void {
-  if (isMobile() || getThemeConfig().enableFixedHeader) return;
   const header = $(".joe_header__above");
   if (!header) return;
-  const headerHeight = header.offsetHeight;
-  let lastY = 0;
-  document.addEventListener(
-    "scroll",
-    throttle(() => {
-      const y = window.scrollY;
-      const hide = y > lastY && y > headerHeight;
-      header.classList.toggle("active", hide);
-      // 侧栏吸顶元素随页面替换，每次滚动时重新查询
-      $$(".joe_aside_post, .joe_aside .joe_aside__item:last-child").forEach(
-        (el) => (el.style.top = `${hide ? 15 : headerHeight + 15}px`),
-      );
-      lastY = y;
-    }, 100),
-  );
+  const autoHide = !isMobile() && !getThemeConfig().enableFixedHeader;
+  const root = document.documentElement;
+  let lastY = window.scrollY;
+  const update = () => {
+    const y = window.scrollY;
+    header.classList.toggle("is-compact", y > 24);
+    const hide = autoHide && y > lastY && y > 120;
+    header.classList.toggle("active", hide);
+    root.classList.toggle("nav-hidden", hide);
+    lastY = y;
+  };
+  update();
+  document.addEventListener("scroll", throttle(update, 80), { passive: true });
 }
+
+/** 菜单下方的玻璃滑块：停在当前项，鼠标悬停时滑到对应项 */
+function initNavPill(): void {
+  const nav = $(".joe_header__above-nav");
+  if (!nav) return;
+  const moveTo = (item: HTMLElement | null) => {
+    if (!item) {
+      nav.style.setProperty("--pill-o", "0");
+      return;
+    }
+    const navBox = nav.getBoundingClientRect();
+    const box = item.getBoundingClientRect();
+    nav.style.setProperty("--pill-x", `${box.left - navBox.left}px`);
+    nav.style.setProperty("--pill-w", `${box.width}px`);
+    nav.style.setProperty("--pill-o", "1");
+  };
+  // 当前项可能是一级链接，也可能在某个下拉菜单里（此时高亮整个下拉项）
+  const current = () => {
+    const link = $<HTMLElement>("a.item.current", nav);
+    return link?.closest<HTMLElement>(".joe_dropdown") ?? link;
+  };
+  const topItems = () =>
+    $$<HTMLElement>(":scope > a.item, :scope > .joe_dropdown", nav);
+  for (const item of topItems())
+    item.addEventListener("mouseenter", () => moveTo(item));
+  nav.addEventListener("mouseleave", () => moveTo(current()));
+  pillToCurrent = () => moveTo(current());
+  // 字体加载完成后宽度会变化
+  void document.fonts?.ready.then(() => pillToCurrent());
+  window.addEventListener("resize", throttle(() => pillToCurrent(), 150));
+}
+
+let pillToCurrent = (): void => {};
 
 function initSearch(): void {
   $$("[data-joe-search]").forEach((button) =>
@@ -166,11 +200,14 @@ export function initNavigation(): void {
   initDrawer();
   initHeaderScroll();
   initSearch();
+  highlightCurrentMenu();
+  initNavPill();
 }
 
 /** 切页后同步导航状态 */
 export function refreshNavigation(): void {
   highlightCurrentMenu();
+  pillToCurrent();
   if (document.documentElement.classList.contains("disable-scroll"))
     closeOverlays(false);
 }

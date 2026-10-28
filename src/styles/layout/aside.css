@@ -17,9 +17,9 @@
 
   &:last-child {
     position: sticky;
-    top: 75px;
+    top: var(--sticky-top);
     margin-bottom: 0;
-    transition: top 0.35s;
+    transition: top var(--dur-slow) var(--ease-spring);
   }
 }
 
