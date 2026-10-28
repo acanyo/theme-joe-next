@@ -899,7 +899,7 @@
     transform: translate3d(0, 0, 0) scale(1);
     transform-origin: bottom center;
     transition: transform 0.35s;
-    border-radius: 8px 0 28px 0;
+    border-radius: var(--radius-wrap);
 
     &:hover {
       transform: translate3d(0, -2px, 0) scale(1.01);

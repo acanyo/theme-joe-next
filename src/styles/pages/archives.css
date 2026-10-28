@@ -183,11 +183,12 @@
           align-items: center;
           justify-content: space-between;
           color: var(--theme);
+          font-weight: 600;
           cursor: pointer;
-          background: var(--fill-base);
-          padding: 10px;
+          background: color-mix(in srgb, var(--theme) 7%, var(--bg-page));
+          padding: 10px 12px;
           height: 40px;
-          border-radius: 4px;
+          border-radius: var(--radius-inner);
 
           .joe-font {
             fill: var(--text-secondary);
@@ -213,7 +214,7 @@
             left: -8px;
             width: 0;
             height: 0;
-            border-right: 8px solid var(--fill-base);
+            border-right: 8px solid color-mix(in srgb, var(--theme) 7%, var(--bg-page));
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
           }
@@ -252,16 +253,16 @@
 
         .head {
           top: 25px;
-          background: #2db7f5;
+          background: var(--theme);
         }
 
         .button {
           position: relative;
           margin-left: 30px;
           border: none;
-          background: #2db7f5;
+          background: var(--theme);
           color: #fff;
-          border-radius: 4px;
+          border-radius: var(--radius-inner);
           padding: 0 12px;
           height: 34px;
           font-size: 13px;
@@ -274,7 +275,7 @@
             left: -8px;
             width: 0;
             height: 0;
-            border-right: 8px solid #2db7f5;
+            border-right: 8px solid var(--theme);
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
           }
