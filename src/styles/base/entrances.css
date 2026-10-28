@@ -1,0 +1,90 @@
+/*
+ * 入场动画（替代 animate.css）：元素带上 `animated` 和效果名即播放一次。
+ * 用于列表入场（features/reveal.ts，效果由设置 effects.list_animation_name 决定）
+ * 以及模板中静态写出的 `animated fadeIn` 等。系统开启「减少动态效果」时不播放。
+ */
+.animated {
+  animation-duration: 0.6s;
+  animation-timing-function: var(--ease-out);
+  animation-fill-mode: both;
+
+  &.fadeIn {
+    animation-name: enter-fade;
+  }
+
+  &.fadeInUp {
+    --enter-from: translate3d(0, 40px, 0);
+  }
+
+  &.fadeInDown {
+    --enter-from: translate3d(0, -40px, 0);
+  }
+
+  &.fadeInLeft {
+    --enter-from: translate3d(-40px, 0, 0);
+  }
+
+  &.fadeInRight {
+    --enter-from: translate3d(40px, 0, 0);
+  }
+
+  &.zoomIn {
+    --enter-from: scale(0.9);
+  }
+
+  &.flipInX {
+    --enter-from: perspective(600px) rotateX(-30deg);
+  }
+
+  &:is(.fadeInUp, .fadeInDown, .fadeInLeft, .fadeInRight, .zoomIn, .flipInX) {
+    animation-name: enter-move;
+  }
+
+  &.blurIn {
+    animation-name: enter-blur;
+  }
+
+  /* 主体模块缓入（effects.reveal）沿用 animations.css 中的 showInUp，只保留其原时长 */
+  &.showInUp {
+    animation-duration: 0.35s;
+  }
+
+  &.bounceIn {
+    animation-name: enter-bounce;
+    animation-timing-function: var(--ease-spring);
+  }
+}
+
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes enter-move {
+  from {
+    opacity: 0;
+    transform: var(--enter-from);
+  }
+}
+
+@keyframes enter-blur {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes enter-bounce {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated {
+    animation: none;
+  }
+}

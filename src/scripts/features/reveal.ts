@@ -1,8 +1,7 @@
 /**
  * 进入视口动画（替代 WOW.js）。
- * 元素声明 `class="joe-reveal" data-reveal="fadeInUp"`，进入视口时添加 animate.css 类名。
+ * 元素声明 `class="joe-reveal" data-reveal="fadeInUp"`，进入视口时添加动画类名（见 styles/base/entrances.css）。
  */
-import "animate.css/animate.min.css";
 import { $$ } from "../core/dom";
 import { observe } from "../core/lifecycle";
 
@@ -28,10 +27,5 @@ export function initReveal(root: ParentNode = document): void {
 
 function show(el: HTMLElement): void {
   const effect = el.dataset.reveal || "fadeInUp";
-  el.classList.add(
-    "animated",
-    "animate__animated",
-    `animate__${effect}`,
-    effect,
-  );
+  el.classList.add("animated", effect);
 }

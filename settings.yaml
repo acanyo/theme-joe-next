@@ -287,158 +287,26 @@ spec:
           key: list_animation_name
           label: 入场动画效果
           value: fadeInUp
-          help: animate.css 动画名，四处列表共用
+          help: 四处列表共用
           options:
-            - value: fadeIn
-              label: fadeIn
             - value: fadeInUp
-              label: fadeInUp
+              label: 上浮淡入
+            - value: fadeIn
+              label: 淡入
             - value: fadeInDown
-              label: fadeInDown
-            - value: fadeInDownBig
-              label: fadeInDownBig
+              label: 下落淡入
             - value: fadeInLeft
-              label: fadeInLeft
-            - value: fadeInLeftBig
-              label: fadeInLeftBig
+              label: 左侧滑入
             - value: fadeInRight
-              label: fadeInRight
-            - value: fadeInRightBig
-              label: fadeInRightBig
-            - value: fadeInUpBig
-              label: fadeInUpBig
-            - value: fadeOut
-              label: fadeOut
-            - value: fadeOutDown
-              label: fadeOutDown
-            - value: fadeOutDownBig
-              label: fadeOutDownBig
-            - value: fadeOutLeft
-              label: fadeOutLeft
-            - value: fadeOutLeftBig
-              label: fadeOutLeftBig
-            - value: fadeOutRight
-              label: fadeOutRight
-            - value: fadeOutRightBig
-              label: fadeOutRightBig
-            - value: fadeOutUp
-              label: fadeOutUp
-            - value: fadeOutUpBig
-              label: fadeOutUpBig
-            - value: bounce
-              label: bounce
-            - value: flash
-              label: flash
-            - value: pulse
-              label: pulse
-            - value: rubberBand
-              label: rubberBand
-            - value: headShake
-              label: headShake
-            - value: swing
-              label: swing
-            - value: tada
-              label: tada
-            - value: wobble
-              label: wobble
-            - value: jello
-              label: jello
-            - value: heartBeat
-              label: heartBeat
-            - value: bounceIn
-              label: bounceIn
-            - value: bounceInDown
-              label: bounceInDown
-            - value: bounceInLeft
-              label: bounceInLeft
-            - value: bounceInRight
-              label: bounceInRight
-            - value: bounceInUp
-              label: bounceInUp
-            - value: bounceOut
-              label: bounceOut
-            - value: bounceOutDown
-              label: bounceOutDown
-            - value: bounceOutLeft
-              label: bounceOutLeft
-            - value: bounceOutRight
-              label: bounceOutRight
-            - value: bounceOutUp
-              label: bounceOutUp
-            - value: flip
-              label: flip
-            - value: flipInX
-              label: flipInX
-            - value: flipInY
-              label: flipInY
-            - value: flipOutX
-              label: flipOutX
-            - value: flipOutY
-              label: flipOutY
-            - value: rotateIn
-              label: rotateIn
-            - value: rotateInDownLeft
-              label: rotateInDownLeft
-            - value: rotateInDownRight
-              label: rotateInDownRight
-            - value: rotateInUpLeft
-              label: rotateInUpLeft
-            - value: rotateInUpRight
-              label: rotateInUpRight
-            - value: rotateOut
-              label: rotateOut
-            - value: rotateOutDownLeft
-              label: rotateOutDownLeft
-            - value: rotateOutDownRight
-              label: rotateOutDownRight
-            - value: rotateOutUpLeft
-              label: rotateOutUpLeft
-            - value: rotateOutUpRight
-              label: rotateOutUpRight
-            - value: hinge
-              label: hinge
-            - value: jackInTheBox
-              label: jackInTheBox
-            - value: rollIn
-              label: rollIn
-            - value: rollOut
-              label: rollOut
+              label: 右侧滑入
             - value: zoomIn
-              label: zoomIn
-            - value: zoomInDown
-              label: zoomInDown
-            - value: zoomInLeft
-              label: zoomInLeft
-            - value: zoomInRight
-              label: zoomInRight
-            - value: zoomInUp
-              label: zoomInUp
-            - value: zoomOut
-              label: zoomOut
-            - value: zoomOutDown
-              label: zoomOutDown
-            - value: zoomOutLeft
-              label: zoomOutLeft
-            - value: zoomOutRight
-              label: zoomOutRight
-            - value: zoomOutUp
-              label: zoomOutUp
-            - value: slideInDown
-              label: slideInDown
-            - value: slideInLeft
-              label: slideInLeft
-            - value: slideInRight
-              label: slideInRight
-            - value: slideInUp
-              label: slideInUp
-            - value: slideOutDown
-              label: slideOutDown
-            - value: slideOutLeft
-              label: slideOutLeft
-            - value: slideOutRight
-              label: slideOutRight
-            - value: slideOutUp
-              label: slideOutUp
+              label: 缩放淡入
+            - value: blurIn
+              label: 模糊渐显
+            - value: flipInX
+              label: 翻转
+            - value: bounceIn
+              label: 弹出
           if: $get(list_animation).value === true
         - $formkit: switch
           value: false

@@ -2,6 +2,7 @@
 @import "./base/normalize.css";
 @import "./base/tokens.css";
 @import "./base/animations.css";
+@import "./base/entrances.css";
 @import "./base/transitions.css";
 @import "./vendor/joe-font.css";
 @import "./vendor/jiewen.css";
