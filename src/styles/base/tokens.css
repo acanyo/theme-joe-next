@@ -8,7 +8,6 @@ html {
   --bg-page: #fff;
   --bg-muted: #f5f5f5;
   --bg-raised: #fff;
-  --canvas: #eef0f4;
   /* 液态玻璃材质：半透明底 + 背景模糊增饱和 + 顶部高光描边 + 柔和投影 */
   --glass-bg: rgb(255 255 255 / 62%);
   --glass-bg-strong: rgb(255 255 255 / 82%);
@@ -40,13 +39,11 @@ html {
   --code-background: #e8f3ff;
   --overdue-border: #ffbb76;
   --overdue-background: #fffcef;
-  --radius-wrap: 20px;
-  --radius-inner: 10px;
-  --radius-img: 14px;
-  /* 内容卡片：实色底保证可读性，加上与玻璃一致的顶部高光和细描边 */
+  --radius-wrap: 12px;
+  --radius-inner: 6px;
+  --radius-img: 8px;
   --shadow:
-    0 1px 0 0 rgb(255 255 255 / 80%) inset, 0 0 0 1px rgb(15 23 42 / 6%),
-    0 1px 2px rgb(15 23 42 / 4%), 0 12px 32px -18px rgb(15 23 42 / 22%);
+    0 1px 2px rgb(15 23 42 / 4%), 0 8px 24px -12px rgb(15 23 42 / 16%);
   --text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-code: #bdbdbd;
   --shadow-block: 1px 2px 10px 0 #afafaf;
@@ -69,7 +66,6 @@ html {
 
   &[data-mode="dark"] {
     /* --theme: #9999ff; */
-    --canvas: #121315;
     --bg-inverse: #fff;
     --bg-page: #202124;
     --bg-muted: #2a2b2f;
@@ -103,8 +99,7 @@ html {
     --overdue-border: #6f553b;
     --overdue-background: #2b2715;
     --shadow:
-      0 1px 0 0 rgb(255 255 255 / 6%) inset, 0 0 0 1px rgb(255 255 255 / 6%),
-      0 14px 34px -18px rgb(0 0 0 / 75%);
+      0 0 0 1px rgb(255 255 255 / 4%), 0 8px 24px -12px rgb(0 0 0 / 60%);
     --text-shadow: none;
     --shadow-code: #191919;
     --shadow-block: 2px 4px 10px 0 #0a0a0a;
@@ -126,8 +121,8 @@ html {
     background: var(--bg-page);
 
     /* 暗黑模式下需要修改的样式*/
-
     body:after {
+      background: #141517;
       z-index: -200;
     }
 
