@@ -455,22 +455,22 @@ body::before {
       }
 
       pre[class*="language-"] {
-        font-size: 13px !important;
+        font-size: 13px;
 
         &:before {
-          left: 10px !important;
+          left: 10px;
           box-shadow:
             16px 0 #fdbc40,
-            32px 0 #35cd4b !important;
+            32px 0 #35cd4b;
         }
 
         &:after {
-          top: 30px !important;
+          top: 30px;
         }
 
         &.line-numbers {
           .line-numbers-rows {
-            width: 2.4em !important;
+            width: 2.4em;
           }
 
           code {

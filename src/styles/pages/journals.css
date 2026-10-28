@@ -90,7 +90,7 @@
   transition: height var(--dur-fast) var(--ease-out);
 
   &.open {
-    max-height: unset !important;
+    max-height: unset;
 
     .journal_content_expander {
       background: none;
@@ -343,7 +343,7 @@
     }
 
     span[data-fancybox="Joe"] {
-      display: inline-block !important;
+      display: inline-block;
     }
 
     img {
@@ -476,7 +476,7 @@
 
     &:hover {
       transform: scale(1);
-      color: #f15c43 !important;
+      color: #f15c43;
     }
   }
 

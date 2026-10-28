@@ -177,7 +177,7 @@
 
   &.full {
     .joe_container {
-      max-width: 100% !important;
+      max-width: 100%;
     }
   }
 }

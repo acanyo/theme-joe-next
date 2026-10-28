@@ -893,6 +893,7 @@
   margin-bottom: 15px;
 }
 
+/* 正文 ul li 的列表样式写在前面但权重更高，这里需要 !important 覆盖 */
 .joe_detail__friends-item {
   list-style: none !important;
   line-height: 1.5 !important;

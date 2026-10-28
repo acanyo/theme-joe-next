@@ -72,7 +72,7 @@
   }
 
   .full {
-    max-width: 100% !important;
+    max-width: 100%;
   }
 }
 
@@ -201,7 +201,7 @@
       }
 
       & + .joe-icon-chevron-down {
-        color: var(--theme) !important;
+        color: var(--theme);
       }
     }
   }

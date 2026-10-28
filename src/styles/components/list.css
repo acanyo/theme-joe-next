@@ -668,7 +668,7 @@
 
     .meta {
       .last {
-        display: none !important;
+        display: none;
       }
     }
 
@@ -744,7 +744,7 @@
 
     .meta {
       .last {
-        display: none !important;
+        display: none;
       }
     }
 

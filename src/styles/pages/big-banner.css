@@ -354,7 +354,7 @@
   }
 
   .content {
-    margin-top: 10px !important;
+    margin-top: 10px;
     font-size: 0.93em;
     color: var(--text-primary);
   }
@@ -383,7 +383,7 @@
       bottom: 0;
       right: 0;
       z-index: -1;
-      background-color: var(--fcolor) !important;
+      background-color: var(--fcolor);
       transform: scale(0);
       transition: all var(--dur-slow) var(--ease-out);
       transform-origin: right bottom;
