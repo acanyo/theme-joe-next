@@ -11,7 +11,7 @@ import "../styles/pages/index.css";
 <BaseLayout pageScript="index" pageClass="page-index" bigBanner="fullscreen">
   <div class="joe_main">
     <div class="joe_index">
-      <th-block th:if="${theme.config.carousel.enabled and not #lists.isEmpty(theme.config.carousel.slides)}">
+      <th-block th:if="${theme.config.home.carousel and not #lists.isEmpty(theme.config.home.carousel_slides)}">
         <Banner />
       </th-block>
       <th-block th:if="${theme.config.home.featured and not #lists.isEmpty(theme.config.home.featured_items)}">

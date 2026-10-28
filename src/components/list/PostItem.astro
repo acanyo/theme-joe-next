@@ -19,12 +19,12 @@ const COVER =
   class="joe_list__item default"
   th:classappend={
     reveal
-      ? "${theme.config.home.list_animation ? 'joe-reveal' : ''}"
+      ? "${theme.config.effects.list_animation ? 'joe-reveal' : ''}"
       : undefined
   }
   th:attr={
     reveal
-      ? "data-reveal=${theme.config.home.list_animation_name}"
+      ? "data-reveal=${theme.config.effects.list_animation_name}"
       : undefined
   }
   th:style={reveal ? "|animation-delay: ${iter.index * 0.1}s|" : undefined}

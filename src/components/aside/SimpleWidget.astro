@@ -46,7 +46,7 @@ const SUBJECT_LINK =
     variant="reward"
     icon="coffee"
     title="请作者喝杯咖啡"
-    th:unless="${theme.config.advanced.clean_mode}"
+    th:unless="${theme.config.footer.clean_mode}"
   >
     <div class="pay-tab-content">
       <ul>
@@ -113,7 +113,7 @@ const SUBJECT_LINK =
     variant="newreply"
     icon="message"
     title="最新回复"
-    th:if={`\${!theme.config.advanced.clean_mode and (${COMMENT_ENABLED})}`}
+    th:if={`\${!theme.config.footer.clean_mode and (${COMMENT_ENABLED})}`}
   >
     <ul
       class="joe_aside__item-contain"

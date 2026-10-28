@@ -9,7 +9,7 @@ import "../styles/pages/journals.css";
 
 <BaseLayout
   pageScript="moments"
-  title="(theme.config.moments.title ?: '我的动态') + ' - ' + site.title"
+  title="(theme.config.pages.moments_title ?: '我的动态') + ' - ' + site.title"
   pageClass="page-journals"
 >
   <div class="joe_main">
@@ -23,7 +23,7 @@ import "../styles/pages/journals.css";
       <p
         class="joe_journals__empty"
         th:if="${#lists.isEmpty(moments.items)}"
-        th:text="${theme.config.moments.empty ?: '暂无动态'}"
+        th:text="${theme.config.pages.moments_empty ?: '暂无动态'}"
       ></p>
       <Pagination result="moments" />
     </div>

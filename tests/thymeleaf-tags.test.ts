@@ -27,27 +27,27 @@ describe("normalizeBooleanSettings", () => {
   it("wraps boolean settings used in logical expressions", () => {
     assert.equal(
       normalizeBooleanSettings(
-        '<p th:if="${theme.config.moments.like or !theme.config.advanced.clean_mode}"></p>',
+        '<p th:if="${theme.config.pages.moments_like or !theme.config.footer.clean_mode}"></p>',
       ),
-      '<p th:if="${(theme.config.moments.like == true) or !(theme.config.advanced.clean_mode == true)}"></p>',
+      '<p th:if="${(theme.config.pages.moments_like == true) or !(theme.config.footer.clean_mode == true)}"></p>',
     );
   });
   it("keeps explicit comparisons and non-boolean settings", () => {
     const html =
-      "<p th:if=\"${theme.config.general.color_mode == 'user' and theme.config.moments.like == true}\"></p>";
+      "<p th:if=\"${theme.config.general.color_mode == 'user' and theme.config.pages.moments_like == true}\"></p>";
     assert.equal(normalizeBooleanSettings(html), html);
   });
   it("does not touch plain attributes or text", () => {
     const html =
-      '<p data-x="theme.config.moments.like">theme.config.moments.like</p>';
+      '<p data-x="theme.config.pages.moments_like">theme.config.pages.moments_like</p>';
     assert.equal(normalizeBooleanSettings(html), html);
   });
   it("handles inline javascript expressions", () => {
     assert.equal(
       normalizeBooleanSettings(
-        "<script>x = /*[[${theme.config.advanced.debug}]]*/ false;</script>",
+        "<script>x = /*[[${theme.config.footer.debug}]]*/ false;</script>",
       ),
-      "<script>x = /*[[${(theme.config.advanced.debug == true)}]]*/ false;</script>",
+      "<script>x = /*[[${(theme.config.footer.debug == true)}]]*/ false;</script>",
     );
   });
 });

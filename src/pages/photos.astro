@@ -43,7 +43,8 @@ import "../styles/pages/photos.css";
           class="grid-item"
           th:each="photo : ${photos.items}"
           th:attr="data-group=${photo.spec.groupName}"
-          th:classappend="${theme.config.pages.photos_animation ? 'joe-reveal' : ''}"
+          th:classappend="${theme.config.effects.list_animation ? 'joe-reveal' : ''}"
+          th:data-reveal="${theme.config.effects.list_animation_name}"
         >
           <img
             loading="lazy"

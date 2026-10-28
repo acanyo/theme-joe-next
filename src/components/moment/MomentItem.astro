@@ -8,8 +8,8 @@ import { COMMENT_ENABLED, el } from "../../config/expressions";
 
 <li
   class="joe_journal__item"
-  th:classappend="${theme.config.moments.animation ? 'joe-reveal' : ''}"
-  th:attr="data-reveal=${theme.config.moments.animation_name}, data-cid=${moment.metadata.name}"
+  th:classappend="${theme.config.effects.list_animation ? 'joe-reveal' : ''}"
+  th:attr="data-reveal=${theme.config.effects.list_animation_name}, data-cid=${moment.metadata.name}"
   th:with="content = ${moment.spec.content}"
 >
   <p class="joe_journal_date">
@@ -23,7 +23,7 @@ import { COMMENT_ENABLED, el } from "../../config/expressions";
   <div class="joe_journal_block">
     <div
       class="joe_journal_body"
-      th:style="|max-height: ${theme.config.moments.max_height ?: 300}px|"
+      th:style="|max-height: ${theme.config.pages.moments_max_height ?: 300}px|"
       th:classappend="${theme.config.code.line_numbers and !theme.config.code.wrap ? 'line-numbers' : ''}"
     >
       <div class="content-wrp">
@@ -60,13 +60,13 @@ import { COMMENT_ENABLED, el } from "../../config/expressions";
     </div>
     <div
       class="joe_journal_footer"
-      th:if="${theme.config.moments.like or theme.config.moments.comments}"
+      th:if="${theme.config.pages.moments_like or theme.config.pages.moments_comments}"
     >
       <div class="footer-wrap">
         <button
           type="button"
           class="joe_journal_operate_item like"
-          th:if="${theme.config.moments.like}"
+          th:if="${theme.config.pages.moments_like}"
           data-joe-moment-like
           aria-label="点赞"
         >
@@ -82,7 +82,7 @@ import { COMMENT_ENABLED, el } from "../../config/expressions";
             0
           </em>
         </button>
-        <th-block th:if="${theme.config.moments.comments and !theme.config.advanced.clean_mode}">
+        <th-block th:if="${theme.config.pages.moments_comments and !theme.config.footer.clean_mode}">
           <button
             type="button"
             class="joe_journal_operate_item comment"

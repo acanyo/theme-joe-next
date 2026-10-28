@@ -26,7 +26,7 @@ html { filter: grayscale(100%); }
 [/]
 html body {
   --theme: [(\${theme.config.appearance.accent_light ?: '#fb6c28'})];
-  --wave-color: [(\${theme.config.hero.wave_light ?: '#fff'})];
+  --wave-color: [(\${theme.config.home.hero_wave_light ?: '#fff'})];
   --scroll-bar: [(\${theme.config.appearance.scrollbar_color ?: '#c0c4cc'})];
   --loading-bar: [(\${theme.config.effects.loading_bar_color ?: 'var(--theme)'})];
   --loading-bar-height: [(\${theme.config.effects.loading_bar_height ?: '3px'})];
@@ -34,18 +34,18 @@ html body {
 }
 html[data-mode="dark"] body {
   --theme: [(\${theme.config.appearance.accent_dark ?: '#9999ff'})];
-  --wave-color: [(\${theme.config.hero.wave_dark ?: '#fff'})];
+  --wave-color: [(\${theme.config.home.hero_wave_dark ?: '#fff'})];
   --scroll-bar: [(\${theme.config.appearance.scrollbar_color ?: '#666'})];
 }
 ::-webkit-scrollbar { width: [(\${theme.config.appearance.scrollbar_width ?: '8px'})]; }
-[# th:if="\${theme.config.appearance.background_light_enabled and not #strings.isEmpty(theme.config.appearance.background_light)}"]
+[# th:if="\${not #strings.isEmpty(theme.config.appearance.background_light)}"]
 html[data-mode="light"] body::before { background-image: url("[(\${theme.config.appearance.background_light})]"); }
 [/]
-[# th:if="\${theme.config.appearance.background_dark_enabled and not #strings.isEmpty(theme.config.appearance.background_dark)}"]
+[# th:if="\${not #strings.isEmpty(theme.config.appearance.background_dark)}"]
 html[data-mode="dark"] body::before { background-image: url("[(\${theme.config.appearance.background_dark})]"); }
 [/]
-[# th:if="\${not #strings.isEmpty(theme.config.hero.image)}"]
-html body { --joe-big-banner-image: url("[(\${theme.config.hero.image})]"); }
+[# th:if="\${not #strings.isEmpty(theme.config.home.hero_image)}"]
+html body { --joe-big-banner-image: url("[(\${theme.config.home.hero_image})]"); }
 [/]
 `;
 ---

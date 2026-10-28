@@ -40,7 +40,7 @@ import "../../styles/content/aside-operate.css";
   </li>
   <li
     class="post-operate-comment"
-    th:if={`\${!theme.config.advanced.clean_mode and theme.config.post.comments and (${COMMENT_ENABLED})}`}
+    th:if={`\${!theme.config.footer.clean_mode and theme.config.post.comments and (${COMMENT_ENABLED})}`}
   >
     <button type="button" data-joe-goto-comment aria-label="前往评论区">
       <i class="joe-font joe-icon-message" aria-hidden="true"></i>
