@@ -13,7 +13,7 @@ const MENU =
 <header class="joe_header" th:with={`navMenu = \${${MENU}}`}>
   <div
     class="joe_header__above"
-    th:classappend="|${theme.config.navbar.sticky ? 'fixed' : ''} ${theme.config.navbar.sticky and theme.config.navbar.glass ? 'glass' : ''}|"
+    th:classappend="|${theme.config.effects.reveal ? 'topInDown' : ''} ${theme.config.navbar.sticky ? 'fixed' : ''} ${theme.config.navbar.sticky and theme.config.navbar.glass ? 'glass' : ''}|"
   >
     <div
       class="joe_container joe_header_container"
@@ -44,6 +44,7 @@ const MENU =
       <nav
         class="joe_header__above-nav"
         aria-label="主导航"
+        th:classappend="|${theme.config.navbar.active_glow ? 'active-shadow' : ''} ${theme.config.navbar.icon_animation ? 'active-animate' : ''}|"
       >
         <th-block
           th:if="${navMenu != null}"

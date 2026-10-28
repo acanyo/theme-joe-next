@@ -20,6 +20,8 @@ export const SERVER_CONFIG_FIELDS = {
   linkBehavior: "theme.config.general.link_target",
   pageTransition: "theme.config.effects.page_transition",
   swupPreload: "theme.config.effects.swup_preload",
+  cursorEffect: "theme.config.effects.cursor_effect",
+  backdrop: "theme.config.effects.backdrop",
   enableOffscreenTip: "theme.config.effects.offscreen_title",
   offscreenTitleLeave: "theme.config.effects.offscreen_title_leave",
   offscreenTitleBack: "theme.config.effects.offscreen_title_back",
@@ -33,6 +35,8 @@ export const SERVER_CONFIG_FIELDS = {
   birthday: "theme.config.footer.since",
   enableIndexListAjax: "theme.config.home.load_more",
   enableAutoAjax: "theme.config.home.infinite_scroll",
+  enableIndexListEffect: "theme.config.home.list_animation",
+  indexListEffectClass: "theme.config.home.list_animation_name",
   fallbackThumbnail: "theme.config.home.fallback_thumbnail",
   enableBanner: "theme.config.carousel.enabled",
   bannerDirection: "theme.config.carousel.direction",
@@ -64,7 +68,11 @@ export const SERVER_CONFIG_FIELDS = {
   enableProgressBar: "theme.config.post.progress",
   enableCopyRightText: "theme.config.post.copy_notice",
   copyRightText: "theme.config.post.copy_notice_text",
+  enableJournalEffect: "theme.config.moments.animation",
+  journalListEffectClass: "theme.config.moments.animation_name",
   journalBlockHeight: "theme.config.moments.max_height",
+  enableFriendEffect: "theme.config.links.feed_animation",
+  friendListEffectClass: "theme.config.links.feed_animation_name",
   enableLinksRandom: "theme.config.links.random",
   siteTitle: "site.title",
   version: "theme.spec.version",
@@ -97,6 +105,8 @@ export interface ThemeConfig {
   linkBehavior: "default" | "current" | "new";
   pageTransition: "none" | "native" | "swup";
   swupPreload: boolean;
+  cursorEffect: string;
+  backdrop: string;
   enableOffscreenTip: boolean;
   offscreenTitleLeave: string;
   offscreenTitleBack: string;
@@ -110,6 +120,8 @@ export interface ThemeConfig {
   birthday: string;
   enableIndexListAjax: boolean;
   enableAutoAjax: boolean;
+  enableIndexListEffect: boolean;
+  indexListEffectClass: string;
   fallbackThumbnail: string;
   banner: {
     enabled: boolean;
@@ -148,7 +160,8 @@ export interface ThemeConfig {
     progressBar: boolean;
     copyRightText: string;
   };
-  journal: { blockHeight: number };
+  journal: { effect: boolean; effectClass: string; blockHeight: number };
+  friend: { effect: boolean; effectClass: string };
   enableLinksRandom: boolean;
   siteTitle: string;
   version: string;
@@ -225,6 +238,8 @@ export function normalizeThemeConfig(
     linkBehavior: (["default", "current", "new"].includes(linkBehavior)
       ? linkBehavior
       : "default") as ThemeConfig["linkBehavior"],
+    cursorEffect: toStr(raw.cursorEffect, "off"),
+    backdrop: toStr(raw.backdrop, "off"),
     enableOffscreenTip: toBool(raw.enableOffscreenTip),
     offscreenTitleLeave: toStr(raw.offscreenTitleLeave),
     offscreenTitleBack: toStr(raw.offscreenTitleBack),
@@ -238,6 +253,8 @@ export function normalizeThemeConfig(
     birthday: toStr(raw.birthday),
     enableIndexListAjax: toBool(raw.enableIndexListAjax),
     enableAutoAjax: toBool(raw.enableAutoAjax),
+    enableIndexListEffect: toBool(raw.enableIndexListEffect, true),
+    indexListEffectClass: toStr(raw.indexListEffectClass, "fadeInUp"),
     fallbackThumbnail: toStr(raw.fallbackThumbnail),
     banner: {
       enabled: toBool(raw.enableBanner, true),
@@ -280,7 +297,13 @@ export function normalizeThemeConfig(
         : "",
     },
     journal: {
+      effect: toBool(raw.enableJournalEffect, true),
+      effectClass: toStr(raw.journalListEffectClass, "fadeInUp"),
       blockHeight: toNumber(raw.journalBlockHeight, 300),
+    },
+    friend: {
+      effect: toBool(raw.enableFriendEffect, true),
+      effectClass: toStr(raw.friendListEffectClass, "fadeInUp"),
     },
     enableLinksRandom: toBool(raw.enableLinksRandom),
     siteTitle: toStr(raw.siteTitle),

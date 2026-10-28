@@ -1,7 +1,7 @@
 ---
 /**
  * 文章列表项。依赖循环变量 `post` 与 `iter`（th:each="post, iter : ...")。
- * 首页列表项带进入视口动效（data-motion）。
+ * 首页可开启进入视口动画（data-reveal）。
  */
 import { COMMENT_ENABLED, el } from "../../config/expressions";
 
@@ -17,7 +17,17 @@ const COVER =
 
 <li
   class="joe_list__item default"
-  data-motion={reveal ? "" : undefined}
+  th:classappend={
+    reveal
+      ? "${theme.config.home.list_animation ? 'joe-reveal' : ''}"
+      : undefined
+  }
+  th:attr={
+    reveal
+      ? "data-reveal=${theme.config.home.list_animation_name}"
+      : undefined
+  }
+  th:style={reveal ? "|animation-delay: ${iter.index * 0.1}s|" : undefined}
   th:with={`cover = \${${COVER}}`}
 >
   <a

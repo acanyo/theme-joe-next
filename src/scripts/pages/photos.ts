@@ -2,7 +2,7 @@
  * 图库：CSS 多列瀑布流（替代 Isotope）、分组筛选、滚动加载下一页、灯箱预览。
  */
 import { $, $$ } from "../core/dom";
-import { initMotion } from "../features/motion";
+import { initReveal } from "../features/reveal";
 import { loadStylesheet } from "../core/stylesheet";
 import photoswipeCss from "photoswipe/style.css?url";
 import { observe } from "../core/lifecycle";
@@ -51,7 +51,7 @@ function initInfiniteScroll(grid: HTMLElement): void {
         .forEach((item) => grid.appendChild(item));
       grid.dataset.next = nextGrid?.dataset.next ?? "";
       applyFilter(grid);
-      initMotion(grid);
+      initReveal(grid);
     } catch (error) {
       console.error("[joe-next] 加载图库下一页失败", error);
       observer.disconnect();

@@ -206,7 +206,18 @@
     }
   }
 
+  &.active-shadow {
+    .item.current {
+      text-shadow: 0 4px 20px var(--theme);
+    }
+  }
 
+  &.active-animate {
+    .item:hover .m-icon {
+      /* transform: translateY(-2px);*/
+      animation: dung 0.3s 0.12s ease;
+    }
+  }
 
   .joe_dropdown {
     margin-right: 15px;

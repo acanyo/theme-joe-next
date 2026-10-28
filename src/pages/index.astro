@@ -36,7 +36,7 @@ import "../styles/pages/index.css";
           </div>
         </div>
         <div class="joe_index__list">
-          <ul class="joe_list" data-joe-post-list data-motion-group>
+          <ul class="joe_list" data-joe-post-list>
             <th-block th:each="post, iter : ${posts.items}">
               <PostItem reveal />
             </th-block>

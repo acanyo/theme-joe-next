@@ -36,7 +36,6 @@ import "../styles/pages/photos.css";
       <div
         class="joe_photos__grid"
         id="image-grid"
-        data-motion-group
         th:attr="data-next=${photos.hasNext() ? photos.nextUrl : ''}"
         th:style="|--photos-gap: ${theme.config.pages.photos_gap ?: 10}px|"
       >
@@ -44,7 +43,7 @@ import "../styles/pages/photos.css";
           class="grid-item"
           th:each="photo : ${photos.items}"
           th:attr="data-group=${photo.spec.groupName}"
-          data-motion
+          th:classappend="${theme.config.pages.photos_animation ? 'joe-reveal' : ''}"
         >
           <img
             loading="lazy"

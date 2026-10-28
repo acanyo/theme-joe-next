@@ -18,7 +18,7 @@ import { initImageFallback } from "./features/image-fallback";
 import { initLinkBehavior } from "./features/link-behavior";
 import { finishLoadingBar, startLoadingBar } from "./features/loading-bar";
 import { initNavigation, refreshNavigation } from "./features/navigation";
-import { initMotion } from "./features/motion";
+import { initReveal } from "./features/reveal";
 
 function initShell(): void {
   initColorMode();
@@ -30,7 +30,7 @@ async function initPage(): Promise<void> {
   refreshNavigation();
   initActions();
   initLinkBehavior();
-  initMotion();
+  initReveal();
   initAsideWidgets();
   await runPageScript();
 }
