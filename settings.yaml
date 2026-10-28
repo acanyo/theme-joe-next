@@ -180,8 +180,13 @@ spec:
           options:
             - value: islands
               label: 阅读条
+              render: /themes/theme-joe-next/assets/previews/navbar-islands.svg
             - value: classic
               label: 经典
+              render: /themes/theme-joe-next/assets/previews/navbar-classic.svg
+          render-type: image
+          size: 112
+          gap: 8
         - $formkit: menuSelect
           name: menu
           id: menu
@@ -417,7 +422,7 @@ spec:
               attrs:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
               children: 鼠标、背景、右键菜单与标签页标题
-        - $formkit: select
+        - $formkit: toggle
           name: cursor_skin
           id: cursor_skin
           key: cursor_skin
@@ -427,20 +432,34 @@ spec:
           options:
             - value: "off"
               label: 无
+              render: /themes/theme-joe-next/assets/images/none.svg
             - value: simple_cursor
               label: 简洁卡通
+              render: /themes/theme-joe-next/assets/previews/cursor-simple_cursor.webp
             - value: simple_cursor_blue
               label: 简洁卡通-蓝
+              render: /themes/theme-joe-next/assets/previews/cursor-simple_cursor_blue.webp
+            - value: simple_cursor_hand
+              label: 简洁卡通-手型
+              render: /themes/theme-joe-next/assets/previews/cursor-simple_cursor_hand.webp
             - value: simple_sunset_light
               label: 简单日落(浅色)
+              render: /themes/theme-joe-next/assets/previews/cursor-simple_sunset_light.webp
             - value: simple_sunset_dark
               label: 简单日落(暗黑)
+              render: /themes/theme-joe-next/assets/previews/cursor-simple_sunset_dark.webp
             - value: crystallize
               label: 简约水晶
+              render: /themes/theme-joe-next/assets/previews/cursor-crystallize.webp
             - value: emoji_zip
               label: 魔力表情
+              render: /themes/theme-joe-next/assets/previews/cursor-emoji_zip.webp
             - value: black_cat
               label: 小黑猫
+              render: /themes/theme-joe-next/assets/previews/cursor-black_cat.webp
+          render-type: image
+          size: 112
+          gap: 8
         - $formkit: select
           name: cursor_effect
           id: cursor_effect
@@ -711,7 +730,7 @@ spec:
               label: 水平
             - value: vertical
               label: 垂直
-        - $formkit: select
+        - $formkit: toggle
           if: $get(carousel).value === true
           name: carousel_effect
           id: carousel_effect
@@ -721,18 +740,28 @@ spec:
           options:
             - value: slide
               label: 普通位移切换
+              render: /themes/theme-joe-next/assets/previews/carousel-slide.svg
             - value: fade
               label: 淡入
+              render: /themes/theme-joe-next/assets/previews/carousel-fade.svg
             - value: cube
               label: 方块
+              render: /themes/theme-joe-next/assets/previews/carousel-cube.svg
             - value: coverflow
               label: 3d流
+              render: /themes/theme-joe-next/assets/previews/carousel-coverflow.svg
             - value: flip
               label: 3d翻转
+              render: /themes/theme-joe-next/assets/previews/carousel-flip.svg
             - value: cards
               label: 卡片式
+              render: /themes/theme-joe-next/assets/previews/carousel-cards.svg
             - value: creative
               label: 创意性
+              render: /themes/theme-joe-next/assets/previews/carousel-creative.svg
+          render-type: image
+          size: 112
+          gap: 8
         - $formkit: switch
           value: false
           if: $get(carousel).value === true
