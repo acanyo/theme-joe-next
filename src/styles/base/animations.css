@@ -497,17 +497,7 @@
   }
 }
 
-@keyframes twinkle {
-  to {
-    box-shadow: inset 0 0 15px #f4b393;
-  }
-}
 
-@keyframes twinkle-night {
-  to {
-    box-shadow: inset 0 0 15px #595997;
-  }
-}
 
 @keyframes dong {
   0% {

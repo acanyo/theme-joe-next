@@ -11,19 +11,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   background: var(--bg-raised);
+  border: 1px solid var(--border-lighter);
   border-radius: 50%;
   cursor: pointer;
-  box-shadow:
-    0 0 10px rgba(0, 0, 0, 0.1),
-    0 5px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow);
+  transition: border-color 0.25s;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--theme) 45%, transparent);
+  }
 
   svg {
     position: absolute;
-    width: 25px;
-    height: 25px;
+    width: 22px;
+    height: 22px;
     fill: var(--theme);
   }
 

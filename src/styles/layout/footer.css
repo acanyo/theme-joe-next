@@ -1,7 +1,8 @@
 .joe_footer {
   color: var(--text-secondary);
   background: var(--bg-page);
-  border-top: 1px solid var(--fill-base);
+  border-top: 1px solid var(--border-lighter);
+  font-size: 13px;
   z-index: -1;
 
   .joe_container {

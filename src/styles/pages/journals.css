@@ -40,7 +40,7 @@
 
   &:hover {
     .joe_journal_block {
-      box-shadow: 3px 8px 15px 0 var(--box-shadow-journal);
+      border-color: color-mix(in srgb, var(--theme) 30%, var(--border-lighter));
     }
   }
 }
@@ -74,10 +74,9 @@
   color: var(--text-primary);
   background: var(--background-journal);
   border-bottom: 1px solid var(--border-lighter);
-  border-radius: 0 18px 18px 18px;
+  border-radius: 0 var(--radius-wrap) var(--radius-wrap) var(--radius-wrap);
   border: 1px solid var(--border-lighter);
-  box-shadow: 1px 1px 5px 0 var(--box-shadow-journal);
-  transition: box-shadow 0.2s;
+  transition: border-color 0.25s;
 }
 
 .joe_journal_body {
@@ -87,7 +86,7 @@
   overflow: hidden;
   padding: 10px 12px;
   background: var(--background-journal-block);
-  border-radius: 0 6px 6px 6px;
+  border-radius: var(--radius-inner);
   transition: height 0.2s;
 
   &.open {
