@@ -16,7 +16,7 @@ import "../styles/pages/post.css";
     <ArticleBody subject="singlePage" />
     <CommentSection subject="singlePage" kind="SinglePage" />
   </div>
-  <th-block th:if="${theme.config.aside.enable_sheet_aside}">
+  <th-block th:if="${theme.config.aside.on_page}">
     <Aside />
   </th-block>
   <Actions slot="actions" editKind="page" />

@@ -1,23 +1,23 @@
 ---
 /** 打赏二维码列表（正文下方操作区与左侧悬浮栏共用） */
 const QRCODES = [
-  { key: "qrcode_zfb", label: "支付宝打赏", alt: "支付宝收款码" },
-  { key: "qrcode_wx", label: "微信打赏", alt: "微信收款码" },
-  { key: "qrcode_qq", label: "QQ打赏", alt: "QQ收款码" },
+  { key: "donate_alipay", label: "支付宝打赏", alt: "支付宝收款码" },
+  { key: "donate_wechat", label: "微信打赏", alt: "微信收款码" },
+  { key: "donate_qq", label: "QQ打赏", alt: "QQ收款码" },
 ] as const;
 ---
 
 <!-- 恰好两张收款码时拼接显示（.two） -->
 <ol
   class="joe_donate_list"
-  th:with={`qrCount = \${${QRCODES.map((qr) => `(#strings.isEmpty(theme.config.post.${qr.key}) ? 0 : 1)`).join(" + ")}}`}
-  th:classappend="${qrCount == 2 and #strings.isEmpty(#strings.trim(theme.config.post.reward_code)) ? 'two' : ''}"
+  th:with={`qrCount = \${${QRCODES.map((qr) => `(#strings.isEmpty(theme.config.share.${qr.key}) ? 0 : 1)`).join(" + ")}}`}
+  th:classappend="${qrCount == 2 and #strings.isEmpty(#strings.trim(theme.config.share.donate_html)) ? 'two' : ''}"
 >
   {QRCODES.map((qr) => (
-    <li th:if={`\${not #strings.isEmpty(theme.config.post.${qr.key})}`}>
+    <li th:if={`\${not #strings.isEmpty(theme.config.share.${qr.key})}`}>
       <p>{qr.label}</p>
       <img
-        th:src={`\${theme.config.post.${qr.key}}`}
+        th:src={`\${theme.config.share.${qr.key}}`}
         alt={qr.alt}
         loading="lazy"
         data-fallback="image"
@@ -25,7 +25,7 @@ const QRCODES = [
     </li>
   ))}
   <li
-    th:if="${not #strings.isEmpty(#strings.trim(theme.config.post.reward_code))}"
-    th:utext="${theme.config.post.reward_code}"
+    th:if="${not #strings.isEmpty(#strings.trim(theme.config.share.donate_html))}"
+    th:utext="${theme.config.share.donate_html}"
   ></li>
 </ol>

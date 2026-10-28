@@ -12,26 +12,26 @@ interface Props {
 
 const { reveal = false } = Astro.props;
 const COVER =
-  "post.spec.cover ?: (#strings.isEmpty(theme.config.home.post_thumbnail) ? (theme.config.basic.enable_random_img_api and not #strings.isEmpty(theme.config.basic.random_img_api_url) ? theme.config.basic.random_img_api_url + '?pageid=' + post.metadata.name : '') : theme.config.home.post_thumbnail)";
+  "post.spec.cover ?: (#strings.isEmpty(theme.config.home.default_thumbnail) ? (theme.config.home.random_thumbnail and not #strings.isEmpty(theme.config.home.random_thumbnail_api) ? theme.config.home.random_thumbnail_api + '?pageid=' + post.metadata.name : '') : theme.config.home.default_thumbnail)";
 ---
 
 <li
   class="joe_list__item default"
   th:classappend={
     reveal
-      ? "${theme.config.home.enable_index_list_effect ? 'joe-reveal' : ''}"
+      ? "${theme.config.home.list_animation ? 'joe-reveal' : ''}"
       : undefined
   }
   th:attr={
     reveal
-      ? "data-reveal=${theme.config.home.index_list_effect_class}"
+      ? "data-reveal=${theme.config.home.list_animation_name}"
       : undefined
   }
   th:style={reveal ? "|animation-delay: ${iter.index * 0.1}s|" : undefined}
   th:with={`cover = \${${COVER}}`}
 >
   <a
-    th:if="${theme.config.home.enable_post_thumbnail and not #strings.isEmpty(cover)}"
+    th:if="${theme.config.home.thumbnail and not #strings.isEmpty(cover)}"
     th:href="@{${post.status.permalink}}"
     class="thumbnail"
     th:title="${post.spec.title}"

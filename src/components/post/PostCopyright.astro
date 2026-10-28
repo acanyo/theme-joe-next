@@ -32,12 +32,12 @@ const SITE =
       <span>许可协议：</span>
       <span
         class="text"
-        th:if="${not #strings.isEmpty(theme.config.post.passage_rights_content)}"
-        th:text="${theme.config.post.passage_rights_content}"
+        th:if="${not #strings.isEmpty(theme.config.post.license)}"
+        th:text="${theme.config.post.license}"
       ></span>
       <span
         class="text"
-        th:if="${#strings.isEmpty(theme.config.post.passage_rights_content)}"
+        th:if="${#strings.isEmpty(theme.config.post.license)}"
       >
         本文使用《
         <a

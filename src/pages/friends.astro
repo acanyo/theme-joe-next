@@ -6,18 +6,18 @@ import "../styles/pages/friends.css";
 ---
 
 <BaseLayout
-  title="(theme.config.friends.friends_title ?: '朋友圈') + ' - ' + site.title"
+  title="(theme.config.links.feed_title ?: '朋友圈') + ' - ' + site.title"
   pageClass="page-friends"
 >
   <div class="joe_main">
     <div class="joe_detail">
       <h1
         class="joe_detail__title txt-shadow"
-        th:text="${theme.config.friends.friends_title ?: '朋友圈'}"
+        th:text="${theme.config.links.feed_title ?: '朋友圈'}"
       ></h1>
       <a
         class="joe_friend_add"
-        th:if="${theme.config.friends.enable_friend_add}"
+        th:if="${theme.config.links.feed_subscribe}"
         sec:authorize="isAuthenticated()"
         th:href="@{/console/friends}"
         target="_blank"
@@ -31,8 +31,8 @@ import "../styles/pages/friends.css";
           class="joe_friend__item"
           th:each="item : ${friends.items}"
           th:with="spec = ${item.spec}"
-          th:classappend="${theme.config.friends.enable_friend_effect ? 'joe-reveal' : ''}"
-          th:attr="data-reveal=${theme.config.friends.friend_list_effect_class}"
+          th:classappend="${theme.config.links.feed_animation ? 'joe-reveal' : ''}"
+          th:attr="data-reveal=${theme.config.links.feed_animation_name}"
         >
           <p class="joe_friend_info">
             <img
@@ -79,7 +79,7 @@ import "../styles/pages/friends.css";
       <Pagination result="friends" />
     </div>
   </div>
-  <th-block th:if="${theme.config.aside.enable_friends_aside}">
+  <th-block th:if="${theme.config.aside.on_friends}">
     <Aside />
   </th-block>
 </BaseLayout>

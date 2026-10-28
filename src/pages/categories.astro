@@ -7,14 +7,14 @@ import "../styles/pages/index.css";
 
 <BaseLayout
   bigBanner="normal"
-  heading="(theme.config.categories.categories_title ?: '全部分类')"
-  title="(theme.config.categories.categories_title ?: '全部分类') + ' - ' + site.title"
+  heading="(theme.config.pages.categories_title ?: '全部分类')"
+  title="(theme.config.pages.categories_title ?: '全部分类') + ' - ' + site.title"
   pageClass="page-categories"
 >
   <div class="joe_main">
     <TermGrid kind="categories" />
   </div>
-  <th-block th:if="${theme.config.aside.enable_categories_aside}">
+  <th-block th:if="${theme.config.aside.on_categories}">
     <Aside />
   </th-block>
 </BaseLayout>

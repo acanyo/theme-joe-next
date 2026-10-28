@@ -27,7 +27,7 @@ const editOwner =
     <button
       type="button"
       class="joe_action_item random"
-      th:if="${theme.config.links.enable_links_random}"
+      th:if="${theme.config.links.random}"
       aria-label="随机访问友链"
     >
       <svg
@@ -46,7 +46,7 @@ const editOwner =
     <button
       type="button"
       class="joe_action_item toc"
-      th:if="${theme.config.post.enable_mobile_toc}"
+      th:if="${theme.config.post.toc_mobile}"
       aria-label="文章目录"
     >
       <i class="jiewen joe-icon-mulu" aria-hidden="true" />
@@ -55,7 +55,7 @@ const editOwner =
   {editKind && (
     <div
       class="joe_action_item edit"
-      th:if={`\${theme.config.post.enable_edit and #authentication.name == ${editOwner}}`}
+      th:if={`\${theme.config.post.edit_button and #authentication.name == ${editOwner}}`}
       sec:authorize="isAuthenticated()"
     >
       <a th:href={editHref} target="_blank" aria-label="编辑">
@@ -74,7 +74,7 @@ const editOwner =
   <button
     type="button"
     class="joe_action_item mode"
-    th:if="${theme.config.basic.theme_mode == 'user'}"
+    th:if="${theme.config.general.color_mode == 'user'}"
     aria-label="切换明暗模式"
   >
     <svg
@@ -100,7 +100,7 @@ const editOwner =
   <button
     type="button"
     class="joe_action_item back2top"
-    th:if="${theme.config.theme.enable_back2top}"
+    th:if="${theme.config.general.back_to_top}"
     aria-label="返回顶部"
   >
     <svg viewBox="0 0 1024 1024" width="25" height="25" aria-hidden="true">

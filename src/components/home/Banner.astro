@@ -3,23 +3,23 @@
 import BannerSlide from "./BannerSlide.astro";
 
 const RANDOM_COVER = (key: string) =>
-  `(#strings.isEmpty(theme.config.home.post_thumbnail) ? (theme.config.basic.enable_random_img_api and not #strings.isEmpty(theme.config.basic.random_img_api_url) ? theme.config.basic.random_img_api_url + '?pageid=' + ${key} : '') : theme.config.home.post_thumbnail)`;
+  `(#strings.isEmpty(theme.config.home.default_thumbnail) ? (theme.config.home.random_thumbnail and not #strings.isEmpty(theme.config.home.random_thumbnail_api) ? theme.config.home.random_thumbnail_api + '?pageid=' + ${key} : '') : theme.config.home.default_thumbnail)`;
 const POST_VARS =
   "cover = ${slidePost.spec.cover ?: " +
   RANDOM_COVER("slidePost.metadata.name") +
   "}, title = ${slidePost.spec.title}, excerpt = ${slidePost.status.excerpt}, href = ${slidePost.status.permalink}";
 const HOT_QUERY =
-  "postFinder.list({page: 1, size: #conversions.convert(slide.hot_post_num ?: 3, 'java.lang.Integer'), sort: {'stats.visit,desc'}}).items";
+  "postFinder.list({page: 1, size: #conversions.convert(slide.popular_count ?: 3, 'java.lang.Integer'), sort: {'stats.visit,desc'}}).items";
 ---
 
 <div class="joe_index__banner">
   <div class="swiper" data-joe-banner>
     <div class="swiper-wrapper">
-      <th-block th:each="slide : ${theme.config.carousel.banner_data_group}">
-        <th-block th:switch="${slide.banner_section_type}">
+      <th-block th:each="slide : ${theme.config.carousel.slides}">
+        <th-block th:switch="${slide.source}">
           <th-block
             th:case="'post'"
-            th:with="slidePost = ${postFinder.getByName(slide.data_by_post)}"
+            th:with="slidePost = ${postFinder.getByName(slide.post)}"
           >
             <div
               class="swiper-slide"
@@ -29,7 +29,7 @@ const HOT_QUERY =
               <BannerSlide />
             </div>
           </th-block>
-          <th-block th:case="'hot_post'">
+          <th-block th:case="'popular'">
             <div
               class="swiper-slide"
               th:each={`slidePost : \${${HOT_QUERY}}`}
@@ -40,14 +40,14 @@ const HOT_QUERY =
           </th-block>
           <th-block
             th:case="'custom'"
-            th:with="custom = ${slide.data_by_custom}"
+            th:with="custom = ${slide.custom}"
           >
             <div
               class="swiper-slide"
               th:with={
-                "cover = ${custom?.banner_img ?: " +
-                RANDOM_COVER("custom?.banner_title") +
-                "}, title = ${custom?.banner_title}, excerpt = ${custom?.banner_subtitle}, href = ${custom?.banner_url}"
+                "cover = ${custom?.image ?: " +
+                RANDOM_COVER("custom?.title") +
+                "}, title = ${custom?.title}, excerpt = ${custom?.subtitle}, href = ${custom?.url}"
               }
             >
               <BannerSlide />
@@ -58,9 +58,9 @@ const HOT_QUERY =
     </div>
     <div
       class="swiper-pagination"
-      th:if="${theme.config.carousel.enable_banner_pagination}"
+      th:if="${theme.config.carousel.dots}"
     ></div>
-    <th-block th:if="${theme.config.carousel.enable_banner_handle and theme.config.carousel.enable_banner_switch_button}">
+    <th-block th:if="${theme.config.carousel.draggable and theme.config.carousel.arrows}">
       <button
         type="button"
         class="swiper-button-next"

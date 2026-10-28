@@ -14,23 +14,21 @@ const CONFIG = {
   tag: {
     title: "标签云",
     id: "tags-cloud",
-    data: "widget.aside_tag_cloud",
-    prefix: "tag_cloud",
+    data: "widget.tags",
     more: "/tags",
     list: "tagFinder",
   },
   category: {
     title: "分类云",
     id: "categories-cloud",
-    data: "widget.aside_category_cloud",
-    prefix: "category_cloud",
+    data: "widget.categories",
     more: "/categories",
     list: "categoryFinder",
   },
 }[kind];
 
-const opts = (key: string) => `${CONFIG.data}?.${CONFIG.prefix}_${key}`;
-const items = `${opts("num_type")} == 'all' ? ${CONFIG.list}.listAll() : ${CONFIG.list}.list(1, #conversions.convert(${opts("num")} ?: 15, 'java.lang.Integer')).items`;
+const opts = (key: string) => `${CONFIG.data}?.${key}`;
+const items = `${opts("limit")} == 'all' ? ${CONFIG.list}.listAll() : ${CONFIG.list}.list(1, #conversions.convert(${opts("count")} ?: 15, 'java.lang.Integer')).items`;
 ---
 
 <AsideCard
@@ -42,7 +40,7 @@ const items = `${opts("num_type")} == 'all' ? ${CONFIG.list}.listAll() : ${CONFI
 >
   <div
     class="joe_aside__item-contain"
-    th:with={`cloudIs3d = \${${opts("type")} == '3d'}`}
+    th:with={`cloudIs3d = \${${opts("style")} == '3d'}`}
   >
     <div
       class:list={[`${kind === "tag" ? "tags" : "categories"}-cloud-list`]}

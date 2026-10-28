@@ -13,7 +13,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
       width="100%"
       height="150"
       class="joe_header__slideout-image"
-      th:src="${theme.config.blogger.author_bg ?: #theme.assets('/images/author_bg.jpg')}"
+      th:src="${theme.config.blogger.cover ?: #theme.assets('/images/author_bg.jpg')}"
       alt=""
       data-fallback="image"
     />
@@ -23,7 +23,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
         height="50"
         class="avatar"
         loading="lazy"
-        th:src="${theme.config.blogger.avatar ?: theme.config.blogger.default_avatar}"
+        th:src="${theme.config.blogger.avatar ?: theme.config.blogger.fallback_avatar}"
         alt="博主头像"
         th:attr={`data-text-avatar=${el(BLOGGER_NAME)}`}
         data-fallback="avatar"
@@ -32,7 +32,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
         <a class="link" th:href="${site.url}">
           <span th:text={el(BLOGGER_NAME)}></span>
           <img
-            th:if="${theme.config.blogger.enable_blogger_level}"
+            th:if="${theme.config.blogger.level}"
             class="level"
             th:src="@{/assets/images/level_1.svg}"
             alt="博主等级"
@@ -42,7 +42,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
       </div>
     </div>
 
-    <th-block th:if="${theme.config.blogger.enable_mobile_social}">
+    <th-block th:if="${theme.config.blogger.social_mobile}">
       <SocialLinks />
     </th-block>
 

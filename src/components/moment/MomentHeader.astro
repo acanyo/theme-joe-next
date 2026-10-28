@@ -19,11 +19,11 @@ const LINK =
 
 <h1
   class="joe_detail__title txt-shadow"
-  th:text="${theme.config.journals.journals_title ?: '我的动态'}"
+  th:text="${theme.config.moments.title ?: '我的动态'}"
 ></h1>
 <a
   class="joe_journal_add"
-  th:if="${theme.config.journals.enable_journal_add}"
+  th:if="${theme.config.moments.compose_button}"
   sec:authorize="isAuthenticated()"
   th:href="@{/console/moments}"
   target="_blank"

@@ -11,28 +11,28 @@ import "../styles/pages/journals.css";
 <BaseLayout
   pageScript="links"
   bigBanner="normal"
-  heading="(theme.config.links.links_title ?: '友情链接')"
-  title="(theme.config.links.links_title ?: '友情链接') + ' - ' + site.title"
+  heading="(theme.config.links.title ?: '友情链接')"
+  title="(theme.config.links.title ?: '友情链接') + ' - ' + site.title"
   pageClass="page-journals page-links"
 >
   <div class="joe_main">
     <div class="joe_detail">
       <h1
         class="joe_detail__title txt-shadow"
-        th:text="${theme.config.links.links_title ?: '友情链接'}"
+        th:text="${theme.config.links.title ?: '友情链接'}"
       ></h1>
       <article class="joe_detail__article animated fadeIn">
         <LinkGroups groups="groups" />
         <div
           class="links-article"
-          th:if="${not #strings.isEmpty(theme.config.links.links_article)}"
-          th:utext="${theme.config.links.links_article}"
+          th:if="${not #strings.isEmpty(theme.config.links.footer_html)}"
+          th:utext="${theme.config.links.footer_html}"
         ></div>
       </article>
     </div>
     <div
       class="joe_comment"
-      th:if={`\${theme.config.links.enable_links_comment and !theme.config.other.enable_clean_mode and (${COMMENT_ENABLED})}`}
+      th:if={`\${theme.config.links.comments and !theme.config.advanced.clean_mode and (${COMMENT_ENABLED})}`}
     >
       <div class="joe_comment_box">
         <div class="box_title">
@@ -47,7 +47,7 @@ import "../styles/pages/journals.css";
       </div>
     </div>
   </div>
-  <th-block th:if="${theme.config.aside.enable_links_aside}">
+  <th-block th:if="${theme.config.aside.on_links}">
     <Aside />
   </th-block>
   <Actions slot="actions" randomLink />

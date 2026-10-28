@@ -4,13 +4,13 @@ import Aside from "../components/aside/Aside.astro";
 import Pagination from "../components/list/Pagination.astro";
 import "../styles/pages/archives.css";
 
-const TITLE = "theme.config.archives.archives_title ?: '文章归档'";
+const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
 ---
 
 <BaseLayout
   pageScript="archives"
   bigBanner="normal"
-  heading="(theme.config.archives.archives_title ?: '文章归档')"
+  heading="(theme.config.pages.archives_title ?: '文章归档')"
   title={`(${TITLE}) + ' - ' + site.title`}
   pageClass="page-archives"
 >
@@ -20,7 +20,7 @@ const TITLE = "theme.config.archives.archives_title ?: '文章归档'";
       <div class="content">
         <div
           class="joe_archives__category animated fadeIn"
-          th:if="${theme.config.archives.enable_archives_category}"
+          th:if="${theme.config.pages.archives_categories}"
         >
           <div class="joe_archives-title">
             <i class="joe-font joe-icon-fenlei" aria-hidden="true"></i>分类
@@ -41,16 +41,16 @@ const TITLE = "theme.config.archives.archives_title ?: '文章归档'";
 
         <div
           class="joe_archives__wrapper animated fadeIn"
-          th:with="byMonth = ${theme.config.archives.archives_timeline_metric != 'year'}"
+          th:with="byMonth = ${theme.config.pages.archives_group_by != 'year'}"
         >
-          <th-block th:if="${theme.config.archives.archives_list_type == 'list'}">
+          <th-block th:if="${theme.config.pages.archives_style == 'list'}">
             <div class="joe_archives-title">
               <i class="jiewen joe-icon-riqi" aria-hidden="true"></i>列表
             </div>
             <p
               class="joe_archives__empty"
               th:if="${#lists.isEmpty(archives.items)}"
-              th:text="${theme.config.archives.archives_empty_text ?: '暂无文章数据'}"
+              th:text="${theme.config.pages.archives_empty ?: '暂无文章数据'}"
             ></p>
             <ul class="joe_archives-list">
               <th-block th:each="archive : ${archives.items}">
@@ -69,7 +69,7 @@ const TITLE = "theme.config.archives.archives_title ?: '文章归档'";
             <Pagination result="archives" />
           </th-block>
 
-          <th-block th:unless="${theme.config.archives.archives_list_type == 'list'}">
+          <th-block th:unless="${theme.config.pages.archives_style == 'list'}">
             <div class="joe_archives-title">
               <i class="joe-font joe-icon-timeline" aria-hidden="true"></i>
               时间轴<em th:text="${byMonth ? '（月）' : '（年）'}"></em>
@@ -130,7 +130,7 @@ const TITLE = "theme.config.archives.archives_title ?: '文章归档'";
       </div>
     </div>
   </div>
-  <th-block th:if="${theme.config.aside.enable_archives_aside}">
+  <th-block th:if="${theme.config.aside.on_archives}">
     <Aside />
   </th-block>
 </BaseLayout>

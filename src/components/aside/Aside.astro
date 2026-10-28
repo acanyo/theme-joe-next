@@ -1,6 +1,6 @@
 ---
 /**
- * 侧栏容器：按设置 `aside.enable_outpost_aside` 的顺序渲染组件。
+ * 侧栏容器：按设置 `aside.widgets` 的顺序渲染组件。
  * 页面级开关（如 aside.enable_tags_aside）由各页面自行判断。
  */
 import BloggerCard from "../blogger/BloggerCard.astro";
@@ -12,48 +12,48 @@ import MusicWidget from "./MusicWidget.astro";
 
 <aside
   class="joe_aside"
-  th:classappend="${theme.config.aside.aside_position == 'left' ? 'pos_left' : ''}"
+  th:classappend="${theme.config.aside.position == 'left' ? 'pos_left' : ''}"
 >
   <slot name="top" />
-  <th-block th:each="widget : ${theme.config.aside.enable_outpost_aside}">
-    <th-block th:switch="${widget.template_aside}">
-      <th-block th:case="'enable_blogger'">
+  <th-block th:each="widget : ${theme.config.aside.widgets}">
+    <th-block th:switch="${widget.type}">
+      <th-block th:case="'blogger'">
         <BloggerCard />
       </th-block>
-      <th-block th:case="'enable_notice'">
+      <th-block th:case="'notice'">
         <SimpleWidget type="notice" />
       </th-block>
-      <th-block th:case="'enable_reward'">
+      <th-block th:case="'donate'">
         <SimpleWidget type="reward" />
       </th-block>
-      <th-block th:case="'enable_picture'">
+      <th-block th:case="'image'">
         <SimpleWidget type="picture" />
       </th-block>
-      <th-block th:case="'enable_music_player'">
+      <th-block th:case="'music'">
         <MusicWidget />
       </th-block>
-      <th-block th:case="'enable_newest_post'">
+      <th-block th:case="'latest'">
         <PostListWidget kind="newest" />
       </th-block>
-      <th-block th:case="'enable_hot_post'">
+      <th-block th:case="'popular'">
         <PostListWidget kind="hot" />
       </th-block>
-      <th-block th:case="'enable_lifetime'">
+      <th-block th:case="'life'">
         <SimpleWidget type="lifetime" />
       </th-block>
-      <th-block th:case="'show_newreply'">
+      <th-block th:case="'comments'">
         <SimpleWidget type="newreply" />
       </th-block>
-      <th-block th:case="'enable_tag_cloud'">
+      <th-block th:case="'tags'">
         <CloudWidget kind="tag" />
       </th-block>
-      <th-block th:case="'enable_category_cloud'">
+      <th-block th:case="'categories'">
         <CloudWidget kind="category" />
       </th-block>
-      <th-block th:case="'enable_ads_aside'">
+      <th-block th:case="'ad'">
         <SimpleWidget type="ads" />
       </th-block>
-      <th-block th:case="'enable_custom'">
+      <th-block th:case="'custom'">
         <SimpleWidget type="custom" />
       </th-block>
     </th-block>

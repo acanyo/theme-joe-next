@@ -54,15 +54,15 @@ import "../styles/pages/post.css";
     <CommentSection subject="post" kind="Post" />
   </div>
 
-  <th-block th:if="${theme.config.aside.enable_post_aside and #annotations.getOrDefault(post, 'enable_aside', 'true') == 'true'}">
+  <th-block th:if="${theme.config.aside.on_post and #annotations.getOrDefault(post, 'enable_aside', 'true') == 'true'}">
     <PostAside />
   </th-block>
 
   <div
     slot="before"
     class="joe_progress_bar"
-    th:if="${theme.config.post.enable_progress_bar}"
-    th:style="|background: ${theme.config.post.progress_bar_bgc ?: 'var(--theme)'}|"
+    th:if="${theme.config.post.progress}"
+    th:style="|background: ${theme.config.post.progress_color ?: 'var(--theme)'}|"
   ></div>
   <Actions slot="actions" editKind="post" toc />
 </BaseLayout>

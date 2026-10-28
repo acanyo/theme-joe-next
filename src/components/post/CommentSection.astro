@@ -15,7 +15,7 @@ interface Props {
 const { subject, kind, group = "content.halo.run" } = Astro.props;
 const enabledForSubject = `#annotations.getOrDefault(${subject}, 'enable_comment', 'true') == 'true'`;
 const enabledGlobally =
-  "!theme.config.other.enable_clean_mode and theme.config.post.enable_comment";
+  "!theme.config.advanced.clean_mode and theme.config.post.comments";
 ---
 
 <div class="joe_comment" th:if={el(COMMENT_ENABLED)}>

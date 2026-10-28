@@ -1,6 +1,6 @@
 # Joe Next
 
-基于 [Joe3](https://github.com/jiewenhuang/halo-theme-joe3.0) 重构的 [Halo](https://www.halo.run/) 2 主题。保留 Joe3 的视觉风格与设置项，前端代码使用 Astro + TypeScript 重写，不再依赖 jQuery 和手动拷贝的第三方库。
+基于 [Joe3](https://github.com/jiewenhuang/halo-theme-joe3.0) 重构的 [Halo](https://www.halo.run/) 2 主题。保留 Joe3 的视觉风格与功能，前端代码使用 Astro + TypeScript 重写，不再依赖 jQuery 和手动拷贝的第三方库。
 
 > 本主题由 Joe3 衍生，已获得原作者授权。Joe3 的前身为 qinhua 的 halo-theme-joe2.0。
 
@@ -64,7 +64,9 @@ integrations/           Astro 构建后处理
 
 **命名空间标签。** Astro 7 编译器不支持 `<th:block>`、`<halo:comment>`，源码中写作 `<th-block>`、`<halo-comment>`、`<halo-footer>`，构建后由 `integrations/thymeleaf-tags.ts` 还原。
 
-**布尔设置项。** 未保存过的设置值为 `null`，直接参与 `and` / `or` / `!` 会抛出异常。构建后处理会把 `src/config/boolean-settings.ts` 中列出的设置项改写为 `(x == true)`。在 `settings.yaml` 新增布尔字段时，需要同步更新该列表。
+**布尔设置项。** 未保存过的设置值为 `null`，直接参与 `and` / `or` / `!` 会抛出异常。构建后处理会把 `src/config/boolean-settings.ts` 中列出的设置项改写为 `(x == true)`。在 `settings.yaml` 新增布尔字段时，需要同步更新该列表，`pnpm test` 会校验两者一致。
+
+**设置项命名。** 键名一律 snake_case，不带 `enable_` / `show_` 前缀，也不重复分组名（`links.title` 而非 `links.links_title`）。模板中引用的每个 `theme.config.*` 都必须在 `settings.yaml` 中存在，同样由 `pnpm test` 校验。
 
 **避免 `__` 出现在表达式中。** Thymeleaf 把 `__x__` 视为预处理语法，BEM 类名（如 `joe_index__hot`）只能写在静态 `class` 中。
 
@@ -92,7 +94,7 @@ integrations/           Astro 构建后处理
 - **图标字体与资源本地化：** iconfont 不再依赖 at.alicdn.com，Font Awesome 已移除（Joe3 中未实际使用）。
 - **评论：** 只使用 Halo 评论扩展点（评论组件插件），不再内置 Waline。
 - **已移除：** 天气组件、百度收录检测、PDF 短代码，以及 Joe3 中未被引用的库和模板（halo-comment、KaTeX、jquery-ui 等）。视频短代码改用原生 `<video>` + hls.js，不再使用 DPlayer 的 iframe 页面。
-- **设置项：** 保持与 Joe3 相同的键名，便于迁移；删除了已不再生效的设置（预载图、外部资源地址、旧版自定义 CSS/JS、Waline 等）。
+- **设置项：** 重新整理为 18 个分组，统一键名与说明文字，**与 Joe3 及 Joe Next 0.1 之前的配置不兼容**，升级后需要在后台重新设置。已删除不再生效的设置（预载图、外部资源地址、旧版自定义 CSS/JS、Waline 等）。
 - **修复：** 分类/标签/作者页分页地址、年度时间轴重复、作者页标题、`page_links` 在未安装链接插件时报错等 Joe3 遗留问题。
 
 ## 许可证

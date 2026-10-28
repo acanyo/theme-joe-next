@@ -28,7 +28,7 @@ const {
 >
   {withIcon && (
     <i
-      th:if="${theme.config.navbar.enable_navbar_icon}"
+      th:if="${theme.config.navbar.icons}"
       th:class={`|m-icon \${#annotations.getOrDefault(${item}, 'icon', 'jiewen joe-icon-zuzhijiagou')}|`}
     />
   )}

@@ -10,12 +10,12 @@ const { kind } = Astro.props;
 const SOURCES = {
   newest: {
     title: "最新文章",
-    size: "theme.config.aside.set_newest_post_num",
+    size: "theme.config.aside.latest_count",
     sort: "'spec.publishTime,desc'",
   },
   hot: {
     title: "热门文章",
-    size: "theme.config.aside.set_hot_post_num",
+    size: "theme.config.aside.popular_count",
     sort: "'stats.visit,desc'",
   },
 };

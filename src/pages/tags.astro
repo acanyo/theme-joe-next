@@ -7,14 +7,14 @@ import "../styles/pages/index.css";
 
 <BaseLayout
   bigBanner="normal"
-  heading="(theme.config.tags.tags_title ?: '全部标签')"
-  title="(theme.config.tags.tags_title ?: '全部标签') + ' - ' + site.title"
+  heading="(theme.config.pages.tags_title ?: '全部标签')"
+  title="(theme.config.pages.tags_title ?: '全部标签') + ' - ' + site.title"
   pageClass="page-tags"
 >
   <div class="joe_main">
     <TermGrid kind="tags" />
   </div>
-  <th-block th:if="${theme.config.aside.enable_tags_aside}">
+  <th-block th:if="${theme.config.aside.on_tags}">
     <Aside />
   </th-block>
 </BaseLayout>

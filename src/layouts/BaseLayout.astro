@@ -46,7 +46,7 @@ const {
 <!doctype html>
 <html
   th:lang="${#locale.toLanguageTag}"
-  th:attr="data-transition=${theme.config.theme.page_transition ?: 'native'}"
+  th:attr="data-transition=${theme.config.effects.page_transition ?: 'native'}"
 >
   <head>
     <Head title={title}>
@@ -58,7 +58,7 @@ const {
       <Navbar />
       <div id="swup" class="joe_swup" data-joe-script={pageScript}>
         {bigBanner && (
-          <th-block th:if="${theme.config.beauty.enable_big_banner}">
+          <th-block th:if="${theme.config.hero.enabled}">
             <BigBanner
               fullscreen={bigBanner === "fullscreen"}
               title={heading}
@@ -69,7 +69,7 @@ const {
         {container ? (
           <div
             class:list={["joe_container joe_main_container", pageClass]}
-            th:classappend="|${theme.config.theme.enable_show_in_up ? 'animated showInUp' : ''} ${theme.config.aside.aside_position == 'left' ? 'revert' : ''}|"
+            th:classappend="|${theme.config.effects.reveal ? 'animated showInUp' : ''} ${theme.config.aside.position == 'left' ? 'revert' : ''}|"
           >
             <slot />
           </div>

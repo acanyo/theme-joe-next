@@ -28,7 +28,7 @@ import "../styles/pages/journals.css";
     </div>
     <CommentSection subject="singlePage" kind="SinglePage" />
   </div>
-  <th-block th:if="${theme.config.aside.enable_links_aside}">
+  <th-block th:if="${theme.config.aside.on_links}">
     <Aside />
   </th-block>
   <Actions slot="actions" randomLink editKind="page" />
