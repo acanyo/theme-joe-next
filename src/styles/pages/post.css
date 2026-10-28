@@ -97,27 +97,26 @@
   transition: top var(--dur-slow) var(--ease-spring);
 }
 
-/* 目录：玻璃面板，当前章节用主题色滑条标出 */
 .toc-container {
+  display: none;
   min-height: 90px;
   margin-bottom: 15px;
   overflow: hidden;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  background: var(--bg-page);
   border-radius: var(--radius-wrap);
-  box-shadow: var(--glass-shadow);
+  box-shadow: var(--shadow);
+  transition: top 0.3s;
 
   .toc-header {
     position: relative;
     z-index: 1;
-    height: 46px;
-    line-height: 46px;
-    padding: 0 16px;
-    font-weight: 600;
-    font-size: 15px;
-    color: var(--text-title);
-    border-bottom: 1px solid var(--glass-border);
+    height: 45px;
+    line-height: 45px;
+    padding: 0 10px;
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--theme);
+    border-bottom: 1px solid var(--border-lighter);
 
     i {
       position: relative;
@@ -143,12 +142,11 @@
       &::after {
         position: absolute;
         content: "";
-        left: 17px;
-        top: 12px;
-        bottom: 20px;
+        left: 16px;
+        top: 0;
+        bottom: 0;
         width: 2px;
-        border-radius: 1px;
-        background: var(--glass-border);
+        background: var(--border-light);
       }
 
       li {
@@ -156,31 +154,31 @@
       }
 
       & > li > a {
-        font-weight: 600;
+        font-weight: bold;
 
         &::before {
           position: absolute;
           display: block;
           content: "";
-          left: -21px;
-          top: 2px;
+          left: -25px;
+          top: 4px;
           z-index: 1;
-          width: 4px;
-          height: 1.2em;
-          border-radius: 2px;
-          background: transparent;
-          scale: 1 0.4;
-          transition:
-            background var(--dur-base) var(--ease-out),
-            scale var(--dur-slow) var(--ease-spring);
+          width: 8px;
+          height: 8px;
+          background: var(--bg-page);
+          border: 2px solid var(--border-light);
+          box-shadow: 0 0 0 2px var(--bg-page);
+          border-radius: 50%;
         }
 
         &.is-active-link {
+          font-weight: 700;
           color: var(--theme);
+          border-color: var(--toc-active);
 
           &::before {
             background: var(--theme);
-            scale: 1;
+            box-shadow: 0 0 0 1px var(--theme);
           }
         }
       }
@@ -206,13 +204,9 @@
   .toc-link {
     height: 100%;
     color: var(--text-regular);
-    transition: color var(--dur-base) var(--ease-out);
-
-    &:hover {
-      color: var(--text-title);
-    }
 
     &.is-active-link {
+      font-weight: 700;
       color: var(--theme);
     }
   }
@@ -227,8 +221,9 @@
   }
 
   .is-collapsible {
+    /* max-height: 1000px;*/
     overflow: hidden;
-    transition: max-height var(--dur-slow) var(--ease-out);
+    transition: all 300ms ease-in-out;
   }
 
   .is-collapsed {
@@ -260,8 +255,7 @@
 /* 评论区 GIF 位置及大小调整*/
 
 /* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
-/* 窄屏使用移动端目录抽屉；侧栏面板里不再重复显示 */
-@media (max-width: 1200px) {
+@media (max-width: 992px) {
   html .toc-container {
     display: none;
   }

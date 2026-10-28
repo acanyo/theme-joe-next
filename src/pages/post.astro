@@ -62,7 +62,7 @@ import "../styles/pages/post.css";
     slot="before"
     class="joe_progress_bar"
     th:if="${theme.config.post.progress}"
-    th:style="${#strings.isEmpty(theme.config.post.progress_color) ? '' : 'background: ' + theme.config.post.progress_color}"
+    th:style="|background: ${theme.config.post.progress_color ?: 'var(--theme)'}|"
   ></div>
   <Actions slot="actions" editKind="post" toc />
 </BaseLayout>

@@ -1,20 +1,13 @@
 /* 文章左侧悬浮操作栏（点赞、评论、分享、打赏）。*/
 /* 宽屏下文章左侧有足够空间时显示，否则由正文下方的操作区替代（见 scripts/content/aside-operate.ts）。*/
 /* 内部按钮使用 <button>，重置浏览器默认样式。*/
-/* 一根竖向的玻璃胶囊，按钮之间不再各自带阴影 */
 .aside_operations {
   display: none;
   position: fixed;
   top: 250px;
-  margin-left: -76px;
+  margin-left: -70px;
   z-index: 10;
-  padding: 6px;
   user-select: none;
-  border-radius: var(--radius-pill);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
 
   > li {
     position: relative;
@@ -22,23 +15,13 @@
     width: 44px;
     height: 44px;
     line-height: 44px;
-    margin-bottom: 4px;
+    margin-bottom: 14px;
     user-select: none;
     text-align: center;
     color: var(--text-regular);
+    background: var(--bg-page);
+    box-shadow: var(--shadow);
     border-radius: 50%;
-    transition:
-      color var(--dur-base) var(--ease-out),
-      background var(--dur-base) var(--ease-out),
-      scale var(--dur-base) var(--ease-spring);
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    &:active {
-      scale: 0.9;
-    }
 
     i {
       display: block;
@@ -67,7 +50,6 @@
 
     &:hover {
       color: var(--theme);
-      background: color-mix(in srgb, var(--theme) 10%, transparent);
 
       .joe-icon-dianzan,
       .joe-icon-huifu,

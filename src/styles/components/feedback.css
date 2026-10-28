@@ -1,16 +1,11 @@
-/* 阅读进度：一条贴在页面底部的细光带，宽度由 scaleX 驱动（不触发重排）*/
 .joe_progress_bar {
   position: fixed;
   z-index: 80;
-  left: 0;
-  right: 0;
+  width: 0;
+  height: 4px;
   bottom: 0;
-  height: 3px;
-  border-radius: 0 3px 3px 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--theme) 50%, #7dd3fc), var(--theme));
-  box-shadow: 0 0 12px color-mix(in srgb, var(--theme) 60%, transparent);
-  transform-origin: left center;
-  scale: var(--read, 0) 1;
+  left: 0;
+  background: linear-gradient(45deg, #3884d9 50%, #40d968);
 }
 
 .joe_loading {
