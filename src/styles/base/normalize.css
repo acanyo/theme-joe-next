@@ -2,13 +2,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  outline: none;
   -webkit-tap-highlight-color: transparent;
 }
 
 html {
-  /* font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",*/
-  /*   "Microsoft YaHei", "微软雅黑", Arial, sans-serif;*/
+  font-family: var(--font-default);
+  --halo-comment-widget-base-font-family: var(--font-default);
+  --halo-search-widget-base-font-family: var(--font-default);
+  text-size-adjust: 100%;
   &.disable-scroll {
     height: 100vh;
     overflow: hidden;
@@ -22,6 +23,8 @@ html {
 
 body {
   font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding-bottom: constant(safe-area-inset-bottom);

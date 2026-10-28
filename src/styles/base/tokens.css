@@ -1,16 +1,16 @@
 /* 全局 CSS 变量。断点：500 / 768 / 992 / 1200 / 1360px（见 README「样式」）*/
 html {
   --font-default:
-    "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", "微软雅黑", Arial, "sans-serif";
+    "Joe Font", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   /* --theme: #fb6c28; */
   --bg-inverse: #000;
   --bg-page: #fff;
   --bg-muted: #f5f5f5;
   --bg-raised: #fff;
   --bg-glass: rgba(255, 255, 255, 0.65);
-  --text-primary: #303133;
-  --text-regular: #606266;
+  --text-primary: #1f2329;
+  --text-regular: #474c54;
   --text-title: #333;
   --bg-hover: #f2f6fc;
   --text-secondary: #6d7076; /* Joe3: #909399（调整至 WCAG AA 对比度）*/
@@ -30,10 +30,11 @@ html {
   --code-background: #e8f3ff;
   --overdue-border: #ffbb76;
   --overdue-background: #fffcef;
-  --radius-wrap: 8px;
-  --radius-inner: 4px;
-  --radius-img: 5px;
-  --shadow: 0 0px 10px -5px #949494;
+  --radius-wrap: 12px;
+  --radius-inner: 6px;
+  --radius-img: 8px;
+  --shadow:
+    0 1px 2px rgb(15 23 42 / 4%), 0 8px 24px -12px rgb(15 23 42 / 16%);
   --text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-code: #bdbdbd;
   --shadow-block: 1px 2px 10px 0 #afafaf;
@@ -61,20 +62,20 @@ html {
   &[data-mode="dark"] {
     /* --theme: #9999ff; */
     --bg-inverse: #fff;
-    --bg-page: #232323;
-    --bg-muted: #303030;
-    --bg-raised: #303030;
+    --bg-page: #202124;
+    --bg-muted: #2a2b2f;
+    --bg-raised: #2a2b2f;
     --bg-glass: rgba(0, 0, 0, 0.65);
-    --text-primary: #999;
-    --text-regular: #aeaeae; /* Joe3: #888*/
-    --text-title: #ddd;
-    --bg-hover: #3a3a3a;
-    --text-secondary: #979797; /* Joe3: #777*/
+    --text-primary: #e3e3e6;
+    --text-regular: #c2c2c8;
+    --text-title: #ececef;
+    --bg-hover: #34353a;
+    --text-secondary: #9a9aa2;
     --text-placeholder: #666;
-    --border-base: #515253;
-    --border-light: #454545;
-    --border-lighter: #414243;
-    --fill-base: #303030;
+    --border-base: #46474d;
+    --border-light: #3b3c41;
+    --border-lighter: #35363b;
+    --fill-base: #2a2b2f;
     --border-muted: #585858;
     --text-icon: #bdbdbd;
     --border-faint: #303030;
@@ -86,7 +87,8 @@ html {
     --code-background: #353246;
     --overdue-border: #6f553b;
     --overdue-background: #2b2715;
-    --shadow: 1px 1px 3px 1px #1b1b1b;
+    --shadow:
+      0 0 0 1px rgb(255 255 255 / 4%), 0 8px 24px -12px rgb(0 0 0 / 60%);
     --text-shadow: none;
     --shadow-code: #191919;
     --shadow-block: 2px 4px 10px 0 #0a0a0a;
@@ -113,7 +115,7 @@ html {
 
     /* 暗黑模式下需要修改的样式*/
     body:after {
-      background: #2b2b2b;
+      background: #141517;
       z-index: -200;
     }
 
