@@ -46,6 +46,7 @@ const MENU =
       >
         <img
           th:src="${site.logo}"
+          sizes="64px"
           th:alt="${site.title}"
           th:style="|border-radius: ${#strings.replace(theme.config.navbar.logo_radius ?: 4, 'px', '')}px|"
           data-fallback="avatar"
@@ -172,6 +173,7 @@ const MENU =
           >
             <img
               th:src="${me?.avatar}"
+              sizes="40px"
               th:alt="${me?.displayName}"
               th:attr="data-text-avatar=${me?.displayName}"
               data-fallback="avatar"
@@ -204,6 +206,7 @@ const MENU =
           width="100%"
           height="150"
           th:src="${theme.config.blogger.cover ?: #theme.assets('/images/context_bg.png')}"
+          sizes="(max-width: 768px) 80vw, 400px"
           alt=""
           data-fallback="image"
         />

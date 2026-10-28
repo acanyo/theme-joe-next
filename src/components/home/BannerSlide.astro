@@ -1,5 +1,6 @@
 ---
 /** 轮播单项。依赖外层定义的 cover / title / excerpt / autoExcerpt（摘要是否自动生成）/ href 变量 */
+import { responsiveImage, SIZES } from "../../config/images";
 import Icon from "../common/Icon.astro";
 ---
 
@@ -15,9 +16,18 @@ import Icon from "../common/Icon.astro";
     height="100%"
     class="thumbnail"
     loading="lazy"
-    th:src="${#strings.isEmpty(cover) ? #theme.assets('/images/default_thumbnail.png') : thumbnail.gen(cover, 'l')}"
+    th:if="${not #strings.isEmpty(cover)}"
+    {...responsiveImage("cover", SIZES.banner, ["s", "m", "l", "xl"])}
     th:alt="${title}"
     data-fallback="thumbnail"
+  />
+  <img
+    width="100%"
+    height="100%"
+    class="thumbnail"
+    th:if="${#strings.isEmpty(cover)}"
+    th:src="${#theme.assets('/images/default_thumbnail.png')}"
+    th:alt="${title}"
   />
   <div class="title-row">
     <h3 class="title" th:text="${title}"></h3>

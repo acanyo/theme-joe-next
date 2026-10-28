@@ -5,6 +5,7 @@
  */
 import { COMMENT_ENABLED, el } from "../../config/expressions";
 import Icon from "../common/Icon.astro";
+import { responsiveImage, SIZES } from "../../config/images";
 
 interface Props {
   /** 是否启用首页列表动画设置 */
@@ -41,9 +42,7 @@ const COVER =
       width="100%"
       height="100%"
       loading="lazy"
-      th:src="${thumbnail.gen(cover, 'm')}"
-      th:srcset="|${thumbnail.gen(cover, 's')} 400w, ${thumbnail.gen(cover, 'm')} 800w|"
-      sizes="(max-width: 768px) 100vw, 400px"
+      {...responsiveImage("cover", SIZES.listThumb, ["s", "m"])}
       th:alt="${post.spec.title}"
       data-fallback="thumbnail"
     />

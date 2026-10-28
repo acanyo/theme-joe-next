@@ -15,6 +15,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
       height="150"
       class="joe_header__slideout-image"
       th:src="${theme.config.blogger.cover ?: #theme.assets('/images/author_bg.jpg')}"
+      sizes="(max-width: 768px) 80vw, 400px"
       alt=""
       data-fallback="image"
     />
@@ -25,6 +26,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
         class="avatar"
         loading="lazy"
         th:src="${theme.config.blogger.avatar ?: theme.config.blogger.fallback_avatar}"
+        sizes="50px"
         alt="博主头像"
         th:attr={`data-text-avatar=${el(BLOGGER_NAME)}`}
         data-fallback="avatar"
