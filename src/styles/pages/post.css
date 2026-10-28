@@ -92,9 +92,9 @@
 .joe_aside_post {
   position: sticky;
   z-index: 2;
-  top: var(--sticky-top);
+  top: 75px;
   width: 280px;
-  transition: top var(--dur-slow) var(--ease-spring);
+  transition: top 0.35s;
 }
 
 .toc-container {

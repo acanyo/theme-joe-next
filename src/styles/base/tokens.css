@@ -8,16 +8,7 @@ html {
   --bg-page: #fff;
   --bg-muted: #f5f5f5;
   --bg-raised: #fff;
-  /* 液态玻璃材质：半透明底 + 背景模糊增饱和 + 顶部高光描边 + 柔和投影 */
-  --glass-bg: rgb(255 255 255 / 62%);
-  --glass-bg-strong: rgb(255 255 255 / 82%);
-  --glass-blur: blur(20px) saturate(180%);
-  --glass-edge: rgb(255 255 255 / 70%);
-  --glass-border: rgb(15 23 42 / 8%);
-  --glass-shadow:
-    0 1px 0 0 var(--glass-edge) inset, 0 0 0 1px var(--glass-border),
-    0 10px 30px -12px rgb(15 23 42 / 22%), 0 2px 6px -2px rgb(15 23 42 / 8%);
-  --radius-pill: 999px;
+  --bg-glass: rgba(255, 255, 255, 0.65);
   --text-primary: #1f2329;
   --text-regular: #474c54;
   --text-title: #333;
@@ -70,13 +61,7 @@ html {
     --bg-page: #202124;
     --bg-muted: #2a2b2f;
     --bg-raised: #2a2b2f;
-    --glass-bg: rgb(32 33 36 / 58%);
-    --glass-bg-strong: rgb(32 33 36 / 82%);
-    --glass-edge: rgb(255 255 255 / 9%);
-    --glass-border: rgb(255 255 255 / 7%);
-    --glass-shadow:
-      0 1px 0 0 var(--glass-edge) inset, 0 0 0 1px var(--glass-border),
-      0 12px 32px -12px rgb(0 0 0 / 70%), 0 2px 6px -2px rgb(0 0 0 / 40%);
+    --bg-glass: rgba(0, 0, 0, 0.65);
     --text-primary: #e3e3e6;
     --text-regular: #c2c2c8;
     --text-title: #ececef;

@@ -41,12 +41,8 @@ export function scrollToTop(top: number, smooth = true): void {
 }
 
 /** 已固定头部高度，用于锚点定位时的偏移 */
-/** 页面内跳转时为悬浮导航预留的高度（与 CSS 变量 --sticky-top 一致） */
 export function headerOffset(): number {
-  const value = getComputedStyle(document.documentElement).getPropertyValue(
-    "--sticky-top",
-  );
-  return Number.parseFloat(value) || 96;
+  return ($(".joe_header__above")?.offsetHeight ?? 0) + 15;
 }
 
 export function onReady(fn: () => void): void {

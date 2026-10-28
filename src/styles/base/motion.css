@@ -8,8 +8,6 @@
  * 系统开启「减少动态效果」时，所有入场与弹性动画直接显示最终状态。
  */
 :root {
-  /* 吸顶元素距视口顶部的距离：导航胶囊下方；导航隐藏时贴近顶部 */
-  --sticky-top: 96px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: linear(
     0,
@@ -72,16 +70,6 @@
   &:active {
     scale: 0.97;
     transition-duration: var(--dur-fast);
-  }
-}
-
-html.nav-hidden {
-  --sticky-top: 16px;
-}
-
-@media (max-width: 768px) {
-  :root {
-    --sticky-top: 80px;
   }
 }
 
