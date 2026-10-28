@@ -16,7 +16,7 @@
   color: #fff;
   font-weight: 500;
   line-height: 30px;
-  background: var(--theme);
+  background: var(--theme-solid);
   border-radius: 2px 2px 2px 0;
   box-shadow: 2px 5px 10px rgba(49, 58, 70, 0.15);
   user-select: none;
@@ -25,7 +25,7 @@
     position: absolute;
     bottom: -10px;
     left: -10px;
-    border-color: var(--theme) transparent transparent;
+    border-color: color-mix(in oklab, var(--theme-solid) 70%, #000) transparent transparent;
     border-style: solid;
     border-width: 10px;
     transform: rotate(90deg);
@@ -227,7 +227,7 @@
 }
 
 .joe_photos__filter li.active button {
-  color: var(--theme);
+  color: var(--theme-text);
 }
 
 /* 响应式 */

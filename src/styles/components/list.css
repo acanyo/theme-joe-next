@@ -587,7 +587,7 @@
         z-index: 1;
         top: 5px;
         right: 5px;
-        background: var(--theme);
+        background: var(--theme-solid);
         height: 20px;
         line-height: 20px;
         padding: 0 8px;

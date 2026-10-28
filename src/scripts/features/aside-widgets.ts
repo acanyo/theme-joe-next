@@ -42,7 +42,7 @@ function renderCloud3d(list: HTMLElement): void {
     const phi = Math.acos(-1 + (2 * i + 1) / links.length);
     const theta = Math.sqrt(links.length * Math.PI) * phi;
     const el = link.cloneNode(true) as HTMLAnchorElement;
-    el.style.cssText = `position:absolute;left:50%;top:50%;white-space:nowrap;font-weight:500;color:${CLOUD_COLORS[i % CLOUD_COLORS.length]};will-change:transform,opacity;`;
+    el.style.cssText = `position:absolute;left:50%;top:50%;white-space:nowrap;font-weight:500;--cloud-color:${CLOUD_COLORS[i % CLOUD_COLORS.length]};color:var(--cloud-text);will-change:transform,opacity;`;
     cloud.appendChild(el);
     return {
       el,

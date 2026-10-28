@@ -671,7 +671,7 @@
 .joe_cloud__btn {
   flex-shrink: 0;
   margin-left: auto;
-  background: var(--theme);
+  background: var(--theme-solid);
   color: #fff;
   width: 30px;
   height: 30px;

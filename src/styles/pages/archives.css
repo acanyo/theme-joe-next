@@ -260,7 +260,7 @@
           position: relative;
           margin-left: 30px;
           border: none;
-          background: var(--theme);
+          background: var(--theme-solid);
           color: #fff;
           border-radius: var(--radius-inner);
           padding: 0 12px;

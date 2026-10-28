@@ -1,7 +1,8 @@
 /**
  * axe-core 无障碍检查（WCAG 2 A/AA），明暗两种模式：pnpm qa:a11y
  * 按规则汇总违规项与示例节点；有 serious / critical 级别违规时以非零状态退出。
- * 第三方组件（评论、搜索）不在检查范围内。
+ * 第三方组件（评论、搜索、shiki 代码高亮的配色）不在检查范围内；3D 标签云按纵深淡化背面的标签（转到正面时恢复），
+ * 不参与对比度检查。
  */
 import { AxeBuilder } from "@axe-core/playwright";
 import { MODES, ROUTES, launch, newContext, open } from "./shared.mjs";
@@ -15,6 +16,8 @@ for (const mode of MODES) {
     const res = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa"])
       .exclude("halo-comment, [id^=comment-], .halo-search-widget, #vconsole")
+      .exclude(".joe_cloud3d")
+      .exclude("shiki-code")
       .analyze();
     for (const v of res.violations) {
       const r = rules.get(v.id) ?? { impact: v.impact, help: v.help, pages: new Set(), samples: [] };

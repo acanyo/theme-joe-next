@@ -41,12 +41,16 @@
 
       .a-powered {
         font-weight: 600;
-        color: #007cff;
+        color: #0064d6;
+
+        html[data-mode="dark"] & {
+          color: #4d9fff;
+        }
       }
 
       .a-theme {
         font-weight: 600;
-        color: var(--theme);
+        color: var(--theme-text);
       }
     }
 

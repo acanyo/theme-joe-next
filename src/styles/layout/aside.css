@@ -546,7 +546,11 @@
     background: var(--bg-page);
 
     .joe_aside__item-title {
-      color: var(--notice);
+      color: color-mix(in oklab, var(--notice) 68%, #000);
+
+      html[data-mode="dark"] & {
+        color: var(--notice);
+      }
 
       .joe-font {
         color: var(--notice);
@@ -687,7 +691,7 @@
         align-items: center;
 
         .text {
-          color: var(--theme);
+          color: var(--theme-text);
           font-weight: 500;
           font-size: 14px;
           margin: 0 5px;
@@ -1072,4 +1076,13 @@
 /* 暗黑模式：每日一句（灰色 SVG 图片）反色 */
 html[data-mode="dark"] .motto_day_words {
   filter: invert(1);
+}
+
+/* 3D 标签云（features/aside-widgets.ts）：彩色标签按明暗模式调整明度，保证文字对比度 */
+.joe_cloud3d a {
+  --cloud-text: color-mix(in oklab, var(--cloud-color) 62%, #000);
+
+  html[data-mode="dark"] & {
+    --cloud-text: color-mix(in oklab, var(--cloud-color) 72%, #fff);
+  }
 }

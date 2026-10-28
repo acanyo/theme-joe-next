@@ -417,7 +417,7 @@ body::before {
   margin-top: 8px;
   padding: 8px 24px;
   color: #fff;
-  background: var(--theme);
+  background: var(--theme-solid);
   border-radius: 20px;
 }
 

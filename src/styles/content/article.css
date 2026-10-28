@@ -131,7 +131,7 @@
     .author {
       .link {
         font-weight: 500;
-        color: var(--theme);
+        color: var(--theme-text);
 
         &:hover {
           text-decoration: underline;
@@ -341,7 +341,7 @@
     display: inline-block;
     line-height: 26px;
     text-indent: 0;
-    color: var(--theme);
+    color: var(--theme-text);
     position: relative;
 
     &:hover::after {

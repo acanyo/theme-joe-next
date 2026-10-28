@@ -132,7 +132,23 @@ html {
 /* 依赖主题色的派生变量：--theme 由 DynamicStyle 写在 body 上，必须在 body（或更深层）定义才能取到 */
 body {
   --tint: color-mix(in srgb, var(--theme) 12%, transparent);
+  /*
+   * 主题色可由用户任意设置，用于文字或白字底色时需保证 WCAG AA 4.5:1 对比度：
+   * --theme-text   主题色用作文字：浅色模式限制明度上限，暗黑模式限制明度下限
+   * --theme-solid  白色文字的主题色底：限制明度上限
+   * 本身已足够深 / 浅的主题色保持原样。不支持相对颜色语法的浏览器按固定比例混色。
+   * 背景、边框、图标等非文字用途仍使用 --theme。
+   */
+  --theme-text: color-mix(in oklab, var(--theme) 68%, #000);
+  --theme-text: oklch(from var(--theme) min(l, 0.52) c h);
+  --theme-solid: color-mix(in oklab, var(--theme) 68%, #000);
+  --theme-solid: oklch(from var(--theme) min(l, 0.5) c h);
   --shadow-hover:
     0 0 0 1px var(--theme),
     0 10px 20px -10px color-mix(in srgb, var(--theme) 40%, transparent);
+}
+
+html[data-mode="dark"] body {
+  --theme-text: color-mix(in oklab, var(--theme) 70%, #fff);
+  --theme-text: oklch(from var(--theme) max(l, 0.76) c h);
 }
