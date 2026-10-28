@@ -114,7 +114,8 @@ export function initProgressBar(): void {
   if (!bar) return;
   const update = () => {
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = `${max > 0 ? Math.min(1, window.scrollY / max) * 100 : 0}%`;
+    const ratio = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+    bar.style.setProperty("--read", ratio.toFixed(4));
   };
   update();
   listen(document, "scroll", () => requestAnimationFrame(update), {
