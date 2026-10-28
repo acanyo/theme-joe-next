@@ -1,19 +1,23 @@
-/* 页面切换动画。*/
-/* - native：浏览器原生跨页过渡。`@view-transition` 是文档级规则，无法按属性选择开关，*/
-/*   因此由服务端仅在设置为 native 时输出（见 components/head/DynamicStyle.astro），这里只定义动画样式。*/
-/* - swup：无刷新切换，内容区域淡出 → 替换 → 淡入（swup 在 <html> 上添加的状态类）。*/
-/* 系统开启「减少动态效果」时两种模式都不做动画。*/
+/*
+ * 页面切换动画。
+ *
+ * - native：浏览器原生跨页过渡。`@view-transition` 是文档级规则，无法按属性开关，
+ *   由服务端仅在设置为 native 时输出（见 components/head/DynamicStyle.astro），这里只定义动画。
+ * - swup：无刷新切换，内容区域模糊淡出 → 替换 → 弹性浮入（swup 在 <html> 上添加状态类）。
+ *
+ * 两种方式都让导航胶囊保持不动，只有内容区域流动；系统开启「减少动态效果」时不做动画。
+ */
 
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-old(root) {
-    animation: joe-page-out 0.18s ease-in both;
+    animation: joe-page-out 200ms var(--ease-out) both;
   }
 
   ::view-transition-new(root) {
-    animation: joe-page-in 0.28s ease-out both;
+    animation: joe-page-in 520ms var(--ease-spring) both;
   }
 
-  /* 导航栏在原生过渡中保持不动*/
+  /* 导航胶囊在原生过渡中保持不动 */
   html[data-transition="native"] .joe_header__above {
     view-transition-name: joe-header;
   }
@@ -22,38 +26,49 @@
     animation: none;
   }
 
+  /* swup：离开时向上淡出并模糊，进入时从下方弹入 */
   html.is-changing .joe_swup {
     transition:
-      opacity 0.22s ease,
-      transform 0.22s ease;
+      opacity 260ms var(--ease-out),
+      translate 520ms var(--ease-spring),
+      scale 520ms var(--ease-spring),
+      filter 260ms var(--ease-out);
   }
 
   html.is-animating .joe_swup {
     opacity: 0;
-    transform: translateY(8px);
+    translate: 0 14px;
+    scale: 0.99;
+    filter: blur(8px);
   }
 
   html.is-leaving .joe_swup {
-    transform: translateY(-4px);
+    translate: 0 -8px;
+    transition-duration: 200ms;
   }
 }
 
 @keyframes joe-page-out {
   to {
     opacity: 0;
-    transform: translateY(-6px);
+    translate: 0 -8px;
+    filter: blur(6px);
   }
 }
 
 @keyframes joe-page-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    translate: 0 14px;
+    scale: 0.99;
+    filter: blur(8px);
   }
 }
 
-/* swup 进度条（加载较慢时显示）*/
+/* swup 进度条（加载较慢时显示）：贴在导航胶囊上方的细光带 */
 .swup-progress-bar {
   height: var(--loading-bar-height, 3px);
+  border-radius: 0 3px 3px 0;
   background: var(--loading-bar, var(--theme));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--theme) 60%, transparent);
 }
