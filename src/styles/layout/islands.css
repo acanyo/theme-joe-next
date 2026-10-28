@@ -537,16 +537,24 @@
 }
 
 /* 盖在大图上时，导航文字改为白色以保证对比度 */
-.joe_header--islands:has(+ #swup .evan-big-banner) .joe_header__above.is-top {
+.joe_header--islands:has(+ #swup .evan-big-banner) .joe_header__above.is-top,
+.joe_header--islands:has(+ #swup .joe_post_hero) .joe_header__above.is-top {
   .joe_header__above-logo--text,
   .joe_header__above-nav .item,
   .joe_header__above-nav .joe_dropdown__link-icon,
   .joe_header__above-search .submit,
   .nav_login a,
+  .joe_header__mode,
   .joe_header__above-slideicon,
   .joe_header__above-searchicon {
     color: #fff;
     text-shadow: 0 1px 8px rgb(0 0 0 / 35%);
+  }
+
+  .joe_header__kbd {
+    color: rgb(255 255 255 / 85%);
+    border-color: rgb(255 255 255 / 35%);
+    background: rgb(255 255 255 / 12%);
   }
 
   .joe_header__above-nav::before {

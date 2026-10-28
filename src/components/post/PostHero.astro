@@ -1,0 +1,74 @@
+---
+/**
+ * 文章页「沉浸头图」（设置 post.header_style = immersive）：
+ * 整宽头图位于导航下方，背景为文章封面（模糊放大）或主题色渐变；
+ * 分类、标题与作者 / 日期 / 字数 / 阅读等信息胶囊放在头图里，正文卡片向上叠在头图下沿。
+ *
+ * 经典样式时不渲染，标题与信息仍在正文卡片内（ArticleBody.astro）。
+ */
+import { COMMENT_ENABLED, el } from "../../config/expressions";
+
+const COVER = "post.spec.cover";
+const AUTHOR_LINK =
+  "#strings.isEmpty(theme.config.post.author_link) ? author?.permalink : theme.config.post.author_link";
+---
+
+<header
+  class="joe_post_hero"
+  th:if="${(theme.config.post.header_style ?: 'immersive') == 'immersive'}"
+  th:classappend={`\${#strings.isEmpty(${COVER}) ? 'is-plain' : 'has-cover'}`}
+  th:with="author = ${contributorFinder.getContributor(post.spec.owner)}"
+>
+  <div
+    class="joe_post_hero__bg"
+    th:if={`\${not #strings.isEmpty(${COVER})}`}
+    th:style={`|background-image: url('\${thumbnail.gen(${COVER}, 'l')}')|`}
+    aria-hidden="true"
+  ></div>
+  <div class="joe_post_hero__inner joe_container">
+    <div
+      class="joe_post_hero__cats"
+      th:unless="${#lists.isEmpty(post.categories)}"
+    >
+      <a
+        th:each="category, stat : ${post.categories}"
+        th:href="@{${category.status.permalink}}"
+        class="item"
+        th:classappend="${'item-' + (stat.index % 5)}"
+        th:text="${category.spec.displayName}"
+      ></a>
+    </div>
+    <h1
+      class="joe_post_hero__title"
+      th:classappend="${theme.config.post.title_shadow ? 'txt-shadow' : ''}"
+      th:text="${post.spec.title}"
+    ></h1>
+    <ul
+      class="joe_post_hero__meta"
+      th:if="${theme.config.post.meta and #annotations.getOrDefault(post, 'enable_page_meta', 'true') == 'true'}"
+    >
+      <li class="author">
+        <!-- 作者没有头像时用博主卡片的默认头像，避免空 src（不会触发加载失败兜底） -->
+        <img
+          width="24"
+          height="24"
+          loading="lazy"
+          th:src="${#strings.isEmpty(author?.avatar) ? (theme.config.blogger.fallback_avatar ?: #theme.assets('/images/peeps-avatar.png')) : author.avatar}"
+          th:alt="${author?.displayName}"
+          th:attr="data-text-avatar=${author?.displayName}"
+          data-fallback="avatar"
+        />
+        <a th:href={el(AUTHOR_LINK)} th:text="${author?.displayName}"></a>
+      </li>
+      <li>
+        <time
+          th:datetime="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
+          th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
+        ></time>
+      </li>
+      <li data-joe-word-count>0 字</li>
+      <li th:text="|${post.stats.visit} 阅读|"></li>
+      <li th:if={el(COMMENT_ENABLED)} th:text="|${post.stats.comment} 评论|"></li>
+    </ul>
+  </div>
+</header>

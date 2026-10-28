@@ -8,8 +8,10 @@ import CommentSection from "../components/post/CommentSection.astro";
 import PostAds from "../components/post/PostAds.astro";
 import PostAside from "../components/post/PostAside.astro";
 import PostCopyright from "../components/post/PostCopyright.astro";
+import PostHero from "../components/post/PostHero.astro";
 import PostOperate from "../components/post/PostOperate.astro";
 import "../styles/pages/post.css";
+import "../styles/pages/post-hero.css";
 ---
 
 <BaseLayout
@@ -18,6 +20,7 @@ import "../styles/pages/post.css";
   title="post.spec.title + ' - ' + site.title"
   pageClass="page-post"
 >
+  <PostHero slot="before" />
   <Breadcrumb slot="before" />
 
   <div class="joe_main joe_post">

@@ -1718,6 +1718,18 @@ spec:
           attrs:
             style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
           children: 标题与信息
+        - $formkit: radio
+          name: header_style
+          id: header_style
+          key: header_style
+          label: 头部样式
+          value: immersive
+          help: 沉浸头图：文章顶部整宽头图（封面模糊或主题色背景），标题、分类与文章信息放在头图里，正文卡片叠在头图下沿。经典：Joe 原来的样式，标题在正文卡片内
+          options:
+            - value: immersive
+              label: 沉浸头图
+            - value: classic
+              label: 经典
         - $formkit: switch
           name: title_shadow
           id: title_shadow
