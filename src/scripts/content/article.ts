@@ -2,6 +2,7 @@
  * 文章页交互：点赞、分享、复制版权、阅读进度、目录、字数统计、评论定位。
  */
 import tocbot from "tocbot";
+import { buildRawToc, renderRawContent } from "./raw-content";
 import { $, $$, headerOffset } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { copyText } from "../core/clipboard";
@@ -127,7 +128,8 @@ export function initWordCount(): void {
   const targets = $$("[data-joe-word-count]");
   const content = $("#post-inner");
   if (!targets.length || !content) return;
-  const count = content.innerText.match(/[一-龥a-zA-Z0-9]/g)?.length ?? 0;
+  const text = renderRawContent()?.textContent ?? content.innerText;
+  const count = text.match(/[一-龥a-zA-Z0-9]/g)?.length ?? 0;
   targets.forEach((target) => (target.textContent = `${count} 字`));
 }
 
@@ -140,12 +142,13 @@ export function initToc(): void {
   if (!container && !mobile) return;
   const tocSelector = mobile ? "#js-toc-mobile" : "#js-toc";
   if (!$(tocSelector)) return;
-  if ($(".joe_raw_content")) {
-    $(tocSelector)!.innerHTML =
-      '<div class="toc-nodata">暂不支持解析原始内容目录</div>';
+  const offset = headerOffset();
+  const raw = renderRawContent();
+  if (raw) {
+    buildRawToc(raw, $(tocSelector)!, { offset, onNavigate: () => mobile && closeOverlays() });
+    showMobileTocButton(mobile);
     return;
   }
-  const offset = headerOffset();
   onCleanup(() => tocbot.destroy());
   tocbot.init({
     tocSelector,
@@ -165,13 +168,15 @@ export function initToc(): void {
   if (!$(tocSelector)?.children.length) {
     $(tocSelector)!.innerHTML = '<div class="toc-nodata">暂无目录</div>';
   }
-  if (mobile) {
-    const button = $(".joe_action .toc");
-    if (button) {
-      button.style.display = "flex";
-      button.addEventListener("click", () => openTocDrawer());
-    }
-  }
+  showMobileTocButton(mobile);
+}
+
+function showMobileTocButton(mobile: boolean): void {
+  if (!mobile) return;
+  const button = $(".joe_action .toc");
+  if (!button) return;
+  button.style.display = "flex";
+  button.addEventListener("click", () => openTocDrawer());
 }
 
 /** 目录展开层级：文章元数据 toc_depth 优先，其次主题设置 */
