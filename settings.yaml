@@ -44,7 +44,7 @@ spec:
           label: 网站图标
           value: ""
           help: 覆盖 Halo 的站点图标，建议 64×64 的 png
-        - $formkit: select
+        - $formkit: toggle
           name: link_target
           id: link_target
           key: link_target
@@ -61,6 +61,22 @@ spec:
     - group: appearance
       label: 外观
       formSchema:
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 颜色
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 主题色与滚动条
         - $formkit: color
           name: accent_light
           id: accent_light
@@ -75,6 +91,38 @@ spec:
           label: 主题色（暗黑）
           value: "#9999ff"
           help: "默认 #9999ff"
+        - $formkit: color
+          name: scrollbar_color
+          id: scrollbar_color
+          key: scrollbar_color
+          label: 滚动条颜色
+          value: ""
+          help: "留空时浅色模式为 #c0c4cc、暗黑模式为 #666"
+        - $formkit: number
+          name: scrollbar_width
+          id: scrollbar_width
+          key: scrollbar_width
+          label: 滚动条宽度
+          value: 8
+          help: 单位 px，填 0 隐藏滚动条
+          min: 0
+          max: 20
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 背景与字体
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 背景图、自定义字体与灰色模式
         - $formkit: attachment
           name: background_light
           id: background_light
@@ -96,20 +144,6 @@ spec:
           label: 自定义字体
           value: ""
           help: 字体文件地址，建议 woff2；留空使用系统字体
-        - $formkit: color
-          name: scrollbar_color
-          id: scrollbar_color
-          key: scrollbar_color
-          label: 滚动条颜色
-          value: ""
-          help: "留空时浅色模式为 #c0c4cc、暗黑模式为 #666"
-        - $formkit: text
-          name: scrollbar_width
-          id: scrollbar_width
-          key: scrollbar_width
-          label: 滚动条宽度
-          value: 8px
-          help: 默认 8px，填 0 隐藏
         - $formkit: switch
           name: grayscale
           id: grayscale
@@ -120,7 +154,23 @@ spec:
     - group: navbar
       label: 导航
       formSchema:
-        - $formkit: radio
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 通用
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 导航样式、菜单与 Logo
+        - $formkit: toggle
           name: style
           id: style
           key: style
@@ -153,13 +203,15 @@ spec:
           label: Logo 链接
           value: ""
           help: "留空回到首页，填 # 不跳转"
-        - $formkit: text
+        - $formkit: number
           name: logo_radius
           id: logo_radius
           key: logo_radius
           label: Logo 圆角
-          value: 4px
-          help: 像素或百分比，默认 4px
+          value: 4
+          help: 单位 px
+          min: 0
+          max: 40
         - $formkit: switch
           name: icons
           id: icons
@@ -176,8 +228,20 @@ spec:
           help: 未登录显示登录按钮，已登录显示头像
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 经典样式
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 经典样式
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 仅在导航样式选择「经典」时生效
         - $formkit: switch
           name: sticky
           id: sticky
@@ -222,8 +286,20 @@ spec:
       formSchema:
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 页面
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 页面与滚动
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 切页方式、入场动画、加载条与返回顶部
         - $formkit: select
           name: page_transition
           id: page_transition
@@ -294,14 +370,16 @@ spec:
           key: loading_bar
           label: 页面加载条
           help: 页面顶部的加载进度条
-        - $formkit: text
+        - $formkit: number
           if: $get(loading_bar).value
           name: loading_bar_height
           id: loading_bar_height
           key: loading_bar_height
           label: 加载条高度
-          value: 3px
-          help: 默认 3px
+          value: 3
+          help: 单位 px
+          min: 1
+          max: 10
         - $formkit: color
           if: $get(loading_bar).value
           name: loading_bar_color
@@ -325,17 +403,29 @@ spec:
           if: $get(back_to_top).value === true
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 特效
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 趣味特效
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 鼠标、背景、右键菜单与标签页标题
         - $formkit: select
           name: cursor_skin
           id: cursor_skin
           key: cursor_skin
           label: 鼠标皮肤
-          value: off
+          value: "off"
           help: 部分皮肤在暗黑模式下不明显；绿色模式下不生效
           options:
-            - value: off
+            - value: "off"
               label: 无
             - value: simple_cursor
               label: 简洁卡通
@@ -356,10 +446,10 @@ spec:
           id: cursor_effect
           key: cursor_effect
           label: 鼠标点击特效
-          value: off
+          value: "off"
           help: 移动端与绿色模式下不生效
           options:
-            - value: off
+            - value: "off"
               label: 无（默认）
             - value: cursor0
               label: 樱花+颜文字
@@ -390,10 +480,10 @@ spec:
           id: backdrop
           key: backdrop
           label: 背景特效
-          value: off
+          value: "off"
           help: 部分特效显示在页面最上层，部分仅在暗黑模式生效；较耗性能，移动端与绿色模式下不加载
           options:
-            - value: off
+            - value: "off"
               label: 无
             - value: universe
               label: 宇宙空间（仅暗黑）
@@ -444,8 +534,20 @@ spec:
       formSchema:
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 首页大图
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 首页大图
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 首屏的大图或视频、标题与一言
         - $formkit: switch
           value: false
           name: hero
@@ -485,14 +587,14 @@ spec:
           if: $get(hero).value === true
           label: 一言
           help: 标题下方显示随机一句话
-        - $formkit: text
+        - $formkit: color
           name: hero_wave_light
           id: hero_wave_light
           key: hero_wave_light
           if: $get(hero).value === true
           label: 底部波浪颜色（浅色）
           value: "#fff"
-        - $formkit: text
+        - $formkit: color
           name: hero_wave_dark
           id: hero_wave_dark
           key: hero_wave_dark
@@ -501,8 +603,20 @@ spec:
           value: "#fff"
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 轮播
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 轮播
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 大图下方的文章轮播
         - $formkit: switch
           name: carousel
           id: carousel
@@ -585,7 +699,7 @@ spec:
                   label: 图片
                   value: ""
                   validation: required
-        - $formkit: radio
+        - $formkit: toggle
           if: $get(carousel).value === true
           name: carousel_direction
           id: carousel_direction
@@ -661,8 +775,9 @@ spec:
           id: carousel_interval
           key: carousel_interval
           label: 间隔（毫秒）
-          value: "3500"
+          value: 3500
           help: 默认 3500
+          min: 1000
         - $formkit: number
           if: $get(carousel_autoplay).value === true
           name: carousel_speed
@@ -673,8 +788,20 @@ spec:
           help: 默认 500
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 精选分类
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 精选分类
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 首页顶部的分类卡片
         - $formkit: switch
           value: false
           name: featured
@@ -749,8 +876,20 @@ spec:
                   validation: required
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 瞬间叠放
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 瞬间叠放
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 首页展示最近的瞬间，需要瞬间插件
         - $formkit: switch
           name: moments_stack
           id: moments_stack
@@ -770,9 +909,21 @@ spec:
           if: $get(moments_stack).value === true
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 文章列表
-        - $formkit: radio
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 文章列表
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 分页方式与缩略图
+        - $formkit: toggle
           name: load_more
           id: load_more
           key: load_more
@@ -826,8 +977,20 @@ spec:
           label: 随机图接口
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: QQ 群
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - QQ 群
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 首页的加群按钮
         - $formkit: textarea
           name: qq_group
           id: qq_group
@@ -844,6 +1007,22 @@ spec:
     - group: blogger
       label: 博主卡片
       formSchema:
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 基本信息
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 昵称、签名与头像
         - $formkit: switch
           value: true
           name: enabled
@@ -886,7 +1065,23 @@ spec:
           label: 文字头像样式
           value: "{bgColor:'',textColor:'',useTextGradient:false}"
           help: "格式 {bgColor: '', textColor: '', useTextGradient: false}，留空颜色为随机渐变"
-        - $formkit: select
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 头像装饰
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 形状、头像框与挂件
+        - $formkit: toggle
           name: avatar_shape
           id: avatar_shape
           key: avatar_shape
@@ -1031,6 +1226,22 @@ spec:
             - value: swirl-heart
               label: 上升的心
               render: /themes/theme-joe-next/assets/widget/swirl-heart.webp
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 卡片内容
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 背景、等级、每日一句与统计
         - $formkit: attachment
           name: cover
           id: cover
@@ -1072,6 +1283,22 @@ spec:
           key: ribbons
           label: 悬停彩带
           help: 鼠标移入卡片时撒彩带；移动端和「减少动态效果」下不显示
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 社交账号
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 卡片底部的社交平台图标
         - $formkit: switch
           value: false
           name: social
@@ -1084,7 +1311,7 @@ spec:
           id: social_mobile
           key: social_mobile
           label: 移动端显示社交账号
-        - $formkit: radio
+        - $formkit: toggle
           name: social_source
           id: social_source
           key: social_source
@@ -1200,6 +1427,22 @@ spec:
     - group: aside
       label: 侧边栏
       formSchema:
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 首页侧栏
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 位置、文章条数与侧栏模块
         - $formkit: switch
           value: true
           name: enabled
@@ -1207,7 +1450,7 @@ spec:
           key: enabled
           label: 首页侧边栏
           help: 首页右侧是否显示侧边栏；其他页面由下方各页开关控制
-        - $formkit: select
+        - $formkit: toggle
           name: position
           id: position
           key: position
@@ -1224,13 +1467,17 @@ spec:
           id: latest_count
           key: latest_count
           label: 最新文章条数
-          value: "5"
+          value: 5
+          min: 1
+          max: 20
         - $formkit: number
           name: popular_count
           id: popular_count
           key: popular_count
           label: 热门文章条数
-          value: "5"
+          value: 5
+          min: 1
+          max: 20
         - $formkit: array
           name: widgets
           id: widgets
@@ -1558,6 +1805,22 @@ spec:
                   label: HTML
                   language: html
           help: 文章页以外的侧边栏显示哪些模块、按什么顺序
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 其他页面
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 哪些页面也显示侧栏
         - $formkit: switch
           value: true
           name: on_post
@@ -1619,9 +1882,21 @@ spec:
       formSchema:
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 标题与信息
-        - $formkit: radio
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 标题与信息
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 文章头部样式、作者与过期提醒
+        - $formkit: toggle
           name: header_style
           id: header_style
           key: header_style
@@ -1660,15 +1935,16 @@ spec:
           label: 过期提醒
           help: 文章长时间未更新时在顶部提示
           value: false
-        - $formkit: text
+        - $formkit: number
           if: $get(outdated_notice).value === true
           name: outdated_days
           id: outdated_days
           key: outdated_days
           label: 多少天后提醒
-          value: "30"
+          value: 30
           help: 默认 30
-        - $formkit: radio
+          min: 1
+        - $formkit: toggle
           if: $get(outdated_notice).value === true
           name: outdated_format
           id: outdated_format
@@ -1691,9 +1967,21 @@ spec:
           help: 留空使用默认文字
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 正文
-        - $formkit: select
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 正文
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 图片排版、首行缩进与复制
+        - $formkit: toggle
           name: image_align
           id: image_align
           key: image_align
@@ -1729,8 +2017,20 @@ spec:
           value: false
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 目录与进度
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 目录与进度
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 文章目录、阅读进度与相关文章
         - $formkit: switch
           name: toc
           id: toc
@@ -1744,13 +2044,15 @@ spec:
           key: toc_mobile
           label: 移动端文章目录
           value: true
-        - $formkit: text
+        - $formkit: number
           name: toc_depth
           id: toc_depth
           key: toc_depth
           label: 目录默认展开层级
-          value: "0"
+          value: 0
           help: 0 表示只显示一级，最大 6
+          min: 0
+          max: 6
         - $formkit: switch
           name: progress
           id: progress
@@ -1772,18 +2074,32 @@ spec:
           label: 相关文章
           help: 侧边栏显示同分类或同标签的文章
           value: true
-        - $formkit: text
+        - $formkit: number
           if: $get(related).value === true
           name: related_count
           id: related_count
           key: related_count
           label: 相关文章条数
-          value: "5"
+          value: 5
           help: 默认 5
+          min: 1
+          max: 20
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 互动
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 互动
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 评论、点赞与编辑按钮
         - $formkit: switch
           name: comments
           id: comments
@@ -1806,8 +2122,20 @@ spec:
           help: 登录后在右下角显示编辑入口
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 版权
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 版权
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 复制内容与文末的版权信息
         - $formkit: switch
           name: copy_notice
           id: copy_notice
@@ -1830,9 +2158,21 @@ spec:
           help: 文末版权卡片中的协议说明，留空使用默认文字
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 广告
-        - $formkit: select
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 广告
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 文章顶部、底部与侧栏的广告位
+        - $formkit: toggle
           name: ads_top
           id: ads_top
           key: ads_top
@@ -1880,7 +2220,7 @@ spec:
               label: 自定义代码
               value: null
               language: html
-        - $formkit: select
+        - $formkit: toggle
           name: ads_bottom
           id: ads_bottom
           key: ads_bottom
@@ -1928,7 +2268,7 @@ spec:
               label: 自定义代码
               value: null
               language: html
-        - $formkit: select
+        - $formkit: toggle
           name: ads_aside
           id: ads_aside
           key: ads_aside
@@ -1979,6 +2319,22 @@ spec:
     - group: share
       label: 分享与打赏
       formSchema:
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 分享
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 文章底部的分享按钮
         - $formkit: switch
           name: enabled
           id: enabled
@@ -2024,6 +2380,22 @@ spec:
           label: 复制链接的内容
           value: ""
           help: 可用变量 {postUrl}、{postTitle}、{postAuthor}、{postDescription}
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 打赏
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 收款码与自定义打赏内容
         - $formkit: switch
           name: donate
           id: donate
@@ -2066,9 +2438,9 @@ spec:
     - group: code
       label: 代码块
       formSchema:
-        - $el: p
+        - $el: div
           attrs:
-            style: "margin: 0 0 0.75rem; font-size: 0.8125rem; color: rgb(100 116 139);"
+            style: "margin-bottom: 4px; padding: 10px 14px; border: 0; border-radius: 8px; font-size: 13px; line-height: 20px; color: rgb(30 64 175); background: rgb(59 130 246 / 8%);"
           children: 语法高亮由 Halo 代码高亮插件（推荐应用市场中的 Shiki）提供，主题只负责下面的代码块外观与交互；未安装插件时代码块不着色。
         - $formkit: switch
           value: false
@@ -2122,13 +2494,14 @@ spec:
           key: fold_long
           label: 自动折叠长代码
           help: 需先开启「可折叠」，仅文章页生效
-        - $formkit: text
+        - $formkit: number
           name: fold_height
           id: fold_height
           key: fold_height
           label: 折叠高度（px）
-          value: "800"
+          value: 800
           help: 默认 800，填 0 折叠所有代码块
+          min: 0
         - $formkit: switch
           value: false
           name: tools_on_hover
@@ -2146,15 +2519,27 @@ spec:
       formSchema:
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 标签与分类
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 标签与分类
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 标签页、分类页的样式与计数
         - $formkit: text
           name: tags_title
           id: tags_title
           key: tags_title
           label: 标签页标题
           value: 全部标签
-        - $formkit: select
+        - $formkit: toggle
           name: tags_style
           id: tags_style
           key: tags_style
@@ -2177,7 +2562,7 @@ spec:
           key: categories_title
           label: 分类页标题
           value: 全部分类
-        - $formkit: select
+        - $formkit: toggle
           name: categories_style
           id: categories_style
           key: categories_style
@@ -2196,8 +2581,20 @@ spec:
           value: false
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 归档
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 归档
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 归档页样式与分组
         - $formkit: text
           name: archives_title
           id: archives_title
@@ -2210,7 +2607,7 @@ spec:
           key: archives_empty
           label: 归档页无文章时的文字
           value: 暂无文章数据
-        - $formkit: select
+        - $formkit: toggle
           name: archives_style
           id: archives_style
           key: archives_style
@@ -2222,7 +2619,7 @@ spec:
               label: 列表
             - value: timeline
               label: 时间轴
-        - $formkit: select
+        - $formkit: toggle
           name: archives_group_by
           id: archives_group_by
           key: archives_group_by
@@ -2243,8 +2640,20 @@ spec:
           value: false
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 图库
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 图库
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 需要图库插件
         - $formkit: text
           name: photos_title
           id: photos_title
@@ -2256,13 +2665,27 @@ spec:
           id: photos_gap
           key: photos_gap
           label: 图片间距（px）
-          value: "10"
+          value: 10
           help: 默认 10
+          min: 0
+          max: 40
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 留言板
-        - $formkit: radio
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 留言板
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 留言板页面显示的评论范围
+        - $formkit: toggle
           name: guestbook_source
           id: guestbook_source
           key: guestbook_source
@@ -2275,8 +2698,20 @@ spec:
               label: 仅留言板评论
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 友链
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 友链
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 需要链接插件
         - $formkit: text
           name: links_title
           id: links_title
@@ -2341,8 +2776,20 @@ spec:
           help: HTML，例如申请友链的说明
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 朋友圈
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 朋友圈
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 需要朋友圈插件
         - $formkit: text
           name: feed_title
           id: feed_title
@@ -2358,8 +2805,20 @@ spec:
           value: false
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 瞬间
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 瞬间
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 需要瞬间插件
         - $formkit: text
           name: moments_title
           id: moments_title
@@ -2396,22 +2855,35 @@ spec:
           id: moments_max_height
           key: moments_max_height
           label: 瞬间内容最大高度（px）
-          value: "300"
+          value: 300
           help: 超出后折叠，默认 300，最小 100
+          min: 100
     - group: footer
       label: 页脚与高级
       formSchema:
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 页脚
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 页脚
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 版权、运行时间、服务商与统计
         - $formkit: switch
           name: enabled
           id: enabled
           key: enabled
           label: 页脚
           value: true
-        - $formkit: radio
+        - $formkit: toggle
           if: $get(enabled).value == true
           name: position
           id: position
@@ -2519,8 +2991,20 @@ spec:
           label: 访问统计（不蒜子）
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 备案
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 备案
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: ICP 与公安备案信息
         - $formkit: switch
           if: $get(enabled).value === true
           name: icp
@@ -2570,8 +3054,20 @@ spec:
           if: $get(enabled).value === true && ($get(icp).value === true || $get(police).value === true)
         - $el: div
           attrs:
-            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
-          children: 高级
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 高级
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 绿色模式与调试输出
         - $formkit: switch
           name: clean_mode
           id: clean_mode
