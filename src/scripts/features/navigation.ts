@@ -157,7 +157,7 @@ function initHeaderScroll(): void {
  * 阅读条导航（navbar.style = islands）的附加交互，经典样式下不执行：
  * - 页面顶部时 .is-top（透明），离开顶部后是一整条玻璃条
  * - 文章页向下阅读时 .is-reading：中间一段由菜单换成当前章节（见 nav-chapter.ts），向上滚动恢复菜单
- * - 底边阅读进度线（--read 0~1）
+ * - 底边阅读进度线（--read 0~1）：只在文章页且开启了「阅读进度条」时显示（#swup 的 data-joe-progress 为颜色）
  * - 当前菜单项下方的主题色下划线随鼠标在菜单项之间滑动（--bar-x / --bar-w）
  */
 const isIslands = () => !!$(".joe_header--islands");
@@ -186,12 +186,19 @@ function initIslandsScroll(): void {
       (max > 0 ? Math.min(1, y / max) : 0).toFixed(4),
     );
   };
+  syncProgress = () => {
+    const color = $("#swup")?.dataset.joeProgress ?? "";
+    header.classList.toggle("has-progress", !!color);
+    header.style.setProperty("--read-color", color || "var(--theme)");
+  };
+  syncProgress();
   update();
   document.addEventListener("scroll", throttle(update, 50), { passive: true });
   refreshIslands = update;
 }
 
 let refreshIslands = (): void => {};
+let syncProgress = (): void => {};
 
 /** 菜单下方的主题色下划线：停在当前项，鼠标悬停时滑到对应项 */
 function initNavBar(): void {
@@ -245,6 +252,7 @@ export function initNavigation(): void {
 /** 切页后同步导航状态 */
 export function refreshNavigation(): void {
   highlightCurrentMenu();
+  syncProgress();
   refreshIslands();
   barToCurrent();
   if (document.documentElement.classList.contains("disable-scroll"))

@@ -25,10 +25,12 @@
     }
   }
 
-  /* 玻璃条本体：三栏网格，菜单 / 章节始终居中 */
+  /* 玻璃条本体：三栏网格，菜单 / 章节始终居中；左右与下方内容区对齐（内容区有 15px 内边距） */
   .joe_header_container {
     position: relative;
     display: grid;
+    width: calc(100% - 30px);
+    max-width: calc(var(--content-max-width, 1320px) - 30px);
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     min-height: 52px;
@@ -367,14 +369,15 @@
     bottom: 0;
     height: 2px;
     border-radius: 2px;
-    background: var(--theme);
-    box-shadow: 0 0 8px color-mix(in srgb, var(--theme) 50%, transparent);
+    background: var(--read-color, var(--theme));
+    box-shadow: 0 0 8px color-mix(in srgb, var(--read-color, var(--theme)) 50%, transparent);
     transform-origin: left center;
     transform: scaleX(var(--read, 0));
     transition: opacity var(--dur-base) var(--ease-out);
     pointer-events: none;
   }
 
+  .joe_header__above:not(.has-progress) .joe_header__read,
   .joe_header__above.is-top .joe_header__read {
     opacity: 0;
   }
@@ -623,5 +626,18 @@
     .joe_header__chapter-list {
       transition-duration: 0s;
     }
+  }
+}
+
+/* 阅读条显示进度时，不再显示页面底部的旧进度条 */
+html:has(.joe_header--islands) .joe_progress_bar {
+  display: none;
+}
+
+/* 宽屏时 base.css 用 #Joe .joe_container 设置最大宽度，这里同样带上 #Joe 以保持与内容区对齐 */
+@media (min-width: 769px) {
+  #Joe .joe_header--islands .joe_header_container {
+    width: calc(100% - 30px);
+    max-width: calc(var(--content-max-width, 1400px) - 30px);
   }
 }
