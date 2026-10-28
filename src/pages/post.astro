@@ -39,7 +39,8 @@ import "../styles/pages/post.css";
           th:href="@{${cursor.previous.status.permalink}}"
           th:title="${cursor.previous.spec.title}"
         >
-          上一篇
+          <span class="label">上一篇</span>
+          <span class="title" th:text="${cursor.previous.spec.title}"></span>
         </a>
       </li>
       <li class="joe_post__pagination-item next" th:if="${cursor.hasNext()}">
@@ -47,7 +48,8 @@ import "../styles/pages/post.css";
           th:href="@{${cursor.next.status.permalink}}"
           th:title="${cursor.next.spec.title}"
         >
-          下一篇
+          <span class="label">下一篇</span>
+          <span class="title" th:text="${cursor.next.spec.title}"></span>
         </a>
       </li>
     </ul>

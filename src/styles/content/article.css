@@ -7,17 +7,25 @@
   box-shadow: var(--shadow);
 }
 
+/* 分类：居中放在标题上方；保留 Joe 的五色，改为淡底 + 同色文字 */
 .joe_detail__category {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 0;
+  padding-top: 24px;
 
   .item {
-    color: #fff;
+    --c: var(--theme);
+    color: var(--c);
+    background: color-mix(in srgb, var(--c) 12%, transparent);
     font-size: 12px;
-    padding: 3px 8px;
-    margin-right: 5px;
-    border-radius: 2px;
+    font-weight: 600;
+    padding: 3px 10px;
+    margin-right: 0;
+    border-radius: 999px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -37,23 +45,23 @@
   }
 
   .item-0 {
-    background: #0396ff;
+    --c: #0396ff;
   }
 
   .item-1 {
-    background: #ea5455;
+    --c: #ea5455;
   }
 
   .item-2 {
-    background: #7367f0;
+    --c: #7367f0;
   }
 
   .item-3 {
-    background: #28c76f;
+    --c: #28c76f;
   }
 
   .item-4 {
-    background: #9f44d3;
+    --c: #9f44d3;
   }
 
   .edit {
@@ -76,6 +84,11 @@
   text-wrap: balance;
   padding-top: 32px;
   margin-bottom: 15px;
+
+  /* 上方有分类时标题贴近分类 */
+  .joe_detail__category + .joe_detail-wrapper & {
+    padding-top: 12px;
+  }
   word-break: break-word;
 
   &.txt-shadow {
@@ -91,17 +104,6 @@
   padding-bottom: 15px;
   margin-bottom: 10px;
   border-bottom: 1px solid var(--border-lighter);
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -1.5px;
-    left: 0;
-    width: 80px;
-    height: 3px;
-    border-radius: 1.5px;
-    background: var(--theme);
-  }
 }
 
 .joe_detail__count-information {
@@ -860,11 +862,16 @@
         margin-bottom: 0;
       }
 
+      /* 三个图标原本各一种颜色（蓝 / 绿 / 黄），统一为主题色 */
       .icon {
         width: 18px;
         height: 18px;
         margin-right: 3px;
         vertical-align: -4px;
+
+        path:not([fill="#FFF"]) {
+          fill: var(--theme);
+        }
       }
 
       .link {
