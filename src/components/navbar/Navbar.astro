@@ -106,11 +106,28 @@ const MENU =
           type="button"
           class="joe_header__page-title"
           title="回到顶部"
-          hidden
+          th:attr="data-site-title=${site.title}"
+          th:text="${site.title}"
         ></button>
       </nav>
 
       <div class="joe_header__above-search">
+        <!-- 浮岛样式：阅读进度圆环，离开顶部后出现，点击回到顶部（features/navigation.ts） -->
+        <button
+          type="button"
+          class="joe_header__progress"
+          aria-label="回到顶部"
+          title="回到顶部"
+        >
+          <svg viewBox="0 0 36 36" aria-hidden="true">
+            <circle class="track" cx="18" cy="18" r="15"></circle>
+            <circle class="bar" cx="18" cy="18" r="15" pathLength="100"></circle>
+          </svg>
+          <span class="value">0</span>
+          <svg class="up" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 19V5M5 12l7-7 7 7"></path>
+          </svg>
+        </button>
         <button
           type="button"
           class="submit"

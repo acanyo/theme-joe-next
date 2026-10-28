@@ -3,8 +3,8 @@
  *
  *   顶部（.is-top）：透明通栏，盖在大图上
  *   向上滚动：Logo / 菜单 / 工具按钮各自浮成一块玻璃胶囊
- *   向下滚动（.is-down）：只保留 Logo，菜单与工具按钮收起；
- *     文章页同时在中间显示文章标题（.show-title），点击回到顶部
+ *   向下滚动（.is-down / .show-title）：中间胶囊由菜单换成文章标题（其他页面为站点名），
+ *     点击回到顶部；Logo 与右侧工具保留，工具区多出阅读进度圆环；向上滚动恢复菜单
  *
  * 当前项与悬停项下方有一块主题色淡底滑块（位置由 navigation.ts 写入 --pill-*）。
  * 下拉菜单、二级菜单是同材质的玻璃面板；Joe 的菜单图标、多级菜单、登录、搜索、移动端抽屉均保留。
@@ -178,9 +178,6 @@
       opacity 0.3s var(--ease-out),
       transform 0.45s var(--ease-spring);
 
-    &[hidden] {
-      display: none;
-    }
   }
 
   .joe_header__above.show-title .joe_header__above-nav {
@@ -216,23 +213,103 @@
       box-shadow 0.35s var(--ease-out);
   }
 
-  .joe_header__above.is-down {
-    .joe_header__above-search {
-      opacity: 0;
-      transform: translateY(-12px) scale(0.92);
-      pointer-events: none;
+  .joe_header__above.is-down .joe_dropdown__menu {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  /* 阅读进度圆环：离开顶部后出现；悬停时数字换成向上箭头 */
+  .joe_header__progress {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 0;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-title);
+    cursor: pointer;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      width 0.45s var(--ease-spring),
+      opacity 0.25s var(--ease-out),
+      transform 0.45s var(--ease-spring);
+
+    svg:not(.up) {
+      position: absolute;
+      inset: 2px;
+      width: 32px;
+      height: 32px;
+      rotate: -90deg;
     }
 
-    &:not(.show-title) .joe_header__above-nav {
-      opacity: 0;
-      transform: translateY(-12px) scale(0.96);
-      pointer-events: none;
+    circle {
+      fill: none;
+      stroke-width: 3;
     }
 
-    .joe_dropdown__menu {
-      visibility: hidden;
-      opacity: 0;
+    .track {
+      stroke: color-mix(in srgb, var(--text-title) 12%, transparent);
     }
+
+    .bar {
+      stroke: var(--theme);
+      stroke-linecap: round;
+      stroke-dasharray: 100;
+      stroke-dashoffset: calc(100 - var(--read, 0));
+      transition: stroke-dashoffset 0.2s linear;
+    }
+
+    .value {
+      font-size: 11px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      transition: opacity 0.2s var(--ease-out);
+    }
+
+    .up {
+      position: absolute;
+      inset: 9px;
+      width: 18px;
+      height: 18px;
+      rotate: none;
+      fill: none;
+      stroke: var(--theme);
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0;
+      transform: translateY(4px);
+      transition:
+        opacity 0.2s var(--ease-out),
+        transform 0.35s var(--ease-spring);
+    }
+
+    &:hover {
+      .value {
+        opacity: 0;
+      }
+
+      .up {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+
+  .joe_header__above:not(.is-top) .joe_header__progress {
+    width: 36px;
+    opacity: 1;
+    transform: none;
   }
 
   .joe_header__above-nav > a.item,
@@ -489,5 +566,19 @@
     .joe_header__above .joe_container {
       height: 48px;
     }
+  }
+}
+
+/* 桌面端由导航里的进度圆环负责回到顶部，隐藏右下角重复的按钮（移动端仍保留） */
+@media (min-width: 769px) {
+  html:has(.joe_header--islands) .joe_action_item.back2top {
+    display: none;
+  }
+}
+
+/* 移动端胶囊较窄，不放进度圆环 */
+@media (max-width: 768px) {
+  .joe_header--islands .joe_header__progress {
+    display: none;
   }
 }

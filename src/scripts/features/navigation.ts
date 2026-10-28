@@ -156,7 +156,9 @@ function initHeaderScroll(): void {
 /**
  * 浮岛导航（navbar.style = islands）的附加交互，经典样式下不执行：
  * - 页面顶部时 .is-top（透明），离开顶部后浮起
- * - 向下滚动时 .is-down：只保留 Logo（文章页中间同时显示文章标题，.show-title），向上滚动恢复完整导航
+ * - 向下滚动时 .is-down：中间菜单收起，文章页换成文章标题（.show-title），首页等显示站点名；
+ *   Logo 与右侧工具保留，向上滚动恢复菜单
+ * - 右侧阅读进度圆环（--read 0~100），离开顶部后出现，点击回到顶部
  * - 菜单下方的主题色滑块停在当前项、随鼠标滑到悬停项
  */
 const isIslands = () => !!$(".joe_header--islands");
@@ -173,18 +175,22 @@ function initIslandsScroll(): void {
     if (Math.abs(delta) > 4) {
       const down = delta > 0 && y > 120;
       header.classList.toggle("is-down", down);
-      const title = $(".joe_header__page-title");
-      header.classList.toggle(
-        "show-title",
-        down && !!title && !title.hidden && y > 360,
-      );
+      header.classList.toggle("show-title", down && y > 240);
       lastY = y;
     }
     if (y < 24) {
       header.classList.remove("is-down", "show-title");
       lastY = y;
     }
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const read = max > 0 ? Math.round(Math.min(1, y / max) * 100) : 0;
+    header.style.setProperty("--read", String(read));
+    const value = $(".joe_header__progress .value", header);
+    if (value) value.textContent = String(read);
   };
+  $(".joe_header__progress", header)?.addEventListener("click", () =>
+    window.scrollTo({ top: 0, behavior: "smooth" }),
+  );
   update();
   document.addEventListener("scroll", throttle(update, 80), { passive: true });
   refreshIslands = update;
@@ -192,13 +198,12 @@ function initIslandsScroll(): void {
 
 let refreshIslands = (): void => {};
 
-/** 把当前页面的标题写入导航中间的标题胶囊（切页后调用） */
+/** 把当前页面的标题写入导航中间的标题胶囊（切页后调用）；没有文章标题的页面显示站点名 */
 function syncPageTitle(): void {
   const button = $<HTMLButtonElement>(".joe_header__page-title");
   if (!button) return;
-  const title = $("#swup")?.dataset.joeTitle ?? "";
-  button.textContent = title;
-  button.hidden = !title;
+  button.textContent =
+    $("#swup")?.dataset.joeTitle || button.dataset.siteTitle || "";
 }
 
 function initPageTitle(): void {
