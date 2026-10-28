@@ -24,8 +24,8 @@
 
   html.is-changing .joe_swup {
     transition:
-      opacity 0.22s ease,
-      transform 0.22s ease;
+      opacity 0.22s var(--ease-out),
+      transform 0.22s var(--ease-out);
   }
 
   html.is-animating .joe_swup {
@@ -56,4 +56,16 @@
 .swup-progress-bar {
   height: var(--loading-bar-height, 3px);
   background: var(--loading-bar, var(--theme));
+}
+
+/* 系统开启「减少动态效果」时，全站过渡与动画缩短到几乎瞬时（Joe 的特效脚本另行判断） */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

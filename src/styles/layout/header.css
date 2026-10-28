@@ -8,7 +8,7 @@
 }
 
 .joe_dropdown__link-icon {
-  transition: transform 0.35s;
+  transition: transform var(--dur-base) var(--ease-out);
   margin-left: -12px;
 }
 
@@ -26,9 +26,9 @@
   opacity: 0;
   transform: translateX(-50%) perspective(600px) rotateX(-45deg);
   transition:
-    opacity 0.35s,
-    visibility 0.35s,
-    transform 0.35s;
+    opacity var(--dur-base) var(--ease-out),
+    visibility var(--dur-base),
+    transform var(--dur-slow) var(--ease-spring);
 
   &::before {
     content: "";
@@ -88,7 +88,7 @@
   will-change: opacity, transform;
   transition:
     opacity,
-    transform 0.35s;
+    transform var(--dur-base) var(--ease-out);
 
   .joe_container {
     align-items: center;
@@ -145,13 +145,13 @@
     user-select: none;
     white-space: nowrap;
     color: var(--text-regular);
-    transition: color 0.25s;
+    transition: color var(--dur-base) var(--ease-out);
 
     > i {
       display: inline-block;
       margin-right: 4px;
       font-size: 18px;
-      transition: transform 0.5s;
+      transition: transform var(--dur-slow) var(--ease-out);
     }
 
     &:last-child {
@@ -173,8 +173,8 @@
       background: var(--theme);
       border-radius: 3px;
       transition:
-        opacity 0.5s,
-        transform 0.5s;
+        opacity var(--dur-slow) var(--ease-out),
+        transform var(--dur-slow) var(--ease-out);
     }
 
     &.current {
@@ -230,7 +230,7 @@
       font-size: 15px;
       padding-left: 8px;
       padding-right: 3px;
-      transition: color 0.35s;
+      transition: color var(--dur-base) var(--ease-out);
       white-space: nowrap;
       color: var(--text-primary);
     }
@@ -253,8 +253,8 @@
       text-overflow: ellipsis;
       padding: 0 15px;
       transition:
-        color 0.35s,
-        background 0.35s;
+        color var(--dur-base) var(--ease-out),
+        background var(--dur-base) var(--ease-out);
 
       &::after {
         display: none;
@@ -317,9 +317,9 @@
     border-radius: 0 var(--radius-inner) var(--radius-inner) 0;
     transform: translateX(-20%) perspective(600px) rotateY(-45deg);
     transition:
-      opacity 0.35s,
-      visibility 0.35s,
-      transform 0.35s;
+      opacity var(--dur-base) var(--ease-out),
+      visibility var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
 
     &::before {
       position: absolute;
@@ -363,9 +363,9 @@
     padding: 0 14px 0 16px;
     color: var(--text-regular);
     transition:
-      width 0.35s,
-      border-color 0.35s,
-      padding-right 0.35s;
+      width var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out),
+      padding-right var(--dur-base) var(--ease-out);
     border-radius: 17px 0 0 17px;
 
     &:focus {
@@ -394,9 +394,9 @@
     border-radius: 50%;
     cursor: pointer;
     transition:
-      color 0.25s,
-      border-color 0.25s,
-      background 0.25s;
+      color var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out),
+      background var(--dur-base) var(--ease-out);
 
     i {
       font-size: 18px;
@@ -417,7 +417,7 @@
     height: 38px;
     background: url(data:image/png;base64,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);
     background-size: 100% 100%;
-    transition: transform 0.35s;
+    transition: transform var(--dur-base) var(--ease-out);
     transform: translate3d(100%, -50%, 0) rotateY(180deg);
   }
 
@@ -434,9 +434,9 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
     border-radius: var(--radius-inner);
     transition:
-      visibility 0.35s,
-      opacity 0.35s,
-      transform 0.35s;
+      visibility var(--dur-base) var(--ease-out),
+      opacity var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
     transform: translate3d(0, 15px, 0);
 
     &.active {
@@ -453,7 +453,7 @@
       overflow: hidden;
       padding: 0 10px;
       border-bottom: 1px solid var(--fill-base);
-      transition: background 0.35s;
+      transition: background var(--dur-base) var(--ease-out);
 
       &:last-child {
         border-bottom: none;
@@ -536,8 +536,8 @@
   border-top: 1px solid var(--border-lighter);
   transform: translate3d(0, -100%, 0);
   transition:
-    transform 0.35s,
-    visibility 0.35s;
+    transform var(--dur-slow) var(--ease-spring),
+    visibility var(--dur-slow);
   visibility: hidden;
 
   .joe_container {
@@ -562,8 +562,8 @@
   background: var(--fill-base);
   transform: translate3d(-100%, 0, 0);
   transition:
-    transform 0.35s,
-    visibility 0.35s;
+    transform var(--dur-slow) var(--ease-spring),
+    visibility var(--dur-slow);
 }
 
 .joe_header__slideout-wrap {
@@ -685,18 +685,18 @@
     justify-content: space-between;
     padding: 10px 0;
     color: var(--text-primary);
-    transition: color 0.15s;
+    transition: color var(--dur-fast) var(--ease-out);
 
     a {
-      transition: color 0.15s;
+      transition: color var(--dur-fast) var(--ease-out);
       color: var(--text-regular);
     }
 
     .joe-font {
       color: var(--text-secondary);
       transition:
-        transform 0.15s,
-        fill 0.15s;
+        transform var(--dur-fast) var(--ease-out),
+        fill var(--dur-fast) var(--ease-out);
     }
 
     &.in {
@@ -756,8 +756,8 @@
   background: var(--fill-base);
   transform: translate3d(-100%, 0, 0);
   transition:
-    transform 0.35s,
-    visibility 0.35s;
+    transform var(--dur-slow) var(--ease-spring),
+    visibility var(--dur-slow);
 }
 
 .joe_header__toc-wrap {
@@ -899,8 +899,8 @@
   opacity: 0;
   visibility: hidden;
   transition:
-    visibility 0.35s,
-    opacity 0.35s;
+    visibility var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out);
 
   &.active {
     visibility: visible;
@@ -932,8 +932,8 @@
     text-decoration: none;
     font-size: 24px;
     transition:
-      background-color 0.3s,
-      color 0.3s;
+      background-color var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out);
 
     &:hover {
       background-color: var(--theme); /* 这里的变量可以是LESS的全局变量*/

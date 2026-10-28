@@ -71,8 +71,8 @@
       opacity: 0;
       transform: scale(0);
       transition:
-        transform 0.35s,
-        opacity 0.35s;
+        transform var(--dur-base) var(--ease-out),
+        opacity var(--dur-base) var(--ease-out);
       border-radius: 50%;
 
       &.active {
@@ -103,7 +103,7 @@
       font-size: 0;
       background: var(--bg-raised);
       border-radius: 50px;
-      transition: all 0.25s;
+      transition: all var(--dur-base) var(--ease-out);
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 
       a {
@@ -185,7 +185,7 @@
       background: var(--bg-muted);
       box-shadow: var(--shadow-block);
       border-radius: 5px;
-      transition: all 0.35s;
+      transition: all var(--dur-base) var(--ease-out);
 
       &:before {
         position: absolute;

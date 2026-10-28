@@ -90,7 +90,7 @@
   border-radius: 0 18px 18px 18px;
   border: 1px solid var(--border-lighter);
   box-shadow: 1px 1px 5px 0 var(--box-shadow-friend);
-  transition: box-shadow 0.2s;
+  transition: box-shadow var(--dur-fast) var(--ease-out);
 }
 
 .joe_friend_body {
@@ -100,7 +100,7 @@
   padding: 10px 12px;
   background: var(--background-friend-block);
   border-radius: 0 6px 6px 6px;
-  transition: height 0.2s;
+  transition: height var(--dur-fast) var(--ease-out);
 }
 
 .joe_friend_content_title {

@@ -39,9 +39,9 @@
     -webkit-backdrop-filter: var(--glass-blur);
     box-shadow: var(--glass-shadow);
     transition:
-      background 0.35s var(--ease-out),
-      box-shadow 0.35s var(--ease-out),
-      backdrop-filter 0.35s var(--ease-out);
+      background var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      backdrop-filter var(--dur-base) var(--ease-out);
 
     > .joe_header__above-logo {
       justify-self: start;
@@ -82,7 +82,7 @@
       height: 20px;
       background: var(--border-light);
       transform: translateY(-50%);
-      transition: opacity 0.3s var(--ease-out);
+      transition: opacity var(--dur-base) var(--ease-out);
     }
   }
 
@@ -132,9 +132,9 @@
       transform: translateX(var(--bar-x, 0px));
       opacity: var(--bar-o, 0);
       transition:
-        transform 0.5s var(--ease-spring),
-        width 0.5s var(--ease-spring),
-        opacity 0.25s var(--ease-out);
+        transform var(--dur-slow) var(--ease-spring),
+        width var(--dur-slow) var(--ease-spring),
+        opacity var(--dur-base) var(--ease-out);
       pointer-events: none;
     }
 
@@ -184,10 +184,10 @@
     > a.item,
     > .joe_dropdown {
       transition:
-        opacity 0.3s var(--ease-out),
-        transform 0.5s var(--ease-spring),
-        filter 0.3s var(--ease-out),
-        color 0.25s var(--ease-out);
+        opacity var(--dur-base) var(--ease-out),
+        transform var(--dur-slow) var(--ease-spring),
+        filter var(--dur-base) var(--ease-out),
+        color var(--dur-base) var(--ease-out);
     }
   }
 
@@ -205,9 +205,9 @@
     filter: blur(2px);
     pointer-events: none;
     transition:
-      opacity 0.3s var(--ease-out),
-      transform 0.5s var(--ease-spring),
-      filter 0.3s var(--ease-out);
+      opacity var(--dur-base) var(--ease-out),
+      transform var(--dur-slow) var(--ease-spring),
+      filter var(--dur-base) var(--ease-out);
 
     &[hidden] {
       display: none;
@@ -246,7 +246,7 @@
         border-radius: 50%;
         background: var(--border-base);
         transition:
-          background 0.3s var(--ease-out),
+          background var(--dur-base) var(--ease-out),
           transform 0.4s var(--ease-spring);
       }
 
@@ -273,7 +273,7 @@
       flex-shrink: 0;
       font-size: 12px;
       color: var(--text-secondary);
-      transition: transform 0.35s var(--ease-spring);
+      transition: transform var(--dur-base) var(--ease-spring);
     }
   }
 
@@ -302,8 +302,8 @@
     transform: translateX(-50%) scale(0.96);
     transform-origin: top center;
     transition:
-      opacity 0.25s var(--ease-out),
-      visibility 0.25s,
+      opacity var(--dur-base) var(--ease-out),
+      visibility var(--dur-base) var(--ease-out),
       transform 0.4s var(--ease-spring);
 
     li.sub a {
@@ -371,7 +371,7 @@
     box-shadow: 0 0 8px color-mix(in srgb, var(--theme) 50%, transparent);
     transform-origin: left center;
     transform: scaleX(var(--read, 0));
-    transition: opacity 0.3s var(--ease-out);
+    transition: opacity var(--dur-base) var(--ease-out);
     pointer-events: none;
   }
 
@@ -393,9 +393,9 @@
       background: transparent;
       color: var(--text-regular);
       transition:
-        color 0.25s var(--ease-out),
-        background 0.25s var(--ease-out),
-        transform 0.35s var(--ease-spring);
+        color var(--dur-base) var(--ease-out),
+        background var(--dur-base) var(--ease-out),
+        transform var(--dur-base) var(--ease-spring);
 
       &:hover {
         color: var(--theme);
@@ -471,8 +471,8 @@
     transform: translateX(-50%) scale(0.96);
     transform-origin: top center;
     transition:
-      opacity 0.25s var(--ease-out),
-      visibility 0.25s,
+      opacity var(--dur-base) var(--ease-out),
+      visibility var(--dur-base) var(--ease-out),
       transform 0.4s var(--ease-spring);
 
     /* 菜单项与面板之间的间隙不断开 hover */

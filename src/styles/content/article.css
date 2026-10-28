@@ -23,8 +23,8 @@
     text-overflow: ellipsis;
     max-width: 120px;
     transition:
-      transform 0.35s,
-      opacity 0.35s;
+      transform var(--dur-base) var(--ease-out),
+      opacity var(--dur-base) var(--ease-out);
 
     &:hover {
       opacity: 0.85;
@@ -358,8 +358,8 @@
       transform: scaleX(0.25);
       opacity: 0;
       transition:
-        transform 0.35s,
-        opacity 0.35s;
+        transform var(--dur-base) var(--ease-out),
+        opacity var(--dur-base) var(--ease-out);
     }
   }
 
@@ -392,8 +392,8 @@
     margin: 5px 0;
     border-radius: var(--radius-img);
     transition:
-      transform 0.35s,
-      box-shadow 0.35s;
+      transform var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out);
 
     &:hover {
       transform: translateY(-5px);
@@ -498,7 +498,7 @@
 
     tbody {
       tr {
-        transition: background 0.35s;
+        transition: background var(--dur-base) var(--ease-out);
 
         &:last-child td {
           border-bottom: none;
@@ -552,8 +552,8 @@
         color: #fff;
         transform: scale(0);
         transition:
-          transform 0.85s,
-          opacity 0.85s;
+          transform 0.85s var(--ease-out),
+          opacity 0.85s var(--ease-out);
 
         &.active {
           transform: scale(1);
@@ -610,8 +610,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     transition:
-      border 0.25s,
-      color 0.25s;
+      border var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out);
 
     &:hover {
       color: var(--text-regular);
@@ -662,7 +662,7 @@
   margin-right: 6px;
   overflow: hidden;
   border-radius: 30px;
-  transition: all 0.25s;
+  transition: all var(--dur-base) var(--ease-out);
 
   .joe-icon-share {
     cursor: pointer;
@@ -678,7 +678,7 @@
     color: #fff;
     background: #9999ff;
     border-radius: 50%;
-    transition: transform 0.35s;
+    transition: transform var(--dur-base) var(--ease-out);
   }
 
   .share-icon-list {
@@ -695,7 +695,7 @@
     padding: 4px 40px 4px 0;
     background: var(--fill-base);
     border-radius: 50px;
-    transition: all 0.2s;
+    transition: all var(--dur-fast) var(--ease-out);
 
     a {
       position: relative;
@@ -790,7 +790,7 @@
       border-radius: 5px;
       background: var(--bg-muted);
       box-shadow: var(--shadow-block);
-      transition: all 0.25s;
+      transition: all var(--dur-base) var(--ease-out);
 
       &:before {
         position: absolute;
@@ -898,7 +898,7 @@
     word-break: break-word;
     transform: translate3d(0, 0, 0) scale(1);
     transform-origin: bottom center;
-    transition: transform 0.35s;
+    transition: transform var(--dur-base) var(--ease-out);
     border-radius: var(--radius-wrap);
 
     &:hover {

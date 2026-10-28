@@ -31,7 +31,7 @@
   user-select: none;
   background: var(--bg-page);
   color: var(--text-regular);
-  transition: transform 0.25s;
+  transition: transform var(--dur-base) var(--ease-out);
   box-shadow: var(--shadow);
 
   &:active {
@@ -55,8 +55,8 @@
   transform: scaleX(0);
   transform-origin: left;
   transition:
-    transform 0.4s ease,
-    opacity 0.3s ease 0.2s;
+    transform 0.4s var(--ease-out),
+    opacity var(--dur-base) var(--ease-out) 0.2s;
   pointer-events: none;
 
   &.is-loading {
@@ -95,8 +95,8 @@
   opacity: 0;
   transform: translateY(-10px);
   transition:
-    opacity 0.25s,
-    transform 0.25s;
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
 
   &.is-visible {
     opacity: 1;

@@ -19,7 +19,7 @@
     position: sticky;
     top: 75px;
     margin-bottom: 0;
-    transition: top 0.35s;
+    transition: top var(--dur-base) var(--ease-out);
   }
 }
 
@@ -127,7 +127,7 @@
         padding: 5px;
         object-fit: cover;
         background: var(--border-lighter);
-        transition: transform 0.75s;
+        transition: transform 0.75s var(--ease-out);
         border-radius: 50%;
 
         &:hover {
@@ -437,7 +437,7 @@
         margin: 0 2px;
         font-size: 0;
         color: var(--text-secondary);
-        transition: transform 0.2s;
+        transition: transform var(--dur-fast) var(--ease-out);
 
         img {
           display: inline-block;
@@ -476,7 +476,7 @@
             width: 0;
             height: 1px;
             background: var(--theme);
-            transition: all 0.35s;
+            transition: all var(--dur-base) var(--ease-out);
           }
 
           &:hover {
@@ -507,7 +507,7 @@
         .joe-font {
           font-size: 18px;
           color: var(--text-regular);
-          transition: transform 0.3s;
+          transition: transform var(--dur-base) var(--ease-out);
         }
 
         &:hover {
@@ -560,7 +560,7 @@
             width: 0;
             height: 1px;
             background: var(--theme);
-            transition: all 0.35s;
+            transition: all var(--dur-base) var(--ease-out);
           }
         }
       }
@@ -604,7 +604,7 @@
           width: 0;
           height: 1px;
           background: var(--theme);
-          transition: all 0.35s;
+          transition: all var(--dur-base) var(--ease-out);
         }
 
         &:hover {
@@ -658,7 +658,7 @@
             cursor: pointer;
             display: block;
             border-radius: 3px;
-            transition: color 0.3s;
+            transition: color var(--dur-base) var(--ease-out);
             border-bottom: 2px solid transparent;
           }
 
@@ -739,7 +739,7 @@
         width: 0;
         height: 100%;
         border-radius: 5px;
-        transition: width 0.35s;
+        transition: width var(--dur-base) var(--ease-out);
         animation: progress 750ms linear infinite;
       }
 
@@ -866,7 +866,7 @@
           width: 100%;
           height: 130px;
           object-fit: cover;
-          transition: transform 0.35s;
+          transition: transform var(--dur-base) var(--ease-out);
         }
       }
     }
@@ -958,7 +958,7 @@
           font-size: 13px;
           font-weight: 500;
           line-height: 24px;
-          transition: all 0.35s;
+          transition: all var(--dur-base) var(--ease-out);
           max-height: 48px;
 
           &:hover {
@@ -1087,7 +1087,7 @@
 
 /* 悬停：描边与投影染上主题色（参考 Heo）*/
 .joe_aside__item {
-  transition: box-shadow 0.3s var(--ease-out);
+  transition: box-shadow var(--dur-base) var(--ease-out);
 
   &:hover {
     box-shadow: var(--shadow-hover);

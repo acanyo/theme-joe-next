@@ -18,7 +18,13 @@
   border-radius: 50%;
   cursor: pointer;
   box-shadow: var(--shadow);
-  transition: border-color 0.25s;
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    scale var(--dur-base) var(--ease-spring);
+
+  &:active {
+    scale: 0.9;
+  }
 
   &:hover {
     border-color: color-mix(in srgb, var(--theme) 45%, transparent);
@@ -57,9 +63,9 @@
       transform: scale(1);
       opacity: 1;
       transition:
-        transform 0.85s,
-        opacity 0.85s,
-        scale 0.85s;
+        transform 0.85s var(--ease-out),
+        opacity 0.85s var(--ease-out),
+        scale 0.85s var(--ease-out);
     }
   }
 
@@ -71,8 +77,8 @@
       transform: scale(0);
       opacity: 0;
       transition:
-        transform 0.85s,
-        opacity 0.85s;
+        transform 0.85s var(--ease-out),
+        opacity 0.85s var(--ease-out);
 
       &.active {
         transform: scale(1);
@@ -86,8 +92,8 @@
     visibility: hidden;
     transform: scale(0);
     transition:
-      visibility 0.35s,
-      transform 0.35s;
+      visibility var(--dur-slow),
+      transform var(--dur-slow) var(--ease-spring);
 
     &.active {
       pointer-events: auto;

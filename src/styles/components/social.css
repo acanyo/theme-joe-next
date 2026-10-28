@@ -13,7 +13,7 @@
     margin: 0 2px;
     font-size: 0;
     color: var(--text-secondary);
-    transition: transform 0.2s;
+    transition: transform var(--dur-fast) var(--ease-out);
 
     img {
       display: inline-block;

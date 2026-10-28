@@ -76,7 +76,7 @@
   border-bottom: 1px solid var(--border-lighter);
   border-radius: 0 var(--radius-wrap) var(--radius-wrap) var(--radius-wrap);
   border: 1px solid var(--border-lighter);
-  transition: border-color 0.25s;
+  transition: border-color var(--dur-base) var(--ease-out);
 }
 
 .joe_journal_body {
@@ -87,7 +87,7 @@
   padding: 10px 12px;
   background: var(--background-journal-block);
   border-radius: var(--radius-inner);
-  transition: height 0.2s;
+  transition: height var(--dur-fast) var(--ease-out);
 
   &.open {
     max-height: unset !important;
@@ -254,8 +254,8 @@
         transform: scaleX(0.25);
         opacity: 0;
         transition:
-          transform 0.35s,
-          opacity 0.35s;
+          transform var(--dur-base) var(--ease-out),
+          opacity var(--dur-base) var(--ease-out);
       }
     }
     a[href*="tag"] {
@@ -353,8 +353,8 @@
       margin: 5px 0;
       border-radius: var(--radius-img);
       transition:
-        transform 0.35s,
-        box-shadow 0.35s;
+        transform var(--dur-base) var(--ease-out),
+        box-shadow var(--dur-base) var(--ease-out);
       height: 120px;
 
       @media (max-width: 768px) {
@@ -399,7 +399,7 @@
 
       tbody {
         tr {
-          transition: background 0.35s;
+          transition: background var(--dur-base) var(--ease-out);
 
           &:last-child td {
             border-bottom: none;
@@ -442,14 +442,14 @@
   font-size: 0;
   user-select: none;
   color: var(--text-regular);
-  transition: color 0.2s;
+  transition: color var(--dur-fast) var(--ease-out);
 
   i {
     display: inline-block;
     cursor: pointer;
     margin-right: 4px;
     vertical-align: sup;
-    transition: all 0.2s;
+    transition: all var(--dur-fast) var(--ease-out);
   }
 
   em {
