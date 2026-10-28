@@ -1084,3 +1084,12 @@
     display: none;
   }
 }
+
+/* 悬停：描边与投影染上主题色（参考 Heo）*/
+.joe_aside__item {
+  transition: box-shadow 0.3s var(--ease-out);
+
+  &:hover {
+    box-shadow: var(--shadow-hover);
+  }
+}

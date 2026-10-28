@@ -151,7 +151,7 @@ body {
     margin: 20px 0;
     overflow: hidden;
     box-shadow: 1px 1px 5px 0 var(--shadow-code);
-    border-radius: 8px;
+    border-radius: var(--radius-wrap);
 
     /* 原依赖 Prism toolbar 插件样式定位，这里自行声明*/
     .toolbar {
@@ -205,7 +205,7 @@ body {
       overflow: hidden;
       white-space: pre;
       text-shadow: none;
-      border-radius: 8px;
+      border-radius: var(--radius-wrap);
 
       code[class*="language-"] {
         display: block;
