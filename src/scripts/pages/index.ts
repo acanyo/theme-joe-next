@@ -1,8 +1,9 @@
-/** 首页：轮播、大图、加载更多 */
+/** 首页：轮播、大图、瞬间叠放、加载更多 */
 import { $, headerOffset } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { initBanner } from "../features/banner";
 import { initBigBanner } from "../features/big-banner";
+import { initMomentsStack } from "../features/moments-stack";
 import { initReveal } from "../features/reveal";
 import { observe } from "../core/lifecycle";
 
@@ -58,6 +59,7 @@ function initLoadMore(): void {
 
 export default function init(): void {
   initBigBanner();
+  initMomentsStack();
   initLoadMore();
   void initBanner();
 }

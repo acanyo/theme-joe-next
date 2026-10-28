@@ -31,6 +31,7 @@ export const BOOLEAN_SETTINGS: readonly string[] = [
   "home.carousel_dots",
   "home.carousel_autoplay",
   "home.featured",
+  "home.moments_stack",
   "home.load_more",
   "home.infinite_scroll",
   "home.thumbnail",

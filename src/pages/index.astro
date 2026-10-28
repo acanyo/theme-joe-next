@@ -5,7 +5,9 @@ import PostItem from "../components/list/PostItem.astro";
 import Pagination from "../components/list/Pagination.astro";
 import Banner from "../components/home/Banner.astro";
 import HotCategories from "../components/home/HotCategories.astro";
+import MomentsStack from "../components/home/MomentsStack.astro";
 import "../styles/pages/index.css";
+import "../styles/pages/moments-stack.css";
 ---
 
 <BaseLayout pageScript="index" pageClass="page-index" bigBanner="fullscreen">
@@ -17,6 +19,7 @@ import "../styles/pages/index.css";
       <th-block th:if="${theme.config.home.featured and not #lists.isEmpty(theme.config.home.featured_items)}">
         <HotCategories />
       </th-block>
+      <MomentsStack />
       <div class="joe_index__article">
         <div class="joe_index__title">
           <ul class="joe_index__title-title passage-list-tabs default">
