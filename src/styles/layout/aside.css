@@ -1,4 +1,12 @@
+/*
+ * 侧栏宽度只在这里设置一次（--aside-width），各组件按侧栏宽度铺满。
+ * 侧栏是命名容器 joe-aside：组件内部需要随宽度调整的样式用 @container joe-aside 编写。
+ */
 .joe_aside {
+  --aside-width: 280px;
+  flex: 0 0 var(--aside-width);
+  width: var(--aside-width);
+  container: joe-aside / inline-size;
   padding-bottom: 15px;
   margin-left: 15px;
 
@@ -9,7 +17,7 @@
 
 .joe_aside__item {
   position: relative;
-  width: 280px;
+  width: 100%;
   margin-bottom: 15px;
   border-radius: var(--radius-wrap);
   box-shadow: var(--shadow);
@@ -649,7 +657,7 @@
             opacity: 0;
             position: absolute;
             width: 100%;
-            left: 300px;
+            left: calc(100% + 20px);
           }
         }
       }

@@ -15,7 +15,9 @@
   }
 }
 
+/* 瞬间列表是命名容器 joe-moments：卡片按列表自身宽度调整（有无侧栏、首页与详情页通用） */
 .joe_journals__list {
+  container: joe-moments / inline-size;
   padding: 10px 0 20px;
 
   &.hidden {
@@ -357,7 +359,7 @@
         box-shadow var(--dur-base) var(--ease-out);
       height: 120px;
 
-      @media (max-width: 768px) {
+      @container joe-moments (max-width: 640px) {
         height: 80px;
       }
 
@@ -514,8 +516,8 @@
   }
 }
 
-/* 响应式 */
-@media (max-width: 500px) {
+/* 窄列表：去掉时间轴，卡片占满宽度 */
+@container joe-moments (max-width: 480px) {
   .joe_journals__list {
     .joe_journal__item {
       padding: 0 0 12px 0;

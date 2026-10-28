@@ -6,6 +6,8 @@
  * 触屏设备与「减少动态效果」下直接显示展开状态。
  */
 .joe_moments_stack {
+  /* 命名容器：卡片按自身宽度切换紧凑布局 */
+  container: joe-moments-stack / inline-size;
   --card-h: 64px;
   --gap: 10px;
   /* 与下方文章列表（.joe_index__article 内边距 15px）左右对齐 */
@@ -124,7 +126,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@container joe-moments-stack (max-width: 600px) {
   .joe_moments_stack__list .card {
     grid-template-columns: 32px 1fr auto;
     gap: 10px;
