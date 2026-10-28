@@ -63,7 +63,6 @@ export const SERVER_CONFIG_FIELDS = {
   enableFoldLongCode: "theme.config.code.fold_long",
   longCodeHeight: "theme.config.code.fold_height",
   showToolsWhenHover: "theme.config.code.tools_on_hover",
-  codeTheme: "theme.config.code.theme",
   enableToc: "theme.config.post.toc",
   tocDepth: "theme.config.post.toc_depth",
   enableProgressBar: "theme.config.post.progress",
@@ -150,7 +149,6 @@ export interface ThemeConfig {
     foldLong: boolean;
     longHeight: number;
     toolsOnHover: boolean;
-    theme: string;
   };
   post: {
     toc: boolean;
@@ -284,7 +282,6 @@ export function normalizeThemeConfig(
       foldLong: toBool(raw.enableFoldLongCode),
       longHeight: toNumber(raw.longCodeHeight, 800),
       toolsOnHover: toBool(raw.showToolsWhenHover, true),
-      theme: toStr(raw.codeTheme, "one-dark"),
     },
     post: {
       toc: toBool(raw.enableToc, true),

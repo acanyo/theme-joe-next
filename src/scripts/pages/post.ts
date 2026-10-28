@@ -26,7 +26,7 @@ export default function init(): void {
   initProgressBar();
   initGallery();
   // 文章元数据可单独关闭长代码自动折叠
-  void initCodeBlocks({
+  initCodeBlocks({
     foldLong:
       document.querySelector<HTMLElement>(".joe_detail")?.dataset
         .foldLongCode !== "false",

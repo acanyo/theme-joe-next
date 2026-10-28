@@ -159,54 +159,6 @@ html {
       }
     }
 
-    .aplayer {
-      background: var(--fill-base);
-
-      .aplayer-list li {
-        color: var(--text-primary);
-        border-color: var(--border-lighter);
-
-        &.aplayer-list-light,
-        &:hover {
-          background: #232324 !important;
-        }
-      }
-
-      .aplayer-info {
-        border-color: var(--border-lighter);
-      }
-
-      .aplayer-music {
-        color: var(--text-icon);
-        border-color: var(--border-lighter);
-      }
-
-      .aplayer-time {
-        .aplayer-icon:hover path {
-          fill: var(--text-icon) !important;
-        }
-      }
-
-      .aplayer-lrc {
-        &:before {
-          height: 5px;
-          background: linear-gradient(
-            180deg,
-            rgba(0, 0, 0, 0.3) 0,
-            rgba(0, 0, 0, 0)
-          );
-        }
-
-        &:after {
-          background: linear-gradient(
-            180deg,
-            rgba(0, 0, 0, 0) 0,
-            rgba(0, 0, 0, 0.3)
-          );
-        }
-      }
-    }
-
     .joe_detail__friends {
       filter: brightness(0.8);
     }

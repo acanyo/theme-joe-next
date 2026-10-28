@@ -6,7 +6,6 @@
  * 属性值来自文章作者，渲染时一律转义，避免把属性当作 HTML 注入。
  */
 import { copyText } from "../core/clipboard";
-import { fetchMeting, loadAPlayer } from "./aplayer";
 import { escapeHtml, parseItems, safeUrl } from "./shortcode-parse";
 
 const attr = (el: Element, name: string, fallback = ""): string =>
@@ -271,44 +270,39 @@ const SHORTCODES: Record<string, (el: HTMLElement) => void | Promise<void>> = {
     }
     video.src = src;
   },
-  "joe-mp3": async (el) => {
-    const url = attr(el, "url");
+  /** 音频：原生 <audio> 播放 */
+  "joe-mp3": (el) => {
+    const url = attr(el, "url").trim();
     if (!url) {
       el.textContent = "音频地址未填写！";
       return;
     }
-    const container = document.createElement("span");
-    container.style.display = "block";
-    el.replaceChildren(container);
-    const APlayer = await loadAPlayer();
-    new APlayer({
-      container,
-      audio: [
-        { name: attr(el, "name"), artist: "", url, cover: attr(el, "cover") },
-      ],
-    });
+    const audio = document.createElement("audio");
+    audio.controls = true;
+    audio.preload = "none";
+    audio.src = url;
+    audio.className = "joe_audio";
+    const name = attr(el, "name");
+    if (name) audio.setAttribute("aria-label", name);
+    el.replaceChildren(audio);
   },
-  "joe-music": (el) => mountMeting(el, "song"),
-  "joe-mlist": (el) => mountMeting(el, "playlist"),
+  /** 网易云单曲 / 歌单：主题不再内置播放器，改为指向网易云的链接 */
+  "joe-music": (el) => renderNeteaseLink(el, "song"),
+  "joe-mlist": (el) => renderNeteaseLink(el, "playlist"),
 };
 
-async function mountMeting(
-  el: HTMLElement,
-  type: "song" | "playlist",
-): Promise<void> {
+function renderNeteaseLink(el: HTMLElement, type: "song" | "playlist"): void {
   const id = attr(el, "id");
-  if (!id) {
+  if (!/^\d+$/.test(id)) {
     el.textContent = "网易云 ID 未填写！";
     return;
   }
-  const container = document.createElement("span");
-  container.style.display = "block";
-  el.replaceChildren(container);
-  const [APlayer, audio] = await Promise.all([
-    loadAPlayer(),
-    fetchMeting(type, id),
-  ]);
-  new APlayer({ container, audio, lrcType: 3 });
+  const link = document.createElement("a");
+  link.href = `https://music.163.com/#/${type}?id=${id}`;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = type === "song" ? "在网易云音乐中收听" : "在网易云音乐中打开歌单";
+  el.replaceChildren(link);
 }
 
 export function initShortcodes(root: ParentNode = document): void {

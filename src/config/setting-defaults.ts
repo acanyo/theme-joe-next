@@ -123,7 +123,6 @@ export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "blogger.stats": "category-post-comment",
   "blogger.text_avatar": "{bgColor:'',textColor:'',useTextGradient:false}",
   "code.fold_height": "800",
-  "code.theme": "one-dark",
   "effects.backdrop": "off",
   "effects.cursor_effect": "off",
   "effects.cursor_skin": "off",
@@ -199,9 +198,6 @@ export const LIST_DEFAULTS: Readonly<Record<string, readonly unknown[]>> = {
         "title": null,
         "description": null
       },
-      "music": {
-        "playlist": null
-      },
       "comments": {
         "count": null
       },
@@ -241,9 +237,6 @@ export const LIST_DEFAULTS: Readonly<Record<string, readonly unknown[]>> = {
         "title": null,
         "description": null
       },
-      "music": {
-        "playlist": null
-      },
       "comments": {
         "count": null
       },
@@ -282,9 +275,6 @@ export const LIST_DEFAULTS: Readonly<Record<string, readonly unknown[]>> = {
         "url": null,
         "title": null,
         "description": null
-      },
-      "music": {
-        "playlist": null
       },
       "comments": {
         "count": null

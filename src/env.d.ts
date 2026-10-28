@@ -64,26 +64,6 @@ declare module "*?url" {
   export default url;
 }
 
-declare module "aplayer" {
-  interface AudioItem {
-    name: string;
-    artist: string;
-    url: string;
-    cover?: string;
-    lrc?: string;
-  }
-  interface APlayerOptions {
-    container: HTMLElement;
-    audio: AudioItem[];
-    listFolded?: boolean;
-    order?: "list" | "random";
-    lrcType?: 0 | 1 | 2 | 3;
-  }
-  export default class APlayer {
-    constructor(options: APlayerOptions);
-  }
-}
-
 declare module "hls.js/light" {
   export { default } from "hls.js";
 }

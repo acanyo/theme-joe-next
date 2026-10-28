@@ -25,42 +25,6 @@ body {
     margin-top: 20px;
   }
 
-  .aplayer {
-    min-height: 66px;
-
-    .aplayer-body {
-      .aplayer-bar {
-        .aplayer-played {
-          background-color: var(--theme) !important;
-        }
-
-        .aplayer-thumb {
-          background-color: var(--theme) !important;
-        }
-      }
-
-      .aplayer-time {
-        .aplayer-volume {
-          background-color: var(--theme) !important;
-        }
-      }
-    }
-
-    .aplayer-list {
-      li {
-        transition: none !important;
-
-        &.aplayer-list-light {
-          background: #fff8f3;
-
-          .aplayer-list-cur {
-            background-color: var(--theme) !important;
-          }
-        }
-      }
-    }
-  }
-
   .page-links {
     .joe_detail__article {
       padding: 10px 0;
@@ -153,7 +117,7 @@ body {
     box-shadow: 1px 1px 5px 0 var(--shadow-code);
     border-radius: var(--radius-wrap);
 
-    /* 原依赖 Prism toolbar 插件样式定位，这里自行声明*/
+    /* 代码块标题栏（语言名、自动折叠提示）*/
     .toolbar {
       position: absolute;
       pointer-events: none;
@@ -215,21 +179,39 @@ body {
         padding: 0 12px 12px 18px;
         border-radius: 0 0 8px 8px;
         text-shadow: none;
-
-        .token {
-          &.string,
-          &.operator {
-            background: none;
-          }
-        }
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        line-height: 1.6;
       }
 
+      /* 无高亮插件时的底色（插件渲染的代码块不经过这里）*/
+      color: var(--text-primary);
+      background: var(--fill-base);
+
       .line-numbers-rows {
+        position: absolute;
         left: 0;
         top: 0;
         bottom: 0;
-        padding-top: 12px;
+        width: 42px;
+        padding-top: 32px;
         border: none;
+        pointer-events: none;
+        user-select: none;
+        counter-reset: line;
+        font-size: 0.85em;
+        line-height: calc(1.6em / 0.85);
+        text-align: right;
+        color: var(--text-placeholder);
+
+        > span {
+          display: block;
+          padding-right: 10px;
+          counter-increment: line;
+
+          &::before {
+            content: counter(line);
+          }
+        }
       }
 
       .code-expander {
