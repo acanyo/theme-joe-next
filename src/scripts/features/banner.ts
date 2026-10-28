@@ -1,34 +1,69 @@
-/** 首页轮播（Swiper，仅在页面存在轮播时加载） */
+/** 首页轮播（Swiper，仅在页面存在轮播时加载；只下载当前设置用到的模块与样式） */
 import { $ } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { loadStylesheet } from "../core/stylesheet";
 import { onCleanup } from "../core/lifecycle";
-import swiperCss from "swiper/css/bundle?url";
+import coreCss from "swiper/css?url";
+import navigationCss from "swiper/css/navigation?url";
+import paginationCss from "swiper/css/pagination?url";
+import type { SwiperModule } from "swiper/types";
+
+/** 切换效果（设置 home.carousel_effect）→ 对应模块与样式，按需下载 */
+const EFFECTS: Record<string, () => Promise<[SwiperModule, string]>> = {
+  fade: async () => [
+    (await import("swiper/modules")).EffectFade,
+    (await import("swiper/css/effect-fade?url")).default,
+  ],
+  cube: async () => [
+    (await import("swiper/modules")).EffectCube,
+    (await import("swiper/css/effect-cube?url")).default,
+  ],
+  coverflow: async () => [
+    (await import("swiper/modules")).EffectCoverflow,
+    (await import("swiper/css/effect-coverflow?url")).default,
+  ],
+  flip: async () => [
+    (await import("swiper/modules")).EffectFlip,
+    (await import("swiper/css/effect-flip?url")).default,
+  ],
+  cards: async () => [
+    (await import("swiper/modules")).EffectCards,
+    (await import("swiper/css/effect-cards?url")).default,
+  ],
+  creative: async () => [
+    (await import("swiper/modules")).EffectCreative,
+    (await import("swiper/css/effect-creative?url")).default,
+  ],
+};
 
 export async function initBanner(): Promise<void> {
   const el = $("[data-joe-banner]");
   if (!el || !el.querySelector(".swiper-slide")) return;
   const banner = getThemeConfig().banner;
-  const [{ default: Swiper }, modules] = await Promise.all([
-    import("swiper"),
-    import("swiper/modules"),
-    loadStylesheet(swiperCss),
-  ]);
+  const effect = EFFECTS[banner.effect] as (typeof EFFECTS)[string] | undefined;
+  const [{ default: Swiper }, autoplay, pagination, navigation, effectModule] =
+    await Promise.all([
+      import("swiper"),
+      banner.autoplay ? import("swiper/modules").then((m) => m.Autoplay) : undefined,
+      import("swiper/modules").then((m) => m.Pagination),
+      import("swiper/modules").then((m) => m.Navigation),
+      effect?.(),
+      loadStylesheet(coreCss),
+      loadStylesheet(paginationCss),
+      loadStylesheet(navigationCss),
+    ]);
+  if (effectModule) await loadStylesheet(effectModule[1]);
+  const modules = [
+    pagination,
+    navigation,
+    autoplay,
+    effectModule?.[0],
+  ].filter((m): m is SwiperModule => !!m);
   const swiper = new Swiper(el, {
-    modules: [
-      modules.Autoplay,
-      modules.Pagination,
-      modules.Navigation,
-      modules.EffectFade,
-      modules.EffectCube,
-      modules.EffectCoverflow,
-      modules.EffectFlip,
-      modules.EffectCards,
-      modules.EffectCreative,
-    ],
+    modules,
     direction: banner.direction,
     loop: banner.loop,
-    effect: banner.effect as "slide",
+    effect: (effect ? banner.effect : "slide") as "slide",
     speed: banner.speed,
     grabCursor: banner.handle,
     allowTouchMove: banner.handle,
