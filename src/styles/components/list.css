@@ -4,27 +4,6 @@
   box-shadow: var(--shadow);
 }
 
-/* 首页：卡片网格直接铺在页面上，外层不再套一张大卡片 */
-.page-index .joe_index {
-  background: none;
-  box-shadow: none;
-  border-radius: 0;
-  overflow: visible;
-
-  .joe_index__article {
-    padding: 0;
-  }
-
-  .joe_index__title {
-    padding: 0 4px;
-    border-bottom: 0;
-  }
-
-  .joe_list__item {
-    will-change: auto;
-  }
-}
-
 .joe_index__title {
   display: flex;
   align-items: center;
