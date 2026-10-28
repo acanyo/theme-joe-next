@@ -132,7 +132,8 @@ function initDrawer(): void {
 }
 
 function initHeaderScroll(): void {
-  if (isMobile() || getThemeConfig().enableFixedHeader) return;
+  // 浮岛样式不整体隐藏导航，由 initIslandsScroll 处理
+  if (isMobile() || getThemeConfig().enableFixedHeader || isIslands()) return;
   const header = $(".joe_header__above");
   if (!header) return;
   const headerHeight = header.offsetHeight;
@@ -155,7 +156,7 @@ function initHeaderScroll(): void {
 /**
  * 浮岛导航（navbar.style = islands）的附加交互，经典样式下不执行：
  * - 页面顶部时 .is-top（透明），离开顶部后浮起
- * - 文章页向下读到正文后 .show-title：中间胶囊由菜单换成文章标题，点击回到顶部
+ * - 向下滚动时 .is-down：只保留 Logo（文章页中间同时显示文章标题，.show-title），向上滚动恢复完整导航
  * - 菜单下方的主题色滑块停在当前项、随鼠标滑到悬停项
  */
 const isIslands = () => !!$(".joe_header--islands");
@@ -163,11 +164,26 @@ const isIslands = () => !!$(".joe_header--islands");
 function initIslandsScroll(): void {
   const header = $(".joe_header__above");
   if (!header || !isIslands()) return;
+  let lastY = window.scrollY;
   const update = () => {
     const y = window.scrollY;
+    const delta = y - lastY;
     header.classList.toggle("is-top", y < 24);
-    const title = $(".joe_header__page-title");
-    header.classList.toggle("show-title", !!title && !title.hidden && y > 360);
+    // 忽略细微抖动，避免触控板惯性滚动时来回切换
+    if (Math.abs(delta) > 4) {
+      const down = delta > 0 && y > 120;
+      header.classList.toggle("is-down", down);
+      const title = $(".joe_header__page-title");
+      header.classList.toggle(
+        "show-title",
+        down && !!title && !title.hidden && y > 360,
+      );
+      lastY = y;
+    }
+    if (y < 24) {
+      header.classList.remove("is-down", "show-title");
+      lastY = y;
+    }
   };
   update();
   document.addEventListener("scroll", throttle(update, 80), { passive: true });
