@@ -2,7 +2,7 @@
  * 文章页交互：点赞、分享、复制版权、阅读进度、目录、字数统计、评论定位。
  */
 import tocbot from "tocbot";
-import { $, $$, headerOffset, isMobile } from "../core/dom";
+import { $, $$, headerOffset } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { copyText } from "../core/clipboard";
 import { bindUpvoteButtons } from "../features/upvote";
@@ -131,9 +131,12 @@ export function initWordCount(): void {
   targets.forEach((target) => (target.textContent = `${count} 字`));
 }
 
+/** 侧栏目录在 992px 以下由 CSS 隐藏（styles/pages/post.css），此时改用抽屉中的目录 */
+const narrow = (): boolean => window.matchMedia("(max-width: 992px)").matches;
+
 export function initToc(): void {
   const container = $(".toc-container");
-  const mobile = isMobile();
+  const mobile = narrow();
   if (!container && !mobile) return;
   const tocSelector = mobile ? "#js-toc-mobile" : "#js-toc";
   if (!$(tocSelector)) return;

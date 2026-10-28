@@ -2066,6 +2066,10 @@ spec:
     - group: code
       label: 代码块
       formSchema:
+        - $el: p
+          attrs:
+            style: "margin: 0 0 0.75rem; font-size: 0.8125rem; color: rgb(100 116 139);"
+          children: 语法高亮由 Halo 代码高亮插件（推荐应用市场中的 Shiki）提供，主题只负责下面的代码块外观与交互；未安装插件时代码块不着色。
         - $formkit: switch
           value: false
           name: title
