@@ -527,15 +527,6 @@
   white-space: nowrap;
 }
 
-/* 顶部透明时让首页 / 列表页大图延伸到导航下方，导航直接压在图上 */
-.joe_header--islands + #swup .evan-big-banner {
-  margin-top: -72px;
-}
-
-.joe_header--islands + #swup .evan-big-banner.is-fullscreen {
-  height: 100vh;
-}
-
 /* 盖在大图上时，导航文字改为白色以保证对比度 */
 .joe_header--islands:has(+ #swup .evan-big-banner) .joe_header__above.is-top,
 .joe_header--islands:has(+ #swup .joe_post_hero) .joe_header__above.is-top {
@@ -617,10 +608,6 @@
       left: 14px;
       right: 14px;
     }
-  }
-
-  .joe_header--islands + #swup .evan-big-banner {
-    margin-top: -64px;
   }
 }
 

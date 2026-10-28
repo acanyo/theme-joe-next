@@ -221,3 +221,12 @@
     }
   }
 }
+
+/* 暗黑模式：深色的备案/驱动徽标反色 */
+html[data-mode="dark"] .site_driven img {
+  &.baidu,
+  &.huawei,
+  &.jinshan {
+    filter: invert(1);
+  }
+}

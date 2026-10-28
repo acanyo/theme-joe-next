@@ -155,6 +155,6 @@ html:has(.joe_post_hero) {
   }
 
   html:has(.joe_post_hero) #Joe .page-post.joe_main_container {
-    margin-top: -48px !important;
+    margin-top: -48px;
   }
 }

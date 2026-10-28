@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import thymeleafTags from "./integrations/thymeleaf-tags.ts";
+import cssLayers from "./integrations/css-layers.ts";
 
 // base 必须与 theme.yaml 的 metadata.name 一致（Halo 主题静态资源路径为 /themes/<name>/assets）
 export default defineConfig({
@@ -12,6 +13,8 @@ export default defineConfig({
   outDir: "./templates",
   integrations: [thymeleafTags()],
   vite: {
+    // 主题样式按目录分入 CSS 级联层（见 integrations/css-layers.ts）
+    css: { postcss: { plugins: [cssLayers()] } },
     build: {
       // 体积较大的依赖（hls.js、vConsole）均为按需动态加载，不影响首屏
       chunkSizeWarningLimit: 600,

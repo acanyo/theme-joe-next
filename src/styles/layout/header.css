@@ -1064,3 +1064,7 @@
     top: 50px;
   }
 }
+
+html[data-mode="dark"] .joe_header .joe_header__above-logo svg {
+  display: block;
+}

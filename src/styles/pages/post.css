@@ -281,6 +281,10 @@
   html .toc-container {
     display: none;
   }
+
+  .joe_detail-wrapper {
+    padding: 0;
+  }
 }
 @media (max-width: 500px) {
   html .joe_bread {
@@ -291,4 +295,8 @@
   html .joe_post__pagination {
     padding: 0 10px;
   }
+}
+
+html[data-mode="dark"] .toc-nodata em {
+  opacity: 0.4;
 }

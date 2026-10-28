@@ -26,14 +26,6 @@ body {
   }
 
   .page-links {
-    .joe_detail__article {
-      padding: 10px 0;
-
-      h3 {
-        margin: 20px 0;
-      }
-    }
-
     .totals {
       position: relative;
       top: -1px;
@@ -451,9 +443,9 @@ html body::before {
     padding-bottom: 0;
   }
 
-  html .joe_main_container {
+  #Joe .joe_main_container {
     padding: 0;
-    margin: 15px auto 20px !important;
+    margin: 15px auto 20px;
   }
 
   html .joe_main {
@@ -489,8 +481,8 @@ html body::before {
     }
   }
 
-  html .page-index {
-    margin-top: 0 !important;
+  #Joe .page-index {
+    margin-top: 0;
 
     .joe_main {
       padding-top: 0;
@@ -505,5 +497,17 @@ html body::before {
     .joe_detail__friends {
       padding-left: 0;
     }
+  }
+}
+
+/* 暗黑模式：背景底色、图片降低亮度 */
+html[data-mode="dark"] {
+  body::after {
+    background: #141517;
+    z-index: -200;
+  }
+
+  img {
+    filter: brightness(0.9);
   }
 }

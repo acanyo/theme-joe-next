@@ -1,4 +1,6 @@
-/* 全局样式入口：所有页面共享。页面专属样式在各页面中单独引入，由 Astro 按页拆分。*/
+/* 全局样式入口：所有页面共享。页面专属样式在各页面中单独引入，由 Astro 按页拆分。
+ * 各文件在构建时按目录放入下面的级联层，后面的层覆盖前面的层（见 integrations/css-layers.ts）。*/
+@layer reset, tokens, vendor, base, components, layout, content, pages;
 @import "./base/normalize.css";
 @import "./base/tokens.css";
 @import "./base/animations.css";

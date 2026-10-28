@@ -982,10 +982,6 @@
       max-width: 100% !important;
     }
   }
-
-  html .joe_detail-wrapper {
-    padding: 0;
-  }
 }
 
 @media (max-width: 768px) {
@@ -1181,5 +1177,31 @@
         }
       }
     }
+  }
+}
+
+/* 暗黑模式 */
+html[data-mode="dark"] {
+  .joe_detail__article {
+    img {
+      filter: brightness(0.9);
+    }
+
+    .joe_detail__overdue-wrapper {
+      background: var(--fill-base);
+    }
+  }
+
+  .joe_detail__friends {
+    filter: brightness(0.8);
+  }
+}
+
+/* 友链页正文 */
+.page-links .joe_detail__article {
+  padding: 10px 0;
+
+  h3 {
+    margin: 20px 0;
   }
 }

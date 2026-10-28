@@ -424,3 +424,16 @@
 .evan-big-banner .waves-svg .parallax use {
   fill: var(--wave-color);
 }
+
+/* 浮岛导航：顶部透明时大图延伸到导航下方，导航直接压在图上 */
+.joe_header--islands + #swup .evan-big-banner {
+  margin-top: -72px;
+
+  &.is-fullscreen {
+    height: 100vh;
+  }
+
+  @media (max-width: 768px) {
+    margin-top: -64px;
+  }
+}
