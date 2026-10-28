@@ -8,16 +8,16 @@
     align-items: center;
 
     .line {
-      color: var(--seat);
+      color: var(--text-placeholder);
       padding: 0 5px;
     }
 
     .item {
-      color: var(--minor);
+      color: var(--text-secondary);
       white-space: nowrap;
 
       .link {
-        color: var(--routine);
+        color: var(--text-regular);
         transition: color 0.35s;
 
         &:hover {
@@ -63,7 +63,7 @@
         font-size: 12px;
         background: var(--theme);
         border-radius: 3px;
-        box-shadow: var(--box-shadow);
+        box-shadow: var(--shadow);
 
         &:hover {
           animation: pulse 1s;
@@ -102,9 +102,9 @@
   min-height: 90px;
   margin-bottom: 15px;
   overflow: hidden;
-  background: var(--background);
+  background: var(--bg-page);
   border-radius: var(--radius-wrap);
-  box-shadow: var(--box-shadow);
+  box-shadow: var(--shadow);
   transition: top 0.3s;
 
   .toc-header {
@@ -116,7 +116,7 @@
     font-weight: bold;
     font-size: 16px;
     color: var(--theme);
-    border-bottom: 1px solid var(--classC);
+    border-bottom: 1px solid var(--border-lighter);
 
     i {
       position: relative;
@@ -146,7 +146,7 @@
         top: 0;
         bottom: 0;
         width: 2px;
-        background: var(--classB);
+        background: var(--border-light);
       }
 
       li {
@@ -165,16 +165,16 @@
           z-index: 1;
           width: 8px;
           height: 8px;
-          background: var(--background);
-          border: 2px solid var(--classB);
-          box-shadow: 0 0 0 2px var(--background);
+          background: var(--bg-page);
+          border: 2px solid var(--border-light);
+          box-shadow: 0 0 0 2px var(--bg-page);
           border-radius: 50%;
         }
 
         &.is-active-link {
           font-weight: 700;
           color: var(--theme);
-          border-color: var(--classK);
+          border-color: var(--toc-active);
 
           &::before {
             background: var(--theme);
@@ -203,7 +203,7 @@
 
   .toc-link {
     height: 100%;
-    color: var(--routine);
+    color: var(--text-regular);
 
     &.is-active-link {
       font-weight: 700;
@@ -214,10 +214,10 @@
   .toc-nodata {
     padding: 20px;
     text-align: center;
-    color: var(--minor);
+    color: var(--text-secondary);
     user-select: none;
     font-style: italic;
-    background: var(--classD);
+    background: var(--fill-base);
   }
 
   .is-collapsible {

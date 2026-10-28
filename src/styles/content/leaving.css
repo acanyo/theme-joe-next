@@ -67,8 +67,8 @@
             white-space: pre;
             word-break: break-all;
             font-size: 13px;
-            color: var(--main);
-            background: var(--classB);
+            color: var(--text-primary);
+            background: var(--border-light);
             text-shadow: unset;
             border-radius: 4px;
           }
@@ -106,5 +106,5 @@
     padding: 15px 0;
     text-align: center;
     user-select: none;
-    color: var(--minor);
+    color: var(--text-secondary);
   }

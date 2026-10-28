@@ -9,7 +9,7 @@
     margin-left: 5px;
     user-select: none;
     overflow: hidden;
-    background: var(--sib-background);
+    background: var(--bg-raised);
     border-radius: 3px;
     box-shadow: var(--box-shadow-pager);
 
@@ -18,7 +18,7 @@
       height: 32px;
       line-height: 32px;
       padding: 0 14px;
-      color: var(--main);
+      color: var(--text-primary);
 
       &:hover {
         color: #fff;
@@ -48,7 +48,7 @@
       pointer-events: none;
 
       a {
-        color: var(--classA);
+        color: var(--border-base);
       }
     }
   }

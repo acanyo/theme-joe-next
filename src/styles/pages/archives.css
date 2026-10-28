@@ -3,8 +3,8 @@
     height: 40px;
     margin-bottom: 20px;
     line-height: 40px;
-    color: var(--main);
-    border-bottom: 1px solid var(--classC);
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-lighter);
 
     i {
       margin-right: 3px;
@@ -13,12 +13,12 @@
 
     em {
       font-style: normal;
-      color: var(--minor);
+      color: var(--text-secondary);
     }
   }
 .joe_archives__filing {
-    background: var(--background);
-    box-shadow: var(--box-shadow);
+    background: var(--bg-page);
+    box-shadow: var(--shadow);
     border-radius: var(--radius-wrap);
 
     .title {
@@ -27,7 +27,7 @@
       height: 45px;
       font-weight: bold;
       padding: 0 12px;
-      /* border-bottom: 1px solid var(--classC);*/
+      /* border-bottom: 1px solid var(--border-lighter);*/
       color: var(--theme);
       justify-content: space-between;
       user-select: none;
@@ -51,9 +51,9 @@
         margin-right: 10px;
         margin-bottom: 10px;
         font-size: 14px;
-        color: var(--routine);
-        background: var(--classH);
-        border: 1px solid var(--classB);
+        color: var(--text-regular);
+        background: var(--fill-accent);
+        border: 1px solid var(--border-light);
         /* transition: background 0.2s;*/
 
         a {
@@ -62,7 +62,7 @@
           height: 24px;
           line-height: 24px;
           font-size: 0;
-          color: var(--routine);
+          color: var(--text-regular);
 
           span {
             display: inline-block;
@@ -88,10 +88,10 @@
           border-color: var(--theme);
 
           a {
-            color: var(--classD);
+            color: var(--fill-base);
 
             em {
-              color: var(--classD);
+              color: var(--fill-base);
             }
           }
         }
@@ -110,7 +110,7 @@
         margin-bottom: 10px;
         padding: 10px 14px;
         height: 40px;
-        background: var(--classD);
+        background: var(--fill-base);
         border-radius: 4px;
 
         a {
@@ -120,15 +120,15 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          color: var(--routine);
+          color: var(--text-regular);
         }
 
         span {
-          color: var(--minor);
+          color: var(--text-secondary);
         }
 
         .joe-font {
-          fill: var(--minor);
+          fill: var(--text-secondary);
           transform: rotate(0deg);
           transition: transform 0.25s;
         }
@@ -157,7 +157,7 @@
           top: 14px;
           width: 13px;
           height: 13px;
-          background: var(--classC);
+          background: var(--border-lighter);
           border-radius: 50%;
         }
 
@@ -168,7 +168,7 @@
           top: 22px;
           width: 1px;
           height: 100%;
-          background: var(--classC);
+          background: var(--border-lighter);
         }
 
         .wrapper {
@@ -184,13 +184,13 @@
             justify-content: space-between;
             color: var(--theme);
             cursor: pointer;
-            background: var(--classD);
+            background: var(--fill-base);
             padding: 10px;
             height: 40px;
             border-radius: 4px;
 
             .joe-font {
-              fill: var(--minor);
+              fill: var(--text-secondary);
               transform: rotate(0deg);
               transition: transform 0.25s;
             }
@@ -213,7 +213,7 @@
               left: -8px;
               width: 0;
               height: 0;
-              border-right: 8px solid var(--classD);
+              border-right: 8px solid var(--fill-base);
               border-top: 8px solid transparent;
               border-bottom: 8px solid transparent;
             }
@@ -230,14 +230,14 @@
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
-              color: var(--routine);
+              color: var(--text-regular);
 
               &:last-child {
                 margin-bottom: 0;
               }
 
               a {
-                color: var(--routine);
+                color: var(--text-regular);
 
                 &:hover {
                   color: var(--theme);

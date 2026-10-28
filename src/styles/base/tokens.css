@@ -4,31 +4,27 @@ html {
     "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
     "Microsoft YaHei", "微软雅黑", Arial, "sans-serif";
   /* --theme: #fb6c28; */
-  --background-reverse: #000;
-  --background: #fff;
-  --background-translucent: rgba(255, 255, 255, 0.7);
-  --sub-background: #f5f5f5;
-  --sib-background: #fff;
-  --glass-background: rgba(255, 255, 255, 0.65);
-  --main: #303133;
-  --routine: #606266;
-  --title: #333;
-  --sib: #f2f6fc;
-  --minor: #6d7076; /* Joe3: #909399（调整至 WCAG AA 对比度）*/
-  --seat: #c0c4cc;
-  --classA: #dcdfe6;
-  --classB: #e4e7ed;
-  --classC: #ebeef5;
-  --classD: #f2f6fc;
-  --classE: #dcdcdc;
-  --classF: #333;
-  --classG: #dcdcdc;
-  --classH: #e9f2ff;
-  --classI: #5a3713;
-  --classJ: #f9e5fb;
-  --classK: #e4e7ed;
-  --classL: #666;
-  --classM: #2d2e37;
+  --bg-inverse: #000;
+  --bg-page: #fff;
+  --bg-muted: #f5f5f5;
+  --bg-raised: #fff;
+  --bg-glass: rgba(255, 255, 255, 0.65);
+  --text-primary: #303133;
+  --text-regular: #606266;
+  --text-title: #333;
+  --bg-hover: #f2f6fc;
+  --text-secondary: #6d7076; /* Joe3: #909399（调整至 WCAG AA 对比度）*/
+  --text-placeholder: #c0c4cc;
+  --border-base: #dcdfe6;
+  --border-light: #e4e7ed;
+  --border-lighter: #ebeef5;
+  --fill-base: #f2f6fc;
+  --border-muted: #dcdcdc;
+  --text-icon: #333;
+  --border-faint: #dcdcdc;
+  --fill-accent: #e9f2ff;
+  --toc-active: #e4e7ed;
+  --icon-shadow: #666;
   --quote: #50bfff;
   --code: #1767c2; /* Joe3: #409eff（行内代码对比度）*/
   --code-background: #e8f3ff;
@@ -37,14 +33,12 @@ html {
   --radius-wrap: 8px;
   --radius-inner: 4px;
   --radius-img: 5px;
-  --box-shadow: 0 0px 10px -5px #949494;
+  --shadow: 0 0px 10px -5px #949494;
   --text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-code: #bdbdbd;
-  --block-shadow: 1px 2px 10px 0 #afafaf;
+  --shadow-block: 1px 2px 10px 0 #afafaf;
   --box-shadow-journal: #d8d8d8;
   --box-shadow-friend: #d8d8d8;
-  --box-shadow-toc: inset 20px 0 30px 0 #dadada, 1px 2px 10px 0 #a8a8a8;
-  --background-toc: rgba(255, 255, 255, 0.95);
   --box-shadow-tags: 2px 2px 3px 0px #c2c0b3;
   --background-tags: #fffaeb;
   --background-tag: #fdfdfd;
@@ -62,49 +56,42 @@ html {
   --background-friend-block: #f5f5f5;
   --shadow-notice: inset 0 0 15px #d1dae8;
   --animation-notice: twinkle 1s ease infinite alternate;
-  background: var(--background);
+  background: var(--bg-page);
 
   &[data-mode="dark"] {
     /* --theme: #9999ff; */
-    --background-reverse: #fff;
-    --background: #232323;
-    --background-translucent: rgba(35, 35, 35, 0.7);
-    --sub-background: #303030;
-    --sib-background: #303030;
-    --glass-background: rgba(0, 0, 0, 0.65);
-    --main: #999;
-    --routine: #aeaeae; /* Joe3: #888*/
-    --title: #ddd;
-    --sib: #3a3a3a;
-    --minor: #979797; /* Joe3: #777*/
-    --seat: #666;
-    --classA: #515253;
-    --classB: #454545;
-    --classC: #414243;
-    --classD: #303030;
-    --classE: #585858;
-    --classF: #bdbdbd;
-    --classG: #303030;
-    --classH: #454545;
-    --classI: #36312c;
-    --classJ: #39243c;
-    --classK: #eee;
-    --classL: #333;
-    --classM: #fff;
+    --bg-inverse: #fff;
+    --bg-page: #232323;
+    --bg-muted: #303030;
+    --bg-raised: #303030;
+    --bg-glass: rgba(0, 0, 0, 0.65);
+    --text-primary: #999;
+    --text-regular: #aeaeae; /* Joe3: #888*/
+    --text-title: #ddd;
+    --bg-hover: #3a3a3a;
+    --text-secondary: #979797; /* Joe3: #777*/
+    --text-placeholder: #666;
+    --border-base: #515253;
+    --border-light: #454545;
+    --border-lighter: #414243;
+    --fill-base: #303030;
+    --border-muted: #585858;
+    --text-icon: #bdbdbd;
+    --border-faint: #303030;
+    --fill-accent: #454545;
+    --toc-active: #eee;
+    --icon-shadow: #333;
     --quote: #276b92;
     --code: #efa141;
     --code-background: #353246;
     --overdue-border: #6f553b;
     --overdue-background: #2b2715;
-    --box-shadow: 1px 1px 3px 1px #1b1b1b;
+    --shadow: 1px 1px 3px 1px #1b1b1b;
     --text-shadow: none;
     --shadow-code: #191919;
-    --block-shadow: 2px 4px 10px 0 #0a0a0a;
+    --shadow-block: 2px 4px 10px 0 #0a0a0a;
     --box-shadow-journal: rgba(0, 0, 0, 0.2);
     --box-shadow-friend: rgba(0, 0, 0, 0.2);
-    --box-shadow-toc:
-      inset 0 0 30px 0 rgba(253, 253, 253, 0.34), 1px 2px 10px 0 #181818;
-    --background-toc: rgba(35, 35, 35, 0.98);
     --box-shadow-tags: 2px 2px 3px 0px #111;
     --background-tags: #35353e;
     --background-tag: #2f2f2f;
@@ -122,7 +109,7 @@ html {
     --background-friend-block: #232323;
     --shadow-notice: inset 0 0 15px #4a4c4e;
     --animation-notice: twinkle-night 1s ease infinite alternate;
-    background: var(--background);
+    background: var(--bg-page);
 
     /* 暗黑模式下需要修改的样式*/
     body:after {
@@ -153,16 +140,16 @@ html {
       }
 
       .joe_detail__overdue-wrapper {
-        background: var(--classD);
+        background: var(--fill-base);
       }
     }
 
     .aplayer {
-      background: var(--classD);
+      background: var(--fill-base);
 
       .aplayer-list li {
-        color: var(--main);
-        border-color: var(--classC);
+        color: var(--text-primary);
+        border-color: var(--border-lighter);
 
         &.aplayer-list-light,
         &:hover {
@@ -171,17 +158,17 @@ html {
       }
 
       .aplayer-info {
-        border-color: var(--classC);
+        border-color: var(--border-lighter);
       }
 
       .aplayer-music {
-        color: var(--classF);
-        border-color: var(--classC);
+        color: var(--text-icon);
+        border-color: var(--border-lighter);
       }
 
       .aplayer-time {
         .aplayer-icon:hover path {
-          fill: var(--classF) !important;
+          fill: var(--text-icon) !important;
         }
       }
 

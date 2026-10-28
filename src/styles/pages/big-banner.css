@@ -356,7 +356,7 @@
   .content {
     margin-top: 10px !important;
     font-size: 0.93em;
-    color: var(--main);
+    color: var(--text-primary);
   }
 
   .contain {

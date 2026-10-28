@@ -9,7 +9,7 @@
     text-align: center;
     padding: 28px 110px;
     font-size: 18px;
-    color: var(--routine);
+    color: var(--text-regular);
     background:
       url(../images/t_left.png) 0/90px auto,
       url(../images/t_right.png) 100%/90px auto;
@@ -20,20 +20,20 @@
 
 .joe_comment {
   padding: 20px;
-  background: var(--background);
+  background: var(--bg-page);
   border-radius: var(--radius-wrap);
-  box-shadow: var(--box-shadow)
+  box-shadow: var(--shadow)
 }
 
 .joe_comment__close {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--routine)
+    color: var(--text-regular)
   }
 
 .joe_comment__close-icon {
-      fill: var(--routine);
+      fill: var(--text-regular);
       margin-right: 5px;
     }
 

@@ -1,7 +1,7 @@
 .joe_footer {
-  color: var(--minor);
-  background: var(--background);
-  border-top: 1px solid var(--classD);
+  color: var(--text-secondary);
+  background: var(--bg-page);
+  border-top: 1px solid var(--fill-base);
   z-index: -1;
 
   .joe_container {
@@ -27,7 +27,7 @@
     }
 
     a {
-      color: var(--minor);
+      color: var(--text-secondary);
       transition: all 0.35s;
 
       &:hover {
@@ -115,8 +115,8 @@
         overflow: hidden;
         font-size: 12px;
         font-weight: bold;
-        color: var(--classB);
-        background: var(--background-reverse);
+        color: var(--border-light);
+        background: var(--bg-inverse);
         border-radius: 5px;
 
         .joe-font {
@@ -171,7 +171,7 @@
     width: 100%;
     bottom: 0;
     z-index: 2;
-    box-shadow: -2px 0 4px 0 var(--classG);
+    box-shadow: -2px 0 4px 0 var(--border-faint);
   }
 
   &.full {

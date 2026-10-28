@@ -4,7 +4,7 @@
     right: 14px;
     cursor: pointer;
     font-size: 16px;
-    color: var(--main);
+    color: var(--text-primary);
 
     &:hover {
       color: var(--theme);
@@ -35,7 +35,7 @@
         content: "";
         width: 0;
         height: 150%;
-        border-left: 1px dashed var(--classG);
+        border-left: 1px dashed var(--border-faint);
       }
 
       &:hover {
@@ -48,8 +48,8 @@
 .joe_friend_info {
       display: flex;
       justify-content: left;
-      background: var(--background);
-      color: var(--routine);
+      background: var(--bg-page);
+      color: var(--text-regular);
       font-size: 14px;
       height: 34px;
       left: -36px;
@@ -62,8 +62,8 @@
         height: 35px;
         width: 35px;
         border-radius: 50%;
-        background: var(--classC);
-        border: 1px solid var(--classA);
+        background: var(--border-lighter);
+        border: 1px solid var(--border-base);
         padding: 3px;
         margin: 0 10px 0 -10px;
       }
@@ -84,11 +84,11 @@
       padding: 10px;
       margin-top: 10px;
       word-break: break-word;
-      color: var(--main);
+      color: var(--text-primary);
       background: var(--background-friend);
-      border-bottom: 1px solid var(--classC);
+      border-bottom: 1px solid var(--border-lighter);
       border-radius: 0 18px 18px 18px;
-      border: 1px solid var(--classC);
+      border: 1px solid var(--border-lighter);
       box-shadow: 1px 1px 5px 0 var(--box-shadow-friend);
       transition: box-shadow 0.2s;
     }

@@ -13,7 +13,7 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    background: var(--sib-background);
+    background: var(--bg-raised);
     border-radius: 50%;
     cursor: pointer;
     box-shadow:

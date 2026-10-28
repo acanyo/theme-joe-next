@@ -4,7 +4,7 @@
     right: 14px;
     cursor: pointer;
     font-size: 16px;
-    color: var(--main);
+    color: var(--text-primary);
 
     &:hover {
       color: var(--theme);
@@ -35,7 +35,7 @@
         content: "";
         width: 0;
         height: 150%;
-        border-left: 1px dashed var(--classG);
+        border-left: 1px dashed var(--border-faint);
       }
 
       &:hover {
@@ -52,8 +52,8 @@
       height: 34px;
       line-height: 34px;
       font-size: 14px;
-      color: var(--routine);
-      background: var(--background);
+      color: var(--text-regular);
+      background: var(--bg-page);
 
       i {
         margin-right: 8px;
@@ -71,11 +71,11 @@
       padding: 10px;
       margin-top: 10px;
       word-break: break-word;
-      color: var(--main);
+      color: var(--text-primary);
       background: var(--background-journal);
-      border-bottom: 1px solid var(--classC);
+      border-bottom: 1px solid var(--border-lighter);
       border-radius: 0 18px 18px 18px;
-      border: 1px solid var(--classC);
+      border: 1px solid var(--border-lighter);
       box-shadow: 1px 1px 5px 0 var(--box-shadow-journal);
       transition: box-shadow 0.2s;
     }
@@ -109,7 +109,7 @@
         h4,
         h5,
         h6 {
-          color: var(--main);
+          color: var(--text-primary);
           line-height: 24px;
           margin-bottom: 18px;
           position: relative;
@@ -262,7 +262,7 @@
         a[href*="tag"] {
           color: var(--theme);
           cursor: pointer;
-          background-color: var(--classD);
+          background-color: var(--fill-base);
           padding: 1px 4px;
           border-radius: 3px;
           display: inline-block;
@@ -293,7 +293,7 @@
         hr {
           border: none;
           height: 1px;
-          background-color: var(--classB);
+          background-color: var(--border-light);
           margin-bottom: 18px;
         }
 
@@ -305,8 +305,8 @@
           line-height: 26px;
           margin: 10px 0;
           padding: 8px 15px;
-          color: var(--routine);
-          background: var(--classD);
+          color: var(--text-regular);
+          background: var(--fill-base);
           border-left: 5px solid var(--quote);
           border-radius: var(--radius-inner);
 
@@ -373,24 +373,24 @@
           max-width: 100%;
           table-layout: fixed;
           border-collapse: unset;
-          color: var(--routine);
+          color: var(--text-regular);
           margin-bottom: 18px;
           overflow: hidden;
           font-size: 13px;
-          border: 1px solid var(--classE);
+          border: 1px solid var(--border-muted);
           border-radius: 4px;
 
           td,
           th {
             padding: 8px;
-            border-right: 1px solid var(--classE);
-            border-bottom: 1px solid var(--classE);
+            border-right: 1px solid var(--border-muted);
+            border-bottom: 1px solid var(--border-muted);
           }
 
           thead {
             th {
               font-weight: 500;
-              background: var(--classC);
+              background: var(--border-lighter);
 
               &:last-child {
                 border-right: none;
@@ -407,7 +407,7 @@
               }
 
               &:hover {
-                background: var(--classD);
+                background: var(--fill-base);
               }
 
               td:last-child {
@@ -442,7 +442,7 @@
       margin-right: 8px;
       font-size: 0;
       user-select: none;
-      color: var(--routine);
+      color: var(--text-regular);
       transition: color 0.2s;
 
       i {
@@ -466,7 +466,7 @@
 
         i:hover {
           transform: scale(1.1);
-          color: var(--classF);
+          color: var(--text-icon);
         }
       }
 
