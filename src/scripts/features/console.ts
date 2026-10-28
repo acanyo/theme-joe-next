@@ -9,6 +9,7 @@ import { $, $$ } from "../core/dom";
 import { toggleColorModeAt, currentMode } from "./color-mode";
 import { iconHtml } from "../core/icons";
 import { closeOverlays } from "./navigation";
+import { refreshConsoleContent, renderConsoleContent } from "./console-content";
 
 const PREFS_KEY = "joe-next:console";
 
@@ -53,6 +54,7 @@ function mount(): HTMLElement | null {
   panel = template.content.firstElementChild?.cloneNode(true) as HTMLElement | null;
   if (!panel) return null;
   document.body.appendChild(panel);
+  renderConsoleContent(panel);
   bindSwitches(panel);
   panel.addEventListener("click", (event) => {
     // 点击面板外（遮罩区域）关闭
@@ -75,7 +77,7 @@ function syncSwitches(root: HTMLElement): void {
     mode.innerHTML = iconHtml(dark ? "moon" : "sun");
     mode.parentElement?.setAttribute("aria-pressed", String(dark));
     const label = mode.parentElement?.querySelector(".label");
-    if (label) label.textContent = dark ? "暗黑模式" : "浅色模式";
+    if (label) label.textContent = dark ? "暗黑" : "浅色";
   }
 }
 
@@ -143,6 +145,7 @@ function open(button: HTMLElement): void {
   if (!root) return;
   opener = button;
   syncSwitches(root);
+  refreshConsoleContent(root);
   root.hidden = false;
   document.documentElement.classList.add("joe-console-open");
   // 下一帧再加 is-open，让进入动画从初始状态开始
@@ -152,9 +155,8 @@ function open(button: HTMLElement): void {
     button.setAttribute("aria-label", "关闭中控台");
     button.innerHTML = iconHtml("close");
   }
-  root.querySelector<HTMLElement>(".joe_console__panel a, .joe_console__panel button")?.focus({
-    preventScroll: true,
-  });
+  // 焦点放到当前视图的切换按钮上，Tab 依次经过面板内容
+  root.querySelector<HTMLElement>("[data-console-switch][aria-selected='true']")?.focus({ preventScroll: true });
 }
 
 function close(restoreFocus = true): void {

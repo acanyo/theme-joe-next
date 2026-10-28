@@ -1,9 +1,9 @@
 /*
- * 中控台（components/navbar/ConsolePanel.astro，features/console.ts）
+ * 中控台（components/navbar/ConsolePanel.astro，features/console.ts / console-content.ts）
  *
- * 一整块玻璃面板盖住页面：模糊遮罩 + 居中面板，内容分为四行
- *   博主与站点数据 / 文章三栏 / 最近评论与热门标签 / 快捷开关
- * 进入时面板从导航按钮方向轻微下落、放大（弹性缓动）。
+ * 借鉴星度与 Heo：模糊遮罩上一块大圆角玻璃面板，顶栏欢迎语 + 数据 + 搜索，
+ * 主体是最新评论墙，下方三栏（发文日历 / 文章 / 标签），底部悬浮一条 dock（视图切换 + 快捷开关）。
+ * 主题色只用在强调处：时间轴圆点、当前标签页、有文章的日期、开启的开关。
  */
 .joe_console {
   position: fixed;
@@ -14,8 +14,8 @@
   padding: 72px 16px 16px;
   overflow-y: auto;
   overscroll-behavior: contain;
-  background: rgb(15 23 42 / 18%);
-  backdrop-filter: blur(6px);
+  background: rgb(15 23 42 / 22%);
+  backdrop-filter: blur(8px) saturate(120%);
   opacity: 0;
   transition: opacity var(--dur-base) var(--ease-out);
 
@@ -29,17 +29,22 @@
 }
 
 html[data-mode="dark"] .joe_console {
-  background: rgb(0 0 0 / 40%);
+  background: rgb(0 0 0 / 45%);
 }
 
 .joe_console__panel {
+  position: relative;
   width: min(100%, var(--content-max-width, 1320px));
-  padding: 18px;
-  border-radius: calc(var(--radius-wrap) * 2);
-  background: var(--glass-bg);
+  padding: 20px 20px 84px;
+  border-radius: 24px;
+  /* 玻璃：半透明底 + 一抹主题色的光晕 */
+  background:
+    radial-gradient(60% 50% at 85% 0%, color-mix(in srgb, var(--theme) 14%, transparent), transparent 70%),
+    radial-gradient(50% 40% at 0% 100%, color-mix(in srgb, var(--theme) 8%, transparent), transparent 70%),
+    var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
-  transform: translateY(-12px) scale(0.98);
+  transform: translateY(-14px) scale(0.985);
   transform-origin: top right;
   transition: transform var(--dur-slow) var(--ease-spring);
 
@@ -48,34 +53,258 @@ html[data-mode="dark"] .joe_console {
   }
 }
 
-.joe_console__row {
-  display: grid;
-  gap: 14px;
+/* —— 顶栏 —— */
+.joe_console__bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
 
-  & + & {
-    margin-top: 14px;
+.joe_console__hello {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 8px 16px 8px 10px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: var(--text-regular);
+  background: color-mix(in srgb, var(--bg-raised) 70%, transparent);
+  box-shadow: 0 0 0 1px var(--card-border);
+
+  .wave {
+    display: inline-block;
+    font-size: 18px;
+    transform-origin: 70% 70%;
+    animation: console-wave 2.4s var(--ease-out) 0.4s 1;
+  }
+
+  [data-console-greeting] {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  strong {
+    color: var(--theme-text);
   }
 }
 
-/* 卡片：与主题卡片同样的圆角与描边，底色略透出玻璃 */
-.joe_console__card {
+@keyframes console-wave {
+  0%, 60%, 100% { transform: rotate(0); }
+  10%, 30% { transform: rotate(16deg); }
+  20%, 40% { transform: rotate(-8deg); }
+}
+
+.joe_console__stats {
+  display: flex;
+  gap: 2px;
+  margin: 0 0 0 auto;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    padding: 4px 10px;
+  }
+
+  strong {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-title);
+    font-variant-numeric: tabular-nums;
+  }
+
+  span {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+}
+
+.joe_console__search {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 260px;
+  padding: 9px 10px 9px 14px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--bg-raised) 70%, transparent);
+  box-shadow: 0 0 0 1px var(--card-border);
+  cursor: pointer;
+  transition: box-shadow var(--dur-fast) var(--ease-out);
+
+  span {
+    flex: 1;
+    text-align: left;
+  }
+
+  kbd {
+    padding: 1px 6px;
+    border-radius: 4px;
+    font: inherit;
+    font-size: 11px;
+    color: var(--text-secondary);
+    background: var(--fill-base);
+  }
+
+  &:hover {
+    box-shadow: var(--shadow-hover);
+  }
+}
+
+/* —— 评论墙：三列，每条一张小名片，左侧时间轴圆点 —— */
+.joe_console__wall {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px 18px;
+  margin-bottom: 18px;
+
+  > .empty {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 24px 0;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+}
+
+.joe_console__comment {
+  position: relative;
+  display: flex;
+  gap: 12px;
   min-width: 0;
-  padding: 14px 16px;
+  padding: 10px 12px 10px 16px;
   border-radius: var(--radius-wrap);
-  background: color-mix(in srgb, var(--bg-raised) 72%, transparent);
+  transition: background-color var(--dur-fast) var(--ease-out);
+
+  /* 时间轴：主题色圆点 */
+  &::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 28px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--theme);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme) 18%, transparent);
+  }
+
+  &:hover {
+    background: color-mix(in srgb, var(--bg-raised) 60%, transparent);
+  }
+
+  .avatar {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--bg-raised) 80%, transparent);
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .meta {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 0;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .who {
+    font-weight: 600;
+    color: var(--text-regular);
+  }
+
+  .what {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-title);
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .where {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 100%;
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    transition: color var(--dur-fast) var(--ease-out);
+
+    .joe-font {
+      flex: none;
+      font-size: 12px;
+    }
+
+    span {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &:hover {
+      color: var(--theme-text);
+    }
+  }
+}
+
+/* —— 下方三栏 —— */
+.joe_console__grid {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.9fr) minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+.joe_console__card {
+  position: relative;
+  min-width: 0;
+  padding: 16px 18px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bg-raised) 66%, transparent);
   box-shadow: 0 0 0 1px var(--card-border);
 
   .title {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin: 0 0 10px;
+    gap: 8px;
+    margin: 0 0 12px;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-title);
 
     .joe-font {
-      color: var(--theme);
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--theme-text);
+      background: var(--tint);
     }
   }
 
@@ -88,91 +317,98 @@ html[data-mode="dark"] .joe_console {
 
   .empty {
     margin: 0;
-    padding: 14px 0;
+    padding: 18px 0;
     font-size: 13px;
+    line-height: 1.6;
     color: var(--text-secondary);
   }
 }
 
-/* 第一行：博主与站点数据 */
-.joe_console__head {
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  padding: 4px 4px 2px;
-}
+/* 发文日历 */
+.joe_console__calendar .grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
 
-.joe_console__blogger {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  min-width: 0;
-
-  .avatar {
-    flex: none;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme) 25%, transparent);
+  .week {
+    padding-bottom: 4px;
+    font-size: 12px;
+    color: var(--text-placeholder);
   }
 
-  .info {
-    min-width: 0;
+  .day {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    color: var(--text-regular);
   }
 
-  .name {
-    font-size: 18px;
+  .is-today {
     font-weight: 700;
-    color: var(--text-title);
+    box-shadow: inset 0 0 0 1.5px var(--theme);
+  }
 
-    &:hover {
-      color: var(--theme-text);
+  .has-post {
+    color: var(--theme-text);
+    background: var(--tint);
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 4px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: #fff;
+      background: var(--theme-solid);
     }
   }
+}
 
-  .motto {
-    margin: 2px 0 0;
-    overflow: hidden;
+/* 文章栏：标签页 + 列表 */
+.joe_console__posts {
+  .tabs {
+    display: inline-flex;
+    gap: 2px;
+    margin-bottom: 12px;
+    padding: 3px;
+    border-radius: 10px;
+    background: var(--fill-base);
+  }
+
+  .tabs button {
+    padding: 4px 14px;
+    border: 0;
+    border-radius: 8px;
+    font: inherit;
     font-size: 13px;
     color: var(--text-secondary);
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    background: transparent;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+
+    &[aria-selected="true"] {
+      color: var(--theme-text);
+      background: var(--bg-raised);
+      box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+    }
   }
-}
-
-.joe_console__stats {
-  display: flex;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  li {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 64px;
-    padding: 6px 10px;
-    border-radius: var(--radius-inner);
-  }
-
-  strong {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--text-title);
-    font-variant-numeric: tabular-nums;
-  }
-
-  span {
-    font-size: 12px;
-    color: var(--text-secondary);
-  }
-}
-
-/* 第二行：文章三栏 */
-.joe_console__posts {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
 
   li + li {
     margin-top: 2px;
@@ -180,16 +416,136 @@ html[data-mode="dark"] .joe_console {
 
   a {
     display: flex;
-    align-items: baseline;
-    gap: 10px;
-    padding: 6px 8px;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 8px;
     margin: 0 -8px;
-    border-radius: var(--radius-inner);
+    border-radius: 8px;
     font-size: 14px;
     color: var(--text-regular);
     transition:
       background-color var(--dur-fast) var(--ease-out),
       color var(--dur-fast) var(--ease-out);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--theme-text);
+      background: var(--tint);
+    }
+  }
+
+  time,
+  .num {
+    flex: none;
+    font-size: 12px;
+    color: var(--text-placeholder);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rank {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: var(--fill-base);
+  }
+
+  li:nth-child(-n + 3) .rank {
+    color: #fff;
+    background: var(--theme-solid);
+  }
+
+  .text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .empty {
+    padding: 18px 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+}
+
+/* 热门标签 */
+.joe_console__tags .cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--text-regular);
+    background: var(--fill-base);
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-spring);
+
+    &:hover,
+    &:focus-visible {
+      color: #fff;
+      background: var(--theme-solid);
+      transform: translateY(-1px);
+    }
+  }
+
+  em {
+    font-size: 11px;
+    font-style: normal;
+    opacity: 0.65;
+  }
+}
+
+/* —— 我的互动 —— */
+.joe_console__me {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+.joe_console__mine .list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 12px;
+
+  .joe_console__comment {
+    padding-left: 18px;
+
+    &::before {
+      top: 18px;
+    }
+  }
+
+  .on {
+    color: var(--text-placeholder);
+  }
+}
+
+.joe_console__history {
+  a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 8px;
+    margin: 0 -8px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text-regular);
+    transition: background-color var(--dur-fast) var(--ease-out);
 
     &:hover,
     &:focus-visible {
@@ -206,139 +562,118 @@ html[data-mode="dark"] .joe_console {
     text-overflow: ellipsis;
   }
 
-  time,
-  .num {
+  /* 阅读进度：一根细进度条 */
+  .progress {
     flex: none;
+    width: 48px;
+    height: 4px;
+    border-radius: 2px;
+    background:
+      linear-gradient(var(--theme), var(--theme)) 0 / var(--p) 100% no-repeat,
+      var(--fill-base);
+  }
+
+  time {
+    flex: none;
+    width: 4.5em;
     font-size: 12px;
+    text-align: right;
     color: var(--text-placeholder);
-    font-variant-numeric: tabular-nums;
   }
 }
 
-/* 第三行：最近评论与热门标签 */
-.joe_console__social {
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-}
-
-.joe_console__comments ul {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 16px;
-
-  li {
-    display: flex;
-    gap: 10px;
-    min-width: 0;
-  }
-
-  .avatar {
-    flex: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  .body {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-
-  .who {
-    font-size: 12px;
-    color: var(--text-secondary);
-  }
-
-  .what {
-    overflow: hidden;
-    font-size: 13px;
-    color: var(--text-regular);
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-}
-
-.joe_console__tags .cloud {
+/* —— 底部悬浮 dock：视图切换 + 快捷开关 —— */
+.joe_console__dock {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-
-  a {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 4px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 13px;
-    color: var(--text-regular);
-    background: var(--fill-base);
-    transition:
-      background-color var(--dur-fast) var(--ease-out),
-      color var(--dur-fast) var(--ease-out);
-
-    &:hover,
-    &:focus-visible {
-      color: #fff;
-      background: var(--theme-solid);
-    }
-  }
-
-  em {
-    font-size: 11px;
-    font-style: normal;
-    opacity: 0.7;
-  }
-}
-
-/* 底部：快捷开关 */
-.joe_console__switches {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  align-items: center;
   gap: 10px;
-  margin-top: 16px;
+  padding: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-raised) 82%, transparent);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 0 0 1px var(--card-border),
+    0 10px 30px -12px rgb(15 23 42 / 30%);
+  transform: translateX(-50%);
+}
+
+.joe_console__switch {
+  display: flex;
+  gap: 2px;
 
   button {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 14px 8px 8px;
+    gap: 6px;
+    padding: 8px 16px;
     border: 0;
     border-radius: 999px;
     font: inherit;
     font-size: 13px;
-    color: var(--text-regular);
-    background: color-mix(in srgb, var(--bg-raised) 72%, transparent);
-    box-shadow: 0 0 0 1px var(--card-border);
+    white-space: nowrap;
+    color: var(--text-secondary);
+    background: transparent;
     cursor: pointer;
     transition:
-      box-shadow var(--dur-fast) var(--ease-out),
-      transform var(--dur-fast) var(--ease-spring);
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
 
-    &:hover {
-      box-shadow: var(--shadow-hover);
+    &[aria-selected="true"] {
+      color: var(--theme-text);
+      background: var(--tint);
+    }
+  }
+}
+
+.joe_console__toggles {
+  display: flex;
+  gap: 2px;
+  padding-left: 8px;
+  border-left: 1px solid var(--border-lighter);
+
+  button {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    width: 46px;
+    padding: 3px 0;
+    border: 0;
+    border-radius: 12px;
+    font: inherit;
+    color: var(--text-secondary);
+    background: transparent;
+    cursor: pointer;
+    transition: transform var(--dur-fast) var(--ease-spring);
+
+    &:hover .icon {
+      background: var(--tint);
     }
 
     &:active {
-      transform: scale(0.96);
+      transform: scale(0.92);
     }
   }
 
   .icon {
     display: grid;
     place-items: center;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    color: var(--text-secondary);
-    background: var(--fill-base);
+    font-size: 15px;
     transition:
       background-color var(--dur-fast) var(--ease-out),
       color var(--dur-fast) var(--ease-out);
   }
 
-  /* 已开启的开关：图标染主题色 */
+  .label {
+    font-size: 11px;
+  }
+
   button[aria-pressed="true"] .icon {
     color: #fff;
     background: var(--theme-solid);
@@ -423,44 +758,80 @@ html.joe-no-motion *::after {
   scroll-behavior: auto !important;
 }
 
+@media (max-width: 1200px) {
+  .joe_console__wall {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .joe_console__grid {
+    grid-template-columns: minmax(250px, 1fr) minmax(0, 1.4fr);
+  }
+
+  .joe_console__tags {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 992px) {
-  .joe_console__posts {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .joe_console__social {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .joe_console__head {
-    grid-template-columns: minmax(0, 1fr);
+  .joe_console__bar {
+    flex-wrap: wrap;
   }
 
   .joe_console__stats {
-    justify-content: space-between;
+    order: 3;
+    width: 100%;
+    margin: 0;
+    justify-content: space-around;
+  }
 
-    li {
-      min-width: 0;
-      padding: 4px;
-    }
+  .joe_console__search {
+    width: auto;
+    margin-left: auto;
+  }
+
+  .joe_console__me,
+  .joe_console__mine .list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .joe_console__wall,
+  .joe_console__grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
 @media (max-width: 500px) {
   .joe_console {
-    padding: 64px 8px 8px;
+    padding: 60px 8px 8px;
   }
 
   .joe_console__panel {
-    padding: 12px;
+    padding: 14px 12px 128px;
+    border-radius: 18px;
   }
 
-  .joe_console__comments ul {
-    grid-template-columns: minmax(0, 1fr);
+  .joe_console__hello {
+    width: 100%;
   }
 
-  .joe_console__stats strong {
-    font-size: 17px;
+  .joe_console__search {
+    width: 100%;
+    margin: 0;
+  }
+
+  .joe_console__dock {
+    flex-direction: column;
+    gap: 6px;
+    width: calc(100% - 24px);
+    border-radius: 18px;
+  }
+
+  .joe_console__toggles {
+    padding: 4px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--border-lighter);
   }
 }
 
@@ -468,5 +839,9 @@ html.joe-no-motion *::after {
   .joe_console,
   .joe_console__panel {
     transition: none;
+  }
+
+  .joe_console__hello .wave {
+    animation: none;
   }
 }
