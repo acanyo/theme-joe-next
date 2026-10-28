@@ -1,15 +1,120 @@
 .joe_aside {
+  flex-shrink: 0;
+  width: 300px;
   padding-bottom: 15px;
-  margin-left: 15px;
+  margin-left: 24px;
 
   &.hide {
     display: none;
   }
 }
 
+/* 窄屏：侧栏收进右侧的玻璃面板 */
+.joe_aside_toggle {
+  display: none;
+}
+
+@media (max-width: 1200px) {
+  .joe_aside_toggle {
+    position: fixed;
+    right: 20px;
+    bottom: 24px;
+    z-index: 91;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 50%;
+    font-size: 20px;
+    color: var(--text-title);
+    background: var(--glass-bg-strong);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    cursor: pointer;
+    transition:
+      scale var(--dur-base) var(--ease-spring),
+      rotate var(--dur-slow) var(--ease-spring);
+
+    &:active {
+      scale: 0.9;
+    }
+  }
+
+  html.aside-open .joe_aside_toggle {
+    rotate: 90deg;
+    color: var(--theme);
+  }
+
+  html .joe_container .joe_aside,
+  html .joe_container.revert .joe_aside {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    bottom: 84px;
+    z-index: 90;
+    width: min(340px, calc(100vw - 24px));
+    margin: 0;
+    padding: 12px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: 28px;
+    background: var(--glass-bg-strong);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    visibility: hidden;
+    opacity: 0;
+    translate: 24px 0;
+    scale: 0.96;
+    transform-origin: right bottom;
+    transition:
+      opacity var(--dur-base) var(--ease-out),
+      translate var(--dur-slow) var(--ease-spring),
+      scale var(--dur-slow) var(--ease-spring),
+      visibility var(--dur-base);
+
+    .joe_aside__item {
+      width: 100%;
+      box-shadow: none;
+      border: 1px solid var(--border-lighter);
+    }
+
+    .joe_aside__item:last-child,
+    .joe_aside_post {
+      position: static;
+      width: 100%;
+    }
+  }
+
+  html.aside-open .joe_container .joe_aside {
+    visibility: visible;
+    opacity: 1;
+    translate: none;
+    scale: none;
+  }
+
+  /* 右下角悬浮按钮让出侧栏按钮的位置；面板打开时暂时隐藏，避免压在面板上 */
+  html .joe_action {
+    bottom: 84px;
+    transition: opacity var(--dur-base) var(--ease-out);
+  }
+
+  html.aside-open .joe_action {
+    opacity: 0;
+    pointer-events: none;
+
+    .joe_action_item {
+      pointer-events: none;
+    }
+  }
+}
+
 .joe_aside__item {
   position: relative;
-  width: 280px;
+  width: 100%;
   margin-bottom: 15px;
   border-radius: var(--radius-wrap);
   box-shadow: var(--shadow);
@@ -856,9 +961,4 @@
   }
 }
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
-@media (max-width: 992px) {
-  html .joe_aside {
-    display: none;
-  }
-}
+

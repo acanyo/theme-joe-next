@@ -9,7 +9,16 @@ const RELATED_SIZE =
 const RELATED = `#lists.isEmpty(post.categories) ? postFinder.listByTag(1, ${RELATED_SIZE}, post.tags[0].metadata.name) : postFinder.listByCategory(1, ${RELATED_SIZE}, post.categories[0].metadata.name)`;
 ---
 
-<aside class="joe_aside">
+<button
+  type="button"
+  class="joe_aside_toggle"
+  aria-label="打开侧栏"
+  aria-controls="joe-aside"
+  aria-expanded="false"
+>
+  <i class="joe-font joe-icon-gengduo" aria-hidden="true"></i>
+</button>
+<aside id="joe-aside" class="joe_aside">
   <th-block th:if="${theme.config.blogger.enabled}">
     <BloggerCard />
   </th-block>

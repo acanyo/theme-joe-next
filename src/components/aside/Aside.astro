@@ -1,7 +1,8 @@
 ---
 /**
  * 侧栏容器：按设置 `aside.widgets` 的顺序渲染组件。
- * 页面级开关（如 aside.enable_tags_aside）由各页面自行判断。
+ * 页面级开关（如 aside.on_tags）由各页面自行判断。
+ * 宽屏是吸顶的右侧栏；1200px 以下收进可展开的玻璃面板。
  */
 import BloggerCard from "../blogger/BloggerCard.astro";
 import CloudWidget from "./CloudWidget.astro";
@@ -10,7 +11,18 @@ import SimpleWidget from "./SimpleWidget.astro";
 import MusicWidget from "./MusicWidget.astro";
 ---
 
+<!-- 窄屏时侧栏收进玻璃面板，由右下角按钮打开（features/aside-dock.ts）-->
+<button
+  type="button"
+  class="joe_aside_toggle"
+  aria-label="打开侧栏"
+  aria-controls="joe-aside"
+  aria-expanded="false"
+>
+  <i class="joe-font joe-icon-gengduo" aria-hidden="true"></i>
+</button>
 <aside
+  id="joe-aside"
   class="joe_aside"
   th:classappend="${theme.config.aside.position == 'left' ? 'pos_left' : ''}"
 >

@@ -11,6 +11,7 @@ import { getThemeConfig } from "./core/config";
 import { runPageScript } from "./core/page-scripts";
 import { initActions } from "./features/actions";
 import { initAsideWidgets } from "./features/aside-widgets";
+import { initAsideDock } from "./features/aside-dock";
 import { initColorMode } from "./features/color-mode";
 import { initEnhancements } from "./features/enhancements";
 import { initFooter } from "./features/footer";
@@ -32,6 +33,7 @@ async function initPage(): Promise<void> {
   initLinkBehavior();
   initMotion();
   initAsideWidgets();
+  initAsideDock();
   await runPageScript();
 }
 
