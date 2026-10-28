@@ -400,7 +400,7 @@ body {
 /* 内容最大宽度由主题设置 basic.content_max_width 控制（见 DynamicStyle.astro）*/
 @media (min-width: 1361px) {
   #Joe .joe_container {
-    max-width: var(--content-max-width, 1400px);
+    max-width: var(--content-max-width, 1320px);
   }
 }
 

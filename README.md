@@ -64,7 +64,7 @@ integrations/           Astro 构建后处理
 
 **命名空间标签。** Astro 7 编译器不支持 `<th:block>`、`<halo:comment>`，源码中写作 `<th-block>`、`<halo-comment>`、`<halo-footer>`，构建后由 `integrations/thymeleaf-tags.ts` 还原。
 
-**布尔设置项。** 未保存过的设置值为 `null`，直接参与 `and` / `or` / `!` 会抛出异常。构建后处理会把 `src/config/boolean-settings.ts` 中列出的设置项改写为 `(x == true)`。在 `settings.yaml` 新增布尔字段时，需要同步更新该列表，`pnpm test` 会校验两者一致。
+**设置项默认值。** 用户首次保存主题设置前，Halo 不会写入 `settings.yaml` 中的默认值，模板读到的是 `null`。`pnpm settings:defaults` 从 `settings.yaml` 生成 `src/config/setting-defaults.ts`；构建后处理据此改写布尔设置的引用（默认开启的写成 `!= false`，默认关闭的写成 `== true`），非布尔设置在模板中用 `?:` 写出与 `settings.yaml` 相同的默认值。修改 `settings.yaml` 后需重新生成，`pnpm test` 会校验两者一致。
 
 **设置项命名。** 键名一律 snake_case，不带 `enable_` / `show_` 前缀，也不重复分组名（`links.title` 而非 `links.links_title`）。模板中引用的每个 `theme.config.*` 都必须在 `settings.yaml` 中存在，同样由 `pnpm test` 校验。
 

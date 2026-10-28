@@ -12,6 +12,7 @@
     "build:templates": "astro build",
     "check": "astro check",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "settings:defaults": "node --experimental-strip-types scripts/settings-defaults.ts",
     "format": "prettier --write .",
     "astro": "astro"
   },

@@ -646,7 +646,7 @@ html:has(.joe_header--islands) .joe_progress_bar {
 @media (min-width: 769px) {
   #Joe .joe_header--islands .joe_header_container {
     width: calc(100% - 30px);
-    max-width: calc(var(--content-max-width, 1400px) - 30px);
+    max-width: calc(var(--content-max-width, 1320px) - 30px);
   }
 }
 

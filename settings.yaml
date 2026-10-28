@@ -122,7 +122,8 @@ spec:
           id: scrollbar_color
           key: scrollbar_color
           label: 滚动条颜色
-          value: "#fb6c28"
+          value: ""
+          help: "留空时浅色模式为 #c0c4cc、暗黑模式为 #666"
         - $formkit: text
           name: scrollbar_width
           id: scrollbar_width
@@ -2573,7 +2574,7 @@ spec:
           id: moments_empty
           key: moments_empty
           label: 瞬间页无内容时的文字
-          value: 暂无日志数据
+          value: 暂无动态
         - $formkit: switch
           name: moments_compose_button
           id: moments_compose_button
