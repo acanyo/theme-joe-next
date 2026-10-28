@@ -1,6 +1,7 @@
 /**
- * 阅读条导航的「当前章节」：文章页向下阅读时，导航中间一段显示正在阅读的章节（§3/8 标题），
- * 点击展开迷你目录直接跳转。只在浮岛（阅读条）样式且正文有 h2 / h3 时启用。
+ * 阅读条导航的「当前章节」：文章页向下阅读时，导航中间一段显示「正在阅读 · 章节名」，
+ * 右侧一排小圆点表示读到第几节；点击展开迷你目录直接跳转。
+ * 只在浮岛（阅读条）样式、且正文至少有 3 个 h2 / h3 小标题时启用（章节太少时导航保持菜单）。
  *
  * 导航位于 swup 容器之外：每次进入页面时（initPage）重新读取正文标题，
  * 离开页面时（lifecycle 清理）清空并隐藏。
@@ -9,6 +10,9 @@ import { $, $$, headerOffset, throttle } from "../core/dom";
 import { listen, onCleanup } from "../core/lifecycle";
 
 const HEADINGS = ".joe_detail__article h2, .joe_detail__article h3";
+const MIN_CHAPTERS = 3;
+/** 圆点最多显示的个数；章节更多时圆点表示进度区间 */
+const MAX_STEPS = 8;
 
 export function initNavChapter(): void {
   const box = $<HTMLElement>(".joe_header--islands .joe_header__chapter");
@@ -27,7 +31,7 @@ export function initNavChapter(): void {
   };
   reset();
   onCleanup(reset);
-  if (headings.length < 2) return;
+  if (headings.length < MIN_CHAPTERS) return;
 
   // 迷你目录：h3 缩进一级
   headings.forEach((h, i) => {
@@ -51,8 +55,13 @@ export function initNavChapter(): void {
   });
   box.hidden = false;
 
-  const indexEl = $(".index", current)!;
   const nameEl = $(".name", current)!;
+  const stepsEl = $(".steps", current)!;
+  const steps = Math.min(headings.length, MAX_STEPS);
+  stepsEl.replaceChildren(
+    ...Array.from({ length: steps }, () => document.createElement("i")),
+  );
+  current.setAttribute("aria-label", "文章目录");
   let active = -1;
   const update = () => {
     const line = headerOffset() + 24;
@@ -63,8 +72,11 @@ export function initNavChapter(): void {
     }
     if (index === active) return;
     active = index;
-    indexEl.textContent = `§${index + 1}/${headings.length}`;
     nameEl.textContent = headings[index]!.textContent!.trim();
+    // 第 n 节点亮前 n 个圆点（章节多于圆点数时按比例换算）
+    const lit = Math.round(((index + 1) / headings.length) * steps);
+    $$("i", stepsEl).forEach((dot, i) => dot.classList.toggle("is-on", i < lit));
+    current.title = `第 ${index + 1} / ${headings.length} 节，点击查看目录`;
     $$("li", list).forEach((li, i) => li.classList.toggle("is-active", i === index));
   };
   update();

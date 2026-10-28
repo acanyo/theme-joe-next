@@ -185,7 +185,8 @@
     > .joe_dropdown {
       transition:
         opacity 0.3s var(--ease-out),
-        transform 0.45s var(--ease-spring),
+        transform 0.5s var(--ease-spring),
+        filter 0.3s var(--ease-out),
         color 0.25s var(--ease-out);
     }
   }
@@ -200,11 +201,13 @@
     min-width: 100%;
     max-width: min(520px, 100vw - 520px);
     opacity: 0;
-    transform: translate(-50%, 8px);
+    transform: translate(-50%, 14px);
+    filter: blur(2px);
     pointer-events: none;
     transition:
       opacity 0.3s var(--ease-out),
-      transform 0.45s var(--ease-spring);
+      transform 0.5s var(--ease-spring),
+      filter 0.3s var(--ease-out);
 
     &[hidden] {
       display: none;
@@ -225,15 +228,36 @@
     color: var(--text-title);
     cursor: pointer;
 
-    .index {
+    .label {
       flex-shrink: 0;
-      padding: 2px 8px;
-      border-radius: 4px;
       font-size: 12px;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      color: var(--theme);
-      background: var(--tint);
+      color: var(--text-secondary);
+    }
+
+    /* 章节进度：一排小圆点，已读到的点亮为主题色 */
+    .steps {
+      display: flex;
+      flex-shrink: 0;
+      gap: 4px;
+
+      i {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--border-base);
+        transition:
+          background 0.3s var(--ease-out),
+          transform 0.4s var(--ease-spring);
+      }
+
+      i.is-on {
+        background: var(--theme);
+      }
+
+      i.is-on:last-child,
+      i.is-on:has(+ i:not(.is-on)) {
+        transform: scale(1.35);
+      }
     }
 
     .name {
@@ -316,19 +340,21 @@
     transform: translateX(-50%) scale(1);
   }
 
-  /* 阅读中：菜单让位给当前章节 */
+  /* 阅读中：菜单向上翻走，当前章节从下方翻上来 */
   .joe_header__above.is-reading .joe_header__above-nav {
     > a.item,
     > .joe_dropdown,
     &::before {
       opacity: 0;
-      transform: translateY(-8px);
+      transform: translateY(-14px);
+      filter: blur(2px);
       pointer-events: none;
     }
 
     .joe_header__chapter {
       opacity: 1;
       transform: translate(-50%, 0);
+      filter: none;
       pointer-events: auto;
     }
   }
@@ -341,11 +367,8 @@
     bottom: 0;
     height: 2px;
     border-radius: 2px;
-    background: linear-gradient(
-      90deg,
-      var(--theme),
-      color-mix(in srgb, var(--theme) 55%, #fff)
-    );
+    background: var(--theme);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--theme) 50%, transparent);
     transform-origin: left center;
     transform: scaleX(var(--read, 0));
     transition: opacity 0.3s var(--ease-out);
