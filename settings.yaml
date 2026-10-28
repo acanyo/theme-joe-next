@@ -333,6 +333,18 @@ spec:
           label: 导航菜单
           value: ""
           help: 留空使用 Halo 的主菜单
+        - $formkit: radio
+          name: style
+          id: style
+          key: style
+          label: 导航样式
+          value: islands
+          help: 浮岛：Logo、菜单、工具按钮分成三块玻璃胶囊，页面顶部时透明，滚动后浮起；文章页滚动后中间显示文章标题。经典：Joe 原来的通栏导航
+          options:
+            - value: islands
+              label: 浮岛
+            - value: classic
+              label: 经典
         - $formkit: switch
           name: sticky
           id: sticky

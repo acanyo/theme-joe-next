@@ -1,0 +1,456 @@
+/*
+ * 浮岛导航（navbar.style = islands）。在经典导航样式之上叠加，经典样式不受影响。
+ *
+ *   顶部（.is-top）：透明通栏，盖在大图上
+ *   滚动后：Logo / 菜单 / 工具按钮各自浮成一块玻璃胶囊
+ *   文章页读到正文后（.show-title）：中间胶囊由菜单换成文章标题，点击回到顶部
+ *
+ * 当前项与悬停项下方有一块主题色淡底滑块（位置由 navigation.ts 写入 --pill-*）。
+ * 下拉菜单、二级菜单是同材质的玻璃面板；Joe 的菜单图标、多级菜单、登录、搜索、移动端抽屉均保留。
+ */
+
+.joe_header--islands {
+  height: 72px;
+
+  .joe_header__above {
+    top: 0;
+    padding: 10px 0;
+    background: transparent;
+    border-bottom: 0;
+    box-shadow: none;
+    transition: transform 0.45s var(--ease-out);
+
+    &.active {
+      transform: translate3d(0, -100%, 0);
+    }
+
+    &.glass {
+      background: transparent;
+      backdrop-filter: none;
+    }
+  }
+
+  .joe_header_container {
+    position: relative;
+    gap: 12px;
+    min-height: 52px;
+  }
+
+  /* 三块浮岛共用的玻璃材质；顶部时材质淡出 */
+  .joe_header__above-logo,
+  .joe_header__above-nav,
+  .joe_header__above-search {
+    position: relative;
+    height: 48px;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    transition:
+      background 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out),
+      backdrop-filter 0.35s var(--ease-out);
+  }
+
+  .joe_header__above.is-top {
+    .joe_header__above-logo,
+    .joe_header__above-nav,
+    .joe_header__above-search {
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+    }
+  }
+
+  /* 左：Logo */
+  .joe_header__above-logo {
+    margin-right: 0;
+    padding: 0 14px;
+
+    &::after {
+      display: none;
+    }
+
+    img {
+      height: 32px;
+      min-width: 32px;
+    }
+  }
+
+  /* 中：菜单，居中 */
+  .joe_header__above-nav {
+    margin: 0 auto;
+    padding: 0 6px;
+    overflow: visible;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      height: 36px;
+      width: var(--pill-w, 0px);
+      transform: translate3d(var(--pill-x, 0px), -50%, 0);
+      border-radius: 999px;
+      background: var(--tint);
+      opacity: var(--pill-o, 0);
+      transition:
+        transform 0.5s var(--ease-spring),
+        width 0.5s var(--ease-spring),
+        opacity 0.25s var(--ease-out);
+      pointer-events: none;
+    }
+
+    .item {
+      z-index: 1;
+      height: 48px;
+      line-height: 48px;
+      margin-right: 0;
+      padding: 0 14px;
+
+      &:last-child {
+        width: auto;
+      }
+
+      /* 滑块替代原来的底部指示条 */
+      &::after {
+        display: none;
+      }
+
+      &.current {
+        color: var(--theme);
+        font-weight: 600;
+      }
+    }
+
+    .joe_dropdown {
+      margin-right: 0;
+
+      .item {
+        padding-right: 6px;
+      }
+    }
+
+    .joe_dropdown__link a {
+      height: 48px;
+      line-height: 48px;
+    }
+
+    .joe_dropdown__link-icon {
+      position: relative;
+      z-index: 1;
+      margin: 0 10px 0 -2px;
+    }
+
+    .m-icon {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  /* 文章标题胶囊：与菜单在同一位置交替显示 */
+  .joe_header__page-title {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-title);
+    background: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition:
+      opacity 0.3s var(--ease-out),
+      transform 0.45s var(--ease-spring);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .joe_header__above.show-title .joe_header__above-nav {
+    > a.item,
+    > .joe_dropdown,
+    &::before {
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+    }
+
+    .joe_header__page-title {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+  }
+
+  .joe_header__above-nav > a.item,
+  .joe_header__above-nav > .joe_dropdown {
+    transition:
+      opacity 0.3s var(--ease-out),
+      transform 0.45s var(--ease-spring),
+      color 0.25s var(--ease-out);
+  }
+
+  /* 右：搜索 / 登录 */
+  .joe_header__above-search {
+    margin-left: 0;
+    gap: 4px;
+    padding: 0 6px;
+
+    .submit {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      background: transparent;
+      color: var(--text-regular);
+      transition:
+        color 0.25s var(--ease-out),
+        background 0.25s var(--ease-out),
+        transform 0.35s var(--ease-spring);
+
+      &:hover {
+        color: var(--theme);
+        background: var(--tint);
+      }
+
+      &:active {
+        transform: scale(0.9);
+      }
+    }
+  }
+
+  .nav_login {
+    height: 36px;
+    margin-left: 0;
+
+    a {
+      width: 36px;
+      height: 36px;
+      font-size: 20px;
+      background: transparent;
+      color: var(--text-regular);
+
+      &:hover {
+        color: var(--theme);
+        background: var(--tint);
+      }
+    }
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  /* 下拉菜单 / 二级菜单：玻璃面板，弹性展开 */
+  .joe_dropdown__menu,
+  .joe_nav_sub {
+    padding: 6px;
+    border-top: 0;
+    border-radius: 16px;
+    background: var(--glass-bg-strong);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    li {
+      background: transparent;
+    }
+
+    a {
+      height: auto;
+      padding: 8px 14px;
+      line-height: 1.5;
+      border-radius: 10px;
+
+      &:hover,
+      &.current {
+        color: var(--theme);
+        background: var(--tint);
+      }
+    }
+  }
+
+  .joe_dropdown__menu {
+    top: calc(100% + 8px);
+    transform: translateX(-50%) scale(0.94);
+    transform-origin: top center;
+    transition:
+      opacity 0.25s var(--ease-out),
+      visibility 0.25s,
+      transform 0.45s var(--ease-spring);
+
+    /* 菜单项与面板之间的间隙不断开 hover */
+    &::after {
+      display: block;
+      content: "";
+      position: absolute;
+      inset: -10px 0 auto;
+      height: 10px;
+    }
+  }
+
+  .joe_dropdown.active .joe_dropdown__menu {
+    transform: translateX(-50%) scale(1);
+  }
+
+  .joe_nav_sub {
+    left: calc(100% + 6px);
+    top: -6px;
+    padding-left: 6px;
+    transform: translateX(-6px) scale(0.96);
+    transform-origin: left top;
+  }
+
+  .joe_nav_sub-li {
+    height: auto;
+
+    &:hover .joe_nav_sub {
+      transform: none;
+    }
+  }
+
+  /* 移动端：一整条玻璃胶囊（菜单 · Logo · 搜索） */
+  @media (max-width: 768px) {
+
+    .joe_header__above {
+      padding: 8px 0;
+    }
+
+    .joe_header_container {
+      width: calc(100% - 20px);
+      min-height: 48px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow: var(--glass-shadow);
+      transition:
+        background 0.35s var(--ease-out),
+        box-shadow 0.35s var(--ease-out);
+    }
+
+    .joe_header__above.is-top .joe_header_container {
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+    }
+
+    .joe_header__above-logo {
+      height: 48px;
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+    }
+
+    .joe_header__above-slideicon,
+    .joe_header__above-searchicon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .joe_header--islands {
+    .joe_header__above,
+    .joe_header__above-nav::before,
+    .joe_header__page-title,
+    .joe_header__above-nav > a.item,
+    .joe_header__above-nav > .joe_dropdown,
+    .joe_dropdown__menu {
+      transition-duration: 0s;
+    }
+  }
+}
+
+/* 顶部透明时让首页 / 列表页大图延伸到导航下方，导航直接压在图上 */
+.joe_header--islands + #swup .evan-big-banner {
+  margin-top: -72px;
+}
+
+.joe_header--islands + #swup .evan-big-banner.is-fullscreen {
+  height: 100vh;
+}
+
+/* 盖在大图上时，导航文字改为白色以保证对比度 */
+.joe_header--islands:has(+ #swup .evan-big-banner) .joe_header__above.is-top {
+  .joe_header__above-logo--text,
+  .joe_header__above-nav .item,
+  .joe_header__above-nav .joe_dropdown__link-icon,
+  .joe_header__above-search .submit,
+  .nav_login a,
+  .joe_header__above-slideicon,
+  .joe_header__above-searchicon {
+    color: #fff;
+    text-shadow: 0 1px 8px rgb(0 0 0 / 35%);
+  }
+
+  .joe_header__above-nav {
+    --tint: rgb(255 255 255 / 18%);
+  }
+}
+
+@media (max-width: 768px) {
+  .joe_header--islands + #swup .evan-big-banner {
+    margin-top: -64px;
+  }
+}
+
+/* 未开启 Logo 时左侧浮岛显示站点名（经典样式下不显示，保持原样） */
+.joe_header__above-logo--text {
+  display: none;
+}
+
+.joe_header--islands .joe_header__above-logo--text {
+  display: flex;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-title);
+  white-space: nowrap;
+}
+
+/* 移动端没有中间菜单，不显示文章标题胶囊 */
+@media (max-width: 768px) {
+  .joe_header--islands .joe_header__page-title {
+    display: none;
+  }
+}
+
+/* 经典样式的移动端高度规则带 html 前缀，这里用同样的优先级覆盖 */
+@media (max-width: 768px) {
+  html .joe_header--islands {
+    height: 64px;
+
+    .joe_header__above .joe_container {
+      height: 48px;
+    }
+  }
+}

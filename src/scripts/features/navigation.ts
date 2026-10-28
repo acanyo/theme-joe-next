@@ -152,6 +152,74 @@ function initHeaderScroll(): void {
   );
 }
 
+/**
+ * 浮岛导航（navbar.style = islands）的附加交互，经典样式下不执行：
+ * - 页面顶部时 .is-top（透明），离开顶部后浮起
+ * - 文章页向下读到正文后 .show-title：中间胶囊由菜单换成文章标题，点击回到顶部
+ * - 菜单下方的主题色滑块停在当前项、随鼠标滑到悬停项
+ */
+const isIslands = () => !!$(".joe_header--islands");
+
+function initIslandsScroll(): void {
+  const header = $(".joe_header__above");
+  if (!header || !isIslands()) return;
+  const update = () => {
+    const y = window.scrollY;
+    header.classList.toggle("is-top", y < 24);
+    const title = $(".joe_header__page-title");
+    header.classList.toggle("show-title", !!title && !title.hidden && y > 360);
+  };
+  update();
+  document.addEventListener("scroll", throttle(update, 80), { passive: true });
+  refreshIslands = update;
+}
+
+let refreshIslands = (): void => {};
+
+/** 把当前页面的标题写入导航中间的标题胶囊（切页后调用） */
+function syncPageTitle(): void {
+  const button = $<HTMLButtonElement>(".joe_header__page-title");
+  if (!button) return;
+  const title = $("#swup")?.dataset.joeTitle ?? "";
+  button.textContent = title;
+  button.hidden = !title;
+}
+
+function initPageTitle(): void {
+  $(".joe_header__page-title")?.addEventListener("click", () =>
+    window.scrollTo({ top: 0, behavior: "smooth" }),
+  );
+}
+
+function initNavPill(): void {
+  const nav = $(".joe_header__above-nav");
+  if (!nav || !isIslands()) return;
+  const moveTo = (item: HTMLElement | null) => {
+    if (!item) {
+      nav.style.setProperty("--pill-o", "0");
+      return;
+    }
+    const navBox = nav.getBoundingClientRect();
+    const box = item.getBoundingClientRect();
+    nav.style.setProperty("--pill-x", `${box.left - navBox.left}px`);
+    nav.style.setProperty("--pill-w", `${box.width}px`);
+    nav.style.setProperty("--pill-o", "1");
+  };
+  // 当前项可能是一级链接，也可能在某个下拉菜单里（此时停在整个下拉项上）
+  const current = () => {
+    const link = $<HTMLElement>("a.item.current", nav);
+    return link?.closest<HTMLElement>(".joe_dropdown") ?? link;
+  };
+  for (const item of $$<HTMLElement>(":scope > a.item, :scope > .joe_dropdown", nav))
+    item.addEventListener("mouseenter", () => moveTo(item));
+  nav.addEventListener("mouseleave", () => moveTo(current()));
+  pillToCurrent = () => moveTo(current());
+  void document.fonts?.ready.then(() => pillToCurrent());
+  window.addEventListener("resize", throttle(() => pillToCurrent(), 150));
+}
+
+let pillToCurrent = (): void => {};
+
 function initSearch(): void {
   $$("[data-joe-search]").forEach((button) =>
     button.addEventListener("click", (event) => {
@@ -166,11 +234,19 @@ export function initNavigation(): void {
   initDrawer();
   initHeaderScroll();
   initSearch();
+  initPageTitle();
+  syncPageTitle();
+  initIslandsScroll();
+  highlightCurrentMenu();
+  initNavPill();
 }
 
 /** 切页后同步导航状态 */
 export function refreshNavigation(): void {
   highlightCurrentMenu();
+  syncPageTitle();
+  refreshIslands();
+  pillToCurrent();
   if (document.documentElement.classList.contains("disable-scroll"))
     closeOverlays(false);
 }

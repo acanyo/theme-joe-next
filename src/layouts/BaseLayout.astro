@@ -31,6 +31,8 @@ interface Props {
   heading?: string;
   /** 页面脚本名，对应 src/scripts/core/page-scripts.ts 中的注册项 */
   pageScript?: PageScript;
+  /** 文章 / 独立页标题表达式；浮岛导航滚动后显示在中间 */
+  navTitle?: string;
 }
 
 const {
@@ -40,6 +42,7 @@ const {
   bigBanner = false,
   heading,
   pageScript,
+  navTitle,
 } = Astro.props;
 ---
 
@@ -56,7 +59,12 @@ const {
   <body>
     <div id="Joe">
       <Navbar />
-      <div id="swup" class="joe_swup" data-joe-script={pageScript}>
+      <div
+        id="swup"
+        class="joe_swup"
+        data-joe-script={pageScript}
+        th:attr={navTitle ? `data-joe-title=\${${navTitle}}` : undefined}
+      >
         {bigBanner && (
           <th-block th:if="${theme.config.hero.enabled}">
             <BigBanner

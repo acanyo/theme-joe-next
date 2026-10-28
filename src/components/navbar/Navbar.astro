@@ -2,6 +2,12 @@
 /**
  * 顶部导航。菜单来源：设置中选择的菜单，未选择时使用 Halo 主菜单。
  * 桌面端最多渲染三级菜单，移动端侧栏同样三级。
+ *
+ * 样式由设置 navbar.style 决定：
+ * - islands（默认）：Logo / 菜单 / 工具按钮三块玻璃胶囊，页面顶部透明，滚动后浮起（styles/layout/islands.css）
+ * - classic：Joe 原来的通栏
+ * 文章页滚动后，浮岛样式中间一块显示文章标题：标题来自 #swup 的 data-joe-title，
+ * 由 navigation.ts 在每次进入页面时写入（无刷新切页时导航不会被替换）。
  */
 import MenuLink from "./MenuLink.astro";
 import MobileDrawer from "./MobileDrawer.astro";
@@ -10,7 +16,11 @@ const MENU =
   "#strings.isEmpty(theme.config.navbar.menu) ? menuFinder.getPrimary() : menuFinder.getByName(theme.config.navbar.menu)";
 ---
 
-<header class="joe_header" th:with={`navMenu = \${${MENU}}`}>
+<header
+  class="joe_header"
+  th:classappend="${(theme.config.navbar.style ?: 'islands') == 'islands' ? 'joe_header--islands' : ''}"
+  th:with={`navMenu = \${${MENU}}`}
+>
   <div
     class="joe_header__above"
     th:classappend="|${theme.config.effects.reveal ? 'topInDown' : ''} ${theme.config.navbar.sticky ? 'fixed' : ''} ${theme.config.navbar.sticky and theme.config.navbar.glass ? 'glass' : ''}|"
@@ -40,6 +50,13 @@ const MENU =
           data-fallback="avatar"
         />
       </a>
+      <a
+        th:unless="${theme.config.navbar.logo}"
+        class="joe_header__above-logo joe_header__above-logo--text"
+        th:href="${site.url}"
+        th:title="${site.title}"
+        th:text="${site.title}"
+      ></a>
 
       <nav
         class="joe_header__above-nav"
@@ -85,6 +102,12 @@ const MENU =
             </ul>
           </div>
         </th-block>
+        <button
+          type="button"
+          class="joe_header__page-title"
+          title="回到顶部"
+          hidden
+        ></button>
       </nav>
 
       <div class="joe_header__above-search">
