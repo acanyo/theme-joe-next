@@ -6,8 +6,7 @@
 @import "./base/animations.css";
 @import "./base/entrances.css";
 @import "./base/transitions.css";
-@import "./vendor/joe-font.css";
-@import "./vendor/jiewen.css";
+@import "./base/icons.css";
 @import "./layout/base.css";
 @import "./layout/header.css";
 @import "./layout/islands.css";

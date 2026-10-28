@@ -1,5 +1,6 @@
 ---
 /** 页脚：版权、备案、Powered by、云服务商、运行时间、RSS/站点地图、访问统计 */
+import Icon from "../common/Icon.astro";
 const CLOUD_PROVIDERS = [
   { key: "aliyun", url: "https://www.aliyun.com" },
   { key: "tencent", url: "https://cloud.tencent.com" },
@@ -96,7 +97,7 @@ const CLOUD_PROVIDERS = [
         提供云服务
       </p>
       <div class="site_life" th:if="${theme.config.footer.uptime}">
-        <i class="joe-font joe-icon-jiasu" aria-hidden="true"></i>已运行&nbsp;
+        <Icon name="runtime" />已运行&nbsp;
         <strong class="joe_run__day">00</strong> 天
         <strong class="joe_run__hour">00</strong> 时
         <strong class="joe_run__minute">00</strong> 分
@@ -126,7 +127,7 @@ const CLOUD_PROVIDERS = [
           target="_blank"
           rel="noopener noreferrer"
         >
-          <i class="joe-font joe-icon-rss-fill" aria-hidden="true"></i>&nbsp;RSS
+          <Icon name="rss" />&nbsp;RSS
         </a>
         <a
           th:if="${theme.config.footer.sitemap}"
@@ -142,15 +143,15 @@ const CLOUD_PROVIDERS = [
         th:if="${theme.config.footer.busuanzi}"
       >
         <span class="site-pv">
-          <i class="joe-font joe-icon-zhexiantu" aria-hidden="true"></i>访问量
+          <Icon name="page-views" />访问量
           <em id="busuanzi_value_site_pv">0</em>
         </span>
         <span class="site-uv">
-          <i class="joe-font joe-icon-monitor" aria-hidden="true"></i>访客量
+          <Icon name="visitors" />访客量
           <em id="busuanzi_value_site_uv">0</em>
         </span>
         <span class="site-page-pv">
-          <i class="joe-font joe-icon-dianji" aria-hidden="true"></i>本页访客
+          <Icon name="page-visitors" />本页访客
           <em id="busuanzi_value_page_pv">0</em>
         </span>
       </div>

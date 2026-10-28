@@ -96,13 +96,6 @@ spec:
           label: 自定义字体
           value: ""
           help: 字体文件地址，建议 woff2；留空使用系统字体
-        - $formkit: text
-          name: iconfont
-          id: iconfont
-          key: iconfont
-          label: iconfont 图标库
-          value: ""
-          help: iconfont 生成的 CSS 链接，会插入 head 末尾
         - $formkit: color
           name: scrollbar_color
           id: scrollbar_color

@@ -39,11 +39,6 @@ const { title = "site.title", titleIf } = Astro.props;
 />
 <link
   rel="stylesheet"
-  th:if="${not #strings.isEmpty(theme.config.appearance.iconfont)}"
-  th:href="${theme.config.appearance.iconfont}"
-/>
-<link
-  rel="stylesheet"
   th:if="${theme.config.effects.cursor_skin != null and theme.config.effects.cursor_skin != 'off' and !theme.config.footer.clean_mode}"
   th:href="${#theme.assets('/cursor/' + theme.config.effects.cursor_skin + '/style.css')}"
 />

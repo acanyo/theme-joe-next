@@ -200,7 +200,7 @@
         transform: scaleX(0.7);
       }
 
-      & + .joe-icon-arrow-down {
+      & + .joe-icon-chevron-down {
         color: var(--theme) !important;
       }
     }

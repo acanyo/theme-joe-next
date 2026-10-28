@@ -1,10 +1,13 @@
 ---
 /** 侧栏组件的统一外框（标题 + 内容） */
+import Icon from "../common/Icon.astro";
+import type { IconName } from "../../config/icons";
+
 interface Props {
   /** 区块类名，如 "newest"、"tags-cloud" */
   variant: string;
-  /** joe-font 图标名，不含前缀 */
-  icon: string;
+  /** 图标名（config/icons.ts） */
+  icon: IconName;
   /** 静态标题；需要动态标题时使用 titleExpr */
   title?: string;
   /** 标题的 SpEL 表达式（不含 `${}`） */
@@ -21,7 +24,7 @@ const { variant, icon, title, titleExpr, moreHref, id, ...rest } = Astro.props;
 <section class:list={["joe_aside__item", variant]} id={id} {...rest}>
   <div class="joe_aside__item-title">
     <slot name="icon">
-      <i class={`joe-font joe-icon-${icon}`} aria-hidden="true"></i>
+      <Icon name={icon} />
     </slot>
     {titleExpr ? (
       <span class="text" th:text={`\${${titleExpr}}`}></span>
@@ -30,7 +33,7 @@ const { variant, icon, title, titleExpr, moreHref, id, ...rest } = Astro.props;
     )}
     {moreHref && (
       <a class="tags_more" th:href={`@{${moreHref}}`}>
-        更多<i class="joe-font joe-icon-more-right" aria-hidden="true"></i>
+        更多<Icon name="chevron-right" />
       </a>
     )}
   </div>

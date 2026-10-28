@@ -103,9 +103,12 @@ spec:
     group: ""
     kind: MenuItem
   formSchema:
-    - $formkit: "text"
+    - $formkit: "iconify"
       name: "icon"
       label: "图标"
+      format: "svg"
+      value-only: true
+      help: "主题设置中开启「菜单图标」后显示；未选择时显示默认图标"
 
 ---
 apiVersion: v1alpha1

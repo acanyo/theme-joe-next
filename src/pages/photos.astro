@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Aside from "../components/aside/Aside.astro";
+import Icon from "../components/common/Icon.astro";
 import "../styles/pages/photos.css";
 ---
 
@@ -12,7 +13,7 @@ import "../styles/pages/photos.css";
   <div class="joe_main">
     <div class="joe_photos__type">
       <div class="joe_photos__type-title">
-        <i class="jiewen joe-icon-tupian" aria-hidden="true"></i>&nbsp;
+        <Icon name="image" />&nbsp;
         <span th:text="${theme.config.pages.photos_title ?: '我的图库'}"></span>
       </div>
       <nav class="joe_photos__filter" aria-label="图库分组">

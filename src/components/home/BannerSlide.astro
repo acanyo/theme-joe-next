@@ -1,5 +1,6 @@
 ---
 /** 轮播单项。依赖外层定义的 cover / title / excerpt / href 变量 */
+import Icon from "../common/Icon.astro";
 ---
 
 <a
@@ -26,5 +27,5 @@
       th:text="${excerpt}"
     ></p>
   </div>
-  <i class="joe-font joe-icon-zhifeiji" aria-hidden="true"></i>
+  <Icon name="send" />
 </a>

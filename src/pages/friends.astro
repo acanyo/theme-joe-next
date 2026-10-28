@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Aside from "../components/aside/Aside.astro";
 import Pagination from "../components/list/Pagination.astro";
+import Icon from "../components/common/Icon.astro";
 import "../styles/pages/friends.css";
 ---
 
@@ -24,7 +25,7 @@ import "../styles/pages/friends.css";
         rel="nofollow"
         aria-label="管理朋友圈"
       >
-        <i class="joe-font joe-icon-edit" aria-hidden="true"></i>
+        <Icon name="edit" />
       </a>
       <ul class="joe_friends__list">
         <li

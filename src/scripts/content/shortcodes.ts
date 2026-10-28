@@ -6,6 +6,7 @@
  * 属性值来自文章作者，渲染时一律转义，避免把属性当作 HTML 注入。
  */
 import { copyText } from "../core/clipboard";
+import { iconHtml } from "../core/icons";
 import { escapeHtml, parseItems, safeUrl } from "./shortcode-parse";
 
 const attr = (el: Element, name: string, fallback = ""): string =>
@@ -79,7 +80,7 @@ const SHORTCODES: Record<string, (el: HTMLElement) => void | Promise<void>> = {
       ["secondary", "success", "warning", "error", "info"],
       "secondary",
     );
-    el.innerHTML = `<a class="joe_anote ${type}" href="${safeUrl(attr(el, "href"))}" target="_blank" rel="noopener noreferrer nofollow"><span class="joe_anote__icon"><i class="joe-font joe-icon-download"></i></span><span class="joe_anote__content">${safe(el, "content", "标签按钮")}</span></a>`;
+    el.innerHTML = `<a class="joe_anote ${type}" href="${safeUrl(attr(el, "href"))}" target="_blank" rel="noopener noreferrer nofollow"><span class="joe_anote__icon">${iconHtml("download")}</span><span class="joe_anote__content">${safe(el, "content", "标签按钮")}</span></a>`;
   },
   "joe-dotted": (el) => {
     const start = cssValue(el, "startColor", "#ff6c6c");
@@ -89,7 +90,7 @@ const SHORTCODES: Record<string, (el: HTMLElement) => void | Promise<void>> = {
   "joe-cloud": (el) => {
     const type = attr(el, "type", "default");
     const password = attr(el, "password");
-    el.innerHTML = `<span class="joe_cloud"><div class="joe_cloud__logo _${escapeHtml(type)}"></div><div class="joe_cloud__describe"><div class="joe_cloud__describe-title">${safe(el, "title", "默认标题")}</div><div class="joe_cloud__describe-type">来源：${CLOUD_TYPES[type] ?? "默认网盘"}${password ? ` | 提取码：${escapeHtml(password)}` : ""}</div></div><a class="joe_cloud__btn" href="${safeUrl(attr(el, "url"))}" target="_blank" rel="noopener noreferrer nofollow" aria-label="下载"><i class="joe-font joe-icon-download"></i></a></span>`;
+    el.innerHTML = `<span class="joe_cloud"><div class="joe_cloud__logo _${escapeHtml(type)}"></div><div class="joe_cloud__describe"><div class="joe_cloud__describe-title">${safe(el, "title", "默认标题")}</div><div class="joe_cloud__describe-type">来源：${CLOUD_TYPES[type] ?? "默认网盘"}${password ? ` | 提取码：${escapeHtml(password)}` : ""}</div></div><a class="joe_cloud__btn" href="${safeUrl(attr(el, "url"))}" target="_blank" rel="noopener noreferrer nofollow" aria-label="下载">${iconHtml("download")}</a></span>`;
   },
   "joe-message": (el) => {
     const type = oneOf(
@@ -229,7 +230,7 @@ const SHORTCODES: Record<string, (el: HTMLElement) => void | Promise<void>> = {
     );
   },
   "joe-copy-icon": (el) => {
-    el.innerHTML = `<button type="button" class="joe_copy">${safe(el, "title")}<i class="${safe(el, "icon", "joe-font joe-icon-copy")}" aria-hidden="true"></i></button>`;
+    el.innerHTML = `<button type="button" class="joe_copy">${safe(el, "title")}${el.hasAttribute("icon") ? `<i class="${safe(el, "icon")}" aria-hidden="true"></i>` : iconHtml("copy")}</button>`;
     el.querySelector("button")?.addEventListener(
       "click",
       () => void copyText(attr(el, "content", "默认文本")),

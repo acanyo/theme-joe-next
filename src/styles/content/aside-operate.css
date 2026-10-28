@@ -51,10 +51,10 @@
     &:hover {
       color: var(--theme);
 
-      .joe-icon-dianzan,
-      .joe-icon-huifu,
-      .joe-icon-message,
-      .joe-icon-shang {
+      .joe-icon-like,
+      .joe-icon-reply,
+      .joe-icon-comment,
+      .joe-icon-reward {
         animation: swing 1s ease;
       }
     }

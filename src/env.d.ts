@@ -59,6 +59,12 @@ declare namespace astroHTML.JSX {
   }
 }
 
+declare module "virtual:joe-icons" {
+  import type { SCRIPT_ICONS } from "../integrations/icons";
+  const icons: Record<(typeof SCRIPT_ICONS)[number], string>;
+  export default icons;
+}
+
 declare module "*?url" {
   const url: string;
   export default url;

@@ -6,6 +6,7 @@
 import { COMMENT_ENABLED, el } from "../../config/expressions";
 import { POST_ICONS } from "../../data/post-icons";
 import PostAds from "./PostAds.astro";
+import Icon from "../common/Icon.astro";
 
 interface Props {
   subject: "post" | "singlePage";
@@ -166,11 +167,8 @@ const ARTICLE_CLASS = [
       >
         <button type="button" class="agree" data-joe-like aria-label="点赞">
           <span class="icon">
-            <i class="joe-font joe-icon-like icon-like" aria-hidden="true" />
-            <i
-              class="joe-font joe-icon-like-fill icon-unlike"
-              aria-hidden="true"
-            />
+            <Icon name="like" class="icon-like" />
+            <Icon name="like-fill" class="icon-unlike" />
           </span>
           <span class="nums" th:text="${post.stats.upvote}">
             0

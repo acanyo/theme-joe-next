@@ -4,6 +4,7 @@
  * 自定义模式直接输出用户填写的图标 HTML。
  */
 import { SOCIAL_PLATFORMS } from "../../data/social-platforms";
+import { iconSvg } from "../../config/icons";
 ---
 
 <div
@@ -24,7 +25,8 @@ import { SOCIAL_PLATFORMS } from "../../data/social-platforms";
           title={platform.title}
           aria-label={platform.title}
           rel="noopener noreferrer nofollow"
-          set:html={platform.svg}
+          style={`--brand: ${platform.color}`}
+          set:html={iconSvg(platform.name)}
         />
       ))}
     </th-block>

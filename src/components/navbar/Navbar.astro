@@ -11,6 +11,7 @@
  */
 import MenuLink from "./MenuLink.astro";
 import MobileDrawer from "./MobileDrawer.astro";
+import Icon from "../common/Icon.astro";
 
 const MENU =
   "#strings.isEmpty(theme.config.navbar.menu) ? menuFinder.getPrimary() : menuFinder.getByName(theme.config.navbar.menu)";
@@ -34,7 +35,7 @@ const MENU =
         class="joe_header__above-slideicon"
         aria-label="打开菜单"
       >
-        <i class="joe-font joe-icon-caidan" aria-hidden="true"></i>
+        <Icon name="menu" />
       </button>
 
       <a
@@ -79,10 +80,7 @@ const MENU =
           >
             <div class="joe_dropdown__link">
               <MenuLink item="menuItem" withIcon />
-              <i
-                class="joe-font joe-icon-arrow-down joe_dropdown__link-icon"
-                aria-hidden="true"
-              ></i>
+              <Icon name="chevron-down" class="joe_dropdown__link-icon" />
             </div>
             <ul class="joe_dropdown__menu">
               <li
@@ -113,7 +111,7 @@ const MENU =
             <span class="label">正在阅读</span>
             <span class="name"></span>
             <span class="steps" aria-hidden="true"></span>
-            <i class="joe-font joe-icon-arrow-down" aria-hidden="true"></i>
+            <Icon name="chevron-down" />
           </button>
           <ol class="joe_header__chapter-list" role="menu"></ol>
         </div>
@@ -128,7 +126,7 @@ const MENU =
           data-joe-search
           th:if="${pluginFinder.available('PluginSearchWidget')}"
         >
-          <i class="joe-font joe-icon-search" aria-hidden="true"></i>
+          <Icon name="search" />
           <kbd class="joe_header__kbd" aria-hidden="true">⌘K</kbd>
         </button>
         <!-- 阅读条样式：明暗切换（太阳 / 月亮变形），仅「访客切换」模式显示 -->
@@ -163,7 +161,7 @@ const MENU =
             th:href="@{/login}"
             title="登录"
           >
-            <i class="jiewen joe-icon-zhanghao" aria-hidden="true"></i>
+            <Icon name="user" />
           </a>
           <a
             class="login_after"
@@ -189,7 +187,7 @@ const MENU =
         data-joe-search
         th:if="${pluginFinder.available('PluginSearchWidget')}"
       >
-        <i class="joe-font joe-icon-search" aria-hidden="true"></i>
+        <Icon name="search" />
       </button>
       <!-- 阅读条底边的阅读进度线（宽度由 --read 驱动） -->
       <span class="joe_header__read" aria-hidden="true"></span>

@@ -29,7 +29,7 @@ const SUBJECT_LINK =
 {type === "notice" && (
   <AsideCard
     variant="notice"
-    icon="speaker"
+    icon="notice"
     titleExpr="widget.notice?.title ?: '网站公告'"
   >
     <div class="joe_aside__item-contain">
@@ -103,7 +103,7 @@ const SUBJECT_LINK =
 )}
 
 {type === "lifetime" && (
-  <AsideCard variant="timelife" icon="shalou" title="人生倒计时">
+  <AsideCard variant="timelife" icon="hourglass" title="人生倒计时">
     <div class="joe_aside__item-contain" data-joe-lifetime />
   </AsideCard>
 )}
@@ -111,7 +111,7 @@ const SUBJECT_LINK =
 {type === "newreply" && (
   <AsideCard
     variant="newreply"
-    icon="message"
+    icon="comment"
     title="最新回复"
     th:if={`\${!theme.config.footer.clean_mode and (${COMMENT_ENABLED})}`}
   >

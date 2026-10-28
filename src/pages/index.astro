@@ -7,6 +7,7 @@ import Banner from "../components/home/Banner.astro";
 import HotCategories from "../components/home/HotCategories.astro";
 import MomentsStack from "../components/home/MomentsStack.astro";
 import "../styles/pages/index.css";
+import Icon from "../components/common/Icon.astro";
 import "../styles/pages/moments-stack.css";
 ---
 
@@ -29,7 +30,7 @@ import "../styles/pages/moments-stack.css";
             class="joe_index__title-notice"
             th:if="${not #strings.isEmpty(theme.config.home.qq_group)}"
           >
-            <i class="joe-font joe-icon-speaker" aria-hidden="true"></i>
+            <Icon name="notice" />
             <a
               th:href="${theme.config.home.qq_group}"
               target="_blank"

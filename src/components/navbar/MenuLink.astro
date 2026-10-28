@@ -1,4 +1,5 @@
 ---
+import Icon from "../common/Icon.astro";
 /**
  * 单个导航链接。`item` 为当前作用域中菜单项变量名（构建期常量），
  * 例如 "menuItem"、"childMenu"。其余属性（如 th:if）原样透传到 <a>。
@@ -27,10 +28,20 @@ const {
   {...rest}
 >
   {withIcon && (
-    <i
-      th:if="${theme.config.navbar.icons}"
-      th:class={`|m-icon \${#annotations.getOrDefault(${item}, 'icon', 'jiewen joe-icon-zuzhijiagou')}|`}
-    />
+    <th-block th:if="${theme.config.navbar.icons}">
+      <!-- 菜单项元数据 icon 为 Iconify 选择器保存的 SVG；未设置（或旧版的图标字体类名）时显示默认图标 -->
+      <i
+        class="m-icon joe-font"
+        aria-hidden="true"
+        th:if={`\${#strings.startsWith(#annotations.getOrDefault(${item}, 'icon', ''), '<svg')}`}
+        th:utext={`\${#annotations.get(${item}, 'icon')}`}
+      ></i>
+      <th-block
+        th:unless={`\${#strings.startsWith(#annotations.getOrDefault(${item}, 'icon', ''), '<svg')}`}
+      >
+        <Icon name="menu-item" class="m-icon" />
+      </th-block>
+    </th-block>
   )}
   <span th:text={`\${${item}.status.displayName}`}></span>
 </a>

@@ -3,6 +3,7 @@
 import BloggerCard from "../blogger/BloggerCard.astro";
 import AsideCard from "../aside/AsideCard.astro";
 import PostAds from "./PostAds.astro";
+import Icon from "../common/Icon.astro";
 
 const RELATED_SIZE =
   "#conversions.convert(theme.config.post.related_count ?: 5, 'java.lang.Integer')";
@@ -19,12 +20,12 @@ const RELATED = `#lists.isEmpty(post.categories) ? postFinder.listByTag(1, ${REL
       th:if="${theme.config.post.toc and #annotations.getOrDefault(post, 'enable_toc', 'true') == 'true'}"
     >
       <h3 class="toc-header">
-        <i class="jiewen joe-icon-mulu" aria-hidden="true"></i>文章目录
+        <Icon name="toc" />文章目录
       </h3>
       <nav id="js-toc" class="toc" aria-label="文章目录"></nav>
     </div>
     <th-block th:if="${theme.config.post.related and (not #lists.isEmpty(post.categories) or not #lists.isEmpty(post.tags))}">
-      <AsideCard variant="newest" icon="huo" title="相关文章">
+      <AsideCard variant="newest" icon="hot" title="相关文章">
         <div class="joe_aside__item-contain">
           <ul class="list" th:with={`related = \${${RELATED}}`}>
             <li
@@ -38,7 +39,7 @@ const RELATED = `#lists.isEmpty(post.categories) ? postFinder.listByTag(1, ${REL
                 th:title="${item.spec.title}"
                 th:text="${item.spec.title}"
               ></a>
-              <i class="joe-font joe-icon-link" aria-hidden="true"></i>
+              <Icon name="link" />
             </li>
           </ul>
         </div>

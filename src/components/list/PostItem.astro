@@ -4,6 +4,7 @@
  * 首页可开启进入视口动画（data-reveal）。
  */
 import { COMMENT_ENABLED, el } from "../../config/expressions";
+import Icon from "../common/Icon.astro";
 
 interface Props {
   /** 是否启用首页列表动画设置 */
@@ -50,7 +51,7 @@ const COVER =
       th:datetime="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
       th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
     ></time>
-    <i class="joe-font joe-icon-picture" aria-hidden="true"></i>
+    <Icon name="image" />
   </a>
   <div class="information">
     <a
@@ -77,15 +78,15 @@ const COVER =
       <ul class="items">
         <li th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"></li>
         <li>
-          <i class="joe-font joe-icon-eye" aria-hidden="true"></i>
+          <Icon name="views" />
           <span th:text="${post.stats.visit}">0</span>
         </li>
         <li th:if={el(COMMENT_ENABLED)}>
-          <i class="joe-font joe-icon-message" aria-hidden="true"></i>
+          <Icon name="comment" />
           <span th:text="${post.stats.comment}">0</span>
         </li>
         <li>
-          <i class="joe-font joe-icon-dianzan" aria-hidden="true"></i>
+          <Icon name="like" />
           <span th:text="${post.stats.upvote}">0</span>
         </li>
       </ul>

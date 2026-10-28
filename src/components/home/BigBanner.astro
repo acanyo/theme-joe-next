@@ -1,4 +1,5 @@
 ---
+import Icon from "../common/Icon.astro";
 /**
  * 首屏大图：背景图/视频、打字机标题、一言。文字效果由 features/big-banner.ts 驱动。
  * `fullscreen` 用于首页（占满首屏并显示向下按钮）。
@@ -43,10 +44,7 @@ const WAVES =
   </div>
   {fullscreen && (
     <a href="#indexPosition" class="evan-big-banner_goto" aria-label="向下滚动">
-      <span
-        class="index-goto-icon jiewen joe-icon-xiangxia"
-        aria-hidden="true"
-      />
+      <Icon name="chevrons-down" class="index-goto-icon" />
     </a>
   )}
   <section class="evan-big-banner_bottom" id="indexPosition" set:html={WAVES} />

@@ -1,0 +1,16 @@
+---
+/**
+ * 图标（Iconify，构建时内联为 SVG，见 config/icons.ts）。
+ * 输出 `<i class="joe-font joe-icon-<name>">`，与原图标字体的结构和类名一致，字号、颜色沿用现有样式。
+ */
+import { iconHtml, type IconName } from "../../config/icons";
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className = "" } = Astro.props;
+---
+
+<Fragment set:html={iconHtml(name, className)} />

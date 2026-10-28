@@ -93,7 +93,7 @@ integrations/           Astro 构建后处理（Thymeleaf 标签还原、CSS 级
 ## 相对 Joe3 的变化
 
 - **技术栈：** jQuery、Isotope、fancybox、Draggabilly、WOW.js、NProgress、Qmsg、ClipboardJS、lazysizes、Vue 2 均由原生 API 或 npm 包替代，第三方库通过 pnpm 管理并锁定版本。
-- **图标字体与资源本地化：** iconfont 不再依赖 at.alicdn.com，Font Awesome 已移除（Joe3 中未实际使用）。
+- **图标：** iconfont 图标字体与 Font Awesome 改为 [Iconify](https://iconify.design/) 图标（lucide、Remix Icon、Simple Icons），构建时内联为 SVG（`src/config/icons.ts`），不加载图标字体也不请求 CDN；菜单项图标使用 Halo 的 Iconify 图标选择器。
 - **评论：** 只使用 Halo 评论扩展点（评论组件插件），不再内置 Waline。
 - **已移除：** 天气组件、百度收录检测、PDF 短代码、内置 Prism 代码高亮（改由 shiki 插件负责）、APlayer 音乐播放器（侧栏歌单组件；音频短代码改用原生 `<audio>`，网易云短代码显示为链接），以及 Joe3 中未被引用的库和模板（halo-comment、KaTeX、jquery-ui 等）。视频短代码改用原生 `<video>` + hls.js，不再使用 DPlayer 的 iframe 页面。
 - **设置项：** 重新整理为 12 个分组，统一键名与说明文字，**与 Joe3 及 Joe Next 0.1 之前的配置不兼容**，升级后需要在后台重新设置。已删除不再生效的设置（预载图、外部资源地址、旧版自定义 CSS/JS、Waline 等）。

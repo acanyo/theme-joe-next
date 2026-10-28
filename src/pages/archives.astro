@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Aside from "../components/aside/Aside.astro";
 import Pagination from "../components/list/Pagination.astro";
 import "../styles/pages/archives.css";
+import Icon from "../components/common/Icon.astro";
 
 const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
 ---
@@ -23,7 +24,7 @@ const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
           th:if="${theme.config.pages.archives_categories}"
         >
           <div class="joe_archives-title">
-            <i class="joe-font joe-icon-fenlei" aria-hidden="true"></i>分类
+            <Icon name="category" />分类
           </div>
           <ul class="joe_category-list">
             <li class="item" th:each="category : ${categoryFinder.listAll()}">
@@ -45,7 +46,7 @@ const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
         >
           <th-block th:if="${theme.config.pages.archives_style == 'list'}">
             <div class="joe_archives-title">
-              <i class="jiewen joe-icon-riqi" aria-hidden="true"></i>列表
+              <Icon name="calendar" />列表
             </div>
             <p
               class="joe_archives__empty"
@@ -71,7 +72,7 @@ const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
 
           <th-block th:unless="${theme.config.pages.archives_style == 'list'}">
             <div class="joe_archives-title">
-              <i class="joe-font joe-icon-timeline" aria-hidden="true"></i>
+              <Icon name="timeline" />
               时间轴<em th:text="${byMonth ? '（月）' : '（年）'}"></em>
             </div>
             <ul
@@ -84,10 +85,7 @@ const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
                     <div class="wrapper">
                       <div class="panel in">
                         <span th:text="|${archive.year} 年 ${month.month} 月|"></span>
-                        <i
-                          class="joe-font joe-icon-arrow-down"
-                          aria-hidden="true"
-                        ></i>
+                        <Icon name="chevron-down" />
                       </div>
                       <ol class="panel-body">
                         <li th:each="post : ${month.posts}">
@@ -105,10 +103,7 @@ const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
                   <div class="wrapper">
                     <div class="panel in">
                       <span th:text="|${archive.year} 年|"></span>
-                      <i
-                        class="joe-font joe-icon-arrow-down"
-                        aria-hidden="true"
-                      ></i>
+                      <Icon name="chevron-down" />
                     </div>
                     <ol class="panel-body">
                       <th-block th:each="month : ${archive.months}">

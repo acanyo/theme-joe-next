@@ -1,6 +1,7 @@
 ---
 /** 瞬间页头部：标题 + 作者信息 */
 import { BLOGGER_NAME, el } from "../../config/expressions";
+import Icon from "../common/Icon.astro";
 
 interface Props {
   /** 作者头像/名称来源：列表页显示博主，详情页显示瞬间作者 */
@@ -30,7 +31,7 @@ const LINK =
   rel="nofollow"
   aria-label="发布瞬间"
 >
-  <i class="joe-font joe-icon-edit" aria-hidden="true"></i>
+  <Icon name="edit" />
 </a>
 <div class="joe_detail__count">
   <div class="joe_detail__count-information">

@@ -271,7 +271,7 @@
       font-weight: 600;
     }
 
-    .joe-icon-arrow-down {
+    .joe-icon-chevron-down {
       flex-shrink: 0;
       font-size: 12px;
       color: var(--text-secondary);
@@ -279,7 +279,7 @@
     }
   }
 
-  .joe_header__chapter.is-open .joe-icon-arrow-down {
+  .joe_header__chapter.is-open .joe-icon-chevron-down {
     transform: rotate(180deg);
   }
 

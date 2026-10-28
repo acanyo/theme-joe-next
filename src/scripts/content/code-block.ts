@@ -6,6 +6,7 @@
 import { $$ } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { copyText } from "../core/clipboard";
+import { iconHtml } from "../core/icons";
 
 const CODE_SELECTOR = ".joe_detail__article pre, .joe_journal_body pre";
 /** 代码高亮插件的容器：其内部的 <pre> 由插件渲染 */
@@ -64,7 +65,8 @@ function addToolbar(pre: HTMLElement): void {
   if (config.expander) {
     const expander = document.createElement("button");
     expander.type = "button";
-    expander.className = "joe-font joe-icon-arrow-downb code-expander";
+    expander.className = "code-expander";
+    expander.innerHTML = iconHtml("chevron-down");
     expander.title = "折叠/展开";
     expander.setAttribute("aria-label", "折叠/展开代码");
     expander.addEventListener("click", (event) => {
@@ -82,8 +84,7 @@ function addToolbar(pre: HTMLElement): void {
     button.className = "copy-button";
     button.title = "复制代码";
     button.setAttribute("aria-label", "复制代码");
-    button.innerHTML =
-      '<i class="joe-font joe-icon-copy" aria-hidden="true"></i>';
+    button.innerHTML = iconHtml("copy");
     button.addEventListener(
       "click",
       () => void copyText(pre.querySelector("code")?.textContent ?? ""),
