@@ -36,7 +36,7 @@
     }
 
     .site_powered {
-      padding: 2px 0 !important;
+      padding: 2px 0;
 
       .a-powered {
         font-weight: 600;

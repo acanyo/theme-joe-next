@@ -6,7 +6,7 @@
 
   h2 {
     display: inline-block;
-    text-align: center !important;
+    text-align: center;
     padding: 28px 110px;
     font-size: 18px;
     color: var(--routine);

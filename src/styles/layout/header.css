@@ -94,7 +94,6 @@
       align-items: center;
       width: 100%;
       min-height: 44px;
-      max-width: auto !important;
     }
   }
 
@@ -276,7 +275,7 @@
           .joe_dropdown__link {
             a,
             i {
-              color: var(--theme) !important;
+              color: var(--theme);
 
               &::after {
                 display: none;
@@ -494,7 +493,7 @@
 .joe_header__above-searchicon {
       display: none;
       cursor: pointer;
-      font-size: 23px !important;
+      font-size: 23px;
       color: var(--routine);
     }
 
@@ -533,7 +532,7 @@
     visibility: hidden;
 
     .joe_container {
-      margin-bottom: 10px !important;
+      margin-bottom: 10px;
     }
 
     &.active {
