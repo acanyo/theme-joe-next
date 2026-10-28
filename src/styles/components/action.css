@@ -1,9 +1,16 @@
+/* 右下角悬浮按钮：竖向排列、间距固定；窄屏时整列上移，给侧栏按钮让出最下方的位置 */
 .joe_action {
+  --action-size: 48px;
+  --action-gap: 12px;
   pointer-events: none;
   position: fixed;
-  bottom: 90px;
-  right: 30px;
+  bottom: 32px;
+  right: 24px;
   z-index: 90;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--action-gap);
 }
 
 .joe_action_item {
@@ -11,17 +18,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
-  background: var(--bg-raised);
-  border: 1px solid var(--border-lighter);
+  width: var(--action-size);
+  height: var(--action-size);
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: var(--shadow);
-  transition: border-color 0.25s;
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  transition: scale var(--dur-base) var(--ease-spring);
 
   &:hover {
-    border-color: color-mix(in srgb, var(--theme) 45%, transparent);
+    scale: 1.06;
+  }
+
+  &:active {
+    scale: 0.9;
   }
 
   svg {
@@ -34,7 +46,6 @@
   &.toc {
     display: none;
     pointer-events: auto;
-    margin-bottom: 15px;
     text-align: center;
     line-height: 40px;
 
@@ -47,7 +58,6 @@
   &.edit,
   &.random {
     pointer-events: auto;
-    margin-bottom: 15px;
     a {
       display: block;
       width: 25px;
@@ -65,7 +75,6 @@
 
   &.mode {
     pointer-events: auto;
-    margin-bottom: 15px;
 
     svg {
       transform: scale(0);
@@ -81,18 +90,26 @@
     }
   }
 
+  /* 未激活时高度收为 0，上方按钮自然下移，不留空位 */
   &.back2top {
     pointer-events: none;
-    visibility: hidden;
-    transform: scale(0);
+    height: 0;
+    margin-top: calc(var(--action-gap) * -1);
+    opacity: 0;
+    scale: 0.4;
+    overflow: hidden;
     transition:
-      visibility 0.35s,
-      transform 0.35s;
+      height var(--dur-slow) var(--ease-spring),
+      margin var(--dur-slow) var(--ease-spring),
+      opacity var(--dur-base) var(--ease-out),
+      scale var(--dur-slow) var(--ease-spring);
 
     &.active {
       pointer-events: auto;
-      visibility: visible;
-      transform: scale(1);
+      height: var(--action-size);
+      margin-top: 0;
+      opacity: 1;
+      scale: 1;
     }
   }
 }
@@ -100,7 +117,6 @@
 /* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
 @media (max-width: 500px) {
   html .joe_action {
-    bottom: 40px;
     right: 20px;
   }
 }

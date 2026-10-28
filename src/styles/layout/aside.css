@@ -17,8 +17,8 @@
 @media (max-width: 1200px) {
   .joe_aside_toggle {
     position: fixed;
-    right: 20px;
-    bottom: 24px;
+    right: 24px;
+    bottom: 32px;
     z-index: 91;
     display: flex;
     align-items: center;
@@ -53,7 +53,7 @@
     position: fixed;
     top: 12px;
     right: 12px;
-    bottom: 84px;
+    bottom: 92px;
     z-index: 90;
     width: min(340px, calc(100vw - 24px));
     margin: 0;
@@ -98,7 +98,7 @@
 
   /* 右下角悬浮按钮让出侧栏按钮的位置；面板打开时暂时隐藏，避免压在面板上 */
   html .joe_action {
-    bottom: 84px;
+    bottom: calc(32px + var(--action-size) + var(--action-gap));
     transition: opacity var(--dur-base) var(--ease-out);
   }
 

@@ -465,8 +465,8 @@ html body::before {
   }
 
   html .joe_main_container {
-    padding: 0;
-    margin: 15px auto 20px !important;
+    padding: 0 12px;
+    margin: 12px auto 20px !important;
   }
 
   html .joe_main {
