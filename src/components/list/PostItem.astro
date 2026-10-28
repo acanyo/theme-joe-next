@@ -73,6 +73,7 @@ const COVER =
       th:href="@{${post.status.permalink}}"
       th:title="${post.status.excerpt}"
       th:text="${post.status.excerpt}"
+      th:attr="data-joe-excerpt=${post.spec.excerpt?.autoGenerate != false ? 'auto' : null}"
     ></a>
     <div class="meta">
       <ul class="items">

@@ -5,6 +5,7 @@ import { initBanner } from "../features/banner";
 import { initBigBanner } from "../features/big-banner";
 import { initMomentsStack } from "../features/moments-stack";
 import { initReveal } from "../features/reveal";
+import { cleanExcerpts } from "../content/excerpt";
 import { observe } from "../core/lifecycle";
 
 /** 「查看更多」：抓取下一页并追加文章；开启自动加载时进入视口即触发 */
@@ -28,6 +29,7 @@ function initLoadMore(): void {
       doc
         .querySelectorAll("[data-joe-post-list] > .joe_list__item")
         .forEach((item) => list.appendChild(item));
+      cleanExcerpts(list);
       initReveal(list);
       const nextButton = doc.querySelector<HTMLButtonElement>(".joe_load");
       if (nextButton?.dataset.next) {
