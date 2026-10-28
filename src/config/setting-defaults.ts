@@ -109,7 +109,6 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
 export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "appearance.accent_dark": "#9999ff",
   "appearance.accent_light": "#fb6c28",
-  "appearance.font": "off",
   "appearance.scrollbar_width": "8px",
   "aside.latest_count": "5",
   "aside.popular_count": "5",

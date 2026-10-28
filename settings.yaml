@@ -89,27 +89,13 @@ spec:
           label: 暗黑背景图
           help: 填写后暗黑模式使用这张背景图，留空使用默认背景色
           value: ""
-        - $formkit: select
-          name: font
-          id: font
-          key: font
-          label: 网站字体
-          value: off
-          help: 填写了自定义字体时以自定义字体为准
-          options:
-            - value: off
-              label: 默认
-            - value: joe_slate.woff2
-              label: Joe Slate
-            - value: joe_future.woff2
-              label: Joe Future
         - $formkit: attachment
           name: custom_font
           id: custom_font
           key: custom_font
           label: 自定义字体
           value: ""
-          help: 字体文件地址，建议 woff2
+          help: 字体文件地址，建议 woff2；留空使用系统字体
         - $formkit: text
           name: iconfont
           id: iconfont
@@ -918,96 +904,140 @@ spec:
               label: 圆形
             - value: rounded
               label: 圆角矩形
-        - $formkit: select
+        - $formkit: toggle
           name: avatar_frame
           id: avatar_frame
           key: avatar_frame
           label: 头像框
           value: "0"
+          render-type: image
+          size: 64
+          gap: 8
           options:
             - value: "0"
               label: 无
+              render: /themes/theme-joe-next/assets/images/none.svg
             - value: rainbow-girl
               label: 彩虹之女
+              render: /themes/theme-joe-next/assets/frame/rainbow-girl.webp
             - value: honor-light
               label: 荣誉之光
+              render: /themes/theme-joe-next/assets/frame/honor-light.webp
             - value: bird-girl
               label: 彩雀之女
+              render: /themes/theme-joe-next/assets/frame/bird-girl.webp
             - value: purple-crystal
               label: 紫水晶
+              render: /themes/theme-joe-next/assets/frame/purple-crystal.webp
             - value: flower-ring
               label: 清新花环
+              render: /themes/theme-joe-next/assets/frame/flower-ring.webp
             - value: lantern-cloud
               label: 灯笼祥云
+              render: /themes/theme-joe-next/assets/frame/lantern-cloud.webp
             - value: ease-cloud
               label: 福气祥云
+              render: /themes/theme-joe-next/assets/frame/ease-cloud.webp
             - value: festival-luck
               label: 节日福旺
+              render: /themes/theme-joe-next/assets/frame/festival-luck.webp
             - value: happy-mouse
               label: 快乐小鼠
+              render: /themes/theme-joe-next/assets/frame/happy-mouse.webp
             - value: two-mouse
               label: 两只小鼠
+              render: /themes/theme-joe-next/assets/frame/two-mouse.webp
             - value: bull-puff
               label: 牛气大发
+              render: /themes/theme-joe-next/assets/frame/bull-puff.webp
             - value: christmas-knot
               label: 圣诞彩结
+              render: /themes/theme-joe-next/assets/frame/christmas-knot.webp
             - value: christmas-ring
               label: 圣诞花环
+              render: /themes/theme-joe-next/assets/frame/christmas-ring.webp
             - value: santa-claus
               label: 圣诞老人
+              render: /themes/theme-joe-next/assets/frame/santa-claus.webp
             - value: cactus
               label: 仙人掌
+              render: /themes/theme-joe-next/assets/frame/cactus.webp
             - value: rabbit
               label: 幸福兔子（动态）
+              render: /themes/theme-joe-next/assets/frame/rabbit.webp
             - value: gaoda
               label: 高达（动态）
+              render: /themes/theme-joe-next/assets/frame/gaoda.webp
             - value: donut
               label: 甜甜圈（动态）
+              render: /themes/theme-joe-next/assets/frame/donut.webp
             - value: bat
               label: 吸血蝙蝠（动态）
+              render: /themes/theme-joe-next/assets/frame/bat.webp
             - value: bilibili
               label: Bilibili
+              render: /themes/theme-joe-next/assets/frame/bilibili.webp
             - value: constellation
               label: 星座
+              render: /themes/theme-joe-next/assets/frame/constellation.webp
             - value: putin
               label: 布丁
+              render: /themes/theme-joe-next/assets/frame/putin.webp
             - value: princess
               label: 小公主
+              render: /themes/theme-joe-next/assets/frame/princess.webp
             - value: mangci
               label: 芒刺
+              render: /themes/theme-joe-next/assets/frame/mangci.webp
             - value: maid
               label: 女仆
+              render: /themes/theme-joe-next/assets/frame/maid.webp
             - value: orchid
               label: 兰花
+              render: /themes/theme-joe-next/assets/frame/orchid.webp
             - value: gulu
               label: 咕噜
+              render: /themes/theme-joe-next/assets/frame/gulu.webp
             - value: gufeng
               label: 古风
-        - $formkit: select
+              render: /themes/theme-joe-next/assets/frame/gufeng.webp
+        - $formkit: toggle
           name: avatar_pendant
           id: avatar_pendant
           key: avatar_pendant
           label: 头像挂件
           value: "0"
+          render-type: image
+          size: 64
+          gap: 8
           options:
             - value: "0"
               label: 无
+              render: /themes/theme-joe-next/assets/images/none.svg
             - value: angel
               label: 天使
+              render: /themes/theme-joe-next/assets/widget/angel.webp
             - value: meteor
               label: 流星
+              render: /themes/theme-joe-next/assets/widget/meteor.webp
             - value: rain
               label: 下雨
+              render: /themes/theme-joe-next/assets/widget/rain.webp
             - value: wing
               label: 天使之翼
+              render: /themes/theme-joe-next/assets/widget/wing.webp
             - value: rotate-heart
               label: 旋转的心
+              render: /themes/theme-joe-next/assets/widget/rotate-heart.webp
             - value: fall-in-love
               label: 坠入爱河
+              render: /themes/theme-joe-next/assets/widget/fall-in-love.webp
             - value: sun-flower
               label: 向日葵
+              render: /themes/theme-joe-next/assets/widget/sun-flower.webp
             - value: swirl-heart
               label: 上升的心
+              render: /themes/theme-joe-next/assets/widget/swirl-heart.webp
         - $formkit: attachment
           name: cover
           id: cover

@@ -13,13 +13,6 @@ const css = `
 [# th:if="\${theme.config.appearance.grayscale}"]
 html { filter: grayscale(100%); }
 [/]
-[# th:if="\${#strings.isEmpty(theme.config.appearance.custom_font) and theme.config.appearance.font != 'off'}"]
-@font-face {
-  font-family: "Joe Font";
-  font-display: swap;
-  src: url("[(\${#theme.assets('/fonts/' + theme.config.appearance.font)})]") format("woff2");
-}
-[/]
 [# th:if="\${not #strings.isEmpty(theme.config.appearance.custom_font)}"]
 @font-face {
   font-family: "Joe Font";
