@@ -231,6 +231,13 @@ spec:
           label: 登录入口
           value: false
           help: 未登录显示登录按钮，已登录显示头像
+        - $formkit: switch
+          name: console
+          id: console
+          key: console
+          label: 中控台
+          value: true
+          help: 导航右侧的按钮打开一整块面板：博主与站点数据、最近 / 热门 / 置顶文章、最近评论、热门标签，以及明暗模式、侧边栏、动画等访客快捷开关
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"

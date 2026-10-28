@@ -12,6 +12,7 @@ import { runPageScript } from "./core/page-scripts";
 import { initActions } from "./features/actions";
 import { initAsideWidgets } from "./features/aside-widgets";
 import { initColorMode } from "./features/color-mode";
+import { initConsole, refreshConsole } from "./features/console";
 import { initContextMenu } from "./features/context-menu";
 import { initEnhancements } from "./features/enhancements";
 import { initFooter } from "./features/footer";
@@ -28,12 +29,14 @@ function initShell(): void {
   initNavigation();
   initFooter();
   initContextMenu();
+  initConsole();
 }
 
 async function initPage(): Promise<void> {
   cleanExcerpts();
   initNavChapter();
   refreshNavigation();
+  refreshConsole();
   initActions();
   initLinkBehavior();
   initReveal();

@@ -11,6 +11,7 @@
  */
 import MenuLink from "./MenuLink.astro";
 import MobileDrawer from "./MobileDrawer.astro";
+import ConsolePanel from "./ConsolePanel.astro";
 import Icon from "../common/Icon.astro";
 
 const MENU =
@@ -155,6 +156,17 @@ const MENU =
             </g>
           </svg>
         </button>
+        <button
+          type="button"
+          class="joe_header__console"
+          aria-label="打开中控台"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          th:if="${theme.config.navbar.console}"
+          data-joe-console
+        >
+          <Icon name="console" />
+        </button>
         <div class="nav_login" th:if="${theme.config.navbar.login}">
           <a
             class="login_before"
@@ -197,6 +209,7 @@ const MENU =
   </div>
 
   <MobileDrawer />
+  <ConsolePanel />
 
   <div class="joe_header__toc" aria-label="文章目录">
     <div class="joe_header__toc-wrap">

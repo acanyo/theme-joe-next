@@ -8,7 +8,7 @@ const ID = "virtual:joe-icons";
 const RESOLVED = "\0" + ID;
 
 /** 前端脚本（scripts/core/icons.ts）可用的图标 */
-export const SCRIPT_ICONS = ["chevron-down", "copy", "download"] as const satisfies readonly IconName[];
+export const SCRIPT_ICONS = ["chevron-down", "copy", "download", "console", "close", "sun", "moon"] as const satisfies readonly IconName[];
 
 export default function joeIcons() {
   return {
