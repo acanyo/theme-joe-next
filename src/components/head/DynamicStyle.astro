@@ -25,7 +25,7 @@ html body {
   --wave-color: [(\${theme.config.home.hero_wave_light ?: '#fff'})];
   --scroll-bar: [(\${theme.config.appearance.scrollbar_color ?: '#c0c4cc'})];
   --loading-bar: [(\${theme.config.effects.loading_bar_color ?: 'var(--theme)'})];
-  --loading-bar-height: [(\${theme.config.effects.loading_bar_height ?: '3px'})];
+  --loading-bar-height: [(\${#strings.replace(theme.config.effects.loading_bar_height ?: 3, 'px', '')})]px;
   --content-max-width: [(\${theme.config.general.content_width ?: 1320})]px;
 }
 html[data-mode="dark"] body {
@@ -33,7 +33,7 @@ html[data-mode="dark"] body {
   --wave-color: [(\${theme.config.home.hero_wave_dark ?: '#fff'})];
   --scroll-bar: [(\${theme.config.appearance.scrollbar_color ?: '#666'})];
 }
-::-webkit-scrollbar { width: [(\${theme.config.appearance.scrollbar_width ?: '8px'})]; }
+::-webkit-scrollbar { width: [(\${#strings.replace(theme.config.appearance.scrollbar_width ?: 8, 'px', '')})]px; }
 [# th:if="\${not #strings.isEmpty(theme.config.appearance.background_light)}"]
 html[data-mode="light"] body::before { background-image: url("[(\${theme.config.appearance.background_light})]"); }
 [/]

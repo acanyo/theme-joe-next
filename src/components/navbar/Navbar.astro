@@ -47,7 +47,7 @@ const MENU =
         <img
           th:src="${site.logo}"
           th:alt="${site.title}"
-          th:style="|border-radius: ${theme.config.navbar.logo_radius ?: '4px'}|"
+          th:style="|border-radius: ${#strings.replace(theme.config.navbar.logo_radius ?: 4, 'px', '')}px|"
           data-fallback="avatar"
         />
       </a>
