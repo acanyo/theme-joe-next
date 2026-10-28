@@ -14,10 +14,11 @@
   position: relative;
   display: flex;
   align-items: center;
-  color: var(--theme);
-  font-weight: 500;
-  height: 44px;
-  line-height: 44px;
+  color: var(--text-title);
+  font-size: 16px;
+  font-weight: 600;
+  height: 48px;
+  line-height: 48px;
 
   .item {
     cursor: pointer;
@@ -26,9 +27,22 @@
     color: var(--text-regular);
     transition: color var(--dur-base) var(--ease-out);
 
+    /* 当前标签：标题色加粗，下方一小段主题色（与导航的下划线一致） */
     &.active {
-      color: var(--theme);
-      font-weight: bold;
+      position: relative;
+      color: var(--text-title);
+      font-weight: 600;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 8px;
+        width: 18px;
+        height: 3px;
+        border-radius: 3px;
+        background: var(--theme);
+      }
     }
   }
 
@@ -413,13 +427,10 @@
         font-size: 12px;
         white-space: nowrap;
         vertical-align: 2px;
-        color: #fff;
-        background-image: -webkit-linear-gradient(
-          0deg,
-          #3ca5f6 0%,
-          #a86af9 100%
-        );
-        border-radius: 2px 6px;
+        font-weight: 600;
+        color: var(--theme);
+        background: var(--tint);
+        border-radius: 4px;
       }
     }
 
@@ -471,10 +482,13 @@
           font-size: 15px;
         }
 
+        /* 信息之间用间距分隔，不再用「/」 */
+        & + li {
+          margin-left: 14px;
+        }
+
         &::after {
-          content: "/";
-          color: var(--text-placeholder);
-          padding: 0 5px;
+          content: none;
         }
 
         &:last-child::after {
@@ -538,6 +552,10 @@
         time {
           transform: translate3d(0, 0, 0);
         }
+
+        .joe-font {
+          opacity: 1;
+        }
       }
     }
 
@@ -576,6 +594,7 @@
         transform: translate3d(120%, 0, 0);
       }
 
+      /* 缩略图角标只在悬停时出现 */
       .joe-font {
         position: absolute;
         z-index: 1;
@@ -583,6 +602,8 @@
         left: 5px;
         font-size: 18px;
         color: #f5f5f5;
+        opacity: 0;
+        transition: opacity var(--dur-base) var(--ease-out);
       }
     }
 

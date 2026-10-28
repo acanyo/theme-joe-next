@@ -33,7 +33,6 @@
   line-height: 46px;
   padding: 0 16px;
   color: var(--text-title);
-  border-bottom: 1px solid var(--border-lighter);
 
   .joe-font {
     margin-right: 6px;
@@ -504,10 +503,15 @@
         justify-content: space-between;
         line-height: 20px;
 
+        /* 行尾链接图标只在悬停时出现 */
         .joe-font {
-          font-size: 18px;
-          color: var(--text-regular);
-          transition: transform var(--dur-base) var(--ease-out);
+          font-size: 16px;
+          color: var(--theme);
+          opacity: 0;
+          transform: translateX(-4px);
+          transition:
+            opacity var(--dur-fast) var(--ease-out),
+            transform var(--dur-base) var(--ease-spring);
         }
 
         &:hover {
@@ -520,8 +524,8 @@
           }
 
           .joe-font {
-            transform: rotate(-135deg);
-            color: var(--theme);
+            opacity: 1;
+            transform: none;
           }
         }
 
