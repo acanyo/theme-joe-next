@@ -136,8 +136,7 @@ html:has(.joe_post_hero) {
     display: none;
   }
 
-  /* base.css 用 #Joe .joe_main_container 设置上边距，这里同样带上 #Joe */
-  #Joe .page-post.joe_main_container {
+  .page-post.joe_main_container {
     position: relative;
     z-index: 1;
     margin-top: -64px;
@@ -154,7 +153,7 @@ html:has(.joe_post_hero) {
     display: none;
   }
 
-  html:has(.joe_post_hero) #Joe .page-post.joe_main_container {
+  html:has(.joe_post_hero) .page-post.joe_main_container {
     margin-top: -48px;
   }
 }

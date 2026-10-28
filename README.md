@@ -51,11 +51,11 @@ src/
 │   ├── content/        正文处理（代码块、目录、灯箱、短代码）
 │   ├── core/           基础工具（DOM、配置、存储、提示）
 │   └── effects/        鼠标/背景特效（按需加载）
-├── styles/             原生 CSS（嵌套语法），按 base / layout / components / content / pages 拆分
+├── styles/             原生 CSS（嵌套语法），按 base / components / layout / content / pages 拆分，目录即级联层
 ├── config/             前后端共享的配置契约与 SpEL 表达式
 └── data/               社交图标、内联 SVG 等静态数据
 public/assets/          运行时按路径引用的资源（头像框、鼠标皮肤、字体、默认图片）
-integrations/           Astro 构建后处理
+integrations/           Astro 构建后处理（Thymeleaf 标签还原、CSS 级联层）
 ```
 
 ## 关键约定
@@ -73,6 +73,8 @@ integrations/           Astro 构建后处理
 **前端配置。** 浏览器端需要的设置项在 `src/config/theme-config.ts` 中声明，服务端一次性序列化注入页面，脚本通过 `getThemeConfig()` 读取类型安全的配置。新增字段只需修改这一个文件。
 
 **样式。** 原生 CSS 嵌套语法，无预处理器。颜色、阴影、圆角等变量在 `src/styles/base/tokens.css`，按用途命名（`--text-*`、`--bg-*`、`--border-*`、`--fill-*`）。组件的响应式规则写在组件自己的样式文件末尾，断点只用 500 / 768 / 992 / 1200 / 1360px（`max-width`）。
+
+**级联层。** `src/styles` 的每个文件在构建时按目录放入 CSS 级联层（`integrations/css-layers.ts`），顺序为 `reset → tokens → vendor → base → components → layout → content → pages`。后面的层总是覆盖前面的层，与选择器权重无关，所以不需要用 `html` / `#Joe` 前缀或 `!important` 抬高优先级；跨文件的覆盖应写在更靠后的层里。不分层的样式优先于主题：主题设置生成的动态样式、插件样式，以及在 Halo「代码注入」里写的自定义 CSS，都能直接覆盖主题。按需加载的 Swiper / PhotoSwipe 样式放在 vendor 层。
 
 **按需加载。** Swiper、PhotoSwipe、vConsole、hls.js、鼠标/背景特效均在用到时才下载，样式通过 `loadStylesheet()` 插入，不会进入首屏 CSS。
 
