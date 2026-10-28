@@ -136,3 +136,82 @@
     visibility: visible;
   }
 }
+
+/* 自定义右键菜单（features/context-menu.ts）：玻璃面板，从鼠标位置弹性展开 */
+.joe_context_menu {
+  position: fixed;
+  z-index: 10001;
+  min-width: 200px;
+  max-width: 280px;
+  padding: 6px;
+  border-radius: 8px;
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  opacity: 0;
+  transform: scale(0.92);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-base) var(--ease-spring);
+
+  &.is-open {
+    opacity: 1;
+    transform: none;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    font: inherit;
+    font-size: 13.5px;
+    text-align: left;
+    color: var(--text-regular);
+    cursor: pointer;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out);
+
+    span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.85;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--theme);
+      background: var(--tint);
+      outline: none;
+    }
+  }
+
+  .sep {
+    height: 1px;
+    margin: 4px 6px;
+    background: var(--border-lighter);
+  }
+}

@@ -564,6 +564,13 @@ spec:
             - value: balloon
               label: 上升的气球
         - $formkit: switch
+          name: context_menu
+          id: context_menu
+          key: context_menu
+          label: 自定义右键菜单
+          value: false
+          help: 右键时显示主题菜单：链接可新窗口打开 / 复制，图片可打开 / 复制地址，选中文字可复制 / 站内搜索，空白处可后退、刷新、回到顶部、切换明暗。按住 Ctrl / ⌘ 右键或在输入框中仍是浏览器原生菜单；移动端不启用
+        - $formkit: switch
           value: false
           name: offscreen_title
           id: offscreen_title

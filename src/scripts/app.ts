@@ -12,6 +12,7 @@ import { runPageScript } from "./core/page-scripts";
 import { initActions } from "./features/actions";
 import { initAsideWidgets } from "./features/aside-widgets";
 import { initColorMode } from "./features/color-mode";
+import { initContextMenu } from "./features/context-menu";
 import { initEnhancements } from "./features/enhancements";
 import { initFooter } from "./features/footer";
 import { initImageFallback } from "./features/image-fallback";
@@ -25,6 +26,7 @@ function initShell(): void {
   initColorMode();
   initNavigation();
   initFooter();
+  initContextMenu();
 }
 
 async function initPage(): Promise<void> {

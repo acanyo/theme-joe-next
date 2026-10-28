@@ -20,6 +20,7 @@ export const BOOLEAN_SETTINGS: readonly string[] = [
   "effects.loading_bar",
   "effects.back_to_top",
   "effects.back_to_top_smooth",
+  "effects.context_menu",
   "effects.offscreen_title",
   "home.hero",
   "home.hero_hitokoto",

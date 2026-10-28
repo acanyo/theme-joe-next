@@ -40,8 +40,8 @@ function syncIcons(): void {
   );
 }
 
-/** 以按钮中心为圆心，圆形扩散切换到新模式；不支持或开启「减少动态效果」时直接切换 */
-function toggleFrom(button: HTMLElement): void {
+/** 以 (x, y) 为圆心，圆形扩散切换到新模式；不支持或开启「减少动态效果」时直接切换 */
+export function toggleColorModeAt(x: number, y: number): void {
   const next: ColorMode = currentMode() === "dark" ? "light" : "dark";
   const apply = () => {
     applyMode(next);
@@ -52,9 +52,6 @@ function toggleFrom(button: HTMLElement): void {
     apply();
     return;
   }
-  const box = button.getBoundingClientRect();
-  const x = box.left + box.width / 2;
-  const y = box.top + box.height / 2;
   const radius = Math.hypot(
     Math.max(x, window.innerWidth - x),
     Math.max(y, window.innerHeight - y),
@@ -80,6 +77,11 @@ function toggleFrom(button: HTMLElement): void {
   void transition.finished.finally(() =>
     root.classList.remove("is-mode-switching"),
   );
+}
+
+function toggleFrom(button: HTMLElement): void {
+  const box = button.getBoundingClientRect();
+  toggleColorModeAt(box.left + box.width / 2, box.top + box.height / 2);
 }
 
 export function initColorMode(): void {
