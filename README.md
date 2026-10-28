@@ -25,6 +25,12 @@ pnpm dev        # 监听 src/ 变化并重新构建到 templates/
 | `pnpm build:templates` | 仅构建模板到 `templates/`（开发调试用）              |
 | `pnpm check`           | TypeScript / Astro 类型检查                          |
 | `pnpm test`            | 单元测试                                             |
+| `pnpm qa:size`         | 首屏 CSS / JS 与主题包体积预算（CI 中运行）          |
+| `pnpm qa:shots`        | 各页面明暗 × 桌面 / 手机全页截图，检查状态码和脚本错误 |
+| `pnpm qa:snapshot DIR` | 计算样式快照；`pnpm qa:diff A B` 对比两次快照        |
+| `pnpm qa:a11y`         | axe-core 无障碍检查（WCAG 2 A / AA）                 |
+
+`qa:shots`、`qa:snapshot`、`qa:a11y` 需要一个启用了本主题的 Halo（默认 `http://127.0.0.1:8091`，用 `HALO_URL` 修改）和本机 Chrome；`ROUTES`、`WIDTHS` 环境变量可限定页面与宽度。重构样式时先对修改前后各拍一次快照再对比，可发现肉眼难以察觉的样式变化。
 
 发布：在 GitHub 创建 Release 后，CD 工作流会自动构建并把主题包上传到 Release 附件。
 

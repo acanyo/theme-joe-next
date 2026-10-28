@@ -14,7 +14,12 @@
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "settings:defaults": "node --experimental-strip-types scripts/settings-defaults.ts",
     "format": "prettier --write .",
-    "astro": "astro"
+    "astro": "astro",
+    "qa:shots": "node scripts/qa/screenshots.mjs",
+    "qa:snapshot": "node scripts/qa/snapshot.mjs",
+    "qa:diff": "node scripts/qa/snapshot.mjs --diff",
+    "qa:a11y": "node scripts/qa/a11y.mjs",
+    "qa:size": "node --experimental-strip-types scripts/qa/size.ts"
   },
   "prettier": {
     "plugins": [
@@ -47,6 +52,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
+    "@axe-core/playwright": "4.13.0",
     "@halo-dev/theme-package-cli": "1.1.1",
     "@iconify-json/lucide": "1.2.147",
     "@iconify-json/ri": "1.2.10",
@@ -54,6 +60,7 @@
     "@iconify/utils": "3.1.7",
     "@types/qrcode": "1.5.6",
     "nodemon": "3.1.14",
+    "playwright-core": "1.64.1",
     "postcss": "8.5.32",
     "prettier": "3.9.10",
     "prettier-plugin-astro": "1.1.2",
