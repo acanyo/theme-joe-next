@@ -2,6 +2,7 @@
 /** 侧栏：博主信息卡片 */
 import SocialLinks from "./SocialLinks.astro";
 import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
+import { responsiveImage, SIZES } from "../../config/images";
 
 /** 概览统计项组合，键与 settings.yaml 中 blogger.stats 的取值一致 */
 const OVERVIEW = {
@@ -31,7 +32,7 @@ const STAT_VALUE = {
     height="120"
     class="image"
     loading="lazy"
-    th:src="${theme.config.blogger.cover ?: #theme.assets('/images/author_bg.jpg')}"
+    {...responsiveImage("theme.config.blogger.cover ?: #theme.assets('/images/author_bg.jpg')", SIZES.aside, ["s", "m"])}
     alt=""
     data-fallback="image"
   />
@@ -43,7 +44,7 @@ const STAT_VALUE = {
       <img
         class="avatar"
         loading="lazy"
-        th:src="${theme.config.blogger.avatar ?: theme.config.blogger.fallback_avatar}"
+        {...responsiveImage("theme.config.blogger.avatar ?: theme.config.blogger.fallback_avatar", SIZES.avatar, ["s"])}
         alt="博主头像"
         th:attr={`data-text-avatar=${el(BLOGGER_NAME)}`}
         data-fallback="avatar"

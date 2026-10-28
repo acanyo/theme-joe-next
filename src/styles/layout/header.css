@@ -819,16 +819,16 @@
         list-style: none;
       }
 
-      /* TODO:【待修复】移动端弹窗时会丢失滚动高度，导致TOC目录高亮状态丢失*/
-      /* &>li>a {*/
-      /*   font-weight: bold;*/
+      /* 一级目录项加粗、当前项用主题色（抽屉打开时页面滚动位置保持不变，高亮随之正确）*/
+      & > li > a {
+        font-weight: bold;
+      }
 
-      /*   &.is-active-link {*/
-      /*     font-weight: 700;*/
-      /*     color: var(--theme);*/
-      /*     border-color: var(--toc-active);*/
-      /*   }*/
-      /* }*/
+      a.is-active-link {
+        font-weight: 700;
+        color: var(--theme-text);
+        border-color: var(--toc-active);
+      }
     }
 
     .toc-list {

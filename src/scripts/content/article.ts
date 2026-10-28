@@ -2,6 +2,8 @@
  * 文章页交互：点赞、分享、复制版权、阅读进度、目录、字数统计、评论定位。
  */
 import tocbot from "tocbot";
+import { buildRawToc, renderRawContent } from "./raw-content";
+import { readingStats } from "./reading-stats";
 import { $, $$, headerOffset } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { copyText } from "../core/clipboard";
@@ -122,13 +124,20 @@ export function initProgressBar(): void {
   });
 }
 
-/** 字数统计：沉浸头图与经典信息栏都可能有统计位，全部填写 */
+/** 字数与阅读时长：沉浸头图与经典信息栏都可能有统计位，全部填写 */
 export function initWordCount(): void {
   const targets = $$("[data-joe-word-count]");
   const content = $("#post-inner");
   if (!targets.length || !content) return;
-  const count = content.innerText.match(/[一-龥a-zA-Z0-9]/g)?.length ?? 0;
-  targets.forEach((target) => (target.textContent = `${count} 字`));
+  const root = renderRawContent() ?? content;
+  const clone = root.cloneNode(true) as ParentNode & Node;
+  clone.querySelectorAll?.("pre, script, style").forEach((el) => el.remove());
+  const { words, minutes } = readingStats(clone.textContent ?? "");
+  const label = `${words.toLocaleString("zh-CN")} 字 · 约 ${minutes} 分钟`;
+  targets.forEach((target) => {
+    target.textContent = label;
+    target.setAttribute("title", `${words} 字，预计阅读 ${minutes} 分钟`);
+  });
 }
 
 /** 侧栏目录在 992px 以下由 CSS 隐藏（styles/pages/post.css），此时改用抽屉中的目录 */
@@ -140,12 +149,13 @@ export function initToc(): void {
   if (!container && !mobile) return;
   const tocSelector = mobile ? "#js-toc-mobile" : "#js-toc";
   if (!$(tocSelector)) return;
-  if ($(".joe_raw_content")) {
-    $(tocSelector)!.innerHTML =
-      '<div class="toc-nodata">暂不支持解析原始内容目录</div>';
+  const offset = headerOffset();
+  const raw = renderRawContent();
+  if (raw) {
+    buildRawToc(raw, $(tocSelector)!, { offset, onNavigate: () => mobile && closeOverlays() });
+    showMobileTocButton(mobile);
     return;
   }
-  const offset = headerOffset();
   onCleanup(() => tocbot.destroy());
   tocbot.init({
     tocSelector,
@@ -165,13 +175,15 @@ export function initToc(): void {
   if (!$(tocSelector)?.children.length) {
     $(tocSelector)!.innerHTML = '<div class="toc-nodata">暂无目录</div>';
   }
-  if (mobile) {
-    const button = $(".joe_action .toc");
-    if (button) {
-      button.style.display = "flex";
-      button.addEventListener("click", () => openTocDrawer());
-    }
-  }
+  showMobileTocButton(mobile);
+}
+
+function showMobileTocButton(mobile: boolean): void {
+  if (!mobile) return;
+  const button = $(".joe_action .toc");
+  if (!button) return;
+  button.style.display = "flex";
+  button.addEventListener("click", () => openTocDrawer());
 }
 
 /** 目录展开层级：文章元数据 toc_depth 优先，其次主题设置 */
@@ -197,4 +209,19 @@ export function scrollToHash(): void {
     window.scrollTo({
       top: target.getBoundingClientRect().top + window.scrollY - headerOffset(),
     });
+}
+
+/** 文章系列：「展开全部」按钮 */
+export function initSeries(): void {
+  const button = $<HTMLButtonElement>("[data-joe-series-more]");
+  const list = $(".joe_series__list");
+  if (!button || !list) return;
+  if (!list.querySelector(".is-far")) {
+    button.remove();
+    return;
+  }
+  button.addEventListener("click", () => {
+    list.classList.add("is-expanded");
+    button.remove();
+  });
 }

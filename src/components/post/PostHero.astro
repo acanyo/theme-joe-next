@@ -54,6 +54,7 @@ const AUTHOR_LINK =
           height="24"
           loading="lazy"
           th:src="${#strings.isEmpty(author?.avatar) ? (theme.config.blogger.fallback_avatar ?: #theme.assets('/images/peeps-avatar.png')) : author.avatar}"
+          sizes="24px"
           th:alt="${author?.displayName}"
           th:attr="data-text-avatar=${author?.displayName}"
           data-fallback="avatar"

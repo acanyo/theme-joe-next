@@ -65,6 +65,7 @@ const SUBJECT_LINK =
             <img
               class="reward-image"
               th:src="${reward.image}"
+              sizes="280px"
               alt="打赏"
               loading="lazy"
             />
@@ -90,6 +91,7 @@ const SUBJECT_LINK =
         class="qrcode_img"
         loading="lazy"
         th:src="${widget.image?.url}"
+        sizes="280px"
         th:alt="${widget.image?.title}"
         data-fallback="image"
       />
@@ -127,6 +129,7 @@ const SUBJECT_LINK =
             class="avatar"
             loading="lazy"
             th:src="${comment.owner.avatar}"
+            sizes="35px"
             alt="头像"
             th:attr="data-text-avatar=${comment.owner.displayName}"
             data-fallback="avatar"
@@ -167,6 +170,7 @@ const SUBJECT_LINK =
           width="100%"
           loading="lazy"
           th:src="${ads.image}"
+          sizes="280px"
           alt="广告"
           data-fallback="image"
         />

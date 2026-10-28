@@ -1,6 +1,7 @@
 ---
 /** 首页「精品分类」：指定分类或自定义入口（设置 home.data_hot_category） */
 import Icon from "../common/Icon.astro";
+import { responsiveImage, SIZES } from "../../config/images";
 const FALLBACK = "#theme.assets('/images/hot_cover1.jpg')";
 ---
 
@@ -34,7 +35,7 @@ const FALLBACK = "#theme.assets('/images/hot_cover1.jpg')";
                   height="120"
                   class="image"
                   loading="lazy"
-                  th:src={`\${category.spec.cover ?: ${FALLBACK}}`}
+                  {...responsiveImage(`category.spec.cover ?: ${FALLBACK}`, SIZES.card, ["s", "m"])}
                   th:alt="${category.spec.displayName}"
                   data-fallback="thumbnail"
                 />
@@ -64,7 +65,7 @@ const FALLBACK = "#theme.assets('/images/hot_cover1.jpg')";
                 height="120"
                 class="image"
                 loading="lazy"
-                th:src={`\${custom?.image ?: ${FALLBACK}}`}
+                {...responsiveImage(`custom?.image ?: ${FALLBACK}`, SIZES.card, ["s", "m"])}
                 th:alt="${custom?.title}"
                 data-fallback="thumbnail"
               />

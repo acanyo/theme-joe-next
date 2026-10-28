@@ -36,6 +36,7 @@ const COUNT =
             height="36"
             loading="lazy"
             th:src="${moment.owner?.avatar ?: (theme.config.blogger.avatar ?: theme.config.blogger.fallback_avatar)}"
+            sizes="36px"
             th:alt="${moment.owner?.displayName}"
             th:attr="data-text-avatar=${moment.owner?.displayName}"
             data-fallback="avatar"

@@ -77,6 +77,7 @@ const COLOR_LIST = `#strings.arraySplit('${COLORS.join(",")}', ',')`;
                   class="avatar"
                   loading="lazy"
                   th:src="${link.spec.logo ?: theme.config.pages.links_fallback_logo}"
+                  sizes="40px"
                   th:alt="${link.spec.displayName}"
                   th:attr="data-text-avatar=${link.spec.displayName}"
                   data-fallback="link"

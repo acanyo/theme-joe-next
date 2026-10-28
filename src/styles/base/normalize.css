@@ -10,12 +10,18 @@ html {
   --halo-comment-widget-base-font-family: var(--font-default);
   --halo-search-widget-base-font-family: var(--font-default);
   text-size-adjust: 100%;
+  /*
+   * 抽屉 / 弹窗打开时锁定页面滚动：body 固定在打开前的位置（top 由 features/navigation.ts 写入），
+   * 页面看起来不动，window.scrollY 也不会被重置为 0；关闭时恢复到原位置。
+   */
   &.disable-scroll {
-    height: 100vh;
     overflow: hidden;
+    scrollbar-gutter: stable;
 
     body {
-      height: 100vh;
+      position: fixed;
+      inset-inline: 0;
+      top: var(--scroll-lock-top, 0);
       overflow: hidden;
     }
   }

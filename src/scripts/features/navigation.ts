@@ -69,22 +69,40 @@ function initDropdowns(): void {
 
 let savedScroll = 0;
 
+/**
+ * 锁定滚动时 body 改为 fixed，文档的滚动位置会变为 0 并触发 scroll 事件；
+ * 页面实际并没有移动，这些事件在捕获阶段拦下，避免目录高亮、阅读进度等按 0 重新计算。
+ */
+document.addEventListener(
+  "scroll",
+  (event) => {
+    if (document.documentElement.classList.contains("disable-scroll")) event.stopImmediatePropagation();
+  },
+  { capture: true },
+);
+
 function openOverlay(target: HTMLElement | null): void {
   if (!target) return;
   savedScroll = window.scrollY;
-  document.documentElement.classList.add("disable-scroll");
+  const root = document.documentElement;
+  root.style.setProperty("--scroll-lock-top", `${-savedScroll}px`);
+  root.classList.add("disable-scroll");
   $(".joe_header__mask")?.classList.add("active", "slideout");
   target.classList.add("active");
 }
 
 /** 关闭抽屉与遮罩；restoreScroll 为 false 时不恢复打开前的滚动位置（切页场景） */
 export function closeOverlays(restoreScroll = true): void {
-  document.documentElement.classList.remove("disable-scroll");
+  const root = document.documentElement;
+  const wasLocked = root.classList.contains("disable-scroll");
+  root.classList.remove("disable-scroll");
+  root.style.removeProperty("--scroll-lock-top");
   $(".joe_header__mask")?.classList.remove("active", "slideout");
   $$(".joe_header__slideout, .joe_header__searchout, .joe_header__toc").forEach(
     (el) => el.classList.remove("active"),
   );
-  if (restoreScroll) window.scrollTo({ top: savedScroll });
+  // 立即回到原位置（不走平滑滚动），之后的目录跳转再平滑滚动到目标标题
+  if (restoreScroll && wasLocked) window.scrollTo({ top: savedScroll, behavior: "instant" });
 }
 
 /** 打开移动端目录抽屉（供文章页使用） */

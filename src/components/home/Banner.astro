@@ -7,7 +7,7 @@ const RANDOM_COVER = (key: string) =>
 const POST_VARS =
   "cover = ${slidePost.spec.cover ?: " +
   RANDOM_COVER("slidePost.metadata.name") +
-  "}, title = ${slidePost.spec.title}, excerpt = ${slidePost.status.excerpt}, href = ${slidePost.status.permalink}";
+  "}, title = ${slidePost.spec.title}, excerpt = ${slidePost.status.excerpt}, autoExcerpt = ${slidePost.spec.excerpt?.autoGenerate != false}, href = ${slidePost.status.permalink}";
 const HOT_QUERY =
   "postFinder.list({page: 1, size: #conversions.convert(slide.popular_count ?: 3, 'java.lang.Integer'), sort: {'stats.visit,desc'}}).items";
 ---
@@ -47,7 +47,7 @@ const HOT_QUERY =
               th:with={
                 "cover = ${custom?.image ?: " +
                 RANDOM_COVER("custom?.title") +
-                "}, title = ${custom?.title}, excerpt = ${custom?.subtitle}, href = ${custom?.url}"
+                "}, title = ${custom?.title}, excerpt = ${custom?.subtitle}, autoExcerpt = false, href = ${custom?.url}"
               }
             >
               <BannerSlide />
