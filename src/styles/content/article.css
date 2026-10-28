@@ -711,7 +711,7 @@
     left: -68px;
     padding: 10px;
     background: #fff;
-    border-radius: 5px;
+    border-radius: var(--radius-inner);
     box-shadow: var(--shadow-block);
 
     &:after {
@@ -787,7 +787,7 @@
       right: 0;
       display: flex;
       padding: 12px;
-      border-radius: 5px;
+      border-radius: var(--radius-inner);
       background: var(--bg-muted);
       box-shadow: var(--shadow-block);
       transition: all var(--dur-base) var(--ease-out);
@@ -817,7 +817,7 @@
       &.two {
         li {
           &:first-child img {
-            border-radius: 5px 0 0 5px;
+            border-radius: var(--radius-inner) 0 0 var(--radius-inner);
           }
 
           &:last-child img {

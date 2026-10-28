@@ -104,7 +104,7 @@
       background: var(--bg-raised);
       border-radius: 50px;
       transition: all var(--dur-base) var(--ease-out);
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+      box-shadow: var(--glass-shadow);
 
       a {
         position: relative;
@@ -131,7 +131,7 @@
       margin: -100px 0 0 42px;
       padding: 10px;
       background: #fff;
-      border-radius: 5px;
+      border-radius: var(--radius-inner);
       box-shadow: var(--shadow-block);
 
       &:before {
@@ -184,7 +184,7 @@
       transform: translate3d(0, 0, 0);
       background: var(--bg-muted);
       box-shadow: var(--shadow-block);
-      border-radius: 5px;
+      border-radius: var(--radius-inner);
       transition: all var(--dur-base) var(--ease-out);
 
       &:before {
@@ -207,7 +207,7 @@
           display: block;
           width: 200px;
           max-width: unset;
-          border-radius: 5px;
+          border-radius: var(--radius-inner);
         }
 
         span {

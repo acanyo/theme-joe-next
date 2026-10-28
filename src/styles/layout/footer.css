@@ -118,7 +118,7 @@
         font-weight: bold;
         color: var(--border-light);
         background: var(--bg-inverse);
-        border-radius: 5px;
+        border-radius: var(--radius-inner);
 
         .joe-font {
           position: absolute;

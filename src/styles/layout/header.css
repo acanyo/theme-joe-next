@@ -20,7 +20,7 @@
   border-top: 3px solid var(--theme);
   transform-origin: top;
   background: var(--bg-raised);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--glass-shadow);
   border-radius: 0 0 var(--radius-inner) var(--radius-inner);
   padding: 10px 0;
   opacity: 0;
@@ -313,7 +313,7 @@
     left: 100%;
     top: 0;
     padding-left: 7px;
-    box-shadow: 7px 3px 8px 0px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--glass-shadow);
     border-radius: 0 var(--radius-inner) var(--radius-inner) 0;
     transform: translateX(-20%) perspective(600px) rotateY(-45deg);
     transition:
@@ -431,7 +431,7 @@
     visibility: hidden;
     opacity: 0;
     background: var(--bg-raised);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--glass-shadow);
     border-radius: var(--radius-inner);
     transition:
       visibility var(--dur-base) var(--ease-out),

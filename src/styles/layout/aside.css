@@ -684,7 +684,7 @@
       display: block;
       width: 100%;
       user-select: none;
-      border-radius: 5px;
+      border-radius: var(--radius-inner);
     }
 
     .qrcode_description {
@@ -726,7 +726,7 @@
 
       .progress-bar {
         height: 10px;
-        border-radius: 5px;
+        border-radius: var(--radius-inner);
         overflow: hidden;
         background: var(--border-lighter);
         width: 0;
@@ -738,7 +738,7 @@
       .progress-bar-inner {
         width: 0;
         height: 100%;
-        border-radius: 5px;
+        border-radius: var(--radius-inner);
         transition: width var(--dur-base) var(--ease-out);
         animation: progress 750ms linear infinite;
       }
