@@ -39,7 +39,7 @@ interface Settings {
 
 const isBoolean = (f: Field) =>
   f.$formkit === "switch" ||
-  (f.$formkit === "radio" &&
+  ((f.$formkit === "radio" || f.$formkit === "toggle") &&
     !!f.options?.length &&
     f.options.every((o) => typeof o.value === "boolean"));
 

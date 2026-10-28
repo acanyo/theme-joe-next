@@ -110,8 +110,8 @@ export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "appearance.accent_dark": "#9999ff",
   "appearance.accent_light": "#fb6c28",
   "appearance.scrollbar_width": "8px",
-  "aside.latest_count": "5",
-  "aside.popular_count": "5",
+  "aside.latest_count": 5,
+  "aside.popular_count": 5,
   "aside.position": "right",
   "blogger.avatar_frame": "0",
   "blogger.avatar_pendant": "0",
@@ -121,7 +121,7 @@ export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "blogger.social_source": "builtin",
   "blogger.stats": "category-post-comment",
   "blogger.text_avatar": "{bgColor:'',textColor:'',useTextGradient:false}",
-  "code.fold_height": "800",
+  "code.fold_height": 800,
   "effects.backdrop": "off",
   "effects.cursor_effect": "off",
   "effects.cursor_skin": "off",
@@ -139,7 +139,7 @@ export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "general.link_target": "default",
   "home.carousel_direction": "horizontal",
   "home.carousel_effect": "slide",
-  "home.carousel_interval": "3500",
+  "home.carousel_interval": 3500,
   "home.carousel_speed": 500,
   "home.default_thumbnail": "https://picsum.photos/id/1081/350/200",
   "home.fallback_thumbnail": "/themes/theme-joe-next/assets/images/default_thumbnail.png",
@@ -163,9 +163,9 @@ export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "pages.links_link_order": "created_asc",
   "pages.links_title": "友情链接",
   "pages.moments_empty": "暂无动态",
-  "pages.moments_max_height": "300",
+  "pages.moments_max_height": 300,
   "pages.moments_title": "我的动态",
-  "pages.photos_gap": "10",
+  "pages.photos_gap": 10,
   "pages.photos_title": "我的图库",
   "pages.tags_style": "card",
   "pages.tags_title": "全部标签",
@@ -175,9 +175,9 @@ export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "post.header_style": "immersive",
   "post.image_align": "center",
   "post.image_max_width": "100%",
-  "post.outdated_days": "30",
-  "post.related_count": "5",
-  "post.toc_depth": "0"
+  "post.outdated_days": 30,
+  "post.related_count": 5,
+  "post.toc_depth": 0
 };
 
 /** 列表类设置项（重复器）的默认内容，模板中以 SpEL 内联列表写出 */
