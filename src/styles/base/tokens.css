@@ -147,25 +147,14 @@ html {
     }
 
     .joe_detail__article {
-      .joe_detail__article-anote {
-        color: rgba(255, 255, 255, 0.61);
-      }
 
       img {
         filter: brightness(0.9);
       }
 
-      .joe_detail__article-abtn {
-        color: rgba(255, 255, 255, 0.61);
-      }
-
       .joe_detail__overdue-wrapper {
         background: var(--classD);
       }
-    }
-
-    .joe_detail__article-video .episodes .box .item:not(.active) {
-      background: var(--classC);
     }
 
     .aplayer {

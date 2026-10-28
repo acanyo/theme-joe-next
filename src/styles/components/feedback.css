@@ -43,35 +43,6 @@
   }
 }
 
-.joe_empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 50px 0;
-  user-select: none;
-  font-style: italic;
-  color: var(--routine)
-}
-
-.joe_empty-icon {
-    width: 90px;
-    height: 90px;
-    margin-bottom: 20px;
-    fill: var(--routine);
-  }
-
-.joe_empty {
-
-  &.mini {
-    padding: 20px 0;
-  }
-
-  &.hide {
-    display: none;
-  }
-}
-
 /* 顶部加载进度条（替代 nprogress）*/
 .joe_loading_bar {
   position: fixed;

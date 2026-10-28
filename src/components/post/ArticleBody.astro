@@ -37,13 +37,21 @@ const ARTICLE_CLASS = [
       th:unless="${#lists.isEmpty(post.categories)}"
     >
       <a
-        th:each="category : ${post.categories}"
+        th:each="category, stat : ${post.categories}"
         th:href="@{${category.status.permalink}}"
         class="item"
+        th:classappend="${'item-' + (stat.index % 5)}"
         th:title="${category.spec.displayName}"
         th:text="${category.spec.displayName}"
       />
     </div>
+  )}
+  {isPost && (
+    <span
+      class="joe_raw"
+      title="原始内容"
+      th:if={`\${${ann("use_raw_content", "false")} == 'true'}`}
+    ></span>
   )}
   <div class="joe_detail-wrapper">
     <h1

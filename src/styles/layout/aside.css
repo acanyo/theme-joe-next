@@ -80,15 +80,7 @@
         position: absolute;
         top: 5px;
         right: 8px;
-        z-index: 6;
-
-        .sw-typography {
-          font-family:
-            "Joe Font", "Helvetica Neue", Helvetica, "PingFang SC",
-            "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial,
-            "sans-serif";
-          color: white;
-        }
+        z-index: 6
       }
 
       .joe_strips {
@@ -250,7 +242,7 @@
             height: 88px;
           }
 
-          &.catcus {
+          &.cactus {
             left: -3px;
             top: -4px;
             width: 82px;
@@ -364,11 +356,6 @@
 
           &.rotate-heart {
             top: 8px;
-          }
-
-          &.zouni {
-            left: 0;
-            top: 52px;
           }
 
           &.fall-in-love {
@@ -695,11 +682,6 @@
               width: 100%;
               left: 300px;
             }
-
-            .reward_image {
-              width: 250px;
-              height: 250px;
-            }
           }
         }
       }
@@ -838,14 +820,6 @@
       }
     }
 
-    &.weather {
-      background: var(--background);
-
-      .joe_aside__item-contain {
-        min-height: 300px;
-      }
-    }
-
     &.hot {
       background: var(--background);
 
@@ -903,110 +877,6 @@
             height: 130px;
             object-fit: cover;
             transition: transform 0.35s;
-          }
-
-          .describe {
-            position: absolute;
-            z-index: 1;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            padding: 10px;
-            background: linear-gradient(
-              to bottom,
-              rgba(0, 0, 0, 0),
-              rgba(0, 0, 0, 0.75)
-            );
-            font-size: 12px;
-            color: var(--seat);
-
-            h6 {
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              color: #fff;
-              line-height: 24px;
-              font-size: 14px;
-            }
-          }
-        }
-      }
-    }
-
-    &.today {
-      background: var(--background);
-
-      .joe_aside__item-contain {
-        .item {
-          position: relative;
-
-          .tail {
-            position: absolute;
-            left: 6px;
-            top: 0;
-            height: 100%;
-            border-left: 1px solid var(--classC);
-          }
-
-          .head {
-            position: absolute;
-            width: 13px;
-            height: 13px;
-            border-radius: 50%;
-            background: var(--background);
-          }
-
-          .desc {
-            position: relative;
-            top: -2px;
-            padding-left: 24px;
-            padding-bottom: 15px;
-
-            time {
-              display: block;
-              font-weight: 600;
-              margin-bottom: 7px;
-            }
-
-            a {
-              display: block;
-              color: var(--routine);
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              transition: color 0.25s;
-              font-size: 13px;
-
-              &:hover {
-                color: var(--theme);
-              }
-            }
-          }
-
-          &:nth-child(even) {
-            .head {
-              border: 1px solid #f48b29;
-            }
-
-            .desc {
-              color: #f48b29;
-            }
-          }
-
-          &:nth-child(odd) {
-            .head {
-              border: 1px solid #f05454;
-            }
-
-            .desc {
-              color: #f05454;
-            }
-          }
-
-          &:last-child {
-            .desc {
-              padding-bottom: 0;
-            }
           }
         }
       }
@@ -1103,11 +973,6 @@
 
             &:hover {
               color: var(--theme);
-            }
-
-            .owo_image {
-              height: 18px;
-              vertical-align: -5px;
             }
 
             a {
@@ -1222,12 +1087,3 @@
       }
     }
   }
-
-.joe_aside {
-
-  .speaker-anim-icon {
-    position: relative;
-    top: -2px;
-    margin-right: 6px;
-  }
-}

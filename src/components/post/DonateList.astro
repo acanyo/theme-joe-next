@@ -7,7 +7,12 @@ const QRCODES = [
 ] as const;
 ---
 
-<ol class="joe_donate_list">
+<!-- 恰好两张收款码时拼接显示（.two） -->
+<ol
+  class="joe_donate_list"
+  th:with={`qrCount = \${${QRCODES.map((qr) => `(#strings.isEmpty(theme.config.post.${qr.key}) ? 0 : 1)`).join(" + ")}}`}
+  th:classappend="${qrCount == 2 and #strings.isEmpty(#strings.trim(theme.config.post.reward_code)) ? 'two' : ''}"
+>
   {QRCODES.map((qr) => (
     <li th:if={`\${not #strings.isEmpty(theme.config.post.${qr.key})}`}>
       <p>{qr.label}</p>

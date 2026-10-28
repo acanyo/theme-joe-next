@@ -77,11 +77,6 @@
       font-size: 14px;
       text-shadow: none;
     }
-
-    .evan-tiktok-text {
-      animation: uk-text-shadow-glitch 0.65s cubic-bezier(1, -1.91, 0, 2.79) 0s
-        infinite normal both running;
-    }
   }
 
   .evan-big-banner_bottom {
@@ -265,12 +260,6 @@
   overflow: hidden;
   z-index: 1;
   background: var(--footer-bg);
-}
-.editorial {
-  display: block;
-  width: 100%;
-  height: 40px;
-  margin: 0;
 }
 
 .evan-friends {

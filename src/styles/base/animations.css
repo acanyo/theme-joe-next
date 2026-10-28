@@ -18,10 +18,6 @@
   animation: topInDown 0.8s;
 }
 
-.showInDown {
-  animation: showInDown 0.35s;
-}
-
 @keyframes topInDown {
   from {
     opacity: 0;

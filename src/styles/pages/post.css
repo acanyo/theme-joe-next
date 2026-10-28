@@ -107,28 +107,6 @@
   box-shadow: var(--box-shadow);
   transition: top 0.3s;
 
-  .toc-expander {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 5px;
-
-    .joe-font {
-      display: none;
-      cursor: pointer;
-      font-size: 18px;
-      color: var(--classF);
-
-      &:hover {
-        color: var(--theme);
-      }
-    }
-
-    .joe-icon-expand-in {
-      display: block;
-    }
-  }
-
   .toc-header {
     position: relative;
     z-index: 1;
@@ -263,34 +241,9 @@
     min-height: auto;
     padding: 0;
 
-    .toc-expander {
-      .joe-icon-expand-in {
-        display: none;
-      }
-
-      .joe-icon-expand-out {
-        display: block;
-      }
-    }
-
     .toc-list {
       display: none;
     }
-  }
-}
-
-.aside-expander {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 1;
-  cursor: pointer;
-  user-select: none;
-  font-size: 14px;
-  color: var(--routine);
-
-  &:hover {
-    color: var(--theme);
   }
 }
 
@@ -300,10 +253,3 @@
   }
 }
 /* 评论区 GIF 位置及大小调整*/
-.wl-gif-popup.display {
-  bottom: 100% !important;
-  top: auto !important;
-}
-.wl-gallery {
-  max-height: 30vh !important;
-}

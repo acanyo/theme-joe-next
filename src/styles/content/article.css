@@ -4,39 +4,7 @@
   padding: 20px;
   background: var(--background);
   border-radius: var(--radius-wrap);
-  box-shadow: var(--box-shadow);
-
-  .post-status {
-    position: absolute;
-    left: 12px;
-    top: 12px;
-    padding: 0 8px;
-    height: 26px;
-    line-height: 26px;
-    user-select: none;
-    background: var(--classD);
-    border-radius: 4px;
-
-    i {
-      margin-right: 3px;
-      vertical-align: middle;
-      font-size: 16px;
-    }
-
-    &.s_draft {
-      color: #7a5001;
-      background: #fdd9a9;
-    }
-
-    &.s_intimate {
-      color: #ef44b9;
-      background: var(--classJ);
-    }
-
-    &.s_recycle {
-      color: #c50a00;
-    }
-  }
+  box-shadow: var(--box-shadow)
 }
 
 .joe_detail__category {
@@ -254,18 +222,6 @@
         & > img {
           margin-left: -2em;
         }
-      }
-    }
-
-    &.center-img {
-      span[data-fancybox] {
-        text-align: center;
-      }
-    }
-
-    &.right-img {
-      span[data-fancybox] {
-        text-align: right;
       }
     }
 
@@ -528,11 +484,6 @@
       }
     }
 
-    .owo_image {
-      max-height: 26px;
-      vertical-align: top;
-    }
-
     .indent {
       text-indent: 2em;
     }
@@ -615,148 +566,6 @@
       }
     }
   }
-
-.joe_detail__article-video {
-      margin-bottom: 18px;
-
-      .play,
-      .episodes {
-        position: relative;
-        background: var(--classD);
-        padding: 60px 15px 15px;
-
-        .title {
-          position: absolute;
-          top: 15px;
-          left: -10px;
-          background: var(--theme);
-          color: #fff;
-          font-weight: 500;
-          box-shadow: 2px 5px 10px rgba(49, 58, 70, 0.15);
-          height: 30px;
-          line-height: 30px;
-          padding: 0 12px;
-          border-radius: 2px 2px 2px 0;
-          user-select: none;
-
-          &::after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: -10px;
-            border-style: solid;
-            border-width: 10px;
-            border-color: var(--theme) transparent transparent;
-            transform: rotate(90deg);
-          }
-        }
-
-        .box {
-          border-top: 1px solid var(--classB);
-          padding-top: 15px;
-        }
-      }
-
-      .play {
-        margin-bottom: 15px;
-
-        .box {
-          iframe {
-            width: 100%;
-            height: 500px;
-            background: #000;
-            border-radius: var(--radius-img);
-          }
-        }
-      }
-
-      .episodes {
-        .box {
-          display: grid;
-          grid-template-columns: repeat(6, 1fr);
-          gap: 15px;
-
-          .item {
-            height: 30px;
-            line-height: 30px;
-            border-radius: 15px;
-            background: var(--background);
-            color: var(--routine);
-            cursor: pointer;
-            text-align: center;
-            font-size: 12px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            transition:
-              transform 0.35s,
-              box-shadow 0.35s,
-              background 0.35s,
-              color 0.35s;
-            padding: 0 10px;
-
-            &.active {
-              transform: translateY(-2px);
-              color: #fff;
-              background: var(--theme);
-              box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-            }
-
-            &:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-            }
-          }
-        }
-      }
-    }
-
-.joe_detail__article-protected {
-      display: flex;
-      justify-content: center;
-      background: repeating-linear-gradient(
-        145deg,
-        var(--classB),
-        var(--classB) 15px,
-        var(--background) 0,
-        var(--background) 30px
-      );
-      padding: 20px 0;
-      margin-bottom: 18px;
-
-      .contain {
-        position: relative;
-        overflow: hidden;
-        border-radius: 20px;
-        box-shadow: var(--box-shadow);
-
-        .icon {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          left: 15px;
-        }
-
-        .password {
-          width: 250px;
-          height: 40px;
-          border: none;
-          color: var(--routine);
-          padding-left: 50px;
-          background: var(--background);
-        }
-
-        .submit {
-          position: absolute;
-          top: 50%;
-          right: 15px;
-          transform: translateY(-50%);
-          color: var(--main);
-          border: none;
-          background: none;
-        }
-      }
-    }
 
 .joe_detail__agree {
     display: flex;
@@ -1122,68 +931,6 @@
     }
   }
 
-.joe_detail__related {
-    padding-top: 15px
-  }
-
-.joe_detail__related-title {
-      position: relative;
-      font-size: 18px;
-      font-weight: 500;
-      color: var(--main);
-      padding-left: 15px;
-      margin-bottom: 15px;
-
-      &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 4px;
-        border-radius: 2px;
-        background: var(--theme);
-      }
-    }
-
-.joe_detail__related-content {
-      display: grid;
-      gap: 15px;
-      grid-template-columns: repeat(4, 1fr);
-
-      .item {
-        overflow: hidden;
-        border-radius: var(--radius-inner);
-        transition:
-          transform 0.25s,
-          box-shadow 0.25s;
-
-        &:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 34px 20px -24px rgba(136, 161, 206, 0.3);
-        }
-
-        img {
-          width: 100%;
-          height: 120px;
-          object-fit: cover;
-        }
-
-        h6 {
-          height: 32px;
-          line-height: 32px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          background: var(--classD);
-          text-align: center;
-          font-size: 13px;
-          color: var(--minor);
-          padding: 0 12px;
-        }
-      }
-    }
-
 .joe_detail__friends {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1258,10 +1005,6 @@
     }
 
 .joe_detail {
-
-  .link-requirement {
-    padding-left: 30px;
-  }
 
   .joe_comment_box {
     padding-top: 20px;

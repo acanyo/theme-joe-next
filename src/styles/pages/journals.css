@@ -21,10 +21,6 @@
     &.hidden {
       visibility: hidden;
     }
-
-&.effect_journal__item {
-          visibility: hidden;
-        }
   }
 
 .joe_journal__item {
@@ -428,11 +424,6 @@
         .code-toolbar {
           margin: 10px 0;
         }
-
-        .owo_image {
-          max-height: 26px;
-          vertical-align: top;
-        }
       }
     }
 
@@ -443,11 +434,6 @@
         .joe_journal_comment {
           display: block;
           padding-top: 18px;
-        }
-
-        .journal_comment_expander i {
-          vertical-align: text-bottom;
-          transform: rotate(180deg);
         }
       }
     }
@@ -492,18 +478,6 @@
         &:hover {
           transform: scale(1);
           color: #f15c43 !important;
-        }
-      }
-
-      &.journal_comment_expander {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        float: right;
-        margin-right: 0;
-
-        &:hover {
-          color: var(--classF);
         }
       }
 

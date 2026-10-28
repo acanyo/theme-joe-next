@@ -42,38 +42,6 @@
     }
   }
 
-.joe_checkbox {
-  -webkit-appearance: none;
-  position: relative;
-  border-radius: 2px;
-  width: 15px;
-  height: 15px;
-  border: 2px solid var(--theme);
-  vertical-align: -2px;
-
-  &:disabled {
-    cursor: not-allowed;
-  }
-
-  &:checked {
-    border: none;
-    background: var(--theme);
-
-    &::after {
-      content: "";
-      width: 3px;
-      height: 7px;
-      position: absolute;
-      top: 2px;
-      left: 5px;
-      border: 2px solid #fff;
-      border-top: 0;
-      border-left: 0;
-      transform: rotate(45deg);
-    }
-  }
-}
-
 .joe_mtitle {
   display: flex;
   justify-content: center
@@ -534,19 +502,6 @@
   height: 500px;
   border-radius: var(--radius-img);
   box-shadow: var(--box-shadow);
-}
-
-.joe_pdf {
-  iframe {
-    display: block;
-    width: 100%;
-    height: 500px;
-    margin: 0 auto;
-    overflow: hidden;
-    border: none;
-    border-radius: var(--radius-img);
-    box-shadow: var(--box-shadow);
-  }
 }
 
 .joe_card__describe {
