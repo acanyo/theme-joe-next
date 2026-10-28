@@ -1124,7 +1124,7 @@
   }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 768px) {
   html .joe_donate {
     display: none;
   }

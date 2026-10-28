@@ -614,7 +614,7 @@
   }
 }
 
-@media (max-width: 1130px) {
+@media (max-width: 1200px) {
   html .joe_list__item {
     &.default {
       .meta {

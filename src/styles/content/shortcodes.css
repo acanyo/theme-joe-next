@@ -681,7 +681,7 @@
 }
 
 /* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
-@media (max-width: 1400px) {
+@media (max-width: 1360px) {
   html .joe_vplayer {
     height: 450px;
   }
@@ -705,7 +705,7 @@
   }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 768px) {
   html .joe_vplayer {
     width: 100%;
     height: 220px !important;

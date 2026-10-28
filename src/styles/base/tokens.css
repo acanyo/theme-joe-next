@@ -1,4 +1,4 @@
-/* 全局CSS变量*/
+/* 全局 CSS 变量。断点：500 / 768 / 992 / 1200 / 1360px（见 README「样式」）*/
 html {
   --font-default:
     "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",

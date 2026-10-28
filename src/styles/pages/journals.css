@@ -358,7 +358,7 @@
         box-shadow 0.35s;
       height: 120px;
 
-      @media screen and (max-width: 768px) {
+      @media (max-width: 768px) {
         height: 80px;
       }
 
