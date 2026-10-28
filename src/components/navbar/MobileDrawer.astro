@@ -4,6 +4,7 @@
  * 依赖 Navbar 中定义的 `navMenu` 变量。
  */
 import SocialLinks from "../blogger/SocialLinks.astro";
+import Icon from "../common/Icon.astro";
 import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
 ---
 
@@ -51,13 +52,13 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
       th:with="stats = ${siteStatsFinder.getStats()}"
     >
       <li class="item">
-        <i class="joe-font joe-icon-danganguanli" aria-hidden="true"></i>
+        <Icon name="archive" />
         <span>
           累计撰写 <strong th:text="${stats.post}">0</strong> 篇文章
         </span>
       </li>
       <li class="item">
-        <i class="joe-font joe-icon-remen" aria-hidden="true"></i>
+        <Icon name="hot" />
         <span>
           累计创建{" "}
           <strong th:text="${#lists.size(tagFinder.listAll())}">0</strong>{" "}
@@ -65,7 +66,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
         </span>
       </li>
       <li class="item" th:if={el(COMMENT_ENABLED)}>
-        <i class="joe-font joe-icon-message" aria-hidden="true"></i>
+        <Icon name="comment" />
         <span>
           累计收到 <strong th:text="${stats.comment}">0</strong> 条评论
         </span>
@@ -76,7 +77,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
       <li>
         <a class="link panel in" href="#" rel="nofollow">
           <span>栏目</span>
-          <i class="joe-font joe-icon-arrow-right" aria-hidden="true"></i>
+          <Icon name="chevron-right" />
         </a>
         <ul
           class="slides panel-body panel-box panel-side-menu"
@@ -100,7 +101,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
                   th:target="${menuItem.spec.target?.value}"
                   th:text="${menuItem.status.displayName}"
                 ></a>
-                <i class="joe-font joe-icon-arrow-right" aria-hidden="true"></i>
+                <Icon name="chevron-right" />
               </div>
               <ul class="slides panel-body">
                 <li th:each="childMenu : ${menuItem.children}">
@@ -118,10 +119,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
                         th:target="${childMenu.spec.target?.value}"
                         th:text="${childMenu.status.displayName}"
                       ></a>
-                      <i
-                        class="joe-font joe-icon-arrow-right"
-                        aria-hidden="true"
-                      ></i>
+                      <Icon name="chevron-right" />
                     </div>
                     <ul class="slides panel-body">
                       <li th:each="subMenu : ${childMenu.children}">

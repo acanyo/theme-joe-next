@@ -7,24 +7,32 @@
   box-shadow: var(--shadow);
 }
 
+/* 分类：居中放在标题上方；保留 Joe 的五色，改为淡底 + 同色文字 */
 .joe_detail__category {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 0;
+  padding-top: 24px;
 
   .item {
-    color: #fff;
+    --c: var(--theme);
+    color: var(--c);
+    background: color-mix(in srgb, var(--c) 12%, transparent);
     font-size: 12px;
-    padding: 3px 8px;
-    margin-right: 5px;
-    border-radius: 2px;
+    font-weight: 600;
+    padding: 3px 10px;
+    margin-right: 0;
+    border-radius: 999px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 120px;
     transition:
-      transform 0.35s,
-      opacity 0.35s;
+      transform var(--dur-base) var(--ease-out),
+      opacity var(--dur-base) var(--ease-out);
 
     &:hover {
       opacity: 0.85;
@@ -37,23 +45,23 @@
   }
 
   .item-0 {
-    background: #0396ff;
+    --c: #0396ff;
   }
 
   .item-1 {
-    background: #ea5455;
+    --c: #ea5455;
   }
 
   .item-2 {
-    background: #7367f0;
+    --c: #7367f0;
   }
 
   .item-3 {
-    background: #28c76f;
+    --c: #28c76f;
   }
 
   .item-4 {
-    background: #9f44d3;
+    --c: #9f44d3;
   }
 
   .edit {
@@ -76,6 +84,11 @@
   text-wrap: balance;
   padding-top: 32px;
   margin-bottom: 15px;
+
+  /* 上方有分类时标题贴近分类 */
+  .joe_detail__category + .joe_detail-wrapper & {
+    padding-top: 12px;
+  }
   word-break: break-word;
 
   &.txt-shadow {
@@ -91,17 +104,6 @@
   padding-bottom: 15px;
   margin-bottom: 10px;
   border-bottom: 1px solid var(--border-lighter);
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -1.5px;
-    left: 0;
-    width: 80px;
-    height: 3px;
-    border-radius: 1.5px;
-    background: var(--theme);
-  }
 }
 
 .joe_detail__count-information {
@@ -129,7 +131,7 @@
     .author {
       .link {
         font-weight: 500;
-        color: var(--theme);
+        color: var(--theme-text);
 
         &:hover {
           text-decoration: underline;
@@ -339,7 +341,7 @@
     display: inline-block;
     line-height: 26px;
     text-indent: 0;
-    color: var(--theme);
+    color: var(--theme-text);
     position: relative;
 
     &:hover::after {
@@ -358,8 +360,8 @@
       transform: scaleX(0.25);
       opacity: 0;
       transition:
-        transform 0.35s,
-        opacity 0.35s;
+        transform var(--dur-base) var(--ease-out),
+        opacity var(--dur-base) var(--ease-out);
     }
   }
 
@@ -392,8 +394,8 @@
     margin: 5px 0;
     border-radius: var(--radius-img);
     transition:
-      transform 0.35s,
-      box-shadow 0.35s;
+      transform var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out);
 
     &:hover {
       transform: translateY(-5px);
@@ -498,7 +500,7 @@
 
     tbody {
       tr {
-        transition: background 0.35s;
+        transition: background var(--dur-base) var(--ease-out);
 
         &:last-child td {
           border-bottom: none;
@@ -552,8 +554,8 @@
         color: #fff;
         transform: scale(0);
         transition:
-          transform 0.85s,
-          opacity 0.85s;
+          transform 0.85s var(--ease-out),
+          opacity 0.85s var(--ease-out);
 
         &.active {
           transform: scale(1);
@@ -610,8 +612,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     transition:
-      border 0.25s,
-      color 0.25s;
+      border var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out);
 
     &:hover {
       color: var(--text-regular);
@@ -662,7 +664,7 @@
   margin-right: 6px;
   overflow: hidden;
   border-radius: 30px;
-  transition: all 0.25s;
+  transition: all var(--dur-base) var(--ease-out);
 
   .joe-icon-share {
     cursor: pointer;
@@ -678,7 +680,7 @@
     color: #fff;
     background: #9999ff;
     border-radius: 50%;
-    transition: transform 0.35s;
+    transition: transform var(--dur-base) var(--ease-out);
   }
 
   .share-icon-list {
@@ -695,7 +697,7 @@
     padding: 4px 40px 4px 0;
     background: var(--fill-base);
     border-radius: 50px;
-    transition: all 0.2s;
+    transition: all var(--dur-fast) var(--ease-out);
 
     a {
       position: relative;
@@ -711,7 +713,7 @@
     left: -68px;
     padding: 10px;
     background: #fff;
-    border-radius: 5px;
+    border-radius: var(--radius-inner);
     box-shadow: var(--shadow-block);
 
     &:after {
@@ -787,10 +789,10 @@
       right: 0;
       display: flex;
       padding: 12px;
-      border-radius: 5px;
+      border-radius: var(--radius-inner);
       background: var(--bg-muted);
       box-shadow: var(--shadow-block);
-      transition: all 0.25s;
+      transition: all var(--dur-base) var(--ease-out);
 
       &:before {
         position: absolute;
@@ -817,7 +819,7 @@
       &.two {
         li {
           &:first-child img {
-            border-radius: 5px 0 0 5px;
+            border-radius: var(--radius-inner) 0 0 var(--radius-inner);
           }
 
           &:last-child img {
@@ -860,11 +862,16 @@
         margin-bottom: 0;
       }
 
+      /* 三个图标原本各一种颜色（蓝 / 绿 / 黄），统一为主题色 */
       .icon {
         width: 18px;
         height: 18px;
         margin-right: 3px;
         vertical-align: -4px;
+
+        path:not([fill="#FFF"]) {
+          fill: var(--theme);
+        }
       }
 
       .link {
@@ -886,6 +893,7 @@
   margin-bottom: 15px;
 }
 
+/* 正文 ul li 的列表样式写在前面但权重更高，这里需要 !important 覆盖 */
 .joe_detail__friends-item {
   list-style: none !important;
   line-height: 1.5 !important;
@@ -898,7 +906,7 @@
     word-break: break-word;
     transform: translate3d(0, 0, 0) scale(1);
     transform-origin: bottom center;
-    transition: transform 0.35s;
+    transition: transform var(--dur-base) var(--ease-out);
     border-radius: var(--radius-wrap);
 
     &:hover {
@@ -962,35 +970,31 @@
   }
 }
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+/* 响应式 */
 @media (max-width: 1200px) {
-  html .joe_detail__friends {
+  .joe_detail__friends {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 992px) {
-  html .joe_detail__article {
+  .joe_detail__article {
     img {
       max-width: 100% !important;
     }
   }
-
-  html .joe_detail-wrapper {
-    padding: 0;
-  }
 }
 
 @media (max-width: 768px) {
-  html .joe_detail__friends {
+  .joe_detail__friends {
     grid-template-columns: repeat(1, 1fr);
   }
 
-  html .joe_detail__title {
+  .joe_detail__title {
     font-size: 18px;
   }
 
-  html .joe_detail__count-information {
+  .joe_detail__count-information {
     width: 100%;
 
     .avatar {
@@ -1011,17 +1015,17 @@
     }
   }
 
-  html .joe_detail__count-created {
+  .joe_detail__count-created {
     display: none;
   }
 
-  html .joe_detail__count {
+  .joe_detail__count {
     &::after {
       display: none;
     }
   }
 
-  html .joe_detail__overdue-wrapper {
+  .joe_detail__overdue-wrapper {
     padding: 10px;
 
     .title {
@@ -1039,7 +1043,7 @@
     }
   }
 
-  html .joe_detail__article {
+  .joe_detail__article {
     padding: 10px 0;
     font-size: 14px;
 
@@ -1059,7 +1063,7 @@
     }
   }
 
-  html .joe_detail__copyright {
+  .joe_detail__copyright {
     .content {
       .item {
         font-size: 13px;
@@ -1074,27 +1078,27 @@
 }
 
 @media (max-width: 768px) {
-  html .joe_donate {
+  .joe_donate {
     display: none;
   }
 }
 
 @media (max-width: 500px) {
-  html .joe_detail {
+  .joe_detail {
     padding: 12px;
     border-radius: 0;
   }
 
-  html .joe_detail__friends {
+  .joe_detail__friends {
     grid-template-columns: repeat(1, 1fr);
   }
 
-  html .joe_detail__title {
+  .joe_detail__title {
     padding-top: 30px;
     font-size: 18px;
   }
 
-  html .joe_detail__count-information {
+  .joe_detail__count-information {
     width: 100%;
 
     .avatar {
@@ -1122,21 +1126,21 @@
     }
   }
 
-  html .joe_detail__count-created {
+  .joe_detail__count-created {
     display: none;
   }
 
-  html .joe_detail__count {
+  .joe_detail__count {
     &::after {
       display: none;
     }
   }
 
-  html .joe_detail__overdue {
+  .joe_detail__overdue {
     padding-top: 0;
   }
 
-  html .joe_detail__overdue-wrapper {
+  .joe_detail__overdue-wrapper {
     padding: 10px;
 
     .title {
@@ -1154,7 +1158,7 @@
     }
   }
 
-  html .joe_detail__article {
+  .joe_detail__article {
     padding: 10px 0;
     font-size: 14px;
 
@@ -1163,7 +1167,7 @@
     }
   }
 
-  html .joe_detail__copyright {
+  .joe_detail__copyright {
     .content {
       .item {
         font-size: 13px;
@@ -1174,5 +1178,31 @@
         }
       }
     }
+  }
+}
+
+/* 暗黑模式 */
+html[data-mode="dark"] {
+  .joe_detail__article {
+    img {
+      filter: brightness(0.9);
+    }
+
+    .joe_detail__overdue-wrapper {
+      background: var(--fill-base);
+    }
+  }
+
+  .joe_detail__friends {
+    filter: brightness(0.8);
+  }
+}
+
+/* 友链页正文 */
+.page-links .joe_detail__article {
+  padding: 10px 0;
+
+  h3 {
+    margin: 20px 0;
   }
 }

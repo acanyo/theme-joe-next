@@ -2,15 +2,26 @@
 /**
  * 顶部导航。菜单来源：设置中选择的菜单，未选择时使用 Halo 主菜单。
  * 桌面端最多渲染三级菜单，移动端侧栏同样三级。
+ *
+ * 样式由设置 navbar.style 决定：
+ * - islands（默认，「阅读条」）：页面顶部透明盖在大图上；滚动后是一整条玻璃条，
+ *   Logo · 菜单 · 工具三段以细线分隔，底边是阅读进度线（styles/layout/islands.css）
+ * - classic：Joe 原来的通栏
+ * 文章页向下阅读时，中间一段由菜单换成「当前章节」，点击展开迷你目录（features/nav-chapter.ts）。
  */
 import MenuLink from "./MenuLink.astro";
 import MobileDrawer from "./MobileDrawer.astro";
+import Icon from "../common/Icon.astro";
 
 const MENU =
   "#strings.isEmpty(theme.config.navbar.menu) ? menuFinder.getPrimary() : menuFinder.getByName(theme.config.navbar.menu)";
 ---
 
-<header class="joe_header" th:with={`navMenu = \${${MENU}}`}>
+<header
+  class="joe_header"
+  th:classappend="${(theme.config.navbar.style ?: 'islands') == 'islands' ? 'joe_header--islands' : ''}"
+  th:with={`navMenu = \${${MENU}}`}
+>
   <div
     class="joe_header__above"
     th:classappend="|${theme.config.effects.reveal ? 'topInDown' : ''} ${theme.config.navbar.sticky ? 'fixed' : ''} ${theme.config.navbar.sticky and theme.config.navbar.glass ? 'glass' : ''}|"
@@ -24,7 +35,7 @@ const MENU =
         class="joe_header__above-slideicon"
         aria-label="打开菜单"
       >
-        <i class="joe-font joe-icon-caidan" aria-hidden="true"></i>
+        <Icon name="menu" />
       </button>
 
       <a
@@ -40,6 +51,13 @@ const MENU =
           data-fallback="avatar"
         />
       </a>
+      <a
+        th:unless="${theme.config.navbar.logo}"
+        class="joe_header__above-logo joe_header__above-logo--text"
+        th:href="${site.url}"
+        th:title="${site.title}"
+        th:text="${site.title}"
+      ></a>
 
       <nav
         class="joe_header__above-nav"
@@ -62,10 +80,7 @@ const MENU =
           >
             <div class="joe_dropdown__link">
               <MenuLink item="menuItem" withIcon />
-              <i
-                class="joe-font joe-icon-arrow-down joe_dropdown__link-icon"
-                aria-hidden="true"
-              ></i>
+              <Icon name="chevron-down" class="joe_dropdown__link-icon" />
             </div>
             <ul class="joe_dropdown__menu">
               <li
@@ -85,6 +100,21 @@ const MENU =
             </ul>
           </div>
         </th-block>
+        <!-- 阅读条：当前章节（文章页向下阅读时替换菜单），点击展开迷你目录 -->
+        <div class="joe_header__chapter" hidden>
+          <button
+            type="button"
+            class="joe_header__chapter-current"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="label">正在阅读</span>
+            <span class="name"></span>
+            <span class="steps" aria-hidden="true"></span>
+            <Icon name="chevron-down" />
+          </button>
+          <ol class="joe_header__chapter-list" role="menu"></ol>
+        </div>
       </nav>
 
       <div class="joe_header__above-search">
@@ -92,10 +122,37 @@ const MENU =
           type="button"
           class="submit"
           aria-label="搜索"
+          aria-keyshortcuts="Control+K Meta+K"
           data-joe-search
           th:if="${pluginFinder.available('PluginSearchWidget')}"
         >
-          <i class="joe-font joe-icon-search" aria-hidden="true"></i>
+          <Icon name="search" />
+          <kbd class="joe_header__kbd" aria-hidden="true">⌘K</kbd>
+        </button>
+        <!-- 阅读条样式：明暗切换（太阳 / 月亮变形），仅「访客切换」模式显示 -->
+        <button
+          type="button"
+          class="joe_header__mode"
+          aria-label="切换明暗模式"
+          th:if="${theme.config.general.color_mode == 'user'}"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <mask id="joe-mode-mask">
+              <rect width="24" height="24" fill="#fff"></rect>
+              <circle class="mode-cut" cx="24" cy="4" r="9" fill="#000"></circle>
+            </mask>
+            <circle class="mode-core" cx="12" cy="12" r="5" mask="url(#joe-mode-mask)"></circle>
+            <g class="mode-rays">
+              <line x1="12" y1="1.5" x2="12" y2="3.5"></line>
+              <line x1="12" y1="20.5" x2="12" y2="22.5"></line>
+              <line x1="1.5" y1="12" x2="3.5" y2="12"></line>
+              <line x1="20.5" y1="12" x2="22.5" y2="12"></line>
+              <line x1="4.6" y1="4.6" x2="6" y2="6"></line>
+              <line x1="18" y1="18" x2="19.4" y2="19.4"></line>
+              <line x1="4.6" y1="19.4" x2="6" y2="18"></line>
+              <line x1="18" y1="6" x2="19.4" y2="4.6"></line>
+            </g>
+          </svg>
         </button>
         <div class="nav_login" th:if="${theme.config.navbar.login}">
           <a
@@ -104,7 +161,7 @@ const MENU =
             th:href="@{/login}"
             title="登录"
           >
-            <i class="jiewen joe-icon-zhanghao" aria-hidden="true"></i>
+            <Icon name="user" />
           </a>
           <a
             class="login_after"
@@ -130,8 +187,10 @@ const MENU =
         data-joe-search
         th:if="${pluginFinder.available('PluginSearchWidget')}"
       >
-        <i class="joe-font joe-icon-search" aria-hidden="true"></i>
+        <Icon name="search" />
       </button>
+      <!-- 阅读条底边的阅读进度线（宽度由 --read 驱动） -->
+      <span class="joe_header__read" aria-hidden="true"></span>
     </div>
   </div>
 

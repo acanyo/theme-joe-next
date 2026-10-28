@@ -6,6 +6,7 @@
 import { COMMENT_ENABLED, el } from "../../config/expressions";
 import { POST_ICONS } from "../../data/post-icons";
 import PostAds from "./PostAds.astro";
+import Icon from "../common/Icon.astro";
 
 interface Props {
   subject: "post" | "singlePage";
@@ -34,7 +35,7 @@ const ARTICLE_CLASS = [
   {isPost && (
     <div
       class="joe_detail__category"
-      th:unless="${#lists.isEmpty(post.categories)}"
+      th:unless="${#lists.isEmpty(post.categories) or (theme.config.post.header_style ?: 'immersive') == 'immersive'}"
     >
       <a
         th:each="category, stat : ${post.categories}"
@@ -54,6 +55,7 @@ const ARTICLE_CLASS = [
     ></span>
   )}
   <div class="joe_detail-wrapper">
+    <th-block th:unless={isPost ? "${(theme.config.post.header_style ?: 'immersive') == 'immersive'}" : "${false}"}>
     <h1
       class="joe_detail__title"
       th:classappend="${theme.config.post.title_shadow ? 'txt-shadow' : ''}"
@@ -110,6 +112,7 @@ const ARTICLE_CLASS = [
         th:text={`\${#dates.format(${s}.status.lastModifyTime, 'MM/dd')}`}
       ></time>
     </div>
+    </th-block>
 
     <div
       class="joe_detail__overdue"
@@ -164,11 +167,8 @@ const ARTICLE_CLASS = [
       >
         <button type="button" class="agree" data-joe-like aria-label="点赞">
           <span class="icon">
-            <i class="joe-font joe-icon-like icon-like" aria-hidden="true" />
-            <i
-              class="joe-font joe-icon-like-fill icon-unlike"
-              aria-hidden="true"
-            />
+            <Icon name="like" class="icon-like" />
+            <Icon name="like-fill" class="icon-unlike" />
           </span>
           <span class="nums" th:text="${post.stats.upvote}">
             0

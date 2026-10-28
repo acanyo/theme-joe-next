@@ -1,12 +1,13 @@
 ---
 /** 文章面包屑 */
+import Icon from "../common/Icon.astro";
 ---
 
 <div class="joe_container joe_bread">
   <nav aria-label="面包屑">
     <ul class="joe_bread__bread">
       <li class="item">
-        <i class="jiewen joe-icon-shouye" aria-hidden="true"></i>
+        <Icon name="home" />
         <a th:href="@{/}" class="link">
           首页
         </a>

@@ -6,7 +6,7 @@
  * 属性值来自文章作者，渲染时一律转义，避免把属性当作 HTML 注入。
  */
 import { copyText } from "../core/clipboard";
-import { fetchMeting, loadAPlayer } from "./aplayer";
+import { iconHtml } from "../core/icons";
 import { escapeHtml, parseItems, safeUrl } from "./shortcode-parse";
 
 const attr = (el: Element, name: string, fallback = ""): string =>
@@ -80,7 +80,7 @@ const SHORTCODES: Record<string, (el: HTMLElement) => void | Promise<void>> = {
       ["secondary", "success", "warning", "error", "info"],
       "secondary",
     );
-    el.innerHTML = `<a class="joe_anote ${type}" href="${safeUrl(attr(el, "href"))}" target="_blank" rel="noopener noreferrer nofollow"><span class="joe_anote__icon"><i class="joe-font joe-icon-download"></i></span><span class="joe_anote__content">${safe(el, "content", "标签按钮")}</span></a>`;
+    el.innerHTML = `<a class="joe_anote ${type}" href="${safeUrl(attr(el, "href"))}" target="_blank" rel="noopener noreferrer nofollow"><span class="joe_anote__icon">${iconHtml("download")}</span><span class="joe_anote__content">${safe(el, "content", "标签按钮")}</span></a>`;
   },
   "joe-dotted": (el) => {
     const start = cssValue(el, "startColor", "#ff6c6c");
@@ -90,7 +90,7 @@ const SHORTCODES: Record<string, (el: HTMLElement) => void | Promise<void>> = {
   "joe-cloud": (el) => {
     const type = attr(el, "type", "default");
     const password = attr(el, "password");
-    el.innerHTML = `<span class="joe_cloud"><div class="joe_cloud__logo _${escapeHtml(type)}"></div><div class="joe_cloud__describe"><div class="joe_cloud__describe-title">${safe(el, "title", "默认标题")}</div><div class="joe_cloud__describe-type">来源：${CLOUD_TYPES[type] ?? "默认网盘"}${password ? ` | 提取码：${escapeHtml(password)}` : ""}</div></div><a class="joe_cloud__btn" href="${safeUrl(attr(el, "url"))}" target="_blank" rel="noopener noreferrer nofollow" aria-label="下载"><i class="joe-font joe-icon-download"></i></a></span>`;
+    el.innerHTML = `<span class="joe_cloud"><div class="joe_cloud__logo _${escapeHtml(type)}"></div><div class="joe_cloud__describe"><div class="joe_cloud__describe-title">${safe(el, "title", "默认标题")}</div><div class="joe_cloud__describe-type">来源：${CLOUD_TYPES[type] ?? "默认网盘"}${password ? ` | 提取码：${escapeHtml(password)}` : ""}</div></div><a class="joe_cloud__btn" href="${safeUrl(attr(el, "url"))}" target="_blank" rel="noopener noreferrer nofollow" aria-label="下载">${iconHtml("download")}</a></span>`;
   },
   "joe-message": (el) => {
     const type = oneOf(
@@ -230,7 +230,7 @@ const SHORTCODES: Record<string, (el: HTMLElement) => void | Promise<void>> = {
     );
   },
   "joe-copy-icon": (el) => {
-    el.innerHTML = `<button type="button" class="joe_copy">${safe(el, "title")}<i class="${safe(el, "icon", "joe-font joe-icon-copy")}" aria-hidden="true"></i></button>`;
+    el.innerHTML = `<button type="button" class="joe_copy">${safe(el, "title")}${el.hasAttribute("icon") ? `<i class="${safe(el, "icon")}" aria-hidden="true"></i>` : iconHtml("copy")}</button>`;
     el.querySelector("button")?.addEventListener(
       "click",
       () => void copyText(attr(el, "content", "默认文本")),
@@ -271,44 +271,39 @@ const SHORTCODES: Record<string, (el: HTMLElement) => void | Promise<void>> = {
     }
     video.src = src;
   },
-  "joe-mp3": async (el) => {
-    const url = attr(el, "url");
+  /** 音频：原生 <audio> 播放 */
+  "joe-mp3": (el) => {
+    const url = attr(el, "url").trim();
     if (!url) {
       el.textContent = "音频地址未填写！";
       return;
     }
-    const container = document.createElement("span");
-    container.style.display = "block";
-    el.replaceChildren(container);
-    const APlayer = await loadAPlayer();
-    new APlayer({
-      container,
-      audio: [
-        { name: attr(el, "name"), artist: "", url, cover: attr(el, "cover") },
-      ],
-    });
+    const audio = document.createElement("audio");
+    audio.controls = true;
+    audio.preload = "none";
+    audio.src = url;
+    audio.className = "joe_audio";
+    const name = attr(el, "name");
+    if (name) audio.setAttribute("aria-label", name);
+    el.replaceChildren(audio);
   },
-  "joe-music": (el) => mountMeting(el, "song"),
-  "joe-mlist": (el) => mountMeting(el, "playlist"),
+  /** 网易云单曲 / 歌单：主题不再内置播放器，改为指向网易云的链接 */
+  "joe-music": (el) => renderNeteaseLink(el, "song"),
+  "joe-mlist": (el) => renderNeteaseLink(el, "playlist"),
 };
 
-async function mountMeting(
-  el: HTMLElement,
-  type: "song" | "playlist",
-): Promise<void> {
+function renderNeteaseLink(el: HTMLElement, type: "song" | "playlist"): void {
   const id = attr(el, "id");
-  if (!id) {
+  if (!/^\d+$/.test(id)) {
     el.textContent = "网易云 ID 未填写！";
     return;
   }
-  const container = document.createElement("span");
-  container.style.display = "block";
-  el.replaceChildren(container);
-  const [APlayer, audio] = await Promise.all([
-    loadAPlayer(),
-    fetchMeting(type, id),
-  ]);
-  new APlayer({ container, audio, lrcType: 3 });
+  const link = document.createElement("a");
+  link.href = `https://music.163.com/#/${type}?id=${id}`;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = type === "song" ? "在网易云音乐中收听" : "在网易云音乐中打开歌单";
+  el.replaceChildren(link);
 }
 
 export function initShortcodes(root: ParentNode = document): void {

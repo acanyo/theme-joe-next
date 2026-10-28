@@ -15,7 +15,7 @@ const HOT_QUERY =
 <div class="joe_index__banner">
   <div class="swiper" data-joe-banner>
     <div class="swiper-wrapper">
-      <th-block th:each="slide : ${theme.config.carousel.slides}">
+      <th-block th:each="slide : ${theme.config.home.carousel_slides}">
         <th-block th:switch="${slide.source}">
           <th-block
             th:case="'post'"
@@ -58,9 +58,9 @@ const HOT_QUERY =
     </div>
     <div
       class="swiper-pagination"
-      th:if="${theme.config.carousel.dots}"
+      th:if="${theme.config.home.carousel_dots}"
     ></div>
-    <th-block th:if="${theme.config.carousel.draggable and theme.config.carousel.arrows}">
+    <th-block th:if="${theme.config.home.carousel_draggable and theme.config.home.carousel_arrows}">
       <button
         type="button"
         class="swiper-button-next"

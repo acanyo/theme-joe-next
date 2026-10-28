@@ -132,7 +132,8 @@ function initDrawer(): void {
 }
 
 function initHeaderScroll(): void {
-  if (isMobile() || getThemeConfig().enableFixedHeader) return;
+  // 浮岛样式不整体隐藏导航，由 initIslandsScroll 处理
+  if (isMobile() || getThemeConfig().enableFixedHeader || isIslands()) return;
   const header = $(".joe_header__above");
   if (!header) return;
   const headerHeight = header.offsetHeight;
@@ -152,13 +153,101 @@ function initHeaderScroll(): void {
   );
 }
 
+/**
+ * 阅读条导航（navbar.style = islands）的附加交互，经典样式下不执行：
+ * - 页面顶部时 .is-top（透明），离开顶部后是一整条玻璃条
+ * - 文章页向下阅读时 .is-reading：中间一段由菜单换成当前章节（见 nav-chapter.ts），向上滚动恢复菜单
+ * - 底边阅读进度线（--read 0~1）：只在文章页且开启了「阅读进度条」时显示（#swup 的 data-joe-progress 为颜色）
+ * - 当前菜单项下方的主题色下划线随鼠标在菜单项之间滑动（--bar-x / --bar-w）
+ */
+const isIslands = () => !!$(".joe_header--islands");
+
+function initIslandsScroll(): void {
+  const header = $(".joe_header__above");
+  if (!header || !isIslands()) return;
+  let lastY = window.scrollY;
+  const update = () => {
+    const y = window.scrollY;
+    const delta = y - lastY;
+    header.classList.toggle("is-top", y < 24);
+    // 忽略细微抖动，避免触控板惯性滚动时来回切换
+    if (Math.abs(delta) > 4) {
+      const hasChapter = !$(".joe_header__chapter")?.hidden;
+      header.classList.toggle("is-reading", hasChapter && delta > 0 && y > 240);
+      lastY = y;
+    }
+    if (y < 24) {
+      header.classList.remove("is-reading");
+      lastY = y;
+    }
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    header.style.setProperty(
+      "--read",
+      (max > 0 ? Math.min(1, y / max) : 0).toFixed(4),
+    );
+  };
+  syncProgress = () => {
+    const color = $("#swup")?.dataset.joeProgress ?? "";
+    header.classList.toggle("has-progress", !!color);
+    header.style.setProperty("--read-color", color || "var(--theme)");
+  };
+  syncProgress();
+  update();
+  document.addEventListener("scroll", throttle(update, 50), { passive: true });
+  refreshIslands = update;
+}
+
+let refreshIslands = (): void => {};
+let syncProgress = (): void => {};
+
+/** 菜单下方的主题色下划线：停在当前项，鼠标悬停时滑到对应项 */
+function initNavBar(): void {
+  const nav = $(".joe_header__above-nav");
+  if (!nav || !isIslands()) return;
+  const moveTo = (item: HTMLElement | null) => {
+    if (!item) {
+      nav.style.setProperty("--bar-o", "0");
+      return;
+    }
+    const navBox = nav.getBoundingClientRect();
+    const box = item.getBoundingClientRect();
+    nav.style.setProperty("--bar-x", `${box.left - navBox.left + 14}px`);
+    nav.style.setProperty("--bar-w", `${Math.max(0, box.width - 28)}px`);
+    nav.style.setProperty("--bar-o", "1");
+  };
+  // 当前项可能是一级链接，也可能在某个下拉菜单里（此时停在整个下拉项上）
+  const current = () => {
+    const link = $<HTMLElement>("a.item.current", nav);
+    return link?.closest<HTMLElement>(".joe_dropdown") ?? link;
+  };
+  for (const item of $$<HTMLElement>(":scope > a.item, :scope > .joe_dropdown", nav))
+    item.addEventListener("mouseenter", () => moveTo(item));
+  nav.addEventListener("mouseleave", () => moveTo(current()));
+  barToCurrent = () => moveTo(current());
+  void document.fonts?.ready.then(() => barToCurrent());
+  window.addEventListener("resize", throttle(() => barToCurrent(), 150));
+}
+
+let barToCurrent = (): void => {};
+
 function initSearch(): void {
-  $$("[data-joe-search]").forEach((button) =>
+  const buttons = $$("[data-joe-search]");
+  buttons.forEach((button) =>
     button.addEventListener("click", (event) => {
       event.preventDefault();
       window.SearchWidget?.open();
     }),
   );
+  if (!buttons.length) return;
+  // ⌘K / Ctrl K 打开搜索；Windows / Linux 上提示改为 Ctrl K
+  if (!/Mac|iPhone|iPad/.test(navigator.platform))
+    $$(".joe_header__kbd").forEach((kbd) => (kbd.textContent = "Ctrl K"));
+  document.addEventListener("keydown", (event) => {
+    if (event.key.toLowerCase() !== "k" || !(event.metaKey || event.ctrlKey))
+      return;
+    event.preventDefault();
+    window.SearchWidget?.open();
+  });
 }
 
 export function initNavigation(): void {
@@ -166,11 +255,17 @@ export function initNavigation(): void {
   initDrawer();
   initHeaderScroll();
   initSearch();
+  initIslandsScroll();
+  highlightCurrentMenu();
+  initNavBar();
 }
 
 /** 切页后同步导航状态 */
 export function refreshNavigation(): void {
   highlightCurrentMenu();
+  syncProgress();
+  refreshIslands();
+  barToCurrent();
   if (document.documentElement.classList.contains("disable-scroll"))
     closeOverlays(false);
 }

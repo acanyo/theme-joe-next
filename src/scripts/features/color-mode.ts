@@ -2,6 +2,9 @@
  * 明暗模式切换。
  * 首屏模式由 ConfigScript 在 <head> 中同步设置；这里只处理用户手动切换，
  * 并同步 Halo 插件组件约定的 `data-color-scheme`。
+ *
+ * 切换按钮有两处：右下角悬浮按钮（.joe_action_item.mode）与阅读条导航中的按钮（.joe_header__mode）。
+ * 支持 View Transitions 时，新模式从被点击的按钮处以圆形扩散展开。
  */
 import { $$ } from "../core/dom";
 import { getThemeConfig } from "../core/config";
@@ -37,15 +40,59 @@ function syncIcons(): void {
   );
 }
 
+/** 以 (x, y) 为圆心，圆形扩散切换到新模式；不支持或开启「减少动态效果」时直接切换 */
+export function toggleColorModeAt(x: number, y: number): void {
+  const next: ColorMode = currentMode() === "dark" ? "light" : "dark";
+  const apply = () => {
+    applyMode(next);
+    syncIcons();
+  };
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!document.startViewTransition || reduced) {
+    apply();
+    return;
+  }
+  const radius = Math.hypot(
+    Math.max(x, window.innerWidth - x),
+    Math.max(y, window.innerHeight - y),
+  );
+  const root = document.documentElement;
+  root.classList.add("is-mode-switching");
+  const transition = document.startViewTransition(apply);
+  void transition.ready.then(() => {
+    root.animate(
+      {
+        clipPath: [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${radius}px at ${x}px ${y}px)`,
+        ],
+      },
+      {
+        duration: 520,
+        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        pseudoElement: "::view-transition-new(root)",
+      },
+    );
+  });
+  void transition.finished.finally(() =>
+    root.classList.remove("is-mode-switching"),
+  );
+}
+
+function toggleFrom(button: HTMLElement): void {
+  const box = button.getBoundingClientRect();
+  toggleColorModeAt(box.left + box.width / 2, box.top + box.height / 2);
+}
+
 export function initColorMode(): void {
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   if (getThemeConfig().themeMode !== "user") return;
   syncIcons();
-  $$(".joe_action_item.mode").forEach((button) =>
-    button.addEventListener("click", (event) => {
-      event.stopPropagation();
-      applyMode(currentMode() === "dark" ? "light" : "dark");
-      syncIcons();
-    }),
+  $$<HTMLElement>(".joe_action_item.mode, .joe_header__mode").forEach(
+    (button) =>
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleFrom(button);
+      }),
   );
 }

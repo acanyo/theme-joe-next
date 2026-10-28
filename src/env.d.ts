@@ -59,29 +59,15 @@ declare namespace astroHTML.JSX {
   }
 }
 
+declare module "virtual:joe-icons" {
+  import type { SCRIPT_ICONS } from "../integrations/icons";
+  const icons: Record<(typeof SCRIPT_ICONS)[number], string>;
+  export default icons;
+}
+
 declare module "*?url" {
   const url: string;
   export default url;
-}
-
-declare module "aplayer" {
-  interface AudioItem {
-    name: string;
-    artist: string;
-    url: string;
-    cover?: string;
-    lrc?: string;
-  }
-  interface APlayerOptions {
-    container: HTMLElement;
-    audio: AudioItem[];
-    listFolded?: boolean;
-    order?: "list" | "random";
-    lrcType?: 0 | 1 | 2 | 3;
-  }
-  export default class APlayer {
-    constructor(options: APlayerOptions);
-  }
 }
 
 declare module "hls.js/light" {

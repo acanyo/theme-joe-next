@@ -1,8 +1,7 @@
 /**
- * 侧栏增强：3D 标签云（原生 SVG 实现，替代 3dtag jQuery 插件）、人生倒计时、网易云歌单。
+ * 侧栏增强：3D 标签云（原生 SVG 实现，替代 3dtag jQuery 插件）、人生倒计时。
  */
 import { $, $$, isMobile } from "../core/dom";
-import { fetchMeting, loadAPlayer } from "../content/aplayer";
 import { loop, observe } from "../core/lifecycle";
 
 const CLOUD_COLORS = [
@@ -43,7 +42,7 @@ function renderCloud3d(list: HTMLElement): void {
     const phi = Math.acos(-1 + (2 * i + 1) / links.length);
     const theta = Math.sqrt(links.length * Math.PI) * phi;
     const el = link.cloneNode(true) as HTMLAnchorElement;
-    el.style.cssText = `position:absolute;left:50%;top:50%;white-space:nowrap;font-weight:500;color:${CLOUD_COLORS[i % CLOUD_COLORS.length]};will-change:transform,opacity;`;
+    el.style.cssText = `position:absolute;left:50%;top:50%;white-space:nowrap;font-weight:500;--cloud-color:${CLOUD_COLORS[i % CLOUD_COLORS.length]};color:var(--cloud-text);will-change:transform,opacity;`;
     cloud.appendChild(el);
     return {
       el,
@@ -148,36 +147,6 @@ function initLifetime(): void {
     .join("");
 }
 
-/** 网易云歌单：通过 Meting API 获取歌单，APlayer 播放（进入视口后才加载） */
-async function mountMusic(el: HTMLElement): Promise<void> {
-  const [APlayer, audio] = await Promise.all([
-    loadAPlayer(),
-    fetchMeting("playlist", el.dataset.id ?? "", el.dataset.server),
-  ]);
-  new APlayer({
-    container: el,
-    listFolded: true,
-    order: "random",
-    lrcType: 3,
-    audio,
-  });
-}
-
-function initMusic(): void {
-  const players = $$("[data-joe-music]");
-  if (!players.length) return;
-  const observer = observe((entries) => {
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      observer.unobserve(entry.target);
-      void mountMusic(entry.target as HTMLElement).catch((error) =>
-        console.warn("[joe-next] 歌单加载失败", error),
-      );
-    }
-  });
-  players.forEach((el) => observer.observe(el));
-}
-
 /** 博主卡片彩带动画：仅在开启设置（渲染了 canvas）时加载 */
 function initStrips(): void {
   const cards = $$("[data-joe-blogger-card]").filter((card) =>
@@ -193,5 +162,4 @@ export function initAsideWidgets(): void {
   initStrips();
   initClouds();
   initLifetime();
-  initMusic();
 }

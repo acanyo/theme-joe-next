@@ -9,6 +9,19 @@ html {
   --bg-muted: #f5f5f5;
   --bg-raised: #fff;
   --bg-glass: rgba(255, 255, 255, 0.65);
+  /* 液态玻璃：半透明底 + 背景模糊增饱和 + 顶部 1px 内高光 + 大而淡的投影（导航浮岛、下拉、浮层按钮）*/
+  --glass-bg: rgb(255 255 255 / 86%);
+  --glass-bg-strong: rgb(255 255 255 / 84%);
+  --glass-blur: blur(20px) saturate(180%);
+  --glass-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 70%), 0 0 0 1px rgb(15 23 42 / 6%),
+    0 6px 28px -10px rgb(15 23 42 / 22%);
+  /* 动效：全站统一的缓动与时长。悬停、颜色等用 --ease-out；出现、展开、按压回弹用 --ease-spring */
+  --ease-spring: cubic-bezier(0.34, 1.36, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 0.18s;
+  --dur-base: 0.3s;
+  --dur-slow: 0.5s;
   --text-primary: #1f2329;
   --text-regular: #474c54;
   --text-title: #333;
@@ -30,11 +43,14 @@ html {
   --code-background: #e8f3ff;
   --overdue-border: #ffbb76;
   --overdue-background: #fffcef;
-  --radius-wrap: 12px;
+  /* 卡片：6px 圆角、1px 细描边 + 几乎看不见的投影；悬停时描边与阴影染上主题色（参考 Heo） */
+  --radius-wrap: 6px;
   --radius-inner: 6px;
-  --radius-img: 8px;
+  --radius-img: 6px;
+  --card-border: rgb(15 23 42 / 8%);
   --shadow:
-    0 1px 2px rgb(15 23 42 / 4%), 0 8px 24px -12px rgb(15 23 42 / 16%);
+    0 0 0 1px var(--card-border), 0 8px 16px -10px rgb(15 23 42 / 10%);
+
   --text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-code: #bdbdbd;
   --shadow-block: 1px 2px 10px 0 #afafaf;
@@ -62,6 +78,11 @@ html {
     --bg-muted: #2a2b2f;
     --bg-raised: #2a2b2f;
     --bg-glass: rgba(0, 0, 0, 0.65);
+    --glass-bg: rgb(32 33 36 / 84%);
+    --glass-bg-strong: rgb(36 37 40 / 86%);
+    --glass-shadow:
+      inset 0 1px 1px rgb(255 255 255 / 8%), 0 0 0 1px rgb(255 255 255 / 7%),
+      0 8px 30px -10px rgb(0 0 0 / 65%);
     --text-primary: #e3e3e6;
     --text-regular: #c2c2c8;
     --text-title: #ececef;
@@ -83,8 +104,9 @@ html {
     --code-background: #353246;
     --overdue-border: #6f553b;
     --overdue-background: #2b2715;
+    --card-border: rgb(255 255 255 / 7%);
     --shadow:
-      0 0 0 1px rgb(255 255 255 / 4%), 0 8px 24px -12px rgb(0 0 0 / 60%);
+      0 0 0 1px var(--card-border), 0 8px 18px -10px rgb(0 0 0 / 55%);
     --text-shadow: none;
     --shadow-code: #191919;
     --shadow-block: 2px 4px 10px 0 #0a0a0a;
@@ -104,105 +126,29 @@ html {
     --background-friend: #383838;
     --background-friend-block: #232323;
     background: var(--bg-page);
-
-    /* 暗黑模式下需要修改的样式*/
-    body:after {
-      background: #141517;
-      z-index: -200;
-    }
-
-    img {
-      filter: brightness(0.9);
-    }
-
-    .motto_day_words {
-      filter: invert(1);
-    }
-
-    .joe_header {
-      .joe_header__above-logo {
-        svg {
-          display: block;
-        }
-      }
-    }
-
-    .joe_detail__article {
-      img {
-        filter: brightness(0.9);
-      }
-
-      .joe_detail__overdue-wrapper {
-        background: var(--fill-base);
-      }
-    }
-
-    .aplayer {
-      background: var(--fill-base);
-
-      .aplayer-list li {
-        color: var(--text-primary);
-        border-color: var(--border-lighter);
-
-        &.aplayer-list-light,
-        &:hover {
-          background: #232324 !important;
-        }
-      }
-
-      .aplayer-info {
-        border-color: var(--border-lighter);
-      }
-
-      .aplayer-music {
-        color: var(--text-icon);
-        border-color: var(--border-lighter);
-      }
-
-      .aplayer-time {
-        .aplayer-icon:hover path {
-          fill: var(--text-icon) !important;
-        }
-      }
-
-      .aplayer-lrc {
-        &:before {
-          height: 5px;
-          background: linear-gradient(
-            180deg,
-            rgba(0, 0, 0, 0.3) 0,
-            rgba(0, 0, 0, 0)
-          );
-        }
-
-        &:after {
-          background: linear-gradient(
-            180deg,
-            rgba(0, 0, 0, 0) 0,
-            rgba(0, 0, 0, 0.3)
-          );
-        }
-      }
-    }
-
-    .joe_detail__friends {
-      filter: brightness(0.8);
-    }
-
-    .toc-nodata {
-      em {
-        opacity: 0.4;
-      }
-    }
-
-    .site_driven {
-      img {
-        &.baidu,
-        &.huawei,
-        &.jinshan {
-          filter: invert(1);
-        }
-      }
-    }
   }
+}
+
+/* 依赖主题色的派生变量：--theme 由 DynamicStyle 写在 body 上，必须在 body（或更深层）定义才能取到 */
+body {
+  --tint: color-mix(in srgb, var(--theme) 12%, transparent);
+  /*
+   * 主题色可由用户任意设置，用于文字或白字底色时需保证 WCAG AA 4.5:1 对比度：
+   * --theme-text   主题色用作文字：浅色模式限制明度上限，暗黑模式限制明度下限
+   * --theme-solid  白色文字的主题色底：限制明度上限
+   * 本身已足够深 / 浅的主题色保持原样。不支持相对颜色语法的浏览器按固定比例混色。
+   * 背景、边框、图标等非文字用途仍使用 --theme。
+   */
+  --theme-text: color-mix(in oklab, var(--theme) 68%, #000);
+  --theme-text: oklch(from var(--theme) min(l, 0.52) c h);
+  --theme-solid: color-mix(in oklab, var(--theme) 68%, #000);
+  --theme-solid: oklch(from var(--theme) min(l, 0.5) c h);
+  --shadow-hover:
+    0 0 0 1px var(--theme),
+    0 10px 20px -10px color-mix(in srgb, var(--theme) 40%, transparent);
+}
+
+html[data-mode="dark"] body {
+  --theme-text: color-mix(in oklab, var(--theme) 70%, #fff);
+  --theme-text: oklch(from var(--theme) max(l, 0.76) c h);
 }

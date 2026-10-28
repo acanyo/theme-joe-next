@@ -58,18 +58,6 @@ spec:
               label: 当前页
             - value: new
               label: 新标签
-        - $formkit: switch
-          name: back_to_top
-          id: back_to_top
-          key: back_to_top
-          label: 返回顶部按钮
-          value: false
-        - $formkit: switch
-          name: back_to_top_smooth
-          id: back_to_top_smooth
-          key: back_to_top_smooth
-          label: 平滑滚动到顶部
-          value: false
     - group: appearance
       label: 外观
       formSchema:
@@ -87,68 +75,34 @@ spec:
           label: 主题色（暗黑）
           value: "#9999ff"
           help: "默认 #9999ff"
-        - $formkit: switch
-          value: false
-          name: background_light_enabled
-          id: background_light_enabled
-          key: background_light_enabled
-          label: 浅色背景图
         - $formkit: attachment
-          if: $get(background_light_enabled).value == true
           name: background_light
           id: background_light
           key: background_light
-          label: 浅色背景图地址
-          help: 建议 webp 格式
+          label: 浅色背景图
+          help: 填写后浅色模式使用这张背景图，留空使用默认背景色；建议 webp 格式
           value: ""
-        - $formkit: switch
-          value: false
-          name: background_dark_enabled
-          id: background_dark_enabled
-          key: background_dark_enabled
-          label: 暗黑背景图
         - $formkit: attachment
-          if: $get(background_dark_enabled).value == true
           name: background_dark
           id: background_dark
           key: background_dark
-          label: 暗黑背景图地址
-          help: 建议 webp 格式
+          label: 暗黑背景图
+          help: 填写后暗黑模式使用这张背景图，留空使用默认背景色
           value: ""
-        - $formkit: select
-          name: font
-          id: font
-          key: font
-          label: 网站字体
-          value: off
-          help: 填写了自定义字体时以自定义字体为准
-          options:
-            - value: off
-              label: 默认
-            - value: joe_slate.woff2
-              label: Joe Slate
-            - value: joe_future.woff2
-              label: Joe Future
         - $formkit: attachment
           name: custom_font
           id: custom_font
           key: custom_font
           label: 自定义字体
           value: ""
-          help: 字体文件地址，建议 woff2
-        - $formkit: text
-          name: iconfont
-          id: iconfont
-          key: iconfont
-          label: iconfont 图标库
-          value: ""
-          help: iconfont 生成的 CSS 链接，会插入 head 末尾
+          help: 字体文件地址，建议 woff2；留空使用系统字体
         - $formkit: color
           name: scrollbar_color
           id: scrollbar_color
           key: scrollbar_color
           label: 滚动条颜色
-          value: "#fb6c28"
+          value: ""
+          help: "留空时浅色模式为 #c0c4cc、暗黑模式为 #666"
         - $formkit: text
           name: scrollbar_width
           id: scrollbar_width
@@ -163,9 +117,113 @@ spec:
           label: 全站灰色
           value: false
           help: 用于哀悼日等场景
-    - group: effects
-      label: 动效
+    - group: navbar
+      label: 导航
       formSchema:
+        - $formkit: radio
+          name: style
+          id: style
+          key: style
+          label: 导航样式
+          value: islands
+          help: 阅读条：页面顶部时透明，滚动后是一整条玻璃条，底边显示阅读进度；文章页向下阅读时中间显示当前章节，点击可展开目录跳转。经典：Joe 原来的通栏导航
+          options:
+            - value: islands
+              label: 阅读条
+            - value: classic
+              label: 经典
+        - $formkit: menuSelect
+          name: menu
+          id: menu
+          key: menu
+          label: 导航菜单
+          value: ""
+          help: 留空使用 Halo 的主菜单
+        - $formkit: switch
+          name: logo
+          id: logo
+          key: logo
+          label: 显示 Logo
+          help: 使用 Halo 站点设置中的 Logo
+          value: false
+        - $formkit: text
+          name: logo_link
+          id: logo_link
+          key: logo_link
+          label: Logo 链接
+          value: ""
+          help: "留空回到首页，填 # 不跳转"
+        - $formkit: text
+          name: logo_radius
+          id: logo_radius
+          key: logo_radius
+          label: Logo 圆角
+          value: 4px
+          help: 像素或百分比，默认 4px
+        - $formkit: switch
+          name: icons
+          id: icons
+          key: icons
+          label: 菜单图标
+          help: 显示菜单项在后台配置的图标
+          value: false
+        - $formkit: switch
+          name: login
+          id: login
+          key: login
+          label: 登录入口
+          value: false
+          help: 未登录显示登录按钮，已登录显示头像
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 经典样式
+        - $formkit: switch
+          name: sticky
+          id: sticky
+          key: sticky
+          label: 吸顶
+          help: 向上滚动时显示导航栏；移动端始终吸顶
+          value: false
+          if: $get(style).value === 'classic'
+        - $formkit: switch
+          name: glass
+          id: glass
+          key: glass
+          label: 毛玻璃背景
+          help: 仅吸顶时生效
+          value: false
+          if: $get(style).value === 'classic' && $get(sticky).value === true
+        - $formkit: switch
+          name: full_width
+          id: full_width
+          key: full_width
+          label: 通栏宽度
+          help: 关闭时与内容区同宽
+          value: false
+          if: $get(style).value === 'classic'
+        - $formkit: switch
+          name: icon_animation
+          id: icon_animation
+          key: icon_animation
+          label: 菜单图标悬停动画
+          value: false
+          if: $get(style).value === 'classic'
+        - $formkit: switch
+          name: active_glow
+          id: active_glow
+          key: active_glow
+          label: 当前项发光
+          help: 当前菜单项文字加主题色光晕
+          value: false
+          if: $get(style).value === 'classic'
+    - group: effects
+      label: 动效与特效
+      formSchema:
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 页面
         - $formkit: select
           name: page_transition
           id: page_transition
@@ -189,6 +247,47 @@ spec:
           if: $get(page_transition).value === 'swup'
           help: 鼠标悬停或触摸链接时提前请求页面，点击后几乎立即切换
         - $formkit: switch
+          name: reveal
+          id: reveal
+          key: reveal
+          label: 模块缓入动画
+          help: 页面载入时模块依次淡入
+          value: false
+        - $formkit: switch
+          value: false
+          name: list_animation
+          id: list_animation
+          key: list_animation
+          label: 列表入场动画
+          help: 首页文章、瞬间、朋友圈、图库的列表项进入视口时播放动画
+        - $formkit: select
+          name: list_animation_name
+          id: list_animation_name
+          key: list_animation_name
+          label: 入场动画效果
+          value: fadeInUp
+          help: 四处列表共用
+          options:
+            - value: fadeInUp
+              label: 上浮淡入
+            - value: fadeIn
+              label: 淡入
+            - value: fadeInDown
+              label: 下落淡入
+            - value: fadeInLeft
+              label: 左侧滑入
+            - value: fadeInRight
+              label: 右侧滑入
+            - value: zoomIn
+              label: 缩放淡入
+            - value: blurIn
+              label: 模糊渐显
+            - value: flipInX
+              label: 翻转
+            - value: bounceIn
+              label: 弹出
+          if: $get(list_animation).value === true
+        - $formkit: switch
           value: false
           name: loading_bar
           id: loading_bar
@@ -209,15 +308,25 @@ spec:
           id: loading_bar_color
           key: loading_bar_color
           label: 加载条颜色
-          value: "#fb6c28"
-          help: 留空使用主题色
+          value: ""
+          help: 留空跟随主题色
         - $formkit: switch
-          name: reveal
-          id: reveal
-          key: reveal
-          label: 模块缓入动画
-          help: 页面载入时模块依次淡入
+          name: back_to_top
+          id: back_to_top
+          key: back_to_top
+          label: 返回顶部按钮
           value: false
+        - $formkit: switch
+          name: back_to_top_smooth
+          id: back_to_top_smooth
+          key: back_to_top_smooth
+          label: 平滑滚动到顶部
+          value: false
+          if: $get(back_to_top).value === true
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 特效
         - $formkit: select
           name: cursor_skin
           id: cursor_skin
@@ -303,6 +412,13 @@ spec:
             - value: balloon
               label: 上升的气球
         - $formkit: switch
+          name: context_menu
+          id: context_menu
+          key: context_menu
+          label: 自定义右键菜单
+          value: false
+          help: 右键时显示主题菜单：链接可新窗口打开 / 复制，图片可打开 / 复制地址，选中文字可复制 / 站内搜索，空白处可后退、刷新、回到顶部、切换明暗。按住 Ctrl / ⌘ 右键或在输入框中仍是浏览器原生菜单；移动端不启用
+        - $formkit: switch
           value: false
           name: offscreen_title
           id: offscreen_title
@@ -323,465 +439,81 @@ spec:
           if: $get(offscreen_title).value
           label: 回来时的标题
           value: (つェ⊂)咦，又回来了!
-    - group: navbar
-      label: 导航栏
-      formSchema:
-        - $formkit: menuSelect
-          name: menu
-          id: menu
-          key: menu
-          label: 导航菜单
-          value: ""
-          help: 留空使用 Halo 的主菜单
-        - $formkit: switch
-          name: sticky
-          id: sticky
-          key: sticky
-          label: 吸顶
-          help: 向上滚动时显示导航栏；移动端始终吸顶
-          value: false
-        - $formkit: switch
-          name: full_width
-          id: full_width
-          key: full_width
-          label: 通栏宽度
-          help: 关闭时与内容区同宽
-          value: false
-        - $formkit: switch
-          name: glass
-          id: glass
-          key: glass
-          label: 毛玻璃背景
-          help: 仅吸顶时生效
-          value: false
-        - $formkit: switch
-          name: logo
-          id: logo
-          key: logo
-          label: 显示 Logo
-          help: 使用 Halo 站点设置中的 Logo
-          value: false
-        - $formkit: text
-          name: logo_link
-          id: logo_link
-          key: logo_link
-          label: Logo 链接
-          value: ""
-          help: "留空回到首页，填 # 不跳转"
-        - $formkit: text
-          name: logo_radius
-          id: logo_radius
-          key: logo_radius
-          label: Logo 圆角
-          value: 4px
-          help: 像素或百分比，默认 4px
-        - $formkit: switch
-          name: icons
-          id: icons
-          key: icons
-          label: 菜单图标
-          help: 显示菜单项在后台配置的图标
-          value: false
-        - $formkit: switch
-          name: icon_animation
-          id: icon_animation
-          key: icon_animation
-          label: 菜单图标悬停动画
-          value: false
-        - $formkit: switch
-          name: active_glow
-          id: active_glow
-          key: active_glow
-          label: 当前项发光
-          help: 当前菜单项文字加主题色光晕
-          value: false
-        - $formkit: switch
-          name: login
-          id: login
-          key: login
-          label: 登录入口
-          value: false
-          help: 未登录显示登录按钮，已登录显示头像
     - group: home
       label: 首页
       formSchema:
-        - $formkit: radio
-          name: load_more
-          id: load_more
-          key: load_more
-          label: 文章分页方式
-          value: false
-          options:
-            - value: true
-              label: 加载更多
-            - value: false
-              label: 分页
-        - $formkit: switch
-          name: infinite_scroll
-          id: infinite_scroll
-          key: infinite_scroll
-          label: 滚动到底自动加载
-          help: 仅「加载更多」方式生效
-          value: false
-        - $formkit: switch
-          name: thumbnail
-          id: thumbnail
-          key: thumbnail
-          label: 文章缩略图
-          value: false
-        - $formkit: attachment
-          name: default_thumbnail
-          id: default_thumbnail
-          key: default_thumbnail
-          label: 默认缩略图
-          value: https://picsum.photos/id/1081/350/200
-          help: 文章没有封面时使用，留空则尝试随机图
-        - $formkit: attachment
-          name: fallback_thumbnail
-          id: fallback_thumbnail
-          key: fallback_thumbnail
-          label: 缩略图加载失败时
-          value: /themes/theme-joe-next/assets/images/default_thumbnail.png
-          help: 图片加载出错时显示的图片
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 首页大图
         - $formkit: switch
           value: false
-          name: random_thumbnail
-          id: random_thumbnail
-          key: random_thumbnail
-          label: 随机缩略图
-          help: 没有封面也没有默认缩略图时，使用随机图接口
-        - $formkit: text
-          if: $get(random_thumbnail).value == true
-          name: random_thumbnail_api
-          id: random_thumbnail_api
-          key: random_thumbnail_api
-          value: https://imgapi.xl0408.top/index.php
-          label: 随机图接口
-        - $formkit: switch
-          value: false
-          name: list_animation
-          id: list_animation
-          key: list_animation
-          label: 列表动画
-        - $formkit: select
-          name: list_animation_name
-          id: list_animation_name
-          key: list_animation_name
-          label: 列表动画效果
-          value: fadeInUp
-          help: animate.css 动画名
-          options:
-            - value: fadeIn
-              label: fadeIn
-            - value: fadeInUp
-              label: fadeInUp
-            - value: fadeInDown
-              label: fadeInDown
-            - value: fadeInDownBig
-              label: fadeInDownBig
-            - value: fadeInLeft
-              label: fadeInLeft
-            - value: fadeInLeftBig
-              label: fadeInLeftBig
-            - value: fadeInRight
-              label: fadeInRight
-            - value: fadeInRightBig
-              label: fadeInRightBig
-            - value: fadeInUpBig
-              label: fadeInUpBig
-            - value: fadeOut
-              label: fadeOut
-            - value: fadeOutDown
-              label: fadeOutDown
-            - value: fadeOutDownBig
-              label: fadeOutDownBig
-            - value: fadeOutLeft
-              label: fadeOutLeft
-            - value: fadeOutLeftBig
-              label: fadeOutLeftBig
-            - value: fadeOutRight
-              label: fadeOutRight
-            - value: fadeOutRightBig
-              label: fadeOutRightBig
-            - value: fadeOutUp
-              label: fadeOutUp
-            - value: fadeOutUpBig
-              label: fadeOutUpBig
-            - value: bounce
-              label: bounce
-            - value: flash
-              label: flash
-            - value: pulse
-              label: pulse
-            - value: rubberBand
-              label: rubberBand
-            - value: headShake
-              label: headShake
-            - value: swing
-              label: swing
-            - value: tada
-              label: tada
-            - value: wobble
-              label: wobble
-            - value: jello
-              label: jello
-            - value: heartBeat
-              label: heartBeat
-            - value: bounceIn
-              label: bounceIn
-            - value: bounceInDown
-              label: bounceInDown
-            - value: bounceInLeft
-              label: bounceInLeft
-            - value: bounceInRight
-              label: bounceInRight
-            - value: bounceInUp
-              label: bounceInUp
-            - value: bounceOut
-              label: bounceOut
-            - value: bounceOutDown
-              label: bounceOutDown
-            - value: bounceOutLeft
-              label: bounceOutLeft
-            - value: bounceOutRight
-              label: bounceOutRight
-            - value: bounceOutUp
-              label: bounceOutUp
-            - value: flip
-              label: flip
-            - value: flipInX
-              label: flipInX
-            - value: flipInY
-              label: flipInY
-            - value: flipOutX
-              label: flipOutX
-            - value: flipOutY
-              label: flipOutY
-            - value: rotateIn
-              label: rotateIn
-            - value: rotateInDownLeft
-              label: rotateInDownLeft
-            - value: rotateInDownRight
-              label: rotateInDownRight
-            - value: rotateInUpLeft
-              label: rotateInUpLeft
-            - value: rotateInUpRight
-              label: rotateInUpRight
-            - value: rotateOut
-              label: rotateOut
-            - value: rotateOutDownLeft
-              label: rotateOutDownLeft
-            - value: rotateOutDownRight
-              label: rotateOutDownRight
-            - value: rotateOutUpLeft
-              label: rotateOutUpLeft
-            - value: rotateOutUpRight
-              label: rotateOutUpRight
-            - value: hinge
-              label: hinge
-            - value: jackInTheBox
-              label: jackInTheBox
-            - value: rollIn
-              label: rollIn
-            - value: rollOut
-              label: rollOut
-            - value: zoomIn
-              label: zoomIn
-            - value: zoomInDown
-              label: zoomInDown
-            - value: zoomInLeft
-              label: zoomInLeft
-            - value: zoomInRight
-              label: zoomInRight
-            - value: zoomInUp
-              label: zoomInUp
-            - value: zoomOut
-              label: zoomOut
-            - value: zoomOutDown
-              label: zoomOutDown
-            - value: zoomOutLeft
-              label: zoomOutLeft
-            - value: zoomOutRight
-              label: zoomOutRight
-            - value: zoomOutUp
-              label: zoomOutUp
-            - value: slideInDown
-              label: slideInDown
-            - value: slideInLeft
-              label: slideInLeft
-            - value: slideInRight
-              label: slideInRight
-            - value: slideInUp
-              label: slideInUp
-            - value: slideOutDown
-              label: slideOutDown
-            - value: slideOutLeft
-              label: slideOutLeft
-            - value: slideOutRight
-              label: slideOutRight
-            - value: slideOutUp
-              label: slideOutUp
-        - $formkit: switch
-          value: false
-          name: featured
-          id: featured
-          key: featured
-          label: 精选分类
-          help: 首页顶部的精选分类卡片
-        - $formkit: repeater
-          name: featured_items
-          id: featured_items
-          key: featured_items
-          if: $get(featured).value
-          max: 4
-          min: 1
-          label: 精选分类内容
-          value: []
-          children:
-            - $formkit: radio
-              name: source
-              id: source
-              key: source
-              label: 来源
-              value: ""
-              options:
-                - label: 分类
-                  value: category
-                - label: 自定义
-                  value: custom
-            - $formkit: group
-              name: category
-              id: category
-              key: category
-              if: $value.source === 'category'
-              label: 分类
-              value: ""
-              children:
-                - $formkit: categorySelect
-                  name: name
-                  id: name
-                  key: name
-                  label: 选择分类
-                  value: ""
-                  validation: required
-            - $formkit: group
-              name: custom
-              id: custom
-              key: custom
-              if: $value.source === 'custom'
-              label: 自定义
-              value: []
-              children:
-                - $formkit: text
-                  name: title
-                  id: title
-                  key: title
-                  label: 标题
-                  value: ""
-                  validation: required
-                - $formkit: url
-                  name: url
-                  id: url
-                  key: url
-                  label: 链接
-                  value: ""
-                  validation: required
-                - $formkit: attachment
-                  name: image
-                  id: image
-                  key: image
-                  label: 图片
-                  value: ""
-                  validation: required
-        - $formkit: textarea
-          name: qq_group
-          id: qq_group
-          key: qq_group
-          label: QQ 群链接
-          value: ""
-          help: 留空不显示
-        - $formkit: textarea
-          name: qq_group_text
-          id: qq_group_text
-          key: qq_group_text
-          label: QQ 群按钮文字
-          value: 欢迎加入QQ交流群
-    - group: hero
-      label: 首页大图
-      formSchema:
-        - $formkit: switch
-          value: false
-          name: enabled
-          id: enabled
-          key: enabled
+          name: hero
+          id: hero
+          key: hero
           label: 首页大图
           help: 首页顶部全宽的大图区域
         - $formkit: text
-          name: title
-          id: title
-          key: title
-          if: $get(enabled).value === true
+          name: hero_title
+          id: hero_title
+          key: hero_title
+          if: $get(hero).value === true
           label: 标题
           value: null
           help: 留空使用站点标题
         - $formkit: text
-          name: image
-          id: image
-          key: image
-          if: $get(enabled).value === true
+          name: hero_image
+          id: hero_image
+          key: hero_image
+          if: $get(hero).value === true
           label: 图片
           value: http://imgapi.xl0408.top/index.php
           help: 图片地址或随机图接口
+        - $formkit: attachment
+          name: hero_video
+          id: hero_video
+          key: hero_video
+          if: $get(hero).value === true
+          label: 视频背景
+          value: null
+          help: 填写视频地址后用视频代替图片，留空使用图片
         - $formkit: switch
           value: false
-          name: hitokoto
-          id: hitokoto
-          key: hitokoto
-          if: $get(enabled).value === true
+          name: hero_hitokoto
+          id: hero_hitokoto
+          key: hero_hitokoto
+          if: $get(hero).value === true
           label: 一言
           help: 标题下方显示随机一句话
-        - $formkit: switch
-          value: false
-          name: video_enabled
-          id: video_enabled
-          key: video_enabled
-          if: $get(enabled).value === true
-          label: 视频背景
-        - $formkit: attachment
-          name: video
-          id: video
-          key: video
-          if: $get(video_enabled).value === true
-          label: 视频地址
-          value: null
         - $formkit: text
-          name: wave_light
-          id: wave_light
-          key: wave_light
-          if: $get(enabled).value === true
+          name: hero_wave_light
+          id: hero_wave_light
+          key: hero_wave_light
+          if: $get(hero).value === true
           label: 底部波浪颜色（浅色）
           value: "#fff"
         - $formkit: text
-          name: wave_dark
-          id: wave_dark
-          key: wave_dark
-          if: $get(enabled).value === true
+          name: hero_wave_dark
+          id: hero_wave_dark
+          key: hero_wave_dark
+          if: $get(hero).value === true
           label: 底部波浪颜色（暗黑）
           value: "#fff"
-    - group: carousel
-      label: 首页轮播
-      formSchema:
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 轮播
         - $formkit: switch
-          name: enabled
-          id: enabled
-          key: enabled
+          name: carousel
+          id: carousel
+          key: carousel
           label: 首页轮播
           value: false
         - $formkit: array
-          name: slides
-          id: slides
-          key: slides
-          if: $get(enabled).value === true
+          name: carousel_slides
+          id: carousel_slides
+          key: carousel_slides
+          if: $get(carousel).value === true
           label: 轮播内容
           value: []
           itemLabels:
@@ -854,10 +586,10 @@ spec:
                   value: ""
                   validation: required
         - $formkit: radio
-          if: $get(enabled).value === true
-          name: direction
-          id: direction
-          key: direction
+          if: $get(carousel).value === true
+          name: carousel_direction
+          id: carousel_direction
+          key: carousel_direction
           label: 方向
           value: horizontal
           options:
@@ -866,10 +598,10 @@ spec:
             - value: vertical
               label: 垂直
         - $formkit: select
-          if: $get(enabled).value === true
-          name: effect
-          id: effect
-          key: effect
+          if: $get(carousel).value === true
+          name: carousel_effect
+          id: carousel_effect
+          key: carousel_effect
           label: 切换效果
           value: slide
           options:
@@ -889,58 +621,228 @@ spec:
               label: 创意性
         - $formkit: switch
           value: false
-          if: $get(enabled).value === true
-          name: loop
-          id: loop
-          key: loop
+          if: $get(carousel).value === true
+          name: carousel_loop
+          id: carousel_loop
+          key: carousel_loop
           label: 循环
         - $formkit: switch
           value: false
-          if: $get(enabled).value === true
-          name: draggable
-          id: draggable
-          key: draggable
+          if: $get(carousel).value === true
+          name: carousel_draggable
+          id: carousel_draggable
+          key: carousel_draggable
           label: 允许拖动切换
           help: 关闭后也会隐藏左右按钮
         - $formkit: switch
           value: false
-          if: $get(enabled).value === true
-          name: arrows
-          id: arrows
-          key: arrows
+          if: $get(carousel).value === true
+          name: carousel_arrows
+          id: carousel_arrows
+          key: carousel_arrows
           label: 左右按钮
         - $formkit: switch
           value: false
-          if: $get(enabled).value === true
-          name: dots
-          id: dots
-          key: dots
+          if: $get(carousel).value === true
+          name: carousel_dots
+          id: carousel_dots
+          key: carousel_dots
           label: 分页圆点
         - $formkit: switch
           value: false
-          if: $get(enabled).value === true
-          name: autoplay
-          id: autoplay
-          key: autoplay
+          if: $get(carousel).value === true
+          name: carousel_autoplay
+          id: carousel_autoplay
+          key: carousel_autoplay
           label: 自动播放
         - $formkit: number
-          if: $get(autoplay).value === true
-          name: interval
-          id: interval
-          key: interval
+          if: $get(carousel_autoplay).value === true
+          name: carousel_interval
+          id: carousel_interval
+          key: carousel_interval
           label: 间隔（毫秒）
           value: "3500"
           help: 默认 3500
         - $formkit: number
-          if: $get(autoplay).value === true
-          name: speed
-          id: speed
-          key: speed
+          if: $get(carousel_autoplay).value === true
+          name: carousel_speed
+          id: carousel_speed
+          key: carousel_speed
           label: 切换速度（毫秒）
           value: 500
           help: 默认 500
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 精选分类
+        - $formkit: switch
+          value: false
+          name: featured
+          id: featured
+          key: featured
+          label: 精选分类
+          help: 首页顶部的精选分类卡片
+        - $formkit: repeater
+          name: featured_items
+          id: featured_items
+          key: featured_items
+          if: $get(featured).value
+          max: 4
+          min: 1
+          label: 精选分类内容
+          value: []
+          children:
+            - $formkit: radio
+              name: source
+              id: source
+              key: source
+              label: 来源
+              value: ""
+              options:
+                - label: 分类
+                  value: category
+                - label: 自定义
+                  value: custom
+            - $formkit: group
+              name: category
+              id: category
+              key: category
+              if: $value.source === 'category'
+              label: 分类
+              value: ""
+              children:
+                - $formkit: categorySelect
+                  name: name
+                  id: name
+                  key: name
+                  label: 选择分类
+                  value: ""
+                  validation: required
+            - $formkit: group
+              name: custom
+              id: custom
+              key: custom
+              if: $value.source === 'custom'
+              label: 自定义
+              value: []
+              children:
+                - $formkit: text
+                  name: title
+                  id: title
+                  key: title
+                  label: 标题
+                  value: ""
+                  validation: required
+                - $formkit: url
+                  name: url
+                  id: url
+                  key: url
+                  label: 链接
+                  value: ""
+                  validation: required
+                - $formkit: attachment
+                  name: image
+                  id: image
+                  key: image
+                  label: 图片
+                  value: ""
+                  validation: required
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 瞬间叠放
+        - $formkit: switch
+          name: moments_stack
+          id: moments_stack
+          key: moments_stack
+          label: 瞬间叠放卡片
+          value: false
+          help: 在首页文章列表上方，把最近几条瞬间叠成一摞，鼠标悬停时展开；需要瞬间插件
+        - $formkit: number
+          name: moments_stack_count
+          id: moments_stack_count
+          key: moments_stack_count
+          label: 叠放条数
+          value: 4
+          min: 2
+          max: 6
+          help: 2～6 条，默认 4
+          if: $get(moments_stack).value === true
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 文章列表
+        - $formkit: radio
+          name: load_more
+          id: load_more
+          key: load_more
+          label: 文章分页方式
+          value: false
+          options:
+            - value: true
+              label: 加载更多
+            - value: false
+              label: 分页
+        - $formkit: switch
+          name: infinite_scroll
+          id: infinite_scroll
+          key: infinite_scroll
+          label: 滚动到底自动加载
+          help: 仅「加载更多」方式生效
+          value: false
+        - $formkit: switch
+          name: thumbnail
+          id: thumbnail
+          key: thumbnail
+          label: 文章缩略图
+          value: false
+        - $formkit: attachment
+          name: default_thumbnail
+          id: default_thumbnail
+          key: default_thumbnail
+          label: 默认缩略图
+          value: https://picsum.photos/id/1081/350/200
+          help: 文章没有封面时使用，留空则尝试随机图
+        - $formkit: attachment
+          name: fallback_thumbnail
+          id: fallback_thumbnail
+          key: fallback_thumbnail
+          label: 缩略图加载失败时
+          value: /themes/theme-joe-next/assets/images/default_thumbnail.png
+          help: 图片加载出错时显示的图片
+        - $formkit: switch
+          value: false
+          name: random_thumbnail
+          id: random_thumbnail
+          key: random_thumbnail
+          label: 随机缩略图
+          help: 没有封面也没有默认缩略图时，使用随机图接口
+        - $formkit: text
+          if: $get(random_thumbnail).value == true
+          name: random_thumbnail_api
+          id: random_thumbnail_api
+          key: random_thumbnail_api
+          value: https://imgapi.xl0408.top/index.php
+          label: 随机图接口
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: QQ 群
+        - $formkit: textarea
+          name: qq_group
+          id: qq_group
+          key: qq_group
+          label: QQ 群链接
+          value: ""
+          help: 留空不显示
+        - $formkit: textarea
+          name: qq_group_text
+          id: qq_group_text
+          key: qq_group_text
+          label: QQ 群按钮文字
+          value: 欢迎加入QQ交流群
     - group: blogger
-      label: 博主
+      label: 博主卡片
       formSchema:
         - $formkit: switch
           value: true
@@ -995,96 +897,140 @@ spec:
               label: 圆形
             - value: rounded
               label: 圆角矩形
-        - $formkit: select
+        - $formkit: toggle
           name: avatar_frame
           id: avatar_frame
           key: avatar_frame
           label: 头像框
           value: "0"
+          render-type: image
+          size: 64
+          gap: 8
           options:
             - value: "0"
               label: 无
+              render: /themes/theme-joe-next/assets/images/none.svg
             - value: rainbow-girl
               label: 彩虹之女
+              render: /themes/theme-joe-next/assets/frame/rainbow-girl.webp
             - value: honor-light
               label: 荣誉之光
+              render: /themes/theme-joe-next/assets/frame/honor-light.webp
             - value: bird-girl
               label: 彩雀之女
+              render: /themes/theme-joe-next/assets/frame/bird-girl.webp
             - value: purple-crystal
               label: 紫水晶
+              render: /themes/theme-joe-next/assets/frame/purple-crystal.webp
             - value: flower-ring
               label: 清新花环
+              render: /themes/theme-joe-next/assets/frame/flower-ring.webp
             - value: lantern-cloud
               label: 灯笼祥云
+              render: /themes/theme-joe-next/assets/frame/lantern-cloud.webp
             - value: ease-cloud
               label: 福气祥云
+              render: /themes/theme-joe-next/assets/frame/ease-cloud.webp
             - value: festival-luck
               label: 节日福旺
+              render: /themes/theme-joe-next/assets/frame/festival-luck.webp
             - value: happy-mouse
               label: 快乐小鼠
+              render: /themes/theme-joe-next/assets/frame/happy-mouse.webp
             - value: two-mouse
               label: 两只小鼠
+              render: /themes/theme-joe-next/assets/frame/two-mouse.webp
             - value: bull-puff
               label: 牛气大发
+              render: /themes/theme-joe-next/assets/frame/bull-puff.webp
             - value: christmas-knot
               label: 圣诞彩结
+              render: /themes/theme-joe-next/assets/frame/christmas-knot.webp
             - value: christmas-ring
               label: 圣诞花环
+              render: /themes/theme-joe-next/assets/frame/christmas-ring.webp
             - value: santa-claus
               label: 圣诞老人
+              render: /themes/theme-joe-next/assets/frame/santa-claus.webp
             - value: cactus
               label: 仙人掌
+              render: /themes/theme-joe-next/assets/frame/cactus.webp
             - value: rabbit
               label: 幸福兔子（动态）
+              render: /themes/theme-joe-next/assets/frame/rabbit.webp
             - value: gaoda
               label: 高达（动态）
+              render: /themes/theme-joe-next/assets/frame/gaoda.webp
             - value: donut
               label: 甜甜圈（动态）
+              render: /themes/theme-joe-next/assets/frame/donut.webp
             - value: bat
               label: 吸血蝙蝠（动态）
+              render: /themes/theme-joe-next/assets/frame/bat.webp
             - value: bilibili
               label: Bilibili
+              render: /themes/theme-joe-next/assets/frame/bilibili.webp
             - value: constellation
               label: 星座
+              render: /themes/theme-joe-next/assets/frame/constellation.webp
             - value: putin
               label: 布丁
+              render: /themes/theme-joe-next/assets/frame/putin.webp
             - value: princess
               label: 小公主
+              render: /themes/theme-joe-next/assets/frame/princess.webp
             - value: mangci
               label: 芒刺
+              render: /themes/theme-joe-next/assets/frame/mangci.webp
             - value: maid
               label: 女仆
+              render: /themes/theme-joe-next/assets/frame/maid.webp
             - value: orchid
               label: 兰花
+              render: /themes/theme-joe-next/assets/frame/orchid.webp
             - value: gulu
               label: 咕噜
+              render: /themes/theme-joe-next/assets/frame/gulu.webp
             - value: gufeng
               label: 古风
-        - $formkit: select
+              render: /themes/theme-joe-next/assets/frame/gufeng.webp
+        - $formkit: toggle
           name: avatar_pendant
           id: avatar_pendant
           key: avatar_pendant
           label: 头像挂件
           value: "0"
+          render-type: image
+          size: 64
+          gap: 8
           options:
             - value: "0"
               label: 无
+              render: /themes/theme-joe-next/assets/images/none.svg
             - value: angel
               label: 天使
+              render: /themes/theme-joe-next/assets/widget/angel.webp
             - value: meteor
               label: 流星
+              render: /themes/theme-joe-next/assets/widget/meteor.webp
             - value: rain
               label: 下雨
+              render: /themes/theme-joe-next/assets/widget/rain.webp
             - value: wing
               label: 天使之翼
+              render: /themes/theme-joe-next/assets/widget/wing.webp
             - value: rotate-heart
               label: 旋转的心
+              render: /themes/theme-joe-next/assets/widget/rotate-heart.webp
             - value: fall-in-love
               label: 坠入爱河
+              render: /themes/theme-joe-next/assets/widget/fall-in-love.webp
             - value: sun-flower
               label: 向日葵
+              render: /themes/theme-joe-next/assets/widget/sun-flower.webp
             - value: swirl-heart
               label: 上升的心
+              render: /themes/theme-joe-next/assets/widget/swirl-heart.webp
         - $formkit: attachment
           name: cover
           id: cover
@@ -1259,8 +1205,8 @@ spec:
           name: enabled
           id: enabled
           key: enabled
-          label: 侧边栏
-          help: 关闭后除文章页外都不显示侧边栏，优先于页面元数据
+          label: 首页侧边栏
+          help: 首页右侧是否显示侧边栏；其他页面由下方各页开关控制
         - $formkit: select
           name: position
           id: position
@@ -1319,8 +1265,6 @@ spec:
                   label: 打赏
                 - value: image
                   label: 图片
-                - value: music
-                  label: 音乐播放器
                 - value: latest
                   label: 最新文章
                 - value: popular
@@ -1441,21 +1385,6 @@ spec:
                   id: description
                   key: description
                   label: 说明
-                  value: ""
-            - $formkit: group
-              name: music
-              id: music
-              key: music
-              if: $value.type === 'music'
-              label: 音乐播放器
-              value: []
-              children:
-                - $formkit: text
-                  name: playlist
-                  id: playlist
-                  key: playlist
-                  label: 网易云歌单 ID
-                  help: 歌单页地址栏中 id= 后面的数字
                   value: ""
             - $formkit: group
               name: comments
@@ -1688,6 +1617,22 @@ spec:
     - group: post
       label: 文章
       formSchema:
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 标题与信息
+        - $formkit: radio
+          name: header_style
+          id: header_style
+          key: header_style
+          label: 头部样式
+          value: immersive
+          help: 沉浸头图：文章顶部整宽头图（封面模糊或主题色背景），标题、分类与文章信息放在头图里，正文卡片叠在头图下沿。经典：Joe 原来的样式，标题在正文卡片内
+          options:
+            - value: immersive
+              label: 沉浸头图
+            - value: classic
+              label: 经典
         - $formkit: switch
           name: title_shadow
           id: title_shadow
@@ -1744,6 +1689,10 @@ spec:
           label: 提醒文字
           value: ""
           help: 留空使用默认文字
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 正文
         - $formkit: select
           name: image_align
           id: image_align
@@ -1766,19 +1715,22 @@ spec:
           value: 100%
           help: 需带单位，默认 100%；单篇文章可用元数据 img_max_width 覆盖
         - $formkit: switch
-          name: progress
-          id: progress
-          key: progress
-          label: 阅读进度条
-          value: true
-        - $formkit: color
-          name: progress_color
-          id: progress_color
-          key: progress_color
-          if: $get(progress).value === true
-          label: 进度条颜色
-          value: "#fb6c28"
-          help: 留空使用主题色
+          name: indent
+          id: indent
+          key: indent
+          label: 段落首行缩进
+          help: 单篇文章可用元数据 enable_indent 覆盖
+          value: false
+        - $formkit: switch
+          name: copyable
+          id: copyable
+          key: copyable
+          label: 允许复制正文
+          value: false
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 目录与进度
         - $formkit: switch
           name: toc
           id: toc
@@ -1800,6 +1752,20 @@ spec:
           value: "0"
           help: 0 表示只显示一级，最大 6
         - $formkit: switch
+          name: progress
+          id: progress
+          key: progress
+          label: 阅读进度条
+          value: true
+        - $formkit: color
+          name: progress_color
+          id: progress_color
+          key: progress_color
+          if: $get(progress).value === true
+          label: 进度条颜色
+          value: ""
+          help: 留空跟随主题色
+        - $formkit: switch
           name: related
           id: related
           key: related
@@ -1814,13 +1780,10 @@ spec:
           label: 相关文章条数
           value: "5"
           help: 默认 5
-        - $formkit: switch
-          name: edit_button
-          id: edit_button
-          key: edit_button
-          label: 编辑按钮
-          value: false
-          help: 登录后在右下角显示编辑入口
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 互动
         - $formkit: switch
           name: comments
           id: comments
@@ -1835,18 +1798,16 @@ spec:
           label: 点赞
           value: true
         - $formkit: switch
-          name: copyable
-          id: copyable
-          key: copyable
-          label: 允许复制正文
+          name: edit_button
+          id: edit_button
+          key: edit_button
+          label: 编辑按钮
           value: false
-        - $formkit: switch
-          name: indent
-          id: indent
-          key: indent
-          label: 段落首行缩进
-          help: 单篇文章可用元数据 enable_indent 覆盖
-          value: false
+          help: 登录后在右下角显示编辑入口
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 版权
         - $formkit: switch
           name: copy_notice
           id: copy_notice
@@ -1867,6 +1828,154 @@ spec:
           label: 许可协议文字
           value: ""
           help: 文末版权卡片中的协议说明，留空使用默认文字
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 广告
+        - $formkit: select
+          name: ads_top
+          id: ads_top
+          key: ads_top
+          label: 文章顶部广告
+          value: none
+          options:
+            - value: none
+              label: 关闭
+            - value: img
+              label: 图片
+            - value: code
+              label: 自定义代码
+        - $formkit: array
+          if: $get(ads_top).value !== 'none'
+          name: ads_top_items
+          id: ads_top_items
+          key: ads_top_items
+          label: 文章顶部广告内容
+          max: 1
+          value: []
+          itemLabels:
+            - type: image
+              label: $value.ads_img
+            - type: text
+              label: $value.ads_url
+            - type: code
+              label: $value.ads_code
+          children:
+            - $formkit: attachment
+              name: image
+              id: image
+              key: image
+              label: 广告图片
+              value: null
+            - $formkit: text
+              name: url
+              id: url
+              key: url
+              label: 广告链接
+              value: null
+            - $formkit: code
+              name: html
+              id: html
+              key: html
+              label: 自定义代码
+              value: null
+              language: html
+        - $formkit: select
+          name: ads_bottom
+          id: ads_bottom
+          key: ads_bottom
+          label: 文章底部广告
+          value: none
+          options:
+            - value: none
+              label: 关闭
+            - value: img
+              label: 图片
+            - value: code
+              label: 自定义代码
+        - $formkit: array
+          if: $get(ads_bottom).value !== 'none'
+          name: ads_bottom_items
+          id: ads_bottom_items
+          key: ads_bottom_items
+          label: 文章底部广告内容
+          max: 1
+          value: []
+          itemLabels:
+            - type: image
+              label: $value.ads_img
+            - type: text
+              label: $value.ads_url
+            - type: code
+              label: $value.ads_code
+          children:
+            - $formkit: attachment
+              name: image
+              id: image
+              key: image
+              label: 广告图片
+              value: null
+            - $formkit: text
+              name: url
+              id: url
+              key: url
+              label: 广告链接
+              value: null
+            - $formkit: code
+              name: html
+              id: html
+              key: html
+              label: 自定义代码
+              value: null
+              language: html
+        - $formkit: select
+          name: ads_aside
+          id: ads_aside
+          key: ads_aside
+          label: 文章侧边栏广告
+          value: none
+          options:
+            - value: none
+              label: 关闭
+            - value: img
+              label: 图片
+            - value: code
+              label: 自定义代码
+        - $formkit: array
+          if: $get(ads_aside).value !== 'none'
+          name: ads_aside_items
+          id: ads_aside_items
+          key: ads_aside_items
+          label: 文章侧边栏广告内容
+          max: 1
+          value: []
+          itemLabels:
+            - type: image
+              label: $value.ads_img
+            - type: text
+              label: $value.ads_url
+            - type: code
+              label: $value.ads_code
+          children:
+            - $formkit: attachment
+              name: image
+              id: image
+              key: image
+              label: 广告图片
+              value: null
+            - $formkit: text
+              name: url
+              id: url
+              key: url
+              label: 广告链接
+              value: null
+            - $formkit: code
+              name: html
+              id: html
+              key: html
+              label: 自定义代码
+              value: null
+              language: html
     - group: share
       label: 分享与打赏
       formSchema:
@@ -1957,86 +2066,10 @@ spec:
     - group: code
       label: 代码块
       formSchema:
-        - $formkit: select
-          name: theme
-          id: theme
-          key: theme
-          label: 代码主题
-          value: one-dark
-          help: 来自 prism-themes；单篇文章可用元数据覆盖
-          options:
-            - value: one-dark
-              label: one-dark
-            - value: one-light
-              label: one-light
-            - value: a11y-dark
-              label: a11y-dark
-            - value: atom-dark
-              label: atom-dark
-            - value: base16-ateliersulphurpool.light
-              label: base16-ateliersulphurpool.light
-            - value: cb
-              label: cb
-            - value: coldark-cold
-              label: coldark-cold
-            - value: coldark-dark
-              label: coldark-dark
-            - value: coy-without-shadows
-              label: coy-without-shadows
-            - value: darcula
-              label: darcula
-            - value: dracula
-              label: dracula
-            - value: duotone-dark
-              label: duotone-dark
-            - value: duotone-earth
-              label: duotone-earth
-            - value: duotone-forest
-              label: duotone-forest
-            - value: duotone-light
-              label: duotone-light
-            - value: duotone-sea
-              label: duotone-sea
-            - value: duotone-space
-              label: duotone-space
-            - value: ghcolors
-              label: ghcolors
-            - value: gruvbox-dark
-              label: gruvbox-dark
-            - value: gruvbox-light
-              label: gruvbox-light
-            - value: holi-theme
-              label: holi-theme
-            - value: hopscotch
-              label: hopscotch
-            - value: lucario
-              label: lucario
-            - value: material-dark
-              label: material-dark
-            - value: material-light
-              label: material-light
-            - value: material-oceanic
-              label: material-oceanic
-            - value: night-owl
-              label: night-owl
-            - value: nord
-              label: nord
-            - value: pojoaque
-              label: pojoaque
-            - value: shades-of-purple
-              label: shades-of-purple
-            - value: solarized-dark-atom
-              label: solarized-dark-atom
-            - value: synthwave84
-              label: synthwave84
-            - value: vs
-              label: vs
-            - value: vsc-dark-plus
-              label: vsc-dark-plus
-            - value: xonokai
-              label: xonokai
-            - value: z-touch
-              label: z-touch
+        - $el: p
+          attrs:
+            style: "margin: 0 0 0.75rem; font-size: 0.8125rem; color: rgb(100 116 139);"
+          children: 语法高亮由 Halo 代码高亮插件（推荐应用市场中的 Shiki）提供，主题只负责下面的代码块外观与交互；未安装插件时代码块不着色。
         - $formkit: switch
           value: false
           name: title
@@ -2109,8 +2142,12 @@ spec:
           key: inline_select
           label: 点击行内代码全选
     - group: pages
-      label: 独立页面
+      label: 页面
       formSchema:
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 标签与分类
         - $formkit: text
           name: tags_title
           id: tags_title
@@ -2157,6 +2194,10 @@ spec:
           key: categories_count
           label: 分类页显示文章数
           value: false
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 归档
         - $formkit: text
           name: archives_title
           id: archives_title
@@ -2193,12 +2234,17 @@ spec:
               label: 年
             - value: month
               label: 月
+          if: $get(archives_style).value === 'timeline'
         - $formkit: switch
           name: archives_categories
           id: archives_categories
           key: archives_categories
           label: 归档页显示分类
           value: false
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 图库
         - $formkit: text
           name: photos_title
           id: photos_title
@@ -2212,12 +2258,10 @@ spec:
           label: 图片间距（px）
           value: "10"
           help: 默认 10
-        - $formkit: switch
-          name: photos_animation
-          id: photos_animation
-          key: photos_animation
-          label: 图库载入动画
-          value: false
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 留言板
         - $formkit: radio
           name: guestbook_source
           id: guestbook_source
@@ -2229,38 +2273,39 @@ spec:
               label: 全部评论
             - value: false
               label: 仅留言板评论
-    - group: links
-      label: 友链
-      formSchema:
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 友链
         - $formkit: text
-          name: title
-          id: title
-          key: title
+          name: links_title
+          id: links_title
+          key: links_title
           label: 友链页标题
           value: 友情链接
         - $formkit: attachment
-          name: fallback_logo
-          id: fallback_logo
-          key: fallback_logo
+          name: links_fallback_logo
+          id: links_fallback_logo
+          key: links_fallback_logo
           label: Logo 加载失败时
           value: /themes/theme-joe-next/assets/images/default_links_logo.png
           help: 留空则按名称首字生成文字头像
         - $formkit: switch
-          name: comments
-          id: comments
-          key: comments
+          name: links_comments
+          id: links_comments
+          key: links_comments
           label: 友链页评论
           value: false
         - $formkit: switch
-          name: random
-          id: random
-          key: random
+          name: links_random
+          id: links_random
+          key: links_random
           label: 「随便看看」按钮
           help: 随机打开一个友链
         - $formkit: select
-          name: group_order
-          id: group_order
-          key: group_order
+          name: links_group_order
+          id: links_group_order
+          key: links_group_order
           label: 分组排序
           value: created_asc
           help: 分组排序序号大于 0 时优先按序号
@@ -2272,9 +2317,9 @@ spec:
             - value: original
               label: 友链插件中的顺序
         - $formkit: select
-          name: link_order
-          id: link_order
-          key: link_order
+          name: links_link_order
+          id: links_link_order
+          key: links_link_order
           label: 组内排序
           value: created_asc
           help: 链接排序序号大于 0 时优先按序号
@@ -2286,14 +2331,18 @@ spec:
             - value: original
               label: 友链插件中的顺序
         - $formkit: code
-          name: footer_html
-          id: footer_html
-          key: footer_html
+          name: links_footer_html
+          id: links_footer_html
+          key: links_footer_html
           height: 200
           label: 页面底部内容
           value: ""
           language: html
           help: HTML，例如申请友链的说明
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 朋友圈
         - $formkit: text
           name: feed_title
           id: feed_title
@@ -2302,530 +2351,60 @@ spec:
           value: 朋友圈
           help: 需要朋友圈插件
         - $formkit: switch
-          name: feed_animation
-          id: feed_animation
-          key: feed_animation
-          label: 朋友圈列表动画
-          value: false
-        - $formkit: select
-          name: feed_animation_name
-          id: feed_animation_name
-          key: feed_animation_name
-          label: 朋友圈动画效果
-          value: fadeInUp
-          help: animate.css 动画名
-          options:
-            - value: fadeIn
-              label: fadeIn
-            - value: fadeInUp
-              label: fadeInUp
-            - value: fadeInDown
-              label: fadeInDown
-            - value: fadeInDownBig
-              label: fadeInDownBig
-            - value: fadeInLeft
-              label: fadeInLeft
-            - value: fadeInLeftBig
-              label: fadeInLeftBig
-            - value: fadeInRight
-              label: fadeInRight
-            - value: fadeInRightBig
-              label: fadeInRightBig
-            - value: fadeInUpBig
-              label: fadeInUpBig
-            - value: fadeOut
-              label: fadeOut
-            - value: fadeOutDown
-              label: fadeOutDown
-            - value: fadeOutDownBig
-              label: fadeOutDownBig
-            - value: fadeOutLeft
-              label: fadeOutLeft
-            - value: fadeOutLeftBig
-              label: fadeOutLeftBig
-            - value: fadeOutRight
-              label: fadeOutRight
-            - value: fadeOutRightBig
-              label: fadeOutRightBig
-            - value: fadeOutUp
-              label: fadeOutUp
-            - value: fadeOutUpBig
-              label: fadeOutUpBig
-            - value: bounce
-              label: bounce
-            - value: flash
-              label: flash
-            - value: pulse
-              label: pulse
-            - value: rubberBand
-              label: rubberBand
-            - value: headShake
-              label: headShake
-            - value: swing
-              label: swing
-            - value: tada
-              label: tada
-            - value: wobble
-              label: wobble
-            - value: jello
-              label: jello
-            - value: heartBeat
-              label: heartBeat
-            - value: bounceIn
-              label: bounceIn
-            - value: bounceInDown
-              label: bounceInDown
-            - value: bounceInLeft
-              label: bounceInLeft
-            - value: bounceInRight
-              label: bounceInRight
-            - value: bounceInUp
-              label: bounceInUp
-            - value: bounceOut
-              label: bounceOut
-            - value: bounceOutDown
-              label: bounceOutDown
-            - value: bounceOutLeft
-              label: bounceOutLeft
-            - value: bounceOutRight
-              label: bounceOutRight
-            - value: bounceOutUp
-              label: bounceOutUp
-            - value: flip
-              label: flip
-            - value: flipInX
-              label: flipInX
-            - value: flipInY
-              label: flipInY
-            - value: flipOutX
-              label: flipOutX
-            - value: flipOutY
-              label: flipOutY
-            - value: rotateIn
-              label: rotateIn
-            - value: rotateInDownLeft
-              label: rotateInDownLeft
-            - value: rotateInDownRight
-              label: rotateInDownRight
-            - value: rotateInUpLeft
-              label: rotateInUpLeft
-            - value: rotateInUpRight
-              label: rotateInUpRight
-            - value: rotateOut
-              label: rotateOut
-            - value: rotateOutDownLeft
-              label: rotateOutDownLeft
-            - value: rotateOutDownRight
-              label: rotateOutDownRight
-            - value: rotateOutUpLeft
-              label: rotateOutUpLeft
-            - value: rotateOutUpRight
-              label: rotateOutUpRight
-            - value: hinge
-              label: hinge
-            - value: jackInTheBox
-              label: jackInTheBox
-            - value: rollIn
-              label: rollIn
-            - value: rollOut
-              label: rollOut
-            - value: zoomIn
-              label: zoomIn
-            - value: zoomInDown
-              label: zoomInDown
-            - value: zoomInLeft
-              label: zoomInLeft
-            - value: zoomInRight
-              label: zoomInRight
-            - value: zoomInUp
-              label: zoomInUp
-            - value: zoomOut
-              label: zoomOut
-            - value: zoomOutDown
-              label: zoomOutDown
-            - value: zoomOutLeft
-              label: zoomOutLeft
-            - value: zoomOutRight
-              label: zoomOutRight
-            - value: zoomOutUp
-              label: zoomOutUp
-            - value: slideInDown
-              label: slideInDown
-            - value: slideInLeft
-              label: slideInLeft
-            - value: slideInRight
-              label: slideInRight
-            - value: slideInUp
-              label: slideInUp
-            - value: slideOutDown
-              label: slideOutDown
-            - value: slideOutLeft
-              label: slideOutLeft
-            - value: slideOutRight
-              label: slideOutRight
-            - value: slideOutUp
-              label: slideOutUp
-        - $formkit: switch
           name: feed_subscribe
           id: feed_subscribe
           key: feed_subscribe
           label: 朋友圈「添加订阅」按钮
           value: false
-    - group: moments
-      label: 瞬间
-      formSchema:
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 瞬间
         - $formkit: text
-          name: title
-          id: title
-          key: title
-          label: 页面标题
+          name: moments_title
+          id: moments_title
+          key: moments_title
+          label: 瞬间页标题
           value: 我的动态
           help: 需要瞬间插件
         - $formkit: text
-          name: empty
-          id: empty
-          key: empty
-          label: 无内容时的文字
-          value: 暂无日志数据
+          name: moments_empty
+          id: moments_empty
+          key: moments_empty
+          label: 瞬间页无内容时的文字
+          value: 暂无动态
         - $formkit: switch
-          name: animation
-          id: animation
-          key: animation
-          label: 列表动画
-          value: false
-        - $formkit: select
-          name: animation_name
-          id: animation_name
-          key: animation_name
-          label: 动画效果
-          value: fadeInUp
-          help: animate.css 动画名
-          options:
-            - value: fadeIn
-              label: fadeIn
-            - value: fadeInUp
-              label: fadeInUp
-            - value: fadeInDown
-              label: fadeInDown
-            - value: fadeInDownBig
-              label: fadeInDownBig
-            - value: fadeInLeft
-              label: fadeInLeft
-            - value: fadeInLeftBig
-              label: fadeInLeftBig
-            - value: fadeInRight
-              label: fadeInRight
-            - value: fadeInRightBig
-              label: fadeInRightBig
-            - value: fadeInUpBig
-              label: fadeInUpBig
-            - value: fadeOut
-              label: fadeOut
-            - value: fadeOutDown
-              label: fadeOutDown
-            - value: fadeOutDownBig
-              label: fadeOutDownBig
-            - value: fadeOutLeft
-              label: fadeOutLeft
-            - value: fadeOutLeftBig
-              label: fadeOutLeftBig
-            - value: fadeOutRight
-              label: fadeOutRight
-            - value: fadeOutRightBig
-              label: fadeOutRightBig
-            - value: fadeOutUp
-              label: fadeOutUp
-            - value: fadeOutUpBig
-              label: fadeOutUpBig
-            - value: bounce
-              label: bounce
-            - value: flash
-              label: flash
-            - value: pulse
-              label: pulse
-            - value: rubberBand
-              label: rubberBand
-            - value: headShake
-              label: headShake
-            - value: swing
-              label: swing
-            - value: tada
-              label: tada
-            - value: wobble
-              label: wobble
-            - value: jello
-              label: jello
-            - value: heartBeat
-              label: heartBeat
-            - value: bounceIn
-              label: bounceIn
-            - value: bounceInDown
-              label: bounceInDown
-            - value: bounceInLeft
-              label: bounceInLeft
-            - value: bounceInRight
-              label: bounceInRight
-            - value: bounceInUp
-              label: bounceInUp
-            - value: bounceOut
-              label: bounceOut
-            - value: bounceOutDown
-              label: bounceOutDown
-            - value: bounceOutLeft
-              label: bounceOutLeft
-            - value: bounceOutRight
-              label: bounceOutRight
-            - value: bounceOutUp
-              label: bounceOutUp
-            - value: flip
-              label: flip
-            - value: flipInX
-              label: flipInX
-            - value: flipInY
-              label: flipInY
-            - value: flipOutX
-              label: flipOutX
-            - value: flipOutY
-              label: flipOutY
-            - value: rotateIn
-              label: rotateIn
-            - value: rotateInDownLeft
-              label: rotateInDownLeft
-            - value: rotateInDownRight
-              label: rotateInDownRight
-            - value: rotateInUpLeft
-              label: rotateInUpLeft
-            - value: rotateInUpRight
-              label: rotateInUpRight
-            - value: rotateOut
-              label: rotateOut
-            - value: rotateOutDownLeft
-              label: rotateOutDownLeft
-            - value: rotateOutDownRight
-              label: rotateOutDownRight
-            - value: rotateOutUpLeft
-              label: rotateOutUpLeft
-            - value: rotateOutUpRight
-              label: rotateOutUpRight
-            - value: hinge
-              label: hinge
-            - value: jackInTheBox
-              label: jackInTheBox
-            - value: rollIn
-              label: rollIn
-            - value: rollOut
-              label: rollOut
-            - value: zoomIn
-              label: zoomIn
-            - value: zoomInDown
-              label: zoomInDown
-            - value: zoomInLeft
-              label: zoomInLeft
-            - value: zoomInRight
-              label: zoomInRight
-            - value: zoomInUp
-              label: zoomInUp
-            - value: zoomOut
-              label: zoomOut
-            - value: zoomOutDown
-              label: zoomOutDown
-            - value: zoomOutLeft
-              label: zoomOutLeft
-            - value: zoomOutRight
-              label: zoomOutRight
-            - value: zoomOutUp
-              label: zoomOutUp
-            - value: slideInDown
-              label: slideInDown
-            - value: slideInLeft
-              label: slideInLeft
-            - value: slideInRight
-              label: slideInRight
-            - value: slideInUp
-              label: slideInUp
-            - value: slideOutDown
-              label: slideOutDown
-            - value: slideOutLeft
-              label: slideOutLeft
-            - value: slideOutRight
-              label: slideOutRight
-            - value: slideOutUp
-              label: slideOutUp
-        - $formkit: switch
-          name: compose_button
-          id: compose_button
-          key: compose_button
+          name: moments_compose_button
+          id: moments_compose_button
+          key: moments_compose_button
           label: 「发布瞬间」按钮
           value: false
           help: 登录后显示
         - $formkit: switch
-          name: like
-          id: like
-          key: like
-          label: 点赞
+          name: moments_like
+          id: moments_like
+          key: moments_like
+          label: 瞬间点赞
           value: false
         - $formkit: switch
-          name: comments
-          id: comments
-          key: comments
-          label: 评论
+          name: moments_comments
+          id: moments_comments
+          key: moments_comments
+          label: 瞬间评论
         - $formkit: number
-          name: max_height
-          id: max_height
-          key: max_height
-          label: 内容最大高度（px）
+          name: moments_max_height
+          id: moments_max_height
+          key: moments_max_height
+          label: 瞬间内容最大高度（px）
           value: "300"
           help: 超出后折叠，默认 300，最小 100
-    - group: ads
-      label: 广告
-      formSchema:
-        - $formkit: select
-          name: top
-          id: top
-          key: top
-          label: 文章顶部
-          value: none
-          options:
-            - value: none
-              label: 关闭
-            - value: img
-              label: 图片
-            - value: code
-              label: 自定义代码
-        - $formkit: array
-          if: $get(top).value !== 'none'
-          name: top_items
-          id: top_items
-          key: top_items
-          label: 文章顶部广告
-          max: 1
-          value: []
-          itemLabels:
-            - type: image
-              label: $value.ads_img
-            - type: text
-              label: $value.ads_url
-            - type: code
-              label: $value.ads_code
-          children:
-            - $formkit: attachment
-              name: image
-              id: image
-              key: image
-              label: 广告图片
-              value: null
-            - $formkit: text
-              name: url
-              id: url
-              key: url
-              label: 广告链接
-              value: null
-            - $formkit: code
-              name: html
-              id: html
-              key: html
-              label: 自定义代码
-              value: null
-              language: html
-        - $formkit: select
-          name: bottom
-          id: bottom
-          key: bottom
-          label: 文章底部
-          value: none
-          options:
-            - value: none
-              label: 关闭
-            - value: img
-              label: 图片
-            - value: code
-              label: 自定义代码
-        - $formkit: array
-          if: $get(bottom).value !== 'none'
-          name: bottom_items
-          id: bottom_items
-          key: bottom_items
-          label: 文章底部广告
-          max: 1
-          value: []
-          itemLabels:
-            - type: image
-              label: $value.ads_img
-            - type: text
-              label: $value.ads_url
-            - type: code
-              label: $value.ads_code
-          children:
-            - $formkit: attachment
-              name: image
-              id: image
-              key: image
-              label: 广告图片
-              value: null
-            - $formkit: text
-              name: url
-              id: url
-              key: url
-              label: 广告链接
-              value: null
-            - $formkit: code
-              name: html
-              id: html
-              key: html
-              label: 自定义代码
-              value: null
-              language: html
-        - $formkit: select
-          name: aside
-          id: aside
-          key: aside
-          label: 文章侧边栏
-          value: none
-          options:
-            - value: none
-              label: 关闭
-            - value: img
-              label: 图片
-            - value: code
-              label: 自定义代码
-        - $formkit: array
-          if: $get(aside).value !== 'none'
-          name: aside_items
-          id: aside_items
-          key: aside_items
-          label: 文章侧边栏广告
-          max: 1
-          value: []
-          itemLabels:
-            - type: image
-              label: $value.ads_img
-            - type: text
-              label: $value.ads_url
-            - type: code
-              label: $value.ads_code
-          children:
-            - $formkit: attachment
-              name: image
-              id: image
-              key: image
-              label: 广告图片
-              value: null
-            - $formkit: text
-              name: url
-              id: url
-              key: url
-              label: 广告链接
-              value: null
-            - $formkit: code
-              name: html
-              id: html
-              key: html
-              label: 自定义代码
-              value: null
-              language: html
     - group: footer
-      label: 页脚
+      label: 页脚与高级
       formSchema:
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 页脚
         - $formkit: switch
           name: enabled
           id: enabled
@@ -2872,52 +2451,6 @@ spec:
           label: 起始时间
           value: 2021/11/11 06:30
           help: 格式 2021/11/11 06:30
-        - $formkit: switch
-          if: $get(enabled).value == true
-          name: icp
-          id: icp
-          key: icp
-          label: ICP 备案号
-          value: false
-        - $formkit: switch
-          if: $get(enabled).value == true
-          name: police
-          id: police
-          key: police
-          label: 公安备案号
-          value: false
-        - $formkit: group
-          name: filing
-          id: filing
-          key: filing
-          label: 备案信息
-          children:
-            - $formkit: text
-              name: icp
-              id: icp
-              key: icp
-              label: ICP 备案号
-              value: ""
-              help: ICP 备案信息将展示在页脚中，不填不展示（示例：鄂ICP备20001234号-1）
-            - $formkit: text
-              name: icp_link
-              id: icp_link
-              key: icp_link
-              label: ICP备案跳转链接
-              value: https://beian.miit.gov.cn/
-            - $formkit: text
-              name: police
-              id: police
-              key: police
-              label: 公网安备号
-              value: ""
-              help: 公网安备信息将展示在页脚中，不填不展示，也可在 “页脚” 一栏中单独关闭（示例：鄂公网安备42011102001234号）
-            - $formkit: text
-              name: police_link
-              id: police_link
-              key: police_link
-              label: 公安联网备案跳转链接
-              value: https://beian.mps.gov.cn/#/query/webSearch
         - $formkit: switch
           if: $get(enabled).value == true
           name: powered_by
@@ -2984,9 +2517,61 @@ spec:
           id: busuanzi
           key: busuanzi
           label: 访问统计（不蒜子）
-    - group: advanced
-      label: 高级
-      formSchema:
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 备案
+        - $formkit: switch
+          if: $get(enabled).value === true
+          name: icp
+          id: icp
+          key: icp
+          label: ICP 备案号
+          value: false
+        - $formkit: switch
+          if: $get(enabled).value === true
+          name: police
+          id: police
+          key: police
+          label: 公安备案号
+          value: false
+        - $formkit: group
+          name: filing
+          id: filing
+          key: filing
+          label: 备案信息
+          children:
+            - $formkit: text
+              name: icp
+              id: icp
+              key: icp
+              label: ICP 备案号
+              value: ""
+              help: ICP 备案信息将展示在页脚中，不填不展示（示例：鄂ICP备20001234号-1）
+            - $formkit: text
+              name: icp_link
+              id: icp_link
+              key: icp_link
+              label: ICP备案跳转链接
+              value: https://beian.miit.gov.cn/
+            - $formkit: text
+              name: police
+              id: police
+              key: police
+              label: 公网安备号
+              value: ""
+              help: 公网安备信息将展示在页脚中，不填不展示，也可在 “页脚” 一栏中单独关闭（示例：鄂公网安备42011102001234号）
+            - $formkit: text
+              name: police_link
+              id: police_link
+              key: police_link
+              label: 公安联网备案跳转链接
+              value: https://beian.mps.gov.cn/#/query/webSearch
+          if: $get(enabled).value === true && ($get(icp).value === true || $get(police).value === true)
+        - $el: div
+          attrs:
+            style: "margin: 1.25rem 0 0.25rem; padding-bottom: 0.35rem; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid rgb(0 0 0 / 8%);"
+          children: 高级
         - $formkit: switch
           name: clean_mode
           id: clean_mode

@@ -1,0 +1,157 @@
+/*
+ * 首页「瞬间叠放卡片」（components/home/MomentsStack.astro）。
+ *
+ * 收起：最新一条在最前，后面的每张缩小 6%、向上移 10px 只露出一条边，叠成一摞，整摞只占一张卡片的高度。
+ * 展开（悬停 / 键盘聚焦）：各张恢复原大小、依次排开，高度随之撑开；带弹性缓动，后面的稍晚一点到位。
+ * 触屏设备与「减少动态效果」下直接显示展开状态。
+ */
+.joe_moments_stack {
+  /* 命名容器：卡片按自身宽度切换紧凑布局 */
+  container: joe-moments-stack / inline-size;
+  --card-h: 64px;
+  --gap: 10px;
+  /* 与下方文章列表（.joe_index__article 内边距 15px）左右对齐 */
+  padding: 15px 15px 0;
+  margin-bottom: 5px;
+}
+
+.joe_moments_stack__head {
+  justify-content: space-between;
+  margin-bottom: 14px;
+
+  .more {
+    font-size: 13px;
+    color: var(--text-secondary);
+    transition: color var(--dur-fast) var(--ease-out);
+
+    &:hover {
+      color: var(--theme);
+    }
+  }
+}
+
+.joe_moments_stack__list {
+  --n: 4;
+  position: relative;
+  display: grid;
+  margin: 0;
+  padding: 30px 0 0; /* 给后面露出的边留空间 */
+  list-style: none;
+  outline: none;
+  transition: padding var(--dur-slow) var(--ease-spring);
+
+  li {
+    grid-area: 1 / 1; /* 所有卡片叠在同一格 */
+    z-index: calc(10 - var(--i));
+    transform: translateY(calc(var(--i) * -10px)) scale(calc(1 - var(--i) * 0.06));
+    transform-origin: top center;
+    opacity: calc(1 - var(--i) * 0.18);
+    transition:
+      transform var(--dur-slow) var(--ease-spring),
+      opacity var(--dur-base) var(--ease-out);
+    transition-delay: calc(var(--i) * 30ms);
+  }
+
+  li:nth-child(n + 2) .card > * {
+    opacity: 0;
+    transition: opacity var(--dur-fast) var(--ease-out);
+  }
+}
+
+.joe_moments_stack__list .card {
+  display: grid;
+  grid-template-columns: 36px auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  height: var(--card-h);
+  padding: 0 16px;
+  border-radius: var(--radius-wrap);
+  background: var(--bg-page);
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--dur-base) var(--ease-out);
+
+  &:hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-title);
+    white-space: nowrap;
+  }
+
+  .text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    color: var(--text-regular);
+  }
+
+  .time {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* 展开：改为逐行排列 */
+.joe_moments_stack__list:hover,
+.joe_moments_stack__list:focus-within {
+  padding-top: 0;
+
+  li {
+    grid-area: auto;
+    opacity: 1;
+    transform: none;
+    margin-bottom: var(--gap);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  li:nth-child(n + 2) .card > * {
+    opacity: 1;
+    transition-delay: 120ms;
+  }
+}
+
+@container joe-moments-stack (max-width: 600px) {
+  .joe_moments_stack__list .card {
+    grid-template-columns: 32px 1fr auto;
+    gap: 10px;
+    padding: 0 12px;
+
+    .name {
+      display: none;
+    }
+  }
+}
+
+/* 触屏没有悬停：直接以展开状态显示；减少动态效果时同样不做叠放 */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .joe_moments_stack__list {
+    padding-top: 0;
+
+    li {
+      grid-area: auto;
+      opacity: 1;
+      transform: none;
+      margin-bottom: var(--gap);
+    }
+
+    li:nth-child(n + 2) .card > * {
+      opacity: 1;
+    }
+  }
+}

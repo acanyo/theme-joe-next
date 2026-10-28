@@ -21,6 +21,8 @@ jobs:
       - run: pnpm check
       - run: pnpm test
       - run: pnpm build
+      # 首屏 CSS / JS 与主题包体积预算（scripts/qa/size.ts）
+      - run: pnpm qa:size
       - uses: actions/upload-artifact@v4
         with:
           name: theme-joe-next

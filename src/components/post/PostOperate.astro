@@ -2,6 +2,7 @@
 /** 文章标签、分享、打赏（正文下方） */
 import DonateList from "./DonateList.astro";
 import ShareLinks from "./ShareLinks.astro";
+import Icon from "../common/Icon.astro";
 import {
   POST_URL,
   SHARE_ENABLED,
@@ -20,12 +21,12 @@ import {
   </div>
 
   <div class="joe_detail__operate-share" th:if={el(SHARE_ENABLED)}>
-    <i class="joe-font joe-icon-share" aria-hidden="true"></i>
+    <Icon name="share" />
     <ShareLinks />
   </div>
 
   <div class="joe_donate" th:if={el(DONATE_ENABLED)}>
-    <i class="joe-font joe-icon-shang" aria-hidden="true"></i>
+    <Icon name="reward" />
     <DonateList />
   </div>
 </div>

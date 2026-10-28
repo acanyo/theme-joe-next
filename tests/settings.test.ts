@@ -3,7 +3,9 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
-import { BOOLEAN_SETTINGS } from "../src/config/boolean-settings.ts";
+import { BOOLEAN_DEFAULTS, LIST_DEFAULTS, VALUE_DEFAULTS } from "../src/config/setting-defaults.ts";
+import { collectDefaults } from "../scripts/settings-defaults.ts";
+import { findValueDefaultIssues } from "../scripts/check-value-defaults.ts";
 import { SERVER_CONFIG_FIELDS } from "../src/config/theme-config.ts";
 
 interface Field {
@@ -40,8 +42,16 @@ function sourceFiles(dir: string): string[] {
 }
 
 describe("settings.yaml", () => {
-  it("lists every boolean setting in BOOLEAN_SETTINGS", () => {
-    assert.deepEqual([...BOOLEAN_SETTINGS].sort(), [...booleans].sort());
+  it("setting-defaults.ts is up to date (run pnpm settings:defaults)", () => {
+    const fresh = collectDefaults(readFileSync("settings.yaml", "utf8"));
+    assert.deepEqual({ ...BOOLEAN_DEFAULTS }, fresh.booleans);
+    assert.deepEqual({ ...VALUE_DEFAULTS }, fresh.values);
+    assert.deepEqual({ ...LIST_DEFAULTS }, fresh.lists);
+    assert.deepEqual(Object.keys(BOOLEAN_DEFAULTS).sort(), [...booleans].sort());
+  });
+
+  it("template fallbacks match settings.yaml defaults", () => {
+    assert.deepEqual(findValueDefaultIssues(), []);
   });
 
   it("only references settings that exist", () => {

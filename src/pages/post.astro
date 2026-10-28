@@ -8,15 +8,19 @@ import CommentSection from "../components/post/CommentSection.astro";
 import PostAds from "../components/post/PostAds.astro";
 import PostAside from "../components/post/PostAside.astro";
 import PostCopyright from "../components/post/PostCopyright.astro";
+import PostHero from "../components/post/PostHero.astro";
 import PostOperate from "../components/post/PostOperate.astro";
 import "../styles/pages/post.css";
+import "../styles/pages/post-hero.css";
 ---
 
 <BaseLayout
   pageScript="post"
+  readingProgress
   title="post.spec.title + ' - ' + site.title"
   pageClass="page-post"
 >
+  <PostHero slot="before" />
   <Breadcrumb slot="before" />
 
   <div class="joe_main joe_post">
@@ -38,7 +42,8 @@ import "../styles/pages/post.css";
           th:href="@{${cursor.previous.status.permalink}}"
           th:title="${cursor.previous.spec.title}"
         >
-          上一篇
+          <span class="label">上一篇</span>
+          <span class="title" th:text="${cursor.previous.spec.title}"></span>
         </a>
       </li>
       <li class="joe_post__pagination-item next" th:if="${cursor.hasNext()}">
@@ -46,7 +51,8 @@ import "../styles/pages/post.css";
           th:href="@{${cursor.next.status.permalink}}"
           th:title="${cursor.next.spec.title}"
         >
-          下一篇
+          <span class="label">下一篇</span>
+          <span class="title" th:text="${cursor.next.spec.title}"></span>
         </a>
       </li>
     </ul>

@@ -44,7 +44,7 @@ const COLOR_LIST = `#strings.arraySplit('${COLORS.join(",")}', ',')`;
 <div
   class="joe_links"
   data-joe-links
-  th:attr="data-group-sort=${theme.config.links.group_order}, data-link-sort=${theme.config.links.link_order}"
+  th:attr="data-group-sort=${theme.config.pages.links_group_order}, data-link-sort=${theme.config.pages.links_link_order}"
   th:with={`linkColors = \${${COLOR_LIST}}`}
 >
   <h3>友链列表</h3>
@@ -76,7 +76,7 @@ const COLOR_LIST = `#strings.arraySplit('${COLORS.join(",")}', ',')`;
                   height="40"
                   class="avatar"
                   loading="lazy"
-                  th:src="${link.spec.logo ?: theme.config.links.fallback_logo}"
+                  th:src="${link.spec.logo ?: theme.config.pages.links_fallback_logo}"
                   th:alt="${link.spec.displayName}"
                   th:attr="data-text-avatar=${link.spec.displayName}"
                   data-fallback="link"

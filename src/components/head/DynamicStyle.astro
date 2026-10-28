@@ -2,20 +2,16 @@
 /**
  * 依赖主题设置的 CSS 变量与样式（主题色、字体、背景图、滚动条等）。
  * 使用 Thymeleaf 文本内联，在请求时生成；静态样式全部在 src/styles 中。
+ * 开头声明级联层顺序：本样式先于主题样式表输出，层顺序以第一次声明为准（与 src/styles/index.css 相同）。
+ * 本样式本身不分层，优先级高于主题样式。
  */
 const css = `
+@layer reset, tokens, vendor, base, components, layout, content, pages;
 [# th:if="\${(theme.config.effects.page_transition ?: 'native') == 'native'}"]
 @media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }
 [/]
 [# th:if="\${theme.config.appearance.grayscale}"]
 html { filter: grayscale(100%); }
-[/]
-[# th:if="\${#strings.isEmpty(theme.config.appearance.custom_font) and theme.config.appearance.font != 'off'}"]
-@font-face {
-  font-family: "Joe Font";
-  font-display: swap;
-  src: url("[(\${#theme.assets('/fonts/' + theme.config.appearance.font)})]") format("woff2");
-}
 [/]
 [# th:if="\${not #strings.isEmpty(theme.config.appearance.custom_font)}"]
 @font-face {
@@ -26,26 +22,26 @@ html { filter: grayscale(100%); }
 [/]
 html body {
   --theme: [(\${theme.config.appearance.accent_light ?: '#fb6c28'})];
-  --wave-color: [(\${theme.config.hero.wave_light ?: '#fff'})];
+  --wave-color: [(\${theme.config.home.hero_wave_light ?: '#fff'})];
   --scroll-bar: [(\${theme.config.appearance.scrollbar_color ?: '#c0c4cc'})];
   --loading-bar: [(\${theme.config.effects.loading_bar_color ?: 'var(--theme)'})];
   --loading-bar-height: [(\${theme.config.effects.loading_bar_height ?: '3px'})];
-  --content-max-width: [(\${theme.config.general.content_width ?: 1400})]px;
+  --content-max-width: [(\${theme.config.general.content_width ?: 1320})]px;
 }
 html[data-mode="dark"] body {
   --theme: [(\${theme.config.appearance.accent_dark ?: '#9999ff'})];
-  --wave-color: [(\${theme.config.hero.wave_dark ?: '#fff'})];
+  --wave-color: [(\${theme.config.home.hero_wave_dark ?: '#fff'})];
   --scroll-bar: [(\${theme.config.appearance.scrollbar_color ?: '#666'})];
 }
 ::-webkit-scrollbar { width: [(\${theme.config.appearance.scrollbar_width ?: '8px'})]; }
-[# th:if="\${theme.config.appearance.background_light_enabled and not #strings.isEmpty(theme.config.appearance.background_light)}"]
+[# th:if="\${not #strings.isEmpty(theme.config.appearance.background_light)}"]
 html[data-mode="light"] body::before { background-image: url("[(\${theme.config.appearance.background_light})]"); }
 [/]
-[# th:if="\${theme.config.appearance.background_dark_enabled and not #strings.isEmpty(theme.config.appearance.background_dark)}"]
+[# th:if="\${not #strings.isEmpty(theme.config.appearance.background_dark)}"]
 html[data-mode="dark"] body::before { background-image: url("[(\${theme.config.appearance.background_dark})]"); }
 [/]
-[# th:if="\${not #strings.isEmpty(theme.config.hero.image)}"]
-html body { --joe-big-banner-image: url("[(\${theme.config.hero.image})]"); }
+[# th:if="\${not #strings.isEmpty(theme.config.home.hero_image)}"]
+html body { --joe-big-banner-image: url("[(\${theme.config.home.hero_image})]"); }
 [/]
 `;
 ---

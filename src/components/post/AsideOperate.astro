@@ -14,6 +14,7 @@ import {
   SHARE_ENABLED,
   el,
 } from "../../config/expressions";
+import Icon from "../common/Icon.astro";
 import "../../styles/content/aside-operate.css";
 ---
 
@@ -24,11 +25,8 @@ import "../../styles/content/aside-operate.css";
 >
   <li class="post-operate-like" th:if={el(LIKE_ENABLED)}>
     <button type="button" data-joe-like aria-label="点赞">
-      <i class="joe-font joe-icon-dianzan icon-like" aria-hidden="true"></i>
-      <i
-        class="joe-font joe-icon-dianzan-fill icon-unlike"
-        aria-hidden="true"
-      ></i>
+      <Icon name="like" class="icon-like" />
+      <Icon name="like-fill" class="icon-unlike" />
       <span
         class="nums"
         th:classappend="${post.stats.upvote > 0} ? 'visible'"
@@ -40,10 +38,10 @@ import "../../styles/content/aside-operate.css";
   </li>
   <li
     class="post-operate-comment"
-    th:if={`\${!theme.config.advanced.clean_mode and theme.config.post.comments and (${COMMENT_ENABLED})}`}
+    th:if={`\${!theme.config.footer.clean_mode and theme.config.post.comments and (${COMMENT_ENABLED})}`}
   >
     <button type="button" data-joe-goto-comment aria-label="前往评论区">
-      <i class="joe-font joe-icon-message" aria-hidden="true"></i>
+      <Icon name="comment" />
       <span
         class="visible"
         th:if="${post.stats.comment > 0}"
@@ -53,13 +51,13 @@ import "../../styles/content/aside-operate.css";
   </li>
   <li class="post-operate-share" th:if={el(SHARE_ENABLED)}>
     <button type="button" aria-label="分享" aria-haspopup="true">
-      <i class="joe-font joe-icon-huifu" aria-hidden="true"></i>
+      <Icon name="reply" />
     </button>
     <ShareLinks />
   </li>
   <li class="post-operate-donate" th:if={el(DONATE_ENABLED)}>
     <button type="button" aria-label="打赏" aria-haspopup="true">
-      <i class="joe-font joe-icon-shang" aria-hidden="true"></i>
+      <Icon name="reward" />
     </button>
     <div class="joe_donate">
       <DonateList />

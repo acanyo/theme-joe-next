@@ -43,5 +43,5 @@ export default function init(): void {
   initShortcodes();
   initItems();
   initGallery(".joe_journal_body img");
-  void initCodeBlocks({ foldLong: false });
+  initCodeBlocks({ foldLong: false });
 }

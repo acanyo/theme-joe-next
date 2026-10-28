@@ -135,6 +135,7 @@ a[title="站长统计"] {
 .joe_header__above-searchicon,
 .joe_header__above-search .submit,
 .joe_action_item,
+.joe_detail__agree .agree,
 .joe_load {
   appearance: none;
   border: 0;

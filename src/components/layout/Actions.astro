@@ -3,6 +3,7 @@
  * 右下角悬浮操作按钮。不同页面通过 props 声明需要的按钮，
  * 不再在模板中按 htmlType 字符串分支。
  */
+import Icon from "../common/Icon.astro";
 interface Props {
   /** 文章/页面的编辑入口：内容类型 */
   editKind?: "post" | "page";
@@ -27,7 +28,7 @@ const editOwner =
     <button
       type="button"
       class="joe_action_item random"
-      th:if="${theme.config.links.random}"
+      th:if="${theme.config.pages.links_random}"
       aria-label="随机访问友链"
     >
       <svg
@@ -49,7 +50,7 @@ const editOwner =
       th:if="${theme.config.post.toc_mobile}"
       aria-label="文章目录"
     >
-      <i class="jiewen joe-icon-mulu" aria-hidden="true" />
+      <Icon name="toc" />
     </button>
   )}
   {editKind && (
@@ -100,7 +101,7 @@ const editOwner =
   <button
     type="button"
     class="joe_action_item back2top"
-    th:if="${theme.config.general.back_to_top}"
+    th:if="${theme.config.effects.back_to_top}"
     aria-label="返回顶部"
   >
     <svg viewBox="0 0 1024 1024" width="25" height="25" aria-hidden="true">

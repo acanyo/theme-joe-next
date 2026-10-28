@@ -1,0 +1,19 @@
+/*
+ * 图标（config/icons.ts）：`<i class="joe-font joe-icon-*">` 内联 SVG。
+ * 沿用图标字体的用法：尺寸跟随 font-size，颜色跟随 color。
+ */
+.joe-font {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-style: normal;
+  line-height: 1;
+  vertical-align: -0.15em;
+
+  > svg {
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+  }
+}

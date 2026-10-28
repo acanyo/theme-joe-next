@@ -2,6 +2,7 @@
 /** 分类 / 标签 / 作者归档：标题 + 文章列表 + 分页 */
 import PostItem from "./PostItem.astro";
 import Pagination from "./Pagination.astro";
+import Icon from "../common/Icon.astro";
 
 interface Props {
   /** 标题中的名称 SpEL 表达式 */
@@ -15,10 +16,7 @@ const { name } = Astro.props;
   <div class="joe_archive">
     <div class="joe_archive__title">
       <div class="joe_archive__title-title">
-        <i
-          class="joe-font joe-icon-feather joe_archive__title-icon"
-          aria-hidden="true"
-        ></i>
+        <Icon name="feather" class="joe_archive__title-icon" />
         以下是
         <span class="muted ellipsis" th:text={`\${${name}}`}></span>
         <span>相关的文章</span>

@@ -1,0 +1,760 @@
+/*
+ * 阅读条导航（navbar.style = islands）。在经典导航样式之上叠加，经典样式不受影响。
+ *
+ *   顶部（.is-top）：透明，盖在大图上
+ *   滚动后：一整条玻璃条（圆角 8px），Logo · 菜单 · 工具三段以细线分隔，底边是阅读进度线
+ *   文章页向下阅读（.is-reading）：中间一段由菜单换成「当前章节」，点击展开迷你目录
+ *
+ * 当前菜单项下方保留 Joe 的主题色下划线，并在菜单项之间弹性滑动（位置由 navigation.ts 写入 --bar-*）。
+ * Joe 的菜单图标、多级菜单、登录、搜索、移动端抽屉均保留。
+ */
+
+.joe_header--islands {
+  height: 72px;
+
+  .joe_header__above {
+    top: 0;
+    padding: 10px 0;
+    background: transparent;
+    border-bottom: 0;
+    box-shadow: none;
+
+    &.glass {
+      background: transparent;
+      backdrop-filter: none;
+    }
+  }
+
+  /* 玻璃条本体：三栏网格，菜单 / 章节始终居中；左右与下方内容区对齐（内容区有 15px 内边距） */
+  .joe_header_container {
+    position: relative;
+    display: grid;
+    width: calc(100% - 30px);
+    max-width: calc(var(--content-max-width, 1320px) - 30px);
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    min-height: 52px;
+    padding: 0 8px;
+    border-radius: 8px;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    transition:
+      background var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      backdrop-filter var(--dur-base) var(--ease-out);
+
+    > .joe_header__above-logo {
+      justify-self: start;
+    }
+
+    > .joe_header__above-nav {
+      grid-column: 2;
+    }
+
+    > .joe_header__above-search {
+      grid-column: 3;
+      justify-self: end;
+    }
+
+    > .joe_header__above-slideicon,
+    > .joe_header__above-searchicon {
+      position: absolute;
+    }
+  }
+
+  .joe_header__above.is-top .joe_header_container {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  /* 三段之间的细分隔线（只在玻璃条显示时出现） */
+  .joe_header__above-logo,
+  .joe_header__above-search {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 1px;
+      height: 20px;
+      background: var(--border-light);
+      transform: translateY(-50%);
+      transition: opacity var(--dur-base) var(--ease-out);
+    }
+  }
+
+  .joe_header__above-logo::after {
+    left: auto;
+    right: -8px;
+  }
+
+  .joe_header__above-search::after {
+    left: -8px;
+  }
+
+  .joe_header__above.is-top {
+    .joe_header__above-logo::after,
+    .joe_header__above-search::after {
+      opacity: 0;
+    }
+  }
+
+  /* 左：Logo */
+  .joe_header__above-logo {
+    height: 48px;
+    margin-right: 0;
+    padding: 0 8px;
+
+    img {
+      height: 32px;
+      min-width: 32px;
+    }
+  }
+
+  /* 中：菜单 */
+  .joe_header__above-nav {
+    position: relative;
+    height: 52px;
+
+    /* Joe 的主题色下划线，随悬停在菜单项之间滑动 */
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 6px;
+      left: 0;
+      height: 3px;
+      width: var(--bar-w, 0px);
+      border-radius: 3px;
+      background: var(--theme);
+      transform: translateX(var(--bar-x, 0px));
+      opacity: var(--bar-o, 0);
+      transition:
+        transform var(--dur-slow) var(--ease-spring),
+        width var(--dur-slow) var(--ease-spring),
+        opacity var(--dur-base) var(--ease-out);
+      pointer-events: none;
+    }
+
+    .item {
+      height: 52px;
+      line-height: 52px;
+      margin-right: 0;
+      padding: 0 14px;
+
+      &:last-child {
+        width: auto;
+      }
+
+      /* 滑动下划线替代每项各自的指示条 */
+      &::after {
+        display: none;
+      }
+
+      /* 当前项与悬停项文字加深，位置由滑动下划线指示 */
+      &.current,
+      &:hover {
+        color: var(--text-title);
+      }
+
+      &.current {
+        font-weight: 600;
+      }
+    }
+
+    .joe_dropdown {
+      margin-right: 0;
+
+      .item {
+        padding-right: 6px;
+      }
+    }
+
+    .joe_dropdown__link a {
+      height: 52px;
+      line-height: 52px;
+    }
+
+    .joe_dropdown__link-icon {
+      margin: 0 10px 0 -2px;
+    }
+
+    > a.item,
+    > .joe_dropdown {
+      transition:
+        opacity var(--dur-base) var(--ease-out),
+        transform var(--dur-slow) var(--ease-spring),
+        filter var(--dur-base) var(--ease-out),
+        color var(--dur-base) var(--ease-out);
+    }
+  }
+
+  /* 当前章节：与菜单在同一位置交替显示 */
+  .joe_header__chapter {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 2;
+    width: max-content;
+    min-width: 100%;
+    max-width: min(520px, 100vw - 520px);
+    opacity: 0;
+    transform: translate(-50%, 14px);
+    filter: blur(2px);
+    pointer-events: none;
+    transition:
+      opacity var(--dur-base) var(--ease-out),
+      transform var(--dur-slow) var(--ease-spring),
+      filter var(--dur-base) var(--ease-out);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .joe_header__chapter-current {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 52px;
+    padding: 0 16px;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    color: var(--text-title);
+    cursor: pointer;
+
+    .label {
+      flex-shrink: 0;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* 章节进度：一排小圆点，已读到的点亮为主题色 */
+    .steps {
+      display: flex;
+      flex-shrink: 0;
+      gap: 4px;
+
+      i {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--border-base);
+        transition:
+          background var(--dur-base) var(--ease-out),
+          transform 0.4s var(--ease-spring);
+      }
+
+      i.is-on {
+        background: var(--theme);
+      }
+
+      i.is-on:last-child,
+      i.is-on:has(+ i:not(.is-on)) {
+        transform: scale(1.35);
+      }
+    }
+
+    .name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 14.5px;
+      font-weight: 600;
+    }
+
+    .joe-icon-chevron-down {
+      flex-shrink: 0;
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: transform var(--dur-base) var(--ease-spring);
+    }
+  }
+
+  .joe_header__chapter.is-open .joe-icon-chevron-down {
+    transform: rotate(180deg);
+  }
+
+  /* 迷你目录：玻璃面板 */
+  .joe_header__chapter-list {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    width: max(100%, 300px);
+    max-height: min(60vh, 420px);
+    margin: 0;
+    padding: 6px;
+    overflow-y: auto;
+    list-style: none;
+    border-radius: 8px;
+    background: var(--glass-bg-strong);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(-50%) scale(0.96);
+    transform-origin: top center;
+    transition:
+      opacity var(--dur-base) var(--ease-out),
+      visibility var(--dur-base) var(--ease-out),
+      transform 0.4s var(--ease-spring);
+
+    li.sub a {
+      padding-left: 26px;
+      font-size: 13px;
+    }
+
+    a {
+      display: block;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--text-regular);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &:hover {
+        color: var(--theme);
+        background: var(--tint);
+      }
+    }
+
+    li.is-active a {
+      color: var(--theme);
+      font-weight: 600;
+    }
+  }
+
+  .joe_header__chapter.is-open .joe_header__chapter-list {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  /* 阅读中：菜单向上翻走，当前章节从下方翻上来 */
+  .joe_header__above.is-reading .joe_header__above-nav {
+    > a.item,
+    > .joe_dropdown,
+    &::before {
+      opacity: 0;
+      transform: translateY(-14px);
+      filter: blur(2px);
+      pointer-events: none;
+    }
+
+    .joe_header__chapter {
+      opacity: 1;
+      transform: translate(-50%, 0);
+      filter: none;
+      pointer-events: auto;
+    }
+  }
+
+  /* 底边阅读进度线：玻璃条显示时出现，随阅读填满主题色 */
+  .joe_header__read {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--read-color, var(--theme));
+    box-shadow: 0 0 8px color-mix(in srgb, var(--read-color, var(--theme)) 50%, transparent);
+    transform-origin: left center;
+    transform: scaleX(var(--read, 0));
+    transition: opacity var(--dur-base) var(--ease-out);
+    pointer-events: none;
+  }
+
+  .joe_header__above:not(.has-progress) .joe_header__read,
+  .joe_header__above.is-top .joe_header__read {
+    opacity: 0;
+  }
+
+  /* 右：搜索 / 登录 */
+  .joe_header__above-search {
+    margin-left: 0;
+    gap: 4px;
+    padding: 0 4px 0 8px;
+
+    .submit {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-regular);
+      transition:
+        color var(--dur-base) var(--ease-out),
+        background var(--dur-base) var(--ease-out),
+        transform var(--dur-base) var(--ease-spring);
+
+      &:hover {
+        color: var(--theme);
+        background: var(--tint);
+      }
+
+      &:active {
+        transform: scale(0.9);
+      }
+    }
+  }
+
+  .nav_login {
+    height: 36px;
+    margin-left: 0;
+
+    a {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      font-size: 20px;
+      background: transparent;
+      color: var(--text-regular);
+
+      &:hover {
+        color: var(--theme);
+        background: var(--tint);
+      }
+    }
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  /* 下拉菜单 / 二级菜单：玻璃面板，弹性展开 */
+  .joe_dropdown__menu,
+  .joe_nav_sub {
+    padding: 6px;
+    border-top: 0;
+    border-radius: 8px;
+    background: var(--glass-bg-strong);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    li {
+      background: transparent;
+    }
+
+    a {
+      height: auto;
+      padding: 8px 14px;
+      line-height: 1.5;
+      border-radius: 6px;
+
+      &:hover,
+      &.current {
+        color: var(--theme);
+        background: var(--tint);
+      }
+    }
+  }
+
+  .joe_dropdown__menu {
+    top: calc(100% + 6px);
+    transform: translateX(-50%) scale(0.96);
+    transform-origin: top center;
+    transition:
+      opacity var(--dur-base) var(--ease-out),
+      visibility var(--dur-base) var(--ease-out),
+      transform 0.4s var(--ease-spring);
+
+    /* 菜单项与面板之间的间隙不断开 hover */
+    &::after {
+      display: block;
+      content: "";
+      position: absolute;
+      inset: -8px 0 auto;
+      height: 8px;
+    }
+  }
+
+  .joe_dropdown.active .joe_dropdown__menu {
+    transform: translateX(-50%) scale(1);
+  }
+
+  .joe_header__above.is-reading .joe_dropdown__menu {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .joe_nav_sub {
+    left: calc(100% + 6px);
+    top: -6px;
+    padding-left: 6px;
+    transform: translateX(-6px) scale(0.96);
+    transform-origin: left top;
+  }
+
+  .joe_nav_sub-li {
+    height: auto;
+
+    &:hover .joe_nav_sub {
+      transform: none;
+    }
+  }
+}
+
+/* 未开启 Logo 时左侧显示站点名（经典样式下不显示，保持原样） */
+.joe_header__above-logo--text {
+  display: none;
+}
+
+.joe_header--islands .joe_header__above-logo--text {
+  display: flex;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-title);
+  white-space: nowrap;
+}
+
+/* 盖在大图上时，导航文字改为白色以保证对比度 */
+.joe_header--islands:has(+ #swup .evan-big-banner) .joe_header__above.is-top,
+.joe_header--islands:has(+ #swup .joe_post_hero) .joe_header__above.is-top {
+  .joe_header__above-logo--text,
+  .joe_header__above-nav .item,
+  .joe_header__above-nav .joe_dropdown__link-icon,
+  .joe_header__above-search .submit,
+  .nav_login a,
+  .joe_header__mode,
+  .joe_header__above-slideicon,
+  .joe_header__above-searchicon {
+    color: #fff;
+    text-shadow: 0 1px 8px rgb(0 0 0 / 35%);
+  }
+
+  .joe_header__kbd {
+    color: rgb(255 255 255 / 85%);
+    border-color: rgb(255 255 255 / 35%);
+    background: rgb(255 255 255 / 12%);
+  }
+
+  .joe_header__above-nav::before {
+    background: #fff;
+  }
+}
+
+/* 移动端：一整条玻璃胶囊（菜单 · Logo · 搜索），不显示章节与分隔线 */
+@media (max-width: 768px) {
+  .joe_header--islands {
+    height: 64px;
+
+    .joe_header__above {
+      padding: 8px 0;
+
+      .joe_container {
+        height: 48px;
+      }
+    }
+
+    .joe_header_container {
+      display: flex;
+      justify-content: space-between;
+      width: calc(100% - 20px);
+      min-height: 48px;
+      padding: 0 6px;
+
+      > .joe_header__above-slideicon,
+      > .joe_header__above-searchicon {
+        position: static;
+      }
+    }
+
+    .joe_header__above-logo,
+    .joe_header__above-search {
+      &::after {
+        display: none;
+      }
+    }
+
+    .joe_header__above-logo {
+      height: 48px;
+    }
+
+    .joe_header__above-slideicon,
+    .joe_header__above-searchicon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+    }
+
+    .joe_header__chapter {
+      display: none;
+    }
+
+    .joe_header__read {
+      left: 14px;
+      right: 14px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .joe_header--islands {
+    .joe_header__above-nav::before,
+    .joe_header__chapter,
+    .joe_header__above-nav > a.item,
+    .joe_header__above-nav > .joe_dropdown,
+    .joe_dropdown__menu,
+    .joe_header__chapter-list {
+      transition-duration: 0s;
+    }
+  }
+}
+
+/* 阅读条显示进度时，不再显示页面底部的旧进度条 */
+html:has(.joe_header--islands) .joe_progress_bar {
+  display: none;
+}
+
+/* 宽屏时 base.css 用 #Joe .joe_container 设置最大宽度，这里同样带上 #Joe 以保持与内容区对齐 */
+@media (min-width: 769px) {
+  #Joe .joe_header--islands .joe_header_container {
+    width: calc(100% - 30px);
+    max-width: calc(var(--content-max-width, 1320px) - 30px);
+  }
+}
+
+/* 阅读条：明暗切换按钮。太阳的光芒收起、圆心被「咬」掉一块即成月亮 */
+.joe_header__mode {
+  display: none;
+}
+
+.joe_header--islands .joe_header__mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-regular);
+  cursor: pointer;
+  transition:
+    color var(--dur-base) var(--ease-out),
+    background var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-spring);
+
+  &:hover {
+    color: var(--theme);
+    background: var(--tint);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    overflow: visible;
+  }
+
+  .mode-core {
+    fill: currentColor;
+    transform-origin: center;
+    transition: r var(--dur-slow) var(--ease-spring);
+  }
+
+  .mode-cut {
+    transition:
+      cx var(--dur-slow) var(--ease-spring),
+      cy var(--dur-slow) var(--ease-spring);
+  }
+
+  .mode-rays {
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    transform-origin: center;
+    transition:
+      opacity var(--dur-base) var(--ease-out),
+      transform var(--dur-slow) var(--ease-spring);
+  }
+}
+
+html[data-mode="dark"] .joe_header--islands .joe_header__mode {
+  .mode-core {
+    r: 9;
+  }
+
+  .mode-cut {
+    cx: 17;
+    cy: 7;
+  }
+
+  .mode-rays {
+    opacity: 0;
+    transform: rotate(-60deg) scale(0.5);
+  }
+}
+
+/* 阅读条中已有明暗切换，桌面端隐藏右下角重复的按钮（移动端导航较窄，仍用悬浮按钮） */
+@media (min-width: 769px) {
+  html:has(.joe_header--islands .joe_header__mode) .joe_action_item.mode {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .joe_header--islands .joe_header__mode {
+    display: none;
+  }
+}
+
+/* 搜索快捷键提示 */
+.joe_header__kbd {
+  display: none;
+}
+
+.joe_header--islands .joe_header__above-search .submit:has(.joe_header__kbd) {
+  width: auto;
+  gap: 6px;
+  padding: 0 8px 0 10px;
+}
+
+.joe_header--islands .joe_header__kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  font: 600 11px/1.4 inherit;
+  font-family: inherit;
+  color: var(--text-secondary);
+  background: var(--bg-muted);
+}
+
+@media (max-width: 992px) {
+  .joe_header--islands .joe_header__kbd {
+    display: none;
+  }
+
+  .joe_header--islands .joe_header__above-search .submit:has(.joe_header__kbd) {
+    width: 36px;
+    padding: 0;
+  }
+}

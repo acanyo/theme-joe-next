@@ -3,5 +3,5 @@
 .joe_run__minute,
 .joe_run__second {
   font-weight: 500;
-  color: var(--theme);
+  color: var(--theme-text);
 }

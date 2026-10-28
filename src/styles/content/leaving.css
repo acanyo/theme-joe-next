@@ -85,7 +85,7 @@
     }
 
     /* &:hover {*/
-    /*   transition: transform 0.25s;*/
+    /*   transition: transform var(--dur-base) var(--ease-out);*/
     /*   transform: rotate(-5deg)*/
     /* }*/
   }

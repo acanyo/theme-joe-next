@@ -31,7 +31,7 @@
   user-select: none;
   background: var(--bg-page);
   color: var(--text-regular);
-  transition: transform 0.25s;
+  transition: transform var(--dur-base) var(--ease-out);
   box-shadow: var(--shadow);
 
   &:active {
@@ -55,8 +55,8 @@
   transform: scaleX(0);
   transform-origin: left;
   transition:
-    transform 0.4s ease,
-    opacity 0.3s ease 0.2s;
+    transform 0.4s var(--ease-out),
+    opacity var(--dur-base) var(--ease-out) 0.2s;
   pointer-events: none;
 
   &.is-loading {
@@ -95,8 +95,8 @@
   opacity: 0;
   transform: translateY(-10px);
   transition:
-    opacity 0.25s,
-    transform 0.25s;
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
 
   &.is-visible {
     opacity: 1;
@@ -134,5 +134,84 @@
 
   &.animated {
     visibility: visible;
+  }
+}
+
+/* 自定义右键菜单（features/context-menu.ts）：玻璃面板，从鼠标位置弹性展开 */
+.joe_context_menu {
+  position: fixed;
+  z-index: 10001;
+  min-width: 200px;
+  max-width: 280px;
+  padding: 6px;
+  border-radius: 8px;
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  opacity: 0;
+  transform: scale(0.92);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-base) var(--ease-spring);
+
+  &.is-open {
+    opacity: 1;
+    transform: none;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    font: inherit;
+    font-size: 13.5px;
+    text-align: left;
+    color: var(--text-regular);
+    cursor: pointer;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out);
+
+    span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.85;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--theme);
+      background: var(--tint);
+      outline: none;
+    }
+  }
+
+  .sep {
+    height: 1px;
+    margin: 4px 6px;
+    background: var(--border-lighter);
   }
 }

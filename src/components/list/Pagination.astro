@@ -5,6 +5,7 @@
  * 页码链接基于结果对象的 prevUrl 推导路由前缀（去掉末尾 /page/N），
  * 因此首页、分类、标签、作者、归档等路由都能生成正确地址。
  */
+import Icon from "../common/Icon.astro";
 interface Props {
   /** 分页结果变量名，如 "posts"、"archives" */
   result?: string;
@@ -32,7 +33,7 @@ const WINDOW_END = `winStart + 4 > ${r}.totalPages ? ${r}.totalPages : winStart 
         th:classappend={`\${${r}.hasPrevious() ? '' : 'disabled'}`}
       >
         <a th:href={`@{\${${r}.prevUrl}}`} aria-label="上一页">
-          <i class="joe-font joe-icon-prev" aria-hidden="true"></i>
+          <Icon name="chevron-left" />
         </a>
       </li>
       <li th:if="${winStart > 1}">
@@ -62,7 +63,7 @@ const WINDOW_END = `winStart + 4 > ${r}.totalPages ? ${r}.totalPages : winStart 
       </li>
       <li class="next" th:classappend={`\${${r}.hasNext() ? '' : 'disabled'}`}>
         <a th:href={`@{\${${r}.nextUrl}}`} aria-label="下一页">
-          <i class="joe-font joe-icon-next" aria-hidden="true"></i>
+          <Icon name="chevron-right" />
         </a>
       </li>
     </ul>

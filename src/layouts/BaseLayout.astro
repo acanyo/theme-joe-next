@@ -31,6 +31,8 @@ interface Props {
   heading?: string;
   /** 页面脚本名，对应 src/scripts/core/page-scripts.ts 中的注册项 */
   pageScript?: PageScript;
+  /** 是否在阅读条导航底边显示阅读进度（文章页，受设置 post.progress 控制） */
+  readingProgress?: boolean;
 }
 
 const {
@@ -40,6 +42,7 @@ const {
   bigBanner = false,
   heading,
   pageScript,
+  readingProgress = false,
 } = Astro.props;
 ---
 
@@ -56,9 +59,18 @@ const {
   <body>
     <div id="Joe">
       <Navbar />
-      <div id="swup" class="joe_swup" data-joe-script={pageScript}>
+      <div
+        id="swup"
+        class="joe_swup"
+        data-joe-script={pageScript}
+        th:data-joe-progress={
+          readingProgress
+            ? "${theme.config.post.progress ? (theme.config.post.progress_color ?: 'var(--theme)') : ''}"
+            : undefined
+        }
+      >
         {bigBanner && (
-          <th-block th:if="${theme.config.hero.enabled}">
+          <th-block th:if="${theme.config.home.hero}">
             <BigBanner
               fullscreen={bigBanner === "fullscreen"}
               title={heading}

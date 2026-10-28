@@ -1,0 +1,56 @@
+---
+/**
+ * 首页「瞬间叠放卡片」（设置 home.moments_stack，需要瞬间插件）。
+ *
+ * 最近几条瞬间叠成一摞：最新一条在最前，后面的逐级缩小、向上露出一条边。
+ * 鼠标悬停或键盘聚焦时整摞展开成列表；点击任意一条进入瞬间页。
+ * 系统开启「减少动态效果」时直接以展开状态显示。
+ */
+const COUNT =
+  "#conversions.convert(theme.config.home.moments_stack_count ?: 4, 'java.lang.Integer')";
+---
+
+<section
+  class="joe_moments_stack"
+  th:if="${theme.config.home.moments_stack and pluginFinder.available('PluginMoments')}"
+  th:with={`stackMoments = \${momentFinder.list(1, ${COUNT}).items}`}
+  aria-label="最近的瞬间"
+>
+  <th-block th:unless="${#lists.isEmpty(stackMoments)}">
+    <!-- 与「最新文章」使用同一种标题样式 -->
+    <div class="joe_index__title joe_moments_stack__head">
+      <ul class="joe_index__title-title">
+        <li class="item active">最近的瞬间</li>
+      </ul>
+      <a class="more" th:href="@{/moments}">全部瞬间</a>
+    </div>
+    <ul class="joe_moments_stack__list" tabindex="0">
+      <li
+        th:each="moment, iter : ${stackMoments}"
+        th:style="|--i: ${iter.index}|"
+      >
+        <a class="card" th:href="@{/moments}">
+          <img
+            class="avatar"
+            width="36"
+            height="36"
+            loading="lazy"
+            th:src="${moment.owner?.avatar ?: (theme.config.blogger.avatar ?: theme.config.blogger.fallback_avatar)}"
+            th:alt="${moment.owner?.displayName}"
+            th:attr="data-text-avatar=${moment.owner?.displayName}"
+            data-fallback="avatar"
+          />
+          <span class="name" th:text="${moment.owner?.displayName}"></span>
+          <!-- 瞬间正文是 HTML：放进 <template>（不渲染、不会在链接里嵌套链接），由脚本取纯文本截断 -->
+          <span class="text"></span>
+          <template th:utext="${moment.spec.content.html}"></template>
+          <time
+            class="time"
+            th:datetime="${#dates.format(moment.spec.releaseTime, 'yyyy-MM-dd')}"
+            th:text="${#dates.format(moment.spec.releaseTime, 'MM-dd')}"
+          ></time>
+        </a>
+      </li>
+    </ul>
+  </th-block>
+</section>

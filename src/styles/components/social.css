@@ -13,12 +13,20 @@
     margin: 0 2px;
     font-size: 0;
     color: var(--text-secondary);
-    transition: transform 0.2s;
+    transition: transform var(--dur-fast) var(--ease-out);
 
     img {
       display: inline-block;
       height: 20px;
       border-radius: 3px;
+    }
+
+    /* 内置平台图标（config/icons.ts），以品牌色着色 */
+    > svg {
+      display: block;
+      width: 22px;
+      height: 22px;
+      color: var(--brand, currentColor);
     }
 
     &:hover {

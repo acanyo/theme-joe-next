@@ -1,6 +1,7 @@
 ---
 /** 侧栏文章列表：最新文章 / 热门文章 */
 import AsideCard from "./AsideCard.astro";
+import Icon from "../common/Icon.astro";
 
 interface Props {
   kind: "newest" | "hot";
@@ -23,7 +24,7 @@ const source = SOURCES[kind];
 const query = `postFinder.list({page: 1, size: #conversions.convert(${source.size} ?: 5, 'java.lang.Integer'), sort: {${source.sort}, 'metadata.creationTimestamp,asc'}})`;
 ---
 
-<AsideCard variant="newest" icon="huo" title={source.title}>
+<AsideCard variant="newest" icon="hot" title={source.title}>
   <div class="joe_aside__item-contain">
     <ul class="list" th:with={`asidePosts = \${${query}}`}>
       <li class="item" th:each="asidePost : ${asidePosts.items}">
@@ -32,7 +33,7 @@ const query = `postFinder.list({page: 1, size: #conversions.convert(${source.siz
           th:href="@{${asidePost.status.permalink}}"
           th:text="${asidePost.spec.title}"
         ></a>
-        <i class="joe-font joe-icon-link" aria-hidden="true"></i>
+        <Icon name="link" />
       </li>
     </ul>
   </div>

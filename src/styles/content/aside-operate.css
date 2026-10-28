@@ -51,10 +51,10 @@
     &:hover {
       color: var(--theme);
 
-      .joe-icon-dianzan,
-      .joe-icon-huifu,
-      .joe-icon-message,
-      .joe-icon-shang {
+      .joe-icon-like,
+      .joe-icon-reply,
+      .joe-icon-comment,
+      .joe-icon-reward {
         animation: swing 1s ease;
       }
     }
@@ -71,8 +71,8 @@
       opacity: 0;
       transform: scale(0);
       transition:
-        transform 0.35s,
-        opacity 0.35s;
+        transform var(--dur-base) var(--ease-out),
+        opacity var(--dur-base) var(--ease-out);
       border-radius: 50%;
 
       &.active {
@@ -103,8 +103,8 @@
       font-size: 0;
       background: var(--bg-raised);
       border-radius: 50px;
-      transition: all 0.25s;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+      transition: all var(--dur-base) var(--ease-out);
+      box-shadow: var(--glass-shadow);
 
       a {
         position: relative;
@@ -131,7 +131,7 @@
       margin: -100px 0 0 42px;
       padding: 10px;
       background: #fff;
-      border-radius: 5px;
+      border-radius: var(--radius-inner);
       box-shadow: var(--shadow-block);
 
       &:before {
@@ -184,8 +184,8 @@
       transform: translate3d(0, 0, 0);
       background: var(--bg-muted);
       box-shadow: var(--shadow-block);
-      border-radius: 5px;
-      transition: all 0.35s;
+      border-radius: var(--radius-inner);
+      transition: all var(--dur-base) var(--ease-out);
 
       &:before {
         position: absolute;
@@ -207,7 +207,7 @@
           display: block;
           width: 200px;
           max-width: unset;
-          border-radius: 5px;
+          border-radius: var(--radius-inner);
         }
 
         span {

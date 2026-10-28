@@ -18,7 +18,7 @@
 
     .link {
       color: var(--text-regular);
-      transition: color 0.35s;
+      transition: color var(--dur-base) var(--ease-out);
 
       &:hover {
         color: var(--theme);
@@ -46,33 +46,56 @@
   }
 }
 
+/* 上一篇 / 下一篇：两张并排的卡片，小字说明方向，大字显示文章标题 */
 .joe_post__pagination {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 15px;
 }
 
 .joe_post__pagination-item {
-  margin-bottom: 15px;
+  min-width: 0;
 
   a {
     display: block;
-    height: 32px;
-    line-height: 32px;
-    padding: 0 15px;
-    color: #fff;
-    font-size: 12px;
-    background: var(--theme);
-    border-radius: 3px;
+    height: 100%;
+    padding: 14px 16px;
+    border-radius: var(--radius-wrap);
+    background: var(--bg-page);
     box-shadow: var(--shadow);
+    transition: box-shadow var(--dur-base) var(--ease-out);
 
     &:hover {
-      animation: pulse 1s;
-      box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+      box-shadow: var(--shadow-hover);
+
+      .title {
+        color: var(--theme);
+      }
     }
   }
 
+  .label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .title {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-title);
+    transition: color var(--dur-base) var(--ease-out);
+  }
+
   &.next {
-    margin-left: auto;
+    grid-column: 2;
+    text-align: right;
   }
 }
 
@@ -94,7 +117,7 @@
   z-index: 2;
   top: 75px;
   width: 280px;
-  transition: top 0.35s;
+  transition: top var(--dur-base) var(--ease-out);
 }
 
 .toc-container {
@@ -104,7 +127,7 @@
   background: var(--bg-page);
   border-radius: var(--radius-wrap);
   box-shadow: var(--shadow);
-  transition: top 0.3s;
+  transition: top var(--dur-base) var(--ease-out);
 
   .toc-header {
     position: relative;
@@ -222,7 +245,7 @@
   .is-collapsible {
     /* max-height: 1000px;*/
     overflow: hidden;
-    transition: all 300ms ease-in-out;
+    transition: all var(--dur-base) var(--ease-out);
   }
 
   .is-collapsed {
@@ -253,19 +276,27 @@
 }
 /* 评论区 GIF 位置及大小调整*/
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+/* 响应式 */
 @media (max-width: 992px) {
-  html .toc-container {
+  .toc-container {
     display: none;
+  }
+
+  .joe_detail-wrapper {
+    padding: 0;
   }
 }
 @media (max-width: 500px) {
-  html .joe_bread {
+  .joe_bread {
     margin: 0 auto;
     padding: 15px 15px 0 5px;
   }
 
-  html .joe_post__pagination {
+  .joe_post__pagination {
     padding: 0 10px;
   }
+}
+
+html[data-mode="dark"] .toc-nodata em {
+  opacity: 0.4;
 }

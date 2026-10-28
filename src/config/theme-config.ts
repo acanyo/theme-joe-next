@@ -14,44 +14,45 @@ export const SERVER_CONFIG_FIELDS = {
   themeMode: "theme.config.general.color_mode",
   lightTimeScope: "theme.config.general.light_hours",
   enableLoadingBar: "theme.config.effects.loading_bar",
-  enableBack2top: "theme.config.general.back_to_top",
-  enableBack2topSmooth: "theme.config.general.back_to_top_smooth",
+  enableBack2top: "theme.config.effects.back_to_top",
+  enableBack2topSmooth: "theme.config.effects.back_to_top_smooth",
   enableFixedHeader: "theme.config.navbar.sticky",
   linkBehavior: "theme.config.general.link_target",
   pageTransition: "theme.config.effects.page_transition",
   swupPreload: "theme.config.effects.swup_preload",
   cursorEffect: "theme.config.effects.cursor_effect",
   backdrop: "theme.config.effects.backdrop",
+  enableContextMenu: "theme.config.effects.context_menu",
   enableOffscreenTip: "theme.config.effects.offscreen_title",
   offscreenTitleLeave: "theme.config.effects.offscreen_title_leave",
   offscreenTitleBack: "theme.config.effects.offscreen_title_back",
-  enableCleanMode: "theme.config.advanced.clean_mode",
-  enableConsoleTheme: "theme.config.advanced.console_banner",
-  enableDebug: "theme.config.advanced.debug",
-  showLoadedTime: "theme.config.advanced.console_timing",
+  enableCleanMode: "theme.config.footer.clean_mode",
+  enableConsoleTheme: "theme.config.footer.console_banner",
+  enableDebug: "theme.config.footer.debug",
+  showLoadedTime: "theme.config.footer.console_timing",
   favicon: "theme.config.general.favicon",
   footerPosition: "theme.config.footer.position",
   enableBirthday: "theme.config.footer.uptime",
   birthday: "theme.config.footer.since",
   enableIndexListAjax: "theme.config.home.load_more",
   enableAutoAjax: "theme.config.home.infinite_scroll",
-  enableIndexListEffect: "theme.config.home.list_animation",
-  indexListEffectClass: "theme.config.home.list_animation_name",
+  enableIndexListEffect: "theme.config.effects.list_animation",
+  indexListEffectClass: "theme.config.effects.list_animation_name",
   fallbackThumbnail: "theme.config.home.fallback_thumbnail",
-  enableBanner: "theme.config.carousel.enabled",
-  bannerDirection: "theme.config.carousel.direction",
-  bannerEffect: "theme.config.carousel.effect",
-  enableBannerLoop: "theme.config.carousel.loop",
-  enableBannerAutoplay: "theme.config.carousel.autoplay",
-  enableBannerHandle: "theme.config.carousel.draggable",
-  bannerDelay: "theme.config.carousel.interval",
-  bannerSpeed: "theme.config.carousel.speed",
-  enableBigBanner: "theme.config.hero.enabled",
-  bigBannerTitle: "theme.config.hero.title",
-  enableBigBannerHitokoto: "theme.config.hero.hitokoto",
+  enableBanner: "theme.config.home.carousel",
+  bannerDirection: "theme.config.home.carousel_direction",
+  bannerEffect: "theme.config.home.carousel_effect",
+  enableBannerLoop: "theme.config.home.carousel_loop",
+  enableBannerAutoplay: "theme.config.home.carousel_autoplay",
+  enableBannerHandle: "theme.config.home.carousel_draggable",
+  bannerDelay: "theme.config.home.carousel_interval",
+  bannerSpeed: "theme.config.home.carousel_speed",
+  enableBigBanner: "theme.config.home.hero",
+  bigBannerTitle: "theme.config.home.hero_title",
+  enableBigBannerHitokoto: "theme.config.home.hero_hitokoto",
   defaultAvatar: "theme.config.blogger.fallback_avatar",
   generateAvatarOpts: "theme.config.blogger.text_avatar",
-  linksDefaultLogo: "theme.config.links.fallback_logo",
+  linksDefaultLogo: "theme.config.pages.links_fallback_logo",
   enableCodeTitle: "theme.config.code.title",
   enableCodeHr: "theme.config.code.title_divider",
   enableCodeMacdot: "theme.config.code.mac_dots",
@@ -62,18 +63,13 @@ export const SERVER_CONFIG_FIELDS = {
   enableFoldLongCode: "theme.config.code.fold_long",
   longCodeHeight: "theme.config.code.fold_height",
   showToolsWhenHover: "theme.config.code.tools_on_hover",
-  codeTheme: "theme.config.code.theme",
   enableToc: "theme.config.post.toc",
   tocDepth: "theme.config.post.toc_depth",
   enableProgressBar: "theme.config.post.progress",
   enableCopyRightText: "theme.config.post.copy_notice",
   copyRightText: "theme.config.post.copy_notice_text",
-  enableJournalEffect: "theme.config.moments.animation",
-  journalListEffectClass: "theme.config.moments.animation_name",
-  journalBlockHeight: "theme.config.moments.max_height",
-  enableFriendEffect: "theme.config.links.feed_animation",
-  friendListEffectClass: "theme.config.links.feed_animation_name",
-  enableLinksRandom: "theme.config.links.random",
+  journalBlockHeight: "theme.config.pages.moments_max_height",
+  enableLinksRandom: "theme.config.pages.links_random",
   siteTitle: "site.title",
   version: "theme.spec.version",
 } as const;
@@ -107,6 +103,7 @@ export interface ThemeConfig {
   swupPreload: boolean;
   cursorEffect: string;
   backdrop: string;
+  enableContextMenu: boolean;
   enableOffscreenTip: boolean;
   offscreenTitleLeave: string;
   offscreenTitleBack: string;
@@ -152,7 +149,6 @@ export interface ThemeConfig {
     foldLong: boolean;
     longHeight: number;
     toolsOnHover: boolean;
-    theme: string;
   };
   post: {
     toc: boolean;
@@ -160,8 +156,7 @@ export interface ThemeConfig {
     progressBar: boolean;
     copyRightText: string;
   };
-  journal: { effect: boolean; effectClass: string; blockHeight: number };
-  friend: { effect: boolean; effectClass: string };
+  journal: { blockHeight: number };
   enableLinksRandom: boolean;
   siteTitle: string;
   version: string;
@@ -240,6 +235,7 @@ export function normalizeThemeConfig(
       : "default") as ThemeConfig["linkBehavior"],
     cursorEffect: toStr(raw.cursorEffect, "off"),
     backdrop: toStr(raw.backdrop, "off"),
+    enableContextMenu: toBool(raw.enableContextMenu),
     enableOffscreenTip: toBool(raw.enableOffscreenTip),
     offscreenTitleLeave: toStr(raw.offscreenTitleLeave),
     offscreenTitleBack: toStr(raw.offscreenTitleBack),
@@ -286,7 +282,6 @@ export function normalizeThemeConfig(
       foldLong: toBool(raw.enableFoldLongCode),
       longHeight: toNumber(raw.longCodeHeight, 800),
       toolsOnHover: toBool(raw.showToolsWhenHover, true),
-      theme: toStr(raw.codeTheme, "one-dark"),
     },
     post: {
       toc: toBool(raw.enableToc, true),
@@ -297,13 +292,7 @@ export function normalizeThemeConfig(
         : "",
     },
     journal: {
-      effect: toBool(raw.enableJournalEffect, true),
-      effectClass: toStr(raw.journalListEffectClass, "fadeInUp"),
       blockHeight: toNumber(raw.journalBlockHeight, 300),
-    },
-    friend: {
-      effect: toBool(raw.enableFriendEffect, true),
-      effectClass: toStr(raw.friendListEffectClass, "fadeInUp"),
     },
     enableLinksRandom: toBool(raw.enableLinksRandom),
     siteTitle: toStr(raw.siteTitle),

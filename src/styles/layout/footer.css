@@ -29,7 +29,7 @@
 
     a {
       color: var(--text-secondary);
-      transition: all 0.35s;
+      transition: all var(--dur-base) var(--ease-out);
 
       &:hover {
         color: var(--theme);
@@ -41,12 +41,16 @@
 
       .a-powered {
         font-weight: 600;
-        color: #007cff;
+        color: #0064d6;
+
+        html[data-mode="dark"] & {
+          color: #4d9fff;
+        }
       }
 
       .a-theme {
         font-weight: 600;
-        color: var(--theme);
+        color: var(--theme-text);
       }
     }
 
@@ -118,7 +122,7 @@
         font-weight: bold;
         color: var(--border-light);
         background: var(--bg-inverse);
-        border-radius: 5px;
+        border-radius: var(--radius-inner);
 
         .joe-font {
           position: absolute;
@@ -177,14 +181,14 @@
 
   &.full {
     .joe_container {
-      max-width: 100% !important;
+      max-width: 100%;
     }
   }
 }
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+/* 响应式 */
 @media (max-width: 768px) {
-  html .joe_footer {
+  .joe_footer {
     .joe_container {
       flex-direction: column;
       justify-content: center;
@@ -204,7 +208,7 @@
 }
 
 @media (max-width: 500px) {
-  html .joe_footer {
+  .joe_footer {
     .joe_container {
       flex-direction: column;
       justify-content: center;
@@ -219,5 +223,14 @@
         margin: 0;
       }
     }
+  }
+}
+
+/* 暗黑模式：深色的备案/驱动徽标反色 */
+html[data-mode="dark"] .site_driven img {
+  &.baidu,
+  &.huawei,
+  &.jinshan {
+    filter: invert(1);
   }
 }

@@ -6,7 +6,7 @@
 
 ## 环境要求
 
-- Halo `>= 2.22.2`
+- Halo `>= 2.22.8`
 - 开发：Node.js `22.23.4`（见 `.nvmrc`）、pnpm `10`
 
 ## 开发
@@ -25,6 +25,12 @@ pnpm dev        # 监听 src/ 变化并重新构建到 templates/
 | `pnpm build:templates` | 仅构建模板到 `templates/`（开发调试用）              |
 | `pnpm check`           | TypeScript / Astro 类型检查                          |
 | `pnpm test`            | 单元测试                                             |
+| `pnpm qa:size`         | 首屏 CSS / JS 与主题包体积预算（CI 中运行）          |
+| `pnpm qa:shots`        | 各页面明暗 × 桌面 / 手机全页截图，检查状态码和脚本错误 |
+| `pnpm qa:snapshot DIR` | 计算样式快照；`pnpm qa:diff A B` 对比两次快照        |
+| `pnpm qa:a11y`         | axe-core 无障碍检查（WCAG 2 A / AA）                 |
+
+`qa:shots`、`qa:snapshot`、`qa:a11y` 需要一个启用了本主题的 Halo（默认 `http://127.0.0.1:8091`，用 `HALO_URL` 修改）和本机 Chrome；`ROUTES`、`WIDTHS` 环境变量可限定页面与宽度。重构样式时先对修改前后各拍一次快照再对比，可发现肉眼难以察觉的样式变化。
 
 发布：在 GitHub 创建 Release 后，CD 工作流会自动构建并把主题包上传到 Release 附件。
 
@@ -51,11 +57,11 @@ src/
 │   ├── content/        正文处理（代码块、目录、灯箱、短代码）
 │   ├── core/           基础工具（DOM、配置、存储、提示）
 │   └── effects/        鼠标/背景特效（按需加载）
-├── styles/             原生 CSS（嵌套语法），按 base / layout / components / content / pages 拆分
+├── styles/             原生 CSS（嵌套语法），按 base / components / layout / content / pages 拆分，目录即级联层
 ├── config/             前后端共享的配置契约与 SpEL 表达式
 └── data/               社交图标、内联 SVG 等静态数据
 public/assets/          运行时按路径引用的资源（头像框、鼠标皮肤、字体、默认图片）
-integrations/           Astro 构建后处理
+integrations/           Astro 构建后处理（Thymeleaf 标签还原、CSS 级联层）
 ```
 
 ## 关键约定
@@ -64,7 +70,7 @@ integrations/           Astro 构建后处理
 
 **命名空间标签。** Astro 7 编译器不支持 `<th:block>`、`<halo:comment>`，源码中写作 `<th-block>`、`<halo-comment>`、`<halo-footer>`，构建后由 `integrations/thymeleaf-tags.ts` 还原。
 
-**布尔设置项。** 未保存过的设置值为 `null`，直接参与 `and` / `or` / `!` 会抛出异常。构建后处理会把 `src/config/boolean-settings.ts` 中列出的设置项改写为 `(x == true)`。在 `settings.yaml` 新增布尔字段时，需要同步更新该列表，`pnpm test` 会校验两者一致。
+**设置项默认值。** 用户首次保存主题设置前，Halo 不会写入 `settings.yaml` 中的默认值，模板读到的是 `null`。`pnpm settings:defaults` 从 `settings.yaml` 生成 `src/config/setting-defaults.ts`；构建后处理据此改写布尔设置的引用（默认开启的写成 `!= false`，默认关闭的写成 `== true`），有默认值的文本/数字设置补上 `?: 默认值`，列表设置补上默认内容的内联列表。模板中手写的 `?:` 保持不变，但必须与 `settings.yaml` 一致。修改 `settings.yaml` 后需重新生成，`pnpm test` 会校验两者一致。
 
 **设置项命名。** 键名一律 snake_case，不带 `enable_` / `show_` 前缀，也不重复分组名（`links.title` 而非 `links.links_title`）。模板中引用的每个 `theme.config.*` 都必须在 `settings.yaml` 中存在，同样由 `pnpm test` 校验。
 
@@ -74,7 +80,9 @@ integrations/           Astro 构建后处理
 
 **样式。** 原生 CSS 嵌套语法，无预处理器。颜色、阴影、圆角等变量在 `src/styles/base/tokens.css`，按用途命名（`--text-*`、`--bg-*`、`--border-*`、`--fill-*`）。组件的响应式规则写在组件自己的样式文件末尾，断点只用 500 / 768 / 992 / 1200 / 1360px（`max-width`）。
 
-**按需加载。** Swiper、PhotoSwipe、APlayer、vConsole、Prism 语言包、代码主题、鼠标/背景特效均在用到时才下载，样式通过 `loadStylesheet()` 插入，不会进入首屏 CSS。
+**级联层。** `src/styles` 的每个文件在构建时按目录放入 CSS 级联层（`integrations/css-layers.ts`），顺序为 `reset → tokens → vendor → base → components → layout → content → pages`。后面的层总是覆盖前面的层，与选择器权重无关，所以不需要用 `html` / `#Joe` 前缀或 `!important` 抬高优先级；跨文件的覆盖应写在更靠后的层里。不分层的样式优先于主题：主题设置生成的动态样式、插件样式，以及在 Halo「代码注入」里写的自定义 CSS，都能直接覆盖主题。按需加载的 Swiper / PhotoSwipe 样式放在 vendor 层。
+
+**按需加载。** Swiper、PhotoSwipe、vConsole、hls.js、鼠标/背景特效均在用到时才下载，样式通过 `loadStylesheet()` 插入，不会进入首屏 CSS。
 
 ## 插件集成
 
@@ -86,15 +94,15 @@ integrations/           Astro 构建后处理
 | 图库 `/photos`              | 图库 `PluginPhotos`            | 路由不存在             |
 | 友链 `/links`、友链页面模板 | 链接 `PluginLinks`             | 友链页面模板只显示正文 |
 | 朋友圈 `/friends`           | 朋友圈 `plugin-friends`        | 路由不存在             |
-| 代码高亮                    | 可选（如 shiki）               | 使用主题内置 Prism     |
+| 代码高亮                    | 代码高亮 `shiki`               | 代码块无语法高亮       |
 
 ## 相对 Joe3 的变化
 
 - **技术栈：** jQuery、Isotope、fancybox、Draggabilly、WOW.js、NProgress、Qmsg、ClipboardJS、lazysizes、Vue 2 均由原生 API 或 npm 包替代，第三方库通过 pnpm 管理并锁定版本。
-- **图标字体与资源本地化：** iconfont 不再依赖 at.alicdn.com，Font Awesome 已移除（Joe3 中未实际使用）。
+- **图标：** iconfont 图标字体与 Font Awesome 改为 [Iconify](https://iconify.design/) 图标（lucide、Remix Icon、Simple Icons），构建时内联为 SVG（`src/config/icons.ts`），不加载图标字体也不请求 CDN；菜单项图标使用 Halo 的 Iconify 图标选择器。
 - **评论：** 只使用 Halo 评论扩展点（评论组件插件），不再内置 Waline。
-- **已移除：** 天气组件、百度收录检测、PDF 短代码，以及 Joe3 中未被引用的库和模板（halo-comment、KaTeX、jquery-ui 等）。视频短代码改用原生 `<video>` + hls.js，不再使用 DPlayer 的 iframe 页面。
-- **设置项：** 重新整理为 18 个分组，统一键名与说明文字，**与 Joe3 及 Joe Next 0.1 之前的配置不兼容**，升级后需要在后台重新设置。已删除不再生效的设置（预载图、外部资源地址、旧版自定义 CSS/JS、Waline 等）。
+- **已移除：** 天气组件、百度收录检测、PDF 短代码、内置 Prism 代码高亮（改由 shiki 插件负责）、APlayer 音乐播放器（侧栏歌单组件；音频短代码改用原生 `<audio>`，网易云短代码显示为链接），以及 Joe3 中未被引用的库和模板（halo-comment、KaTeX、jquery-ui 等）。视频短代码改用原生 `<video>` + hls.js，不再使用 DPlayer 的 iframe 页面。
+- **设置项：** 重新整理为 12 个分组，统一键名与说明文字，**与 Joe3 及 Joe Next 0.1 之前的配置不兼容**，升级后需要在后台重新设置。已删除不再生效的设置（预载图、外部资源地址、旧版自定义 CSS/JS、Waline 等）。
 - **修复：** 分类/标签/作者页分页地址、年度时间轴重复、作者页标题、`page_links` 在未安装链接插件时报错等 Joe3 遗留问题。
 
 ## 许可证
