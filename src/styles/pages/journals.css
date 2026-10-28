@@ -514,9 +514,9 @@
   }
 }
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+/* 响应式 */
 @media (max-width: 500px) {
-  html .joe_journals__list {
+  .joe_journals__list {
     .joe_journal__item {
       padding: 0 0 12px 0;
 

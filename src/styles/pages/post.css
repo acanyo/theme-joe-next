@@ -276,9 +276,9 @@
 }
 /* 评论区 GIF 位置及大小调整*/
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+/* 响应式 */
 @media (max-width: 992px) {
-  html .toc-container {
+  .toc-container {
     display: none;
   }
 
@@ -287,12 +287,12 @@
   }
 }
 @media (max-width: 500px) {
-  html .joe_bread {
+  .joe_bread {
     margin: 0 auto;
     padding: 15px 15px 0 5px;
   }
 
-  html .joe_post__pagination {
+  .joe_post__pagination {
     padding: 0 10px;
   }
 }

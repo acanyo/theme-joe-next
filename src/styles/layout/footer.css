@@ -182,9 +182,9 @@
   }
 }
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+/* 响应式 */
 @media (max-width: 768px) {
-  html .joe_footer {
+  .joe_footer {
     .joe_container {
       flex-direction: column;
       justify-content: center;
@@ -204,7 +204,7 @@
 }
 
 @media (max-width: 500px) {
-  html .joe_footer {
+  .joe_footer {
     .joe_container {
       flex-direction: column;
       justify-content: center;

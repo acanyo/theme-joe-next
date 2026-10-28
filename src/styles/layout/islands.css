@@ -555,7 +555,7 @@
 
 /* 移动端：一整条玻璃胶囊（菜单 · Logo · 搜索），不显示章节与分隔线 */
 @media (max-width: 768px) {
-  html .joe_header--islands {
+  .joe_header--islands {
     height: 64px;
 
     .joe_header__above {

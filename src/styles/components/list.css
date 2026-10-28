@@ -624,9 +624,9 @@
   }
 }
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+/* 响应式 */
 @media (max-width: 1200px) {
-  html .joe_list__item {
+  .joe_list__item {
     &.default {
       .thumbnail {
         width: 185px;
@@ -637,7 +637,7 @@
 }
 
 @media (max-width: 1200px) {
-  html .joe_list__item {
+  .joe_list__item {
     &.default {
       .meta {
         .categories {
@@ -655,7 +655,7 @@
 }
 
 @media (max-width: 768px) {
-  html .joe_list__item {
+  .joe_list__item {
     .information {
       .title {
         font-size: 16px;
@@ -729,7 +729,7 @@
 }
 
 @media (max-width: 500px) {
-  html .joe_list__item {
+  .joe_list__item {
     padding: 12px 0;
 
     .information {
@@ -803,7 +803,7 @@
     }
   }
 
-  html .joe_archive {
+  .joe_archive {
     border-radius: 0;
   }
 }

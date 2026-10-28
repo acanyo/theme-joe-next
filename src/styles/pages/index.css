@@ -158,9 +158,9 @@
   }
 }
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+/* 响应式 */
 @media (max-width: 1200px) {
-  html .joe_index__hot-list {
+  .joe_index__hot-list {
     column-gap: 10px;
 
     .item .link .inner .image {
@@ -168,11 +168,11 @@
     }
   }
 
-  html .joe_index__banner {
+  .joe_index__banner {
     display: block;
   }
 
-  html .swiper {
+  .swiper {
     height: 360px;
 
     .item {
@@ -182,7 +182,7 @@
 }
 
 @media (max-width: 1200px) {
-  html .joe_index__banner {
+  .joe_index__banner {
     .swiper {
       height: 350px;
 
@@ -206,13 +206,13 @@
 }
 
 @media (max-width: 992px) {
-  html .joe_index__hot-list {
+  .joe_index__hot-list {
     .item .link .inner .image {
       height: 95px;
     }
   }
 
-  html .joe_index__banner {
+  .joe_index__banner {
     .swiper {
       height: 340px;
 
@@ -224,7 +224,7 @@
 }
 
 @media (max-width: 768px) {
-  html .joe_index__banner {
+  .joe_index__banner {
     .swiper {
       height: 300px;
 
@@ -238,12 +238,12 @@
     }
   }
 
-  html .joe_index__hot-list {
+  .joe_index__hot-list {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
 
-  html .joe_index__title-title {
+  .joe_index__title-title {
     .item {
       display: none;
 
@@ -256,7 +256,7 @@
 }
 
 @media (max-width: 768px) {
-  html .joe_index__banner {
+  .joe_index__banner {
     .swiper {
       .item {
         .title-row {
@@ -272,11 +272,11 @@
 }
 
 @media (max-width: 500px) {
-  html .joe_index {
+  .joe_index {
     border-radius: 0;
   }
 
-  html .joe_index__banner {
+  .joe_index__banner {
     padding: 0;
     border-radius: 0;
 
@@ -312,7 +312,7 @@
     }
   }
 
-  html .joe_index__hot-list {
+  .joe_index__hot-list {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
 
@@ -321,11 +321,11 @@
     }
   }
 
-  html .joe_index__title-notice {
+  .joe_index__title-notice {
     display: none;
   }
 
-  html .joe_index__title-title {
+  .joe_index__title-title {
     .item {
       display: none;
 

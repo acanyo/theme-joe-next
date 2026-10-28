@@ -230,9 +230,9 @@
   color: var(--theme);
 }
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+/* 响应式 */
 @media (max-width: 500px) {
-  html .joe_photos__type {
+  .joe_photos__type {
     margin-bottom: 0;
     padding-bottom: 12px;
     border-radius: 0;

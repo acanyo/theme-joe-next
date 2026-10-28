@@ -969,15 +969,15 @@
   }
 }
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+/* 响应式 */
 @media (max-width: 1200px) {
-  html .joe_detail__friends {
+  .joe_detail__friends {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 992px) {
-  html .joe_detail__article {
+  .joe_detail__article {
     img {
       max-width: 100% !important;
     }
@@ -985,15 +985,15 @@
 }
 
 @media (max-width: 768px) {
-  html .joe_detail__friends {
+  .joe_detail__friends {
     grid-template-columns: repeat(1, 1fr);
   }
 
-  html .joe_detail__title {
+  .joe_detail__title {
     font-size: 18px;
   }
 
-  html .joe_detail__count-information {
+  .joe_detail__count-information {
     width: 100%;
 
     .avatar {
@@ -1014,17 +1014,17 @@
     }
   }
 
-  html .joe_detail__count-created {
+  .joe_detail__count-created {
     display: none;
   }
 
-  html .joe_detail__count {
+  .joe_detail__count {
     &::after {
       display: none;
     }
   }
 
-  html .joe_detail__overdue-wrapper {
+  .joe_detail__overdue-wrapper {
     padding: 10px;
 
     .title {
@@ -1042,7 +1042,7 @@
     }
   }
 
-  html .joe_detail__article {
+  .joe_detail__article {
     padding: 10px 0;
     font-size: 14px;
 
@@ -1062,7 +1062,7 @@
     }
   }
 
-  html .joe_detail__copyright {
+  .joe_detail__copyright {
     .content {
       .item {
         font-size: 13px;
@@ -1077,27 +1077,27 @@
 }
 
 @media (max-width: 768px) {
-  html .joe_donate {
+  .joe_donate {
     display: none;
   }
 }
 
 @media (max-width: 500px) {
-  html .joe_detail {
+  .joe_detail {
     padding: 12px;
     border-radius: 0;
   }
 
-  html .joe_detail__friends {
+  .joe_detail__friends {
     grid-template-columns: repeat(1, 1fr);
   }
 
-  html .joe_detail__title {
+  .joe_detail__title {
     padding-top: 30px;
     font-size: 18px;
   }
 
-  html .joe_detail__count-information {
+  .joe_detail__count-information {
     width: 100%;
 
     .avatar {
@@ -1125,21 +1125,21 @@
     }
   }
 
-  html .joe_detail__count-created {
+  .joe_detail__count-created {
     display: none;
   }
 
-  html .joe_detail__count {
+  .joe_detail__count {
     &::after {
       display: none;
     }
   }
 
-  html .joe_detail__overdue {
+  .joe_detail__overdue {
     padding-top: 0;
   }
 
-  html .joe_detail__overdue-wrapper {
+  .joe_detail__overdue-wrapper {
     padding: 10px;
 
     .title {
@@ -1157,7 +1157,7 @@
     }
   }
 
-  html .joe_detail__article {
+  .joe_detail__article {
     padding: 10px 0;
     font-size: 14px;
 
@@ -1166,7 +1166,7 @@
     }
   }
 
-  html .joe_detail__copyright {
+  .joe_detail__copyright {
     .content {
       .item {
         font-size: 13px;

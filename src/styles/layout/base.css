@@ -379,7 +379,7 @@ body {
 }
 
 /* 背景图层（是否显示由 DynamicStyle.astro 按主题设置写入 background-image）*/
-html body::before {
+body::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -421,9 +421,9 @@ html body::before {
   border-radius: 20px;
 }
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+/* 响应式 */
 @media (max-width: 768px) {
-  html .joe_main {
+  .joe_main {
     .code-toolbar {
       pre[class*="language-"] {
         &.c_hover_tools {
@@ -439,7 +439,7 @@ html body::before {
 }
 
 @media (max-width: 500px) {
-  html .joe_main {
+  .joe_main {
     padding-bottom: 0;
   }
 
@@ -448,7 +448,7 @@ html body::before {
     margin: 15px auto 20px;
   }
 
-  html .joe_main {
+  .joe_main {
     .code-toolbar {
       .toolbar .toolbar-item span {
         font-size: 13px;
@@ -489,7 +489,7 @@ html body::before {
     }
   }
 
-  html .page-links {
+  .page-links {
     .links-group {
       padding-left: 0 !important;
     }

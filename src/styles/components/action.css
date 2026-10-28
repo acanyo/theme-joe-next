@@ -103,9 +103,9 @@
   }
 }
 
-/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+/* 响应式 */
 @media (max-width: 500px) {
-  html .joe_action {
+  .joe_action {
     bottom: 40px;
     right: 20px;
   }
