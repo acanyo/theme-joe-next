@@ -7,6 +7,11 @@ spec:
     group: content.halo.run
     kind: Post
   formSchema:
+    - $formkit: "tagSelect"
+      name: "series"
+      label: "所属系列"
+      value: ""
+      help: "选择一个标签作为系列：文末会列出该标签下的全部文章（按发布时间排序）与系列内的上一篇 / 下一篇"
     - $formkit: "switch"
       name: "enable_aside"
       label: "是否启用侧边栏"

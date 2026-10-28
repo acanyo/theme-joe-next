@@ -300,3 +300,145 @@
 html[data-mode="dark"] .toc-nodata em {
   opacity: 0.4;
 }
+
+/* 文章系列（components/post/PostSeries.astro）*/
+.joe_series {
+  margin: 20px 0;
+  padding: 16px 18px;
+  border-radius: var(--radius-wrap);
+  background: var(--tint);
+  box-shadow: inset 3px 0 0 var(--theme);
+
+  &:empty {
+    display: none;
+  }
+}
+
+.joe_series__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+
+  .joe-font {
+    color: var(--theme);
+  }
+}
+
+.joe_series__label {
+  color: var(--text-secondary);
+}
+
+.joe_series__name {
+  font-weight: 600;
+  color: var(--text-title);
+
+  &:hover {
+    color: var(--theme-text);
+  }
+}
+
+.joe_series__progress {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.joe_series__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 5px 0;
+    font-size: 14px;
+    line-height: 1.5;
+
+    &.is-far {
+      display: none;
+    }
+  }
+
+  &.is-expanded li.is-far {
+    display: flex;
+  }
+
+  .is-current .joe_series__title {
+    font-weight: 600;
+    color: var(--theme-text);
+  }
+}
+
+.joe_series__index {
+  flex: none;
+  min-width: 1.6em;
+  font-size: 12px;
+  color: var(--text-placeholder);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+
+  .is-current & {
+    color: var(--theme-text);
+  }
+}
+
+a.joe_series__title {
+  color: var(--text-regular);
+  transition: color var(--dur-fast) var(--ease-out);
+
+  &:hover {
+    color: var(--theme-text);
+  }
+}
+
+.joe_series__more {
+  margin: 4px 0 0 calc(1.6em + 10px);
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--theme-text);
+  }
+}
+
+.joe_series__nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed color-mix(in srgb, var(--theme) 25%, transparent);
+  font-size: 13px;
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    color: var(--text-regular);
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &:hover {
+      color: var(--theme-text);
+    }
+  }
+
+  .next {
+    margin-left: auto;
+    text-align: right;
+  }
+}

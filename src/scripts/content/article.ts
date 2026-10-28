@@ -210,3 +210,18 @@ export function scrollToHash(): void {
       top: target.getBoundingClientRect().top + window.scrollY - headerOffset(),
     });
 }
+
+/** 文章系列：「展开全部」按钮 */
+export function initSeries(): void {
+  const button = $<HTMLButtonElement>("[data-joe-series-more]");
+  const list = $(".joe_series__list");
+  if (!button || !list) return;
+  if (!list.querySelector(".is-far")) {
+    button.remove();
+    return;
+  }
+  button.addEventListener("click", () => {
+    list.classList.add("is-expanded");
+    button.remove();
+  });
+}

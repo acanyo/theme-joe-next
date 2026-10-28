@@ -9,6 +9,7 @@ import {
   initLike,
   initProgressBar,
   initShare,
+  initSeries,
   initToc,
   initWordCount,
   scrollToHash,
@@ -19,6 +20,7 @@ export default function init(): void {
   ensureHeadingIds();
   initWordCount();
   initToc();
+  initSeries();
   initLike();
   initAsideOperate();
   initShare();
