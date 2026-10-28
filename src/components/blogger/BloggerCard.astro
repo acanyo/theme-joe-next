@@ -48,18 +48,6 @@ const STAT_VALUE = {
         th:attr={`data-text-avatar=${el(BLOGGER_NAME)}`}
         data-fallback="avatar"
       />
-      <img
-        th:if="${theme.config.blogger.avatar_frame != null and theme.config.blogger.avatar_frame != '0'}"
-        th:class="|avatar_frame ${theme.config.blogger.avatar_frame}|"
-        th:src="@{/assets/frame/{name}.png(name=${theme.config.blogger.avatar_frame})}"
-        alt=""
-      />
-      <img
-        th:if="${theme.config.blogger.avatar_pendant != null and theme.config.blogger.avatar_pendant != '0'}"
-        th:class="|avatar_widget ${theme.config.blogger.avatar_pendant}|"
-        th:src="@{/assets/widget/{name}.gif(name=${theme.config.blogger.avatar_pendant})}"
-        alt=""
-      />
     </div>
     <a class="link" th:href="${site.url}">
       <span th:text={el(BLOGGER_NAME)}></span>

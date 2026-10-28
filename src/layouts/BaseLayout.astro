@@ -69,7 +69,7 @@ const {
         {container ? (
           <div
             class:list={["joe_container joe_main_container", pageClass]}
-            th:classappend="|${theme.config.effects.reveal ? 'animated showInUp' : ''} ${theme.config.aside.position == 'left' ? 'revert' : ''}|"
+            th:classappend="${theme.config.aside.position == 'left' ? 'revert' : ''}"
           >
             <slot />
           </div>

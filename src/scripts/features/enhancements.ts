@@ -1,42 +1,9 @@
 /**
- * 低优先级的可选增强：鼠标/背景特效、离屏标题、自定义 favicon、调试面板、控制台信息。
+ * 低优先级的可选增强：离屏标题、自定义 favicon、调试面板、控制台信息。
  * 全部按需动态加载，未开启时不会产生任何下载。
  */
 import { isMobile } from "../core/dom";
 import { getThemeConfig } from "../core/config";
-
-type EffectModule = { default: () => void };
-
-const cursorEffects = import.meta.glob<EffectModule>(
-  "../effects/cursor/*.{js,ts}",
-);
-const backdropEffects = import.meta.glob<EffectModule>(
-  "../effects/backdrop/*.js",
-);
-
-async function runEffect(
-  registry: Record<string, () => Promise<EffectModule>>,
-  dir: string,
-  name: string,
-): Promise<void> {
-  const loader =
-    registry[`../effects/${dir}/${name}.js`] ??
-    registry[`../effects/${dir}/${name}.ts`];
-  if (!loader) {
-    console.warn(`[joe-next] 未找到特效：${dir}/${name}`);
-    return;
-  }
-  (await loader()).default();
-}
-
-function initEffects(): void {
-  const config = getThemeConfig();
-  if (isMobile() || config.enableCleanMode) return;
-  if (config.cursorEffect !== "off")
-    void runEffect(cursorEffects, "cursor", config.cursorEffect);
-  if (config.backdrop !== "off")
-    void runEffect(backdropEffects, "backdrop", config.backdrop);
-}
 
 function initOffscreenTitle(): void {
   const config = getThemeConfig();
@@ -92,7 +59,6 @@ function printConsoleInfo(): void {
 }
 
 export function initEnhancements(): void {
-  initEffects();
   initOffscreenTitle();
   initFavicon();
   void initDebug();

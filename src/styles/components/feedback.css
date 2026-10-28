@@ -128,11 +128,3 @@
   }
 }
 
-/* 进入视口时触发的动画（替代 WOW.js）*/
-.joe-reveal {
-  visibility: hidden;
-
-  &.animated {
-    visibility: visible;
-  }
-}

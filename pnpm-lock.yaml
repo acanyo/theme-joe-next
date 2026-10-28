@@ -26,9 +26,6 @@ importers:
       '@swup/scroll-plugin':
         specifier: 4.0.0
         version: 4.0.0
-      animate.css:
-        specifier: 4.1.1
-        version: 4.1.1
       aplayer:
         specifier: 1.10.1
         version: 1.10.1
@@ -909,9 +906,6 @@ packages:
   am-i-vibing@0.5.0:
     resolution: {integrity: sha512-KLcsDhqf1XRrJmJr+9I/C0EX2K+sGrAGZFgkmd84c8TJO9zJBu+/kFInjazu1KfJWFhWDKdRWkpBzEs7s35DVA==}
     hasBin: true
-
-  animate.css@4.1.1:
-    resolution: {integrity: sha512-+mRmCTv6SbCmtYJCN4faJMNFVNN5EuCTTprDTAo7YzIGji2KADmakjVA3+8mVDkZ2Bf09vayB35lSQIex2+QaQ==}
 
   ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
@@ -3191,8 +3185,6 @@ snapshots:
   am-i-vibing@0.5.0:
     dependencies:
       process-ancestry: 0.1.0
-
-  animate.css@4.1.1: {}
 
   ansi-regex@5.0.1: {}
 

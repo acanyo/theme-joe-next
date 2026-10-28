@@ -15,7 +15,7 @@ import "../styles/pages/journals.css";
   <div class="joe_main">
     <div class="joe_detail">
       <MomentHeader author="blogger" />
-      <ul class="joe_journals__list">
+      <ul class="joe_journals__list" data-motion-group>
         <th-block th:each="moment, iter : ${moments.items}">
           <MomentItem />
         </th-block>

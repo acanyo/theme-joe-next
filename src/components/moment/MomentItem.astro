@@ -8,8 +8,8 @@ import { COMMENT_ENABLED, el } from "../../config/expressions";
 
 <li
   class="joe_journal__item"
-  th:classappend="${theme.config.moments.animation ? 'joe-reveal' : ''}"
-  th:attr="data-reveal=${theme.config.moments.animation_name}, data-cid=${moment.metadata.name}"
+  data-motion
+  th:attr="data-cid=${moment.metadata.name}"
   th:with="content = ${moment.spec.content}"
 >
   <p class="joe_journal_date">

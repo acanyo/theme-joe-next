@@ -26,13 +26,12 @@ import "../styles/pages/friends.css";
       >
         <i class="joe-font joe-icon-edit" aria-hidden="true"></i>
       </a>
-      <ul class="joe_friends__list">
+      <ul class="joe_friends__list" data-motion-group>
         <li
           class="joe_friend__item"
           th:each="item : ${friends.items}"
           th:with="spec = ${item.spec}"
-          th:classappend="${theme.config.links.feed_animation ? 'joe-reveal' : ''}"
-          th:attr="data-reveal=${theme.config.links.feed_animation_name}"
+          data-motion
         >
           <p class="joe_friend_info">
             <img
