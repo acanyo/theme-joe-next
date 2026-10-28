@@ -3,6 +3,7 @@
  */
 import tocbot from "tocbot";
 import { buildRawToc, renderRawContent } from "./raw-content";
+import { readingStats } from "./reading-stats";
 import { $, $$, headerOffset } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { copyText } from "../core/clipboard";
@@ -123,14 +124,20 @@ export function initProgressBar(): void {
   });
 }
 
-/** 字数统计：沉浸头图与经典信息栏都可能有统计位，全部填写 */
+/** 字数与阅读时长：沉浸头图与经典信息栏都可能有统计位，全部填写 */
 export function initWordCount(): void {
   const targets = $$("[data-joe-word-count]");
   const content = $("#post-inner");
   if (!targets.length || !content) return;
-  const text = renderRawContent()?.textContent ?? content.innerText;
-  const count = text.match(/[一-龥a-zA-Z0-9]/g)?.length ?? 0;
-  targets.forEach((target) => (target.textContent = `${count} 字`));
+  const root = renderRawContent() ?? content;
+  const clone = root.cloneNode(true) as ParentNode & Node;
+  clone.querySelectorAll?.("pre, script, style").forEach((el) => el.remove());
+  const { words, minutes } = readingStats(clone.textContent ?? "");
+  const label = `${words.toLocaleString("zh-CN")} 字 · 约 ${minutes} 分钟`;
+  targets.forEach((target) => {
+    target.textContent = label;
+    target.setAttribute("title", `${words} 字，预计阅读 ${minutes} 分钟`);
+  });
 }
 
 /** 侧栏目录在 992px 以下由 CSS 隐藏（styles/pages/post.css），此时改用抽屉中的目录 */
