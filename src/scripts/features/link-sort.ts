@@ -6,8 +6,8 @@ import { $$ } from "../core/dom";
 type DefaultSort = "asc" | "desc" | "keep";
 
 function parseDefault(value: string | undefined): DefaultSort {
-  if (value?.endsWith("_desc")) return "desc";
-  if (value?.endsWith("keep_origin_sort")) return "keep";
+  if (value === "created_desc") return "desc";
+  if (value === "original") return "keep";
   return "asc";
 }
 

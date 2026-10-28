@@ -2,13 +2,14 @@
 import { $, $$, throttle } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { notify } from "../core/toast";
+import { listen } from "../core/lifecycle";
 
 function initBackToTop(): void {
   const button = $(".joe_action_item.back2top");
   if (!button || !getThemeConfig().enableBack2top) return;
   const update = () => button.classList.toggle("active", window.scrollY > 300);
   update();
-  document.addEventListener("scroll", throttle(update, 120), { passive: true });
+  listen(document, "scroll", throttle(update, 120), { passive: true });
   button.addEventListener("click", (event) => {
     event.stopPropagation();
     window.scrollTo({

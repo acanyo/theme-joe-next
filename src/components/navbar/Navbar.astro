@@ -13,11 +13,11 @@ const MENU =
 <header class="joe_header" th:with={`navMenu = \${${MENU}}`}>
   <div
     class="joe_header__above"
-    th:classappend="|${theme.config.theme.enable_show_in_up ? 'topInDown' : ''} ${theme.config.navbar.enable_fixed_header ? 'fixed' : ''} ${theme.config.navbar.enable_fixed_header and theme.config.navbar.enable_glass_blur ? 'glass' : ''}|"
+    th:classappend="|${theme.config.effects.reveal ? 'topInDown' : ''} ${theme.config.navbar.sticky ? 'fixed' : ''} ${theme.config.navbar.sticky and theme.config.navbar.glass ? 'glass' : ''}|"
   >
     <div
       class="joe_container joe_header_container"
-      th:classappend="${theme.config.navbar.enable_full_header ? 'full' : ''}"
+      th:classappend="${theme.config.navbar.full_width ? 'full' : ''}"
     >
       <button
         type="button"
@@ -28,7 +28,7 @@ const MENU =
       </button>
 
       <a
-        th:if="${theme.config.navbar.show_logo}"
+        th:if="${theme.config.navbar.logo}"
         class="joe_header__above-logo"
         th:title="${site.title}"
         th:href="${#strings.isEmpty(theme.config.navbar.logo_link) ? site.url : (theme.config.navbar.logo_link == '#' ? 'javascript:;' : theme.config.navbar.logo_link)}"
@@ -44,7 +44,7 @@ const MENU =
       <nav
         class="joe_header__above-nav"
         aria-label="主导航"
-        th:classappend="|${theme.config.navbar.enable_active_shadow ? 'active-shadow' : ''} ${theme.config.navbar.enable_icon_animate ? 'active-animate' : ''}|"
+        th:classappend="|${theme.config.navbar.active_glow ? 'active-shadow' : ''} ${theme.config.navbar.icon_animation ? 'active-animate' : ''}|"
       >
         <th-block
           th:if="${navMenu != null}"
@@ -97,7 +97,7 @@ const MENU =
         >
           <i class="joe-font joe-icon-search" aria-hidden="true"></i>
         </button>
-        <div class="nav_login" th:if="${theme.config.navbar.nav_login}">
+        <div class="nav_login" th:if="${theme.config.navbar.login}">
           <a
             class="login_before"
             sec:authorize="isAnonymous()"
@@ -140,13 +140,11 @@ const MENU =
   <div class="joe_header__toc" aria-label="文章目录">
     <div class="joe_header__toc-wrap">
       <div class="toc_top">
-        <h3>
-          目 录<span>CONTENT</span>
-        </h3>
+        <h3>目录</h3>
         <img
           width="100%"
           height="150"
-          th:src="${theme.config.blogger.author_bg ?: #theme.assets('/images/context_bg.png')}"
+          th:src="${theme.config.blogger.cover ?: #theme.assets('/images/context_bg.png')}"
           alt=""
           data-fallback="image"
         />

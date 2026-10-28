@@ -1,7 +1,8 @@
 .joe_footer {
-  color: var(--minor);
-  background: var(--background);
-  border-top: 1px solid var(--classD);
+  color: var(--text-secondary);
+  background: var(--bg-page);
+  border-top: 1px solid var(--border-lighter);
+  font-size: 13px;
   z-index: -1;
 
   .joe_container {
@@ -27,7 +28,7 @@
     }
 
     a {
-      color: var(--minor);
+      color: var(--text-secondary);
       transition: all 0.35s;
 
       &:hover {
@@ -36,7 +37,7 @@
     }
 
     .site_powered {
-      padding: 2px 0 !important;
+      padding: 2px 0;
 
       .a-powered {
         font-weight: 600;
@@ -115,8 +116,8 @@
         overflow: hidden;
         font-size: 12px;
         font-weight: bold;
-        color: var(--classB);
-        background: var(--background-reverse);
+        color: var(--border-light);
+        background: var(--bg-inverse);
         border-radius: 5px;
 
         .joe-font {
@@ -171,12 +172,52 @@
     width: 100%;
     bottom: 0;
     z-index: 2;
-    box-shadow: -2px 0 4px 0 var(--classG);
+    box-shadow: -2px 0 4px 0 var(--border-faint);
   }
 
   &.full {
     .joe_container {
       max-width: 100% !important;
+    }
+  }
+}
+
+/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+@media (max-width: 768px) {
+  html .joe_footer {
+    .joe_container {
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 10px;
+      padding-bottom: 10px;
+
+      > .item {
+        padding: 5px 0;
+        text-align: center;
+      }
+
+      .side-col {
+        align-items: center;
+      }
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  html .joe_footer {
+    .joe_container {
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: 0;
+
+      > .item {
+        padding: 5px 0;
+        text-align: center;
+      }
+
+      .site_life {
+        margin: 0;
+      }
     }
   }
 }

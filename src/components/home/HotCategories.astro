@@ -15,11 +15,11 @@ const FALLBACK = "#theme.assets('/images/hot_cover1.jpg')";
     </div>
   </div>
   <ul class="joe_index__hot-list hotlist">
-    <th-block th:each="hot : ${theme.config.home.data_hot_category}">
-      <th-block th:switch="${hot.hot_category_section_type}">
+    <th-block th:each="hot : ${theme.config.home.featured_items}">
+      <th-block th:switch="${hot.source}">
         <th-block
           th:case="'category'"
-          th:with="category = ${categoryFinder.getByName(hot.data_by_category?.category)}"
+          th:with="category = ${categoryFinder.getByName(hot.category?.name)}"
         >
           <li class="item animated fadeIn" th:if="${category != null}">
             <a
@@ -48,12 +48,12 @@ const FALLBACK = "#theme.assets('/images/hot_cover1.jpg')";
         <li
           class="item animated fadeIn"
           th:case="'custom'"
-          th:with="custom = ${hot.data_by_custom}"
+          th:with="custom = ${hot.custom}"
         >
           <a
             class="link"
-            th:href="${custom?.hot_custom_url}"
-            th:title="${custom?.hot_custom_title}"
+            th:href="${custom?.url}"
+            th:title="${custom?.title}"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -63,13 +63,13 @@ const FALLBACK = "#theme.assets('/images/hot_cover1.jpg')";
                 height="120"
                 class="image"
                 loading="lazy"
-                th:src={`\${custom?.hot_custom_img ?: ${FALLBACK}}`}
-                th:alt="${custom?.hot_custom_title}"
+                th:src={`\${custom?.image ?: ${FALLBACK}}`}
+                th:alt="${custom?.title}"
                 data-fallback="thumbnail"
               />
               <figcaption
                 class="title"
-                th:text="${custom?.hot_custom_title}"
+                th:text="${custom?.title}"
               ></figcaption>
             </figure>
           </a>

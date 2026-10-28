@@ -9,10 +9,14 @@ import PostAds from "../components/post/PostAds.astro";
 import PostAside from "../components/post/PostAside.astro";
 import PostCopyright from "../components/post/PostCopyright.astro";
 import PostOperate from "../components/post/PostOperate.astro";
-import "../styles/pages/post.less";
+import "../styles/pages/post.css";
 ---
 
-<BaseLayout title="post.spec.title + ' - ' + site.title" pageClass="page-post">
+<BaseLayout
+  pageScript="post"
+  title="post.spec.title + ' - ' + site.title"
+  pageClass="page-post"
+>
   <Breadcrumb slot="before" />
 
   <div class="joe_main joe_post">
@@ -50,19 +54,15 @@ import "../styles/pages/post.less";
     <CommentSection subject="post" kind="Post" />
   </div>
 
-  <th-block th:if="${theme.config.aside.enable_post_aside and #annotations.getOrDefault(post, 'enable_aside', 'true') == 'true'}">
+  <th-block th:if="${theme.config.aside.on_post and #annotations.getOrDefault(post, 'enable_aside', 'true') == 'true'}">
     <PostAside />
   </th-block>
 
   <div
     slot="before"
     class="joe_progress_bar"
-    th:if="${theme.config.post.enable_progress_bar}"
-    th:style="|background: ${theme.config.post.progress_bar_bgc ?: 'var(--theme)'}|"
+    th:if="${theme.config.post.progress}"
+    th:style="|background: ${theme.config.post.progress_color ?: 'var(--theme)'}|"
   ></div>
   <Actions slot="actions" editKind="post" toc />
 </BaseLayout>
-
-<script>
-  import "../scripts/pages/post";
-</script>

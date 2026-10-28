@@ -9,7 +9,7 @@
 export const COMMENT_ENABLED = "haloCommentEnabled == true";
 
 /** 博主显示名：昵称为空时回退到站点标题 */
-export const BLOGGER_NAME = "theme.config.blogger.nickname ?: site.title";
+export const BLOGGER_NAME = "theme.config.blogger.name ?: site.title";
 
 /** 站点地址（去掉末尾斜杠） */
 export const SITE_URL =
@@ -20,10 +20,10 @@ export const POST_URL = `(${SITE_URL}) + post.status.permalink`;
 
 /** 文章页操作项开关：全局设置 + 文章元数据 */
 const postSwitch = (setting: string, annotation: string) =>
-  `theme.config.post.${setting} and #annotations.getOrDefault(post, '${annotation}', 'true') == 'true'`;
-export const LIKE_ENABLED = postSwitch("enable_like", "enable_like");
-export const SHARE_ENABLED = postSwitch("enable_share", "enable_share");
-export const DONATE_ENABLED = postSwitch("enable_donate", "enable_donate");
+  `theme.config.${setting} and #annotations.getOrDefault(post, '${annotation}', 'true') == 'true'`;
+export const LIKE_ENABLED = postSwitch("post.like", "enable_like");
+export const SHARE_ENABLED = postSwitch("share.enabled", "enable_share");
+export const DONATE_ENABLED = postSwitch("share.donate", "enable_donate");
 
 /** 包裹为 `${...}` */
 export const el = (expr: string): string => `\${${expr}}`;

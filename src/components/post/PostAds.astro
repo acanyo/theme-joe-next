@@ -5,8 +5,8 @@ interface Props {
 }
 
 const { position } = Astro.props;
-const kind = `theme.config.ads.enable_ads_${position}`;
-const list = `theme.config.ads.ads_${position}`;
+const kind = `theme.config.ads.${position}`;
+const list = `theme.config.ads.${position}_items`;
 ---
 
 <th-block
@@ -18,14 +18,14 @@ const list = `theme.config.ads.ads_${position}`;
       th:if={`\${${kind} == 'img'}`}
       target="_blank"
       rel="noopener noreferrer nofollow"
-      th:href="${ad.ads_url}"
+      th:href="${ad.url}"
       title="广告"
     >
       <img
         class="omit"
         width="100%"
         loading="lazy"
-        th:src="${ad.ads_img}"
+        th:src="${ad.image}"
         alt="广告"
         data-fallback="image"
       />
@@ -33,7 +33,7 @@ const list = `theme.config.ads.ads_${position}`;
     </a>
     <th-block
       th:if={`\${${kind} == 'code'}`}
-      th:utext="${ad.ads_code}"
+      th:utext="${ad.html}"
     ></th-block>
   </section>
 </th-block>

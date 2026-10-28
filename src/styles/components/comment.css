@@ -1,0 +1,58 @@
+.joe_comment_box {
+  text-align: revert;
+  .box_title {
+    text-align: center;
+  }
+
+  h2 {
+    display: inline-block;
+    text-align: center;
+    padding: 28px 110px;
+    font-size: 18px;
+    color: var(--text-regular);
+    background:
+      url(../images/t_left.png) 0/90px auto,
+      url(../images/t_right.png) 100%/90px auto;
+    background-repeat: no-repeat;
+    filter: grayscale(1);
+  }
+}
+
+.joe_comment {
+  padding: 20px;
+  background: var(--bg-page);
+  border-radius: var(--radius-wrap);
+  box-shadow: var(--shadow);
+}
+
+.joe_comment__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-regular);
+}
+
+.joe_comment__close-icon {
+  fill: var(--text-regular);
+  margin-right: 5px;
+}
+
+.joe_comment {
+  .joe_pagination {
+    padding-top: 0;
+  }
+}
+
+/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+@media (max-width: 500px) {
+  html .joe_comment {
+    padding: 15px;
+
+    .joe_comment_box {
+      h2 {
+        padding: 20px 100px;
+        font-size: 16px;
+      }
+    }
+  }
+}

@@ -13,31 +13,31 @@ const CLOUD_PROVIDERS = [
 
 <footer
   class="joe_footer"
-  th:if="${theme.config.footer.enable_footer}"
-  th:classappend="|${theme.config.footer.footer_position == 'fixed' ? 'fixed' : ''} ${theme.config.footer.enable_full_footer ? 'full' : ''}|"
+  th:if="${theme.config.footer.enabled}"
+  th:classappend="|${theme.config.footer.position == 'fixed' ? 'fixed' : ''} ${theme.config.footer.full_width ? 'full' : ''}|"
 >
   <div
     class="joe_container"
-    th:classappend="${!theme.config.footer.enable_rss and !theme.config.footer.enable_sitemap} ? 'central' : ''"
+    th:classappend="${!theme.config.footer.rss and !theme.config.footer.sitemap} ? 'central' : ''"
   >
     <div class="item">
       <p>
         ©
-        <span th:text="${#strings.isEmpty(theme.config.footer.custom_birthday) ? '' : #strings.substring(theme.config.footer.custom_birthday, 0, 4) + ' - '}"></span>
+        <span th:text="${#strings.isEmpty(theme.config.footer.since) ? '' : #strings.substring(theme.config.footer.since, 0, 4) + ' - '}"></span>
         <span th:text="${#dates.year(#dates.createNow())}"></span>
         <a th:href="${site.url}" th:text="${site.title}"></a>
-        <th-block th:if="${theme.config.footer.enable_icp and not #strings.isEmpty(theme.config.basic.icp_police?.icp)}">
+        <th-block th:if="${theme.config.footer.icp and not #strings.isEmpty(theme.config.footer.filing?.icp)}">
           -
           <a
             class="icp"
-            th:href="${theme.config.basic.icp_police.icp_link ?: 'https://beian.miit.gov.cn/'}"
+            th:href="${theme.config.footer.filing.icp_link ?: 'https://beian.miit.gov.cn/'}"
             target="_blank"
             rel="noopener noreferrer nofollow"
-            th:text="${theme.config.basic.icp_police.icp}"
+            th:text="${theme.config.footer.filing.icp}"
           ></a>
         </th-block>
       </p>
-      <p class="site_powered" th:if="${theme.config.footer.enable_powerby}">
+      <p class="site_powered" th:if="${theme.config.footer.powered_by}">
         Powered by
         <a
           class="a-powered"
@@ -60,10 +60,10 @@ const CLOUD_PROVIDERS = [
       </p>
       <p
         class="site_driven"
-        th:if="${theme.config.footer.driven_by != null and theme.config.footer.driven_by != 'none'}"
+        th:if="${theme.config.footer.cloud != null and theme.config.footer.cloud != 'none'}"
       >
         本站点由
-        <th-block th:switch="${theme.config.footer.driven_by}">
+        <th-block th:switch="${theme.config.footer.cloud}">
           {CLOUD_PROVIDERS.map((p) => (
             <a
               th:case={`'${p.key}'`}
@@ -81,13 +81,13 @@ const CLOUD_PROVIDERS = [
           ))}
           <a
             th:case="'custom'"
-            th:href="${theme.config.footer.driven_by_custom_url}"
+            th:href="${theme.config.footer.cloud_url}"
             target="_blank"
             rel="noopener noreferrer nofollow"
           >
             <img
               class="custom"
-              th:src="${theme.config.footer.driven_by_custom_img}"
+              th:src="${theme.config.footer.cloud_logo}"
               alt="云服务商"
               data-fallback="image"
             />
@@ -95,7 +95,7 @@ const CLOUD_PROVIDERS = [
         </th-block>
         提供云服务
       </p>
-      <div class="site_life" th:if="${theme.config.footer.enable_birthday}">
+      <div class="site_life" th:if="${theme.config.footer.uptime}">
         <i class="joe-font joe-icon-jiasu" aria-hidden="true"></i>已运行&nbsp;
         <strong class="joe_run__day">00</strong> 天
         <strong class="joe_run__hour">00</strong> 时
@@ -104,23 +104,23 @@ const CLOUD_PROVIDERS = [
       </div>
       <p
         class="site_police"
-        th:if="${theme.config.footer.enable_police and not #strings.isEmpty(theme.config.basic.icp_police?.police)}"
+        th:if="${theme.config.footer.police and not #strings.isEmpty(theme.config.footer.filing?.police)}"
       >
         <a
-          th:href="${theme.config.basic.icp_police.gongan_link ?: 'https://beian.mps.gov.cn/#/query/webSearch'}"
+          th:href="${theme.config.footer.filing.police_link ?: 'https://beian.mps.gov.cn/#/query/webSearch'}"
           target="_blank"
           rel="noopener noreferrer nofollow"
-          th:text="${theme.config.basic.icp_police.police}"
+          th:text="${theme.config.footer.filing.police}"
         ></a>
       </p>
     </div>
     <div class="side-col">
       <div
         class="item"
-        th:if="${theme.config.footer.enable_rss or theme.config.footer.enable_sitemap}"
+        th:if="${theme.config.footer.rss or theme.config.footer.sitemap}"
       >
         <a
-          th:if="${theme.config.footer.enable_rss}"
+          th:if="${theme.config.footer.rss}"
           class="rss"
           th:href="@{/rss.xml}"
           target="_blank"
@@ -129,7 +129,7 @@ const CLOUD_PROVIDERS = [
           <i class="joe-font joe-icon-rss-fill" aria-hidden="true"></i>&nbsp;RSS
         </a>
         <a
-          th:if="${theme.config.footer.enable_sitemap}"
+          th:if="${theme.config.footer.sitemap}"
           th:href="@{/sitemap.xml}"
           target="_blank"
           rel="noopener noreferrer"
@@ -139,7 +139,7 @@ const CLOUD_PROVIDERS = [
       </div>
       <div
         class="item busuanzi-statistic"
-        th:if="${theme.config.footer.enable_busuanzi}"
+        th:if="${theme.config.footer.busuanzi}"
       >
         <span class="site-pv">
           <i class="joe-font joe-icon-zhexiantu" aria-hidden="true"></i>访问量
@@ -159,7 +159,7 @@ const CLOUD_PROVIDERS = [
 </footer>
 <script
   is:inline
-  th:if="${theme.config.footer.enable_busuanzi}"
+  th:if="${theme.config.footer.busuanzi}"
   async
   src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"
 ></script>

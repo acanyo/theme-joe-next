@@ -1,0 +1,21 @@
+/* 全局样式入口：所有页面共享。页面专属样式在各页面中单独引入，由 Astro 按页拆分。*/
+@import "./base/normalize.css";
+@import "./base/tokens.css";
+@import "./base/animations.css";
+@import "./base/transitions.css";
+@import "./vendor/joe-font.css";
+@import "./vendor/jiewen.css";
+@import "./layout/base.css";
+@import "./layout/header.css";
+@import "./layout/aside.css";
+@import "./layout/footer.css";
+@import "./components/list.css";
+@import "./components/feedback.css";
+@import "./components/pagination.css";
+@import "./components/action.css";
+@import "./components/comment.css";
+@import "./components/ads.css";
+@import "./components/social.css";
+@import "./content/article.css";
+@import "./content/shortcodes.css";
+@import "./content/runtime.css";

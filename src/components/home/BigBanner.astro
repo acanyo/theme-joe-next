@@ -18,23 +18,23 @@ const WAVES =
   id="EvanBigBanner"
   class:list={["evan-big-banner", fullscreen && "is-fullscreen"]}
   data-joe-big-banner
-  th:attr={`data-title=\${theme.config.beauty.big_banner_title ?: ${title}}, data-hitokoto=\${theme.config.beauty.enable_big_banner_hitokoto}`}
+  th:attr={`data-title=\${theme.config.hero.title ?: ${title}}, data-hitokoto=\${theme.config.hero.hitokoto}`}
 >
   <video
-    th:if="${theme.config.beauty.enable_big_banner_video and not #strings.isEmpty(theme.config.beauty.big_banner_video)}"
+    th:if="${theme.config.hero.video_enabled and not #strings.isEmpty(theme.config.hero.video)}"
     class="video"
     autoplay
     muted
     loop
     playsinline
     preload="auto"
-    th:src="${theme.config.beauty.big_banner_video}"
+    th:src="${theme.config.hero.video}"
   ></video>
   <div class="infomation">
     <div
       id="EvanBigBanner_Title"
       class="title"
-      th:text={`\${theme.config.beauty.big_banner_title ?: ${title}}`}
+      th:text={`\${theme.config.hero.title ?: ${title}}`}
     ></div>
     <div class="desctitle hitokoto_desctitle">
       <div id="HitokotoText" class="motto joe_motto hitokoto_text"></div>

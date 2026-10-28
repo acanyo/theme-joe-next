@@ -18,10 +18,6 @@
   animation: topInDown 0.8s;
 }
 
-.showInDown {
-  animation: showInDown 0.35s;
-}
-
 @keyframes topInDown {
   from {
     opacity: 0;
@@ -48,44 +44,36 @@
 
 @keyframes im-emotion-step {
   0% {
-    -webkit-transform: translateY(0);
     transform: translateY(0);
   }
 
   to {
-    -webkit-transform: translateY(-100%);
     transform: translateY(-100%);
   }
 }
 
 @keyframes dung {
   0% {
-    -webkit-transform: translateY(0);
     transform: translateY(0);
   }
 
   30% {
-    -webkit-transform: translateY(-2px);
     transform: translateY(-2px);
   }
 
   60% {
-    -webkit-transform: translateY(2px);
     transform: translateY(2px);
   }
 
   80% {
-    -webkit-transform: translateY(-1px);
     transform: translateY(-1px);
   }
 
   90% {
-    -webkit-transform: translateY(1px);
     transform: translateY(1px);
   }
 
   100% {
-    -webkit-transform: translateY(0);
     transform: translateY(0);
   }
 }
@@ -509,17 +497,7 @@
   }
 }
 
-@keyframes twinkle {
-  to {
-    box-shadow: inset 0 0 15px #f4b393;
-  }
-}
 
-@keyframes twinkle-night {
-  to {
-    box-shadow: inset 0 0 15px #595997;
-  }
-}
 
 @keyframes dong {
   0% {
@@ -531,4 +509,4 @@
   }
 }
 
-// 媒体查询
+/* 媒体查询*/

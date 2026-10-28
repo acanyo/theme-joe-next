@@ -2,13 +2,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  outline: none;
   -webkit-tap-highlight-color: transparent;
 }
 
 html {
-  // font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
-  //   "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  font-family: var(--font-default);
+  --halo-comment-widget-base-font-family: var(--font-default);
+  --halo-search-widget-base-font-family: var(--font-default);
+  text-size-adjust: 100%;
   &.disable-scroll {
     height: 100vh;
     overflow: hidden;
@@ -22,6 +23,8 @@ html {
 
 body {
   font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding-bottom: constant(safe-area-inset-bottom);
@@ -30,13 +33,13 @@ body {
 }
 
 ::-webkit-scrollbar {
-  // width: 8px;
+  /* width: 8px;*/
   height: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
-  // background: var(--seat);
+  /* background: var(--text-placeholder);*/
 }
 
 ::-webkit-scrollbar-track {
@@ -127,7 +130,7 @@ table {
 a[title="站长统计"] {
   display: none;
 }
-// 交互元素统一使用 <button>（可聚焦、可键盘操作），这里去掉浏览器默认外观
+/* 交互元素统一使用 <button>（可聚焦、可键盘操作），这里去掉浏览器默认外观*/
 .joe_header__above-slideicon,
 .joe_header__above-searchicon,
 .joe_header__above-search .submit,

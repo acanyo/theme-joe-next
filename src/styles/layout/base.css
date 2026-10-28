@@ -1,18 +1,12 @@
 body {
   overflow: overlay;
   overflow: auto;
-  -webkit-overflow-scrolling: touch;
   transition: background 0.25s;
 
   &:after {
-    background-color: #efefef;
-    background-image:
-      -webkit-linear-gradient(90deg, rgba(60, 10, 30, 0.04) 3%, transparent 0),
-      -webkit-linear-gradient(1turn, rgba(60, 10, 30, 0.04) 3%, transparent 0);
-    background-image:
-      linear-gradient(90deg, rgba(60, 10, 30, 0.04) 3%, transparent 0),
-      linear-gradient(1turn, rgba(60, 10, 30, 0.04) 3%, transparent 0);
-    background-size: 20px 20px;
+    background-color: #f3f4f6;
+    background-image: radial-gradient(rgb(15 23 42 / 7%) 1px, transparent 0);
+    background-size: 22px 22px;
     background-position: 50%;
     background-repeat: repeat;
   }
@@ -85,8 +79,8 @@ body {
       height: 18px;
       line-height: 18px;
       font-size: 12px;
-      color: var(--minor);
-      background: var(--sub-background);
+      color: var(--text-secondary);
+      background: var(--bg-muted);
       border-radius: 3px;
     }
 
@@ -108,73 +102,6 @@ body {
       > h2 {
         display: none;
       }
-    }
-  }
-
-  .newreply,
-  .joe_leaving-list {
-    .emoji-item {
-      display: inline-block;
-      margin: 0 2px;
-      padding: 0;
-      width: 24px;
-      height: 24px;
-      overflow: hidden;
-
-      @media (max-width: 860px) {
-        transform: scale(0.8);
-      }
-
-      img {
-        // position: relative;
-        // top: -3px;
-        display: block;
-        width: 24px;
-        height: 24px;
-        border: 0;
-      }
-    }
-
-    .emoji-animate {
-      position: relative;
-
-      .img {
-        cursor: default;
-        width: 24px;
-        height: 24px;
-
-        &:hover {
-          transform: translateY(0);
-        }
-      }
-    }
-
-    .emoji-img {
-      position: relative;
-      cursor: default;
-      width: 20px;
-      height: 20px;
-
-      &:hover {
-        transform: translateY(0);
-      }
-    }
-  }
-
-  .newreply {
-    .emoji-animate {
-      top: 5px;
-
-      .img {
-        width: 24px;
-        height: 24px;
-      }
-    }
-
-    .emoji-img {
-      top: -3px;
-      width: 20px;
-      height: 20px;
     }
   }
 }
@@ -203,7 +130,7 @@ body {
     overflow-x: auto;
   }
 
-  // ==== 代码块样式 start
+  /* ==== 代码块样式 start*/
   code:not([class]) {
     display: inline-block;
     font-size: 13px;
@@ -226,7 +153,7 @@ body {
     box-shadow: 1px 1px 5px 0 var(--shadow-code);
     border-radius: 8px;
 
-    // 原依赖 Prism toolbar 插件样式定位，这里自行声明
+    /* 原依赖 Prism toolbar 插件样式定位，这里自行声明*/
     .toolbar {
       position: absolute;
       pointer-events: none;
@@ -284,7 +211,6 @@ body {
         display: block;
         margin-bottom: 0;
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
         user-select: none;
         padding: 0 12px 12px 18px;
         border-radius: 0 0 8px 8px;
@@ -438,7 +364,7 @@ body {
     }
   }
 
-  // 代码块样式 end ====
+  /* 代码块样式 end ====*/
 }
 
 .joe_main {
@@ -471,14 +397,14 @@ body {
   }
 }
 
-// 内容最大宽度由主题设置 basic.content_max_width 控制（见 DynamicStyle.astro）
+/* 内容最大宽度由主题设置 basic.content_max_width 控制（见 DynamicStyle.astro）*/
 @media (min-width: 1361px) {
   #Joe .joe_container {
     max-width: var(--content-max-width, 1400px);
   }
 }
 
-// 背景图层（是否显示由 DynamicStyle.astro 按主题设置写入 background-image）
+/* 背景图层（是否显示由 DynamicStyle.astro 按主题设置写入 background-image）*/
 html body::before {
   content: "";
   position: fixed;
@@ -490,7 +416,7 @@ html body::before {
   pointer-events: none;
 }
 
-// 404 页面
+/* 404 页面*/
 .joe_page_404 {
   display: flex;
   flex-direction: column;
@@ -498,10 +424,10 @@ html body::before {
   gap: 12px;
   padding: 60px 20px;
   text-align: center;
-  color: var(--routine);
-  background: var(--background);
+  color: var(--text-regular);
+  background: var(--bg-page);
   border-radius: var(--radius-wrap);
-  box-shadow: var(--box-shadow);
+  box-shadow: var(--shadow);
 
   img {
     width: min(360px, 80%);
@@ -510,14 +436,92 @@ html body::before {
 
   h1 {
     font-size: 20px;
-    color: var(--main);
+    color: var(--text-primary);
+  }
+}
+.joe_page_404__home {
+  margin-top: 8px;
+  padding: 8px 24px;
+  color: #fff;
+  background: var(--theme);
+  border-radius: 20px;
+}
+
+/* 响应式（html 前缀保持与原 responsive.css 相同的优先级）*/
+@media (max-width: 768px) {
+  html .joe_main {
+    .code-toolbar {
+      pre[class*="language-"] {
+        &.c_hover_tools {
+          .code-expander,
+          .copy-button {
+            pointer-events: auto;
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  html .joe_main {
+    padding-bottom: 0;
   }
 
-  &__home {
-    margin-top: 8px;
-    padding: 8px 24px;
-    color: #fff;
-    background: var(--theme);
-    border-radius: 20px;
+  html .joe_main_container {
+    padding: 0;
+    margin: 15px auto 20px !important;
+  }
+
+  html .joe_main {
+    .code-toolbar {
+      .toolbar .toolbar-item span {
+        font-size: 13px;
+      }
+
+      pre[class*="language-"] {
+        font-size: 13px !important;
+
+        &:before {
+          left: 10px !important;
+          box-shadow:
+            16px 0 #fdbc40,
+            32px 0 #35cd4b !important;
+        }
+
+        &:after {
+          top: 30px !important;
+        }
+
+        &.line-numbers {
+          .line-numbers-rows {
+            width: 2.4em !important;
+          }
+
+          code {
+            padding: 12px 12px 12px 40px;
+          }
+        }
+      }
+    }
+  }
+
+  html .page-index {
+    margin-top: 0 !important;
+
+    .joe_main {
+      padding-top: 0;
+    }
+  }
+
+  html .page-links {
+    .links-group {
+      padding-left: 0 !important;
+    }
+
+    .joe_detail__friends {
+      padding-left: 0;
+    }
   }
 }

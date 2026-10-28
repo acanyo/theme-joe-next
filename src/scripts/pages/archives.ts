@@ -1,7 +1,7 @@
 /** 归档页：时间轴折叠 */
-import { $$, onReady } from "../core/dom";
+import { $$ } from "../core/dom";
 
-onReady(() => {
+export default function init(): void {
   $$(".joe_archives-timelist .panel").forEach((panel) => {
     panel.setAttribute("role", "button");
     panel.tabIndex = 0;
@@ -20,4 +20,4 @@ onReady(() => {
       }
     });
   });
-});
+}

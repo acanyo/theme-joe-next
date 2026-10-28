@@ -7,13 +7,13 @@ import AsideCard from "./AsideCard.astro";
   variant="music"
   icon="yinfu"
   title="我的歌单"
-  th:if="${not #strings.isEmpty(widget.aside_music_player?.music_id)}"
+  th:if="${not #strings.isEmpty(widget.music?.playlist)}"
 >
   <div class="joe_aside__item-contain">
     <div
       class="aplayer"
       data-joe-music
-      th:attr="data-id=${widget.aside_music_player.music_id}"
+      th:attr="data-id=${widget.music.playlist}"
       data-server="netease"
       data-type="playlist"
     ></div>

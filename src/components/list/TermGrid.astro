@@ -17,11 +17,10 @@ const CONFIG = {
     defaultTitle: "全部分类",
   },
 }[kind];
-const cfg = (key: string) =>
-  `theme.config.${CONFIG.group}.${CONFIG.group}_${key}`;
+const cfg = (key: string) => `theme.config.pages.${CONFIG.group}_${key}`;
 const v = CONFIG.item;
-const COVER = `${v}.spec.cover ?: (#strings.isEmpty(theme.config.home.post_thumbnail) ? (theme.config.basic.enable_random_img_api and not #strings.isEmpty(theme.config.basic.random_img_api_url) ? theme.config.basic.random_img_api_url + '?pageid=' + ${v}.metadata.name : '') : theme.config.home.post_thumbnail)`;
-const SHOW_NUM = `\${theme.config.${CONFIG.group}.enable_${CONFIG.group}_post_num}`;
+const COVER = `${v}.spec.cover ?: (#strings.isEmpty(theme.config.home.default_thumbnail) ? (theme.config.home.random_thumbnail and not #strings.isEmpty(theme.config.home.random_thumbnail_api) ? theme.config.home.random_thumbnail_api + '?pageid=' + ${v}.metadata.name : '') : theme.config.home.default_thumbnail)`;
+const SHOW_NUM = `\${${cfg("count")}}`;
 const NUM_TEXT = `|\${${v}.status.visiblePostCount ?: 0}篇|`;
 const NAME = `\${${v}.spec.displayName}`;
 const HREF = `@{\${${v}.status.permalink}}`;
@@ -42,7 +41,7 @@ const EACH = `${v} : \${termList}`;
   <div class:list={["joe_index__hot", kind === "categories" && "categories"]}>
     <ul
       class="joe_index__hot-list animated fadeIn"
-      th:if={`\${${cfg("type")} != 'tag'}`}
+      th:if={`\${${cfg("style")} != 'tag'}`}
     >
       <li class="item" th:each={EACH}>
         <a class="link" th:href={HREF} th:title={NAME}>
@@ -64,7 +63,7 @@ const EACH = `${v} : \${termList}`;
     </ul>
     <ul
       class="joe_index__hot-list-tag animated fadeIn"
-      th:if={`\${${cfg("type")} == 'tag'}`}
+      th:if={`\${${cfg("style")} == 'tag'}`}
     >
       <li class="item" th:each={EACH}>
         <a class="link" th:href={HREF} th:title={NAME}>

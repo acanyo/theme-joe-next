@@ -5,16 +5,16 @@ import PostItem from "../components/list/PostItem.astro";
 import Pagination from "../components/list/Pagination.astro";
 import Banner from "../components/home/Banner.astro";
 import HotCategories from "../components/home/HotCategories.astro";
-import "../styles/pages/index.less";
+import "../styles/pages/index.css";
 ---
 
-<BaseLayout pageClass="page-index" bigBanner="fullscreen">
+<BaseLayout pageScript="index" pageClass="page-index" bigBanner="fullscreen">
   <div class="joe_main">
     <div class="joe_index">
-      <th-block th:if="${theme.config.carousel.enable_banner and not #lists.isEmpty(theme.config.carousel.banner_data_group)}">
+      <th-block th:if="${theme.config.carousel.enabled and not #lists.isEmpty(theme.config.carousel.slides)}">
         <Banner />
       </th-block>
-      <th-block th:if="${theme.config.home.enable_hot_category and not #lists.isEmpty(theme.config.home.data_hot_category)}">
+      <th-block th:if="${theme.config.home.featured and not #lists.isEmpty(theme.config.home.featured_items)}">
         <HotCategories />
       </th-block>
       <div class="joe_index__article">
@@ -24,14 +24,14 @@ import "../styles/pages/index.less";
           </ul>
           <div
             class="joe_index__title-notice"
-            th:if="${not #strings.isEmpty(theme.config.social.qq_group)}"
+            th:if="${not #strings.isEmpty(theme.config.home.qq_group)}"
           >
             <i class="joe-font joe-icon-speaker" aria-hidden="true"></i>
             <a
-              th:href="${theme.config.social.qq_group}"
+              th:href="${theme.config.home.qq_group}"
               target="_blank"
               rel="noopener noreferrer nofollow"
-              th:text="${theme.config.social.qq_text}"
+              th:text="${theme.config.home.qq_group_text}"
             ></a>
           </div>
         </div>
@@ -44,12 +44,12 @@ import "../styles/pages/index.less";
         </div>
       </div>
     </div>
-    <th-block th:unless="${theme.config.home.enable_index_list_ajax}">
+    <th-block th:unless="${theme.config.home.load_more}">
       <Pagination />
     </th-block>
     <div
       class="joe_load_container"
-      th:if="${theme.config.home.enable_index_list_ajax and posts.hasNext()}"
+      th:if="${theme.config.home.load_more and posts.hasNext()}"
     >
       <button
         type="button"
@@ -60,11 +60,7 @@ import "../styles/pages/index.less";
       </button>
     </div>
   </div>
-  <th-block th:if="${theme.config.aside.enable_aside}">
+  <th-block th:if="${theme.config.aside.enabled}">
     <Aside />
   </th-block>
 </BaseLayout>
-
-<script>
-  import "../scripts/pages/index";
-</script>

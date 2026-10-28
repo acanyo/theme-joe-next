@@ -29,18 +29,18 @@ const SHARES = [
 
 <div class="share-icon-list">
   <a
-    th:if="${theme.config.post.enable_share_link}"
+    th:if="${theme.config.share.link}"
     class="icon-share-link"
     href="javascript:;"
     title="复制文章链接"
     aria-label="复制文章链接"
     data-joe-share-link
-    th:attr="data-url=${postUrl}, data-title=${post.spec.title}, data-description=${post.status.excerpt}, data-author=${post.owner.displayName}, data-template=${theme.config.post.share_link_template}"
+    th:attr="data-url=${postUrl}, data-title=${post.spec.title}, data-description=${post.status.excerpt}, data-author=${post.owner.displayName}, data-template=${theme.config.share.link_template}"
     set:html={POST_ICONS.link}
   />
   {SHARES.map((share) => (
     <a
-      th:if={`\${theme.config.post.enable_share_${share.key}}`}
+      th:if={`\${theme.config.share.${share.key}}`}
       th:href={`\${${share.href}}`}
       target="_blank"
       rel="noopener noreferrer"
@@ -50,7 +50,7 @@ const SHARES = [
     />
   ))}
   <a
-    th:if="${theme.config.post.enable_share_weixin}"
+    th:if="${theme.config.share.wechat}"
     href="javascript:;"
     title="分享到微信"
     aria-label="分享到微信"

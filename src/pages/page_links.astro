@@ -5,10 +5,11 @@ import Actions from "../components/layout/Actions.astro";
 import Aside from "../components/aside/Aside.astro";
 import CommentSection from "../components/post/CommentSection.astro";
 import LinkGroups from "../components/links/LinkGroups.astro";
-import "../styles/pages/journals.less";
+import "../styles/pages/journals.css";
 ---
 
 <BaseLayout
+  pageScript="links"
   title="singlePage.spec.title + ' - ' + site.title"
   pageClass="page-journals page-links page-sheet"
 >
@@ -27,12 +28,8 @@ import "../styles/pages/journals.less";
     </div>
     <CommentSection subject="singlePage" kind="SinglePage" />
   </div>
-  <th-block th:if="${theme.config.aside.enable_links_aside}">
+  <th-block th:if="${theme.config.aside.on_links}">
     <Aside />
   </th-block>
   <Actions slot="actions" randomLink editKind="page" />
 </BaseLayout>
-
-<script>
-  import "../scripts/pages/links";
-</script>

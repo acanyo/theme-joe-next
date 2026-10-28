@@ -16,11 +16,11 @@ const isPost = s === "post";
 const ann = (key: string, fallback: string) =>
   `#annotations.getOrDefault(${s}, '${key}', '${fallback}')`;
 const ARTICLE_CLASS = [
-  `#annotations.getOrDefault(${s}, 'img_align', theme.config.post.post_img_align ?: 'center') + '-img'`,
-  `${ann("enable_copy", "true")} == 'false' or !theme.config.post.enable_copy ? 'uncopy' : ''`,
-  "theme.config.post.enable_indent ? 'indent' : ''",
-  "theme.config.code_block.enable_code_line_number and !theme.config.code_block.enable_code_newline ? 'line-numbers' : ''",
-  "theme.config.code_block.enable_single_code_select ? 'single_code_select' : ''",
+  `#annotations.getOrDefault(${s}, 'img_align', theme.config.post.image_align ?: 'center') + '-img'`,
+  `${ann("enable_copy", "true")} == 'false' or !theme.config.post.copyable ? 'uncopy' : ''`,
+  "theme.config.post.indent ? 'indent' : ''",
+  "theme.config.code.line_numbers and !theme.config.code.wrap ? 'line-numbers' : ''",
+  "theme.config.code.inline_select ? 'single_code_select' : ''",
 ]
   .map((expr) => `\${${expr}}`)
   .join(" ");
@@ -37,24 +37,32 @@ const ARTICLE_CLASS = [
       th:unless="${#lists.isEmpty(post.categories)}"
     >
       <a
-        th:each="category : ${post.categories}"
+        th:each="category, stat : ${post.categories}"
         th:href="@{${category.status.permalink}}"
         class="item"
+        th:classappend="${'item-' + (stat.index % 5)}"
         th:title="${category.spec.displayName}"
         th:text="${category.spec.displayName}"
       />
     </div>
   )}
+  {isPost && (
+    <span
+      class="joe_raw"
+      title="原始内容"
+      th:if={`\${${ann("use_raw_content", "false")} == 'true'}`}
+    ></span>
+  )}
   <div class="joe_detail-wrapper">
     <h1
       class="joe_detail__title"
-      th:classappend="${theme.config.post.enable_title_shadow ? 'txt-shadow' : ''}"
+      th:classappend="${theme.config.post.title_shadow ? 'txt-shadow' : ''}"
       th:text={`\${${s}.spec.title}`}
     ></h1>
 
     <div
       class="joe_detail__count"
-      th:if={`\${theme.config.post.enable_page_meta and ${ann("enable_page_meta", "true")} == 'true'}`}
+      th:if={`\${theme.config.post.meta and ${ann("enable_page_meta", "true")} == 'true'}`}
     >
       <div class="joe_detail__count-information">
         <img
@@ -71,7 +79,7 @@ const ARTICLE_CLASS = [
           <div class="author">
             <a
               class="link"
-              th:href="${#strings.isEmpty(theme.config.post.post_author_link) ? author?.permalink : theme.config.post.post_author_link}"
+              th:href="${#strings.isEmpty(theme.config.post.author_link) ? author?.permalink : theme.config.post.author_link}"
               th:text="${author?.displayName}"
             ></a>
           </div>
@@ -105,7 +113,7 @@ const ARTICLE_CLASS = [
 
     <div
       class="joe_detail__overdue"
-      th:if={`\${theme.config.post.enable_passage_tips and ${ann("enable_passage_tips", "true")} == 'true'}`}
+      th:if={`\${theme.config.post.outdated_notice and ${ann("enable_passage_tips", "true")} == 'true'}`}
       th:with={`staleDays = \${(#dates.createNow().getTime() - ${s}.status.lastModifyTime.toEpochMilli()) / 86400000}`}
     >
       <div class="joe_detail__overdue-wrapper">
@@ -114,17 +122,17 @@ const ARTICLE_CLASS = [
           <span class="text">温馨提示：</span>
         </div>
         <div class="content">
-          <th-block th:if="${staleDays >= #conversions.convert(theme.config.post.days ?: 30, 'java.lang.Integer')}">
+          <th-block th:if="${staleDays >= #conversions.convert(theme.config.post.outdated_days ?: 30, 'java.lang.Integer')}">
             <th-block
-              th:if="${theme.config.post.days_type}"
+              th:if="${theme.config.post.outdated_format}"
               th:text={`|本文最后更新于 \${#dates.format(${s}.status.lastModifyTime, 'yyyy-MM-dd')}，若内容或图片失效，请留言反馈。|`}
             ></th-block>
             <th-block
-              th:unless="${theme.config.post.days_type}"
+              th:unless="${theme.config.post.outdated_format}"
               th:text="|本文最后更新于 ${staleDays} 天前，若内容或图片失效，请留言反馈。|"
             ></th-block>
           </th-block>
-          <span th:text="${theme.config.post.passage_tips_content ?: '部分素材来自网络，若不小心影响到您的利益，请联系我们删除。'}"></span>
+          <span th:text="${theme.config.post.outdated_text ?: '部分素材来自网络，若不小心影响到您的利益，请联系我们删除。'}"></span>
         </div>
       </div>
     </div>
@@ -134,7 +142,7 @@ const ARTICLE_CLASS = [
     <article
       class={`joe_detail__article animated fadeIn`}
       th:classappend={`|${ARTICLE_CLASS}|`}
-      th:style={`|--img-max-width: \${#annotations.getOrDefault(${s}, 'img_max_width', theme.config.post.img_max_width ?: '100%')}|`}
+      th:style={`|--img-max-width: \${#annotations.getOrDefault(${s}, 'img_max_width', theme.config.post.image_max_width ?: '100%')}|`}
     >
       <div
         id="post-inner"
@@ -152,7 +160,7 @@ const ARTICLE_CLASS = [
     {isPost && (
       <div
         class="joe_detail__agree"
-        th:if="${theme.config.post.enable_like and #annotations.getOrDefault(post, 'enable_like', 'true') == 'true'}"
+        th:if="${theme.config.post.like and #annotations.getOrDefault(post, 'enable_like', 'true') == 'true'}"
       >
         <button type="button" class="agree" data-joe-like aria-label="点赞">
           <span class="icon">

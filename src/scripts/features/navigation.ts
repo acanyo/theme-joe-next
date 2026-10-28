@@ -1,5 +1,8 @@
 /**
  * 导航栏：当前菜单高亮、下拉菜单、移动端抽屉、滚动隐藏头部、搜索入口。
+ *
+ * 导航位于 swup 容器之外，切页时不会被替换：交互只需绑定一次（initNavigation），
+ * 每次切页后调用 refreshNavigation 同步当前菜单高亮并关闭打开的抽屉。
  */
 import { $, $$, isMobile, throttle } from "../core/dom";
 import { getThemeConfig } from "../core/config";
@@ -12,6 +15,7 @@ declare global {
 
 function highlightCurrentMenu(): void {
   const { pathname } = location;
+  $$(".joe_header .current").forEach((el) => el.classList.remove("current"));
   const links = $$<HTMLAnchorElement>(".joe_header__above-nav a.item");
   let best: HTMLAnchorElement | undefined;
   let bestLength = -1;
@@ -73,13 +77,14 @@ function openOverlay(target: HTMLElement | null): void {
   target.classList.add("active");
 }
 
-export function closeOverlays(): void {
+/** 关闭抽屉与遮罩；restoreScroll 为 false 时不恢复打开前的滚动位置（切页场景） */
+export function closeOverlays(restoreScroll = true): void {
   document.documentElement.classList.remove("disable-scroll");
   $(".joe_header__mask")?.classList.remove("active", "slideout");
   $$(".joe_header__slideout, .joe_header__searchout, .joe_header__toc").forEach(
     (el) => el.classList.remove("active"),
   );
-  window.scrollTo({ top: savedScroll });
+  if (restoreScroll) window.scrollTo({ top: savedScroll });
 }
 
 /** 打开移动端目录抽屉（供文章页使用） */
@@ -131,7 +136,6 @@ function initHeaderScroll(): void {
   const header = $(".joe_header__above");
   if (!header) return;
   const headerHeight = header.offsetHeight;
-  const sticky = $$(".joe_aside_post, .joe_aside .joe_aside__item:last-child");
   let lastY = 0;
   document.addEventListener(
     "scroll",
@@ -139,7 +143,8 @@ function initHeaderScroll(): void {
       const y = window.scrollY;
       const hide = y > lastY && y > headerHeight;
       header.classList.toggle("active", hide);
-      sticky.forEach(
+      // 侧栏吸顶元素随页面替换，每次滚动时重新查询
+      $$(".joe_aside_post, .joe_aside .joe_aside__item:last-child").forEach(
         (el) => (el.style.top = `${hide ? 15 : headerHeight + 15}px`),
       );
       lastY = y;
@@ -157,9 +162,15 @@ function initSearch(): void {
 }
 
 export function initNavigation(): void {
-  highlightCurrentMenu();
   initDropdowns();
   initDrawer();
   initHeaderScroll();
   initSearch();
+}
+
+/** 切页后同步导航状态 */
+export function refreshNavigation(): void {
+  highlightCurrentMenu();
+  if (document.documentElement.classList.contains("disable-scroll"))
+    closeOverlays(false);
 }

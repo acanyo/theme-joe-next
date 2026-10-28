@@ -1,0 +1,5 @@
+.joe_advert-large {
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: var(--radius-inner);
+}

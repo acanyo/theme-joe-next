@@ -5,14 +5,15 @@ import Actions from "../components/layout/Actions.astro";
 import Aside from "../components/aside/Aside.astro";
 import CommentSection from "../components/post/CommentSection.astro";
 import { COMMENT_ENABLED, el } from "../config/expressions";
-import "../styles/content/leaving.less";
+import "../styles/content/leaving.css";
 
 /** 留言来源：全站最新评论，或仅当前页面的评论 */
 const COMMENTS =
-  "theme.config.leaving.message_source == false ? commentFinder.list({'kind': 'SinglePage', 'group': 'content.halo.run', 'name': singlePage.metadata.name}, 1, 20) : commentFinder.list(null, 1, 20)";
+  "theme.config.pages.guestbook_source == false ? commentFinder.list({'kind': 'SinglePage', 'group': 'content.halo.run', 'name': singlePage.metadata.name}, 1, 20) : commentFinder.list(null, 1, 20)";
 ---
 
 <BaseLayout
+  pageScript="leaving"
   title="singlePage.spec.title + ' - ' + site.title"
   pageClass="page-sheet page-leaving"
 >
@@ -20,7 +21,7 @@ const COMMENTS =
     <div class="joe_detail">
       <h1
         class="joe_detail__title"
-        th:classappend="${theme.config.post.enable_title_shadow ? 'txt-shadow' : ''}"
+        th:classappend="${theme.config.post.title_shadow ? 'txt-shadow' : ''}"
         th:text="${singlePage.spec.title}"
       ></h1>
       <article class="joe_detail__article animated fadeIn">
@@ -66,12 +67,8 @@ const COMMENTS =
     </div>
     <CommentSection subject="singlePage" kind="SinglePage" />
   </div>
-  <th-block th:if="${#annotations.getOrDefault(singlePage, 'enable_aside', 'true') == 'true' and theme.config.aside.enable_sheet_aside}">
+  <th-block th:if="${#annotations.getOrDefault(singlePage, 'enable_aside', 'true') == 'true' and theme.config.aside.on_page}">
     <Aside />
   </th-block>
   <Actions slot="actions" editKind="page" />
 </BaseLayout>
-
-<script>
-  import "../scripts/pages/leaving";
-</script>

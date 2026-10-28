@@ -1,4 +1,4 @@
-//首页大图
+/*首页大图*/
 /* 额外补充大图样式*/
 .evan-big-banner {
   position: relative;
@@ -41,7 +41,6 @@
   }
 
   img {
-    -o-object-fit: cover;
     object-fit: cover;
   }
 
@@ -78,11 +77,6 @@
       font-size: 14px;
       text-shadow: none;
     }
-
-    .evan-tiktok-text {
-      animation: uk-text-shadow-glitch 0.65s cubic-bezier(1, -1.91, 0, 2.79) 0s
-        infinite normal both running;
-    }
   }
 
   .evan-big-banner_bottom {
@@ -97,39 +91,29 @@
       fill: var(--wave-color);
 
       .parallax > use {
-        -webkit-animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5)
-          infinite;
         animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
       }
 
       .parallax > use:first-child {
-        -webkit-animation-delay: -2s;
         animation-delay: -2s;
-        -webkit-animation-duration: 7s;
         animation-duration: 7s;
         opacity: 0.9;
       }
 
       .parallax > use:nth-child(2) {
-        -webkit-animation-delay: -3s;
         animation-delay: -3s;
-        -webkit-animation-duration: 10s;
         animation-duration: 10s;
         opacity: 0.8;
       }
 
       .parallax > use:nth-child(3) {
-        -webkit-animation-delay: -4s;
         animation-delay: -4s;
-        -webkit-animation-duration: 13s;
         animation-duration: 13s;
         opacity: 0.9;
       }
 
       .parallax > use:nth-child(4) {
-        -webkit-animation-delay: -5s;
         animation-delay: -5s;
-        -webkit-animation-duration: 20s;
         animation-duration: 20s;
       }
     }
@@ -277,15 +261,9 @@
   z-index: 1;
   background: var(--footer-bg);
 }
-.editorial {
-  display: block;
-  width: 100%;
-  height: 40px;
-  margin: 0;
-}
 
 .evan-friends {
-  // 其他相关样式...
+  /* 其他相关样式...*/
 
   .sub-text {
     word-break: break-all;
@@ -335,7 +313,7 @@
 
   .joe_detail__friends-item {
     .contain {
-      border-radius: 28px 8px 28px 0;
+      border-radius: 24px var(--radius-wrap) 24px var(--radius-inner);
 
       .title::after {
         display: none;
@@ -378,7 +356,7 @@
   .content {
     margin-top: 10px !important;
     font-size: 0.93em;
-    color: var(--main);
+    color: var(--text-primary);
   }
 
   .contain {
@@ -386,12 +364,15 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    border: 1px solid var(--fcolor);
-    transition: all 0.2s ease-in-out;
+    border: 1px solid color-mix(in srgb, var(--fcolor) 45%, transparent);
+    background: color-mix(in srgb, var(--fcolor) 5%, var(--bg-page));
+    transition:
+      transform 0.25s,
+      border-color 0.25s;
 
     &:hover {
       transform: translateY(-3px);
-      box-shadow: 0px 0px 20px -5px rgb(158 158 158 / 20%);
+      border-color: var(--fcolor);
     }
 
     &::before {
@@ -406,7 +387,7 @@
       transform: scale(0);
       transition: all 0.5s ease-in-out;
       transform-origin: right bottom;
-      border-bottom-left-radius: 12px;
+      border-radius: inherit;
     }
 
     &:hover .f-avatar {
@@ -419,17 +400,16 @@
 @media (max-width: 768px) {
   .evan-friends {
     .contain {
-      border-color: #ebeef5;
+      border-color: var(--border-lighter);
 
       &:hover {
         border-color: var(--fcolor);
-        box-shadow: 0px 0px 20px -5px rgb(158 158 158 / 20%);
       }
     }
   }
 }
 
-// 首页全屏模式（原为内联 style）
+/* 首页全屏模式（原为内联 style）*/
 .evan-big-banner.is-fullscreen {
   height: calc(100vh - 60px);
   margin-top: initial;

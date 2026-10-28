@@ -4,7 +4,7 @@
  */
 import ConfigScript from "./ConfigScript.astro";
 import DynamicStyle from "./DynamicStyle.astro";
-import "../../styles/index.less";
+import "../../styles/index.css";
 
 interface Props {
   /** 页面标题的 SpEL 表达式（不含 `${}`），为空时使用站点标题 */
@@ -39,13 +39,13 @@ const { title = "site.title", titleIf } = Astro.props;
 />
 <link
   rel="stylesheet"
-  th:if="${not #strings.isEmpty(theme.config.custom.iconfont)}"
-  th:href="${theme.config.custom.iconfont}"
+  th:if="${not #strings.isEmpty(theme.config.appearance.iconfont)}"
+  th:href="${theme.config.appearance.iconfont}"
 />
 <link
   rel="stylesheet"
-  th:if="${theme.config.theme.cursor_skin != null and theme.config.theme.cursor_skin != 'off' and !theme.config.other.enable_clean_mode}"
-  th:href="${#theme.assets('/cursor/' + theme.config.theme.cursor_skin + '/style.css')}"
+  th:if="${theme.config.effects.cursor_skin != null and theme.config.effects.cursor_skin != 'off' and !theme.config.advanced.clean_mode}"
+  th:href="${#theme.assets('/cursor/' + theme.config.effects.cursor_skin + '/style.css')}"
 />
 <ConfigScript />
 <DynamicStyle />

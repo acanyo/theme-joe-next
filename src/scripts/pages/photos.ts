@@ -1,10 +1,11 @@
 /**
  * 图库：CSS 多列瀑布流（替代 Isotope）、分组筛选、滚动加载下一页、灯箱预览。
  */
-import { $, $$, onReady } from "../core/dom";
+import { $, $$ } from "../core/dom";
 import { initReveal } from "../features/reveal";
 import { loadStylesheet } from "../core/stylesheet";
 import photoswipeCss from "photoswipe/style.css?url";
+import { observe } from "../core/lifecycle";
 
 let activeGroup = "*";
 
@@ -30,7 +31,7 @@ function initInfiniteScroll(grid: HTMLElement): void {
   const loading = $(".joe_loading");
   if (!loading || !("IntersectionObserver" in window)) return;
   let busy = false;
-  const observer = new IntersectionObserver(async (entries) => {
+  const observer = observe(async (entries) => {
     if (!entries[0]?.isIntersecting || busy) return;
     const next = grid.dataset.next;
     if (!next) {
@@ -86,10 +87,10 @@ function initLightbox(grid: HTMLElement): void {
   });
 }
 
-onReady(() => {
+export default function init(): void {
   const grid = $("#image-grid");
   if (!grid) return;
   initFilter(grid);
   initInfiniteScroll(grid);
   initLightbox(grid);
-});
+}

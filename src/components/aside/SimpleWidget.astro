@@ -30,12 +30,12 @@ const SUBJECT_LINK =
   <AsideCard
     variant="notice"
     icon="speaker"
-    titleExpr="widget.aside_notice?.notice_title ?: '网站公告'"
+    titleExpr="widget.notice?.title ?: '网站公告'"
   >
     <div class="joe_aside__item-contain">
       <div
         class="notice_content"
-        th:utext="${widget.aside_notice?.site_notice}"
+        th:utext="${widget.notice?.html}"
       />
     </div>
   </AsideCard>
@@ -46,11 +46,11 @@ const SUBJECT_LINK =
     variant="reward"
     icon="coffee"
     title="请作者喝杯咖啡"
-    th:unless="${theme.config.other.enable_clean_mode}"
+    th:unless="${theme.config.advanced.clean_mode}"
   >
     <div class="pay-tab-content">
       <ul>
-        <li th:each="reward, stat : ${widget.aside_reward?.reward_list}">
+        <li th:each="reward, stat : ${widget.donate?.items}">
           <input
             type="radio"
             name="joe-reward"
@@ -59,19 +59,19 @@ const SUBJECT_LINK =
           />
           <label
             th:for="|joe-reward-${stat.index}|"
-            th:text="${reward.reward_label}"
+            th:text="${reward.label}"
           />
-          <div th:if="${reward.reward_type == 'image'}">
+          <div th:if="${reward.kind == 'image'}">
             <img
               class="reward-image"
-              th:src="${reward.reward_url}"
+              th:src="${reward.image}"
               alt="打赏"
               loading="lazy"
             />
           </div>
           <div
-            th:if="${reward.reward_type == 'custom'}"
-            th:utext="${reward.reward_html}"
+            th:if="${reward.kind == 'custom'}"
+            th:utext="${reward.html}"
           />
         </li>
       </ul>
@@ -83,20 +83,20 @@ const SUBJECT_LINK =
   <AsideCard
     variant="qrcode"
     icon="qrcode"
-    titleExpr="widget.aside_picture?.qrcode_title"
+    titleExpr="widget.image?.title"
   >
     <div class="joe_aside__item-contain">
       <img
         class="qrcode_img"
         loading="lazy"
-        th:src="${widget.aside_picture?.qrcode_url}"
-        th:alt="${widget.aside_picture?.qrcode_title}"
+        th:src="${widget.image?.url}"
+        th:alt="${widget.image?.title}"
         data-fallback="image"
       />
       <p
         class="qrcode_description"
-        th:if="${not #strings.isEmpty(widget.aside_picture?.qrcode_description)}"
-        th:text="${widget.aside_picture.qrcode_description}"
+        th:if="${not #strings.isEmpty(widget.image?.description)}"
+        th:text="${widget.image.description}"
       />
     </div>
   </AsideCard>
@@ -113,11 +113,11 @@ const SUBJECT_LINK =
     variant="newreply"
     icon="message"
     title="最新回复"
-    th:if={`\${!theme.config.other.enable_clean_mode and (${COMMENT_ENABLED})}`}
+    th:if={`\${!theme.config.advanced.clean_mode and (${COMMENT_ENABLED})}`}
   >
     <ul
       class="joe_aside__item-contain"
-      th:with="replies = ${commentFinder.list(null, 1, #conversions.convert(widget.aside_newreply?.show_newreply_num ?: 3, 'java.lang.Integer'))}"
+      th:with="replies = ${commentFinder.list(null, 1, #conversions.convert(widget.comments?.count ?: 3, 'java.lang.Integer'))}"
     >
       <li class="item" th:each="comment : ${replies.items}">
         <div class="user">
@@ -150,23 +150,23 @@ const SUBJECT_LINK =
 )}
 
 {type === "ads" && (
-  <th-block th:with="ads = ${widget.aside_ads}">
+  <th-block th:with="ads = ${widget.ad}">
     <section
       class="joe_aside__item advert"
-      th:if="${ads?.aside_ads_type == 'img' and not #strings.isEmpty(ads?.aside_ads_img)}"
+      th:if="${ads?.kind == 'img' and not #strings.isEmpty(ads?.image)}"
     >
       <a
         class="joe_advert"
         target="_blank"
         rel="noopener noreferrer nofollow"
-        th:href="${ads.aside_ads_url}"
+        th:href="${ads.url}"
         title="广告"
       >
         <img
           class="omit"
           width="100%"
           loading="lazy"
-          th:src="${ads.aside_ads_img}"
+          th:src="${ads.image}"
           alt="广告"
           data-fallback="image"
         />
@@ -175,8 +175,8 @@ const SUBJECT_LINK =
     </section>
     <section
       class="joe_aside__item advert"
-      th:if="${ads?.aside_ads_type == 'code'}"
-      th:utext="${ads.aside_ads_code}"
+      th:if="${ads?.kind == 'code'}"
+      th:utext="${ads.html}"
     />
   </th-block>
 )}
@@ -184,6 +184,6 @@ const SUBJECT_LINK =
 {type === "custom" && (
   <section
     class="joe_aside__item aside_custom"
-    th:utext="${widget.aside_custom?.aside_custom_code}"
+    th:utext="${widget.custom?.html}"
   />
 )}

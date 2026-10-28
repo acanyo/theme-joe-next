@@ -15,7 +15,11 @@ import Actions from "../components/layout/Actions.astro";
 ---
 
 <!doctype html>
-<html th:lang="${#locale.toLanguageTag}" th:fragment="html (head, content)">
+<html
+  th:lang="${#locale.toLanguageTag}"
+  th:attr="data-transition=${theme.config.effects.page_transition ?: 'native'}"
+  th:fragment="html (head, content)"
+>
   <head>
     <Head title="site.title" titleIf="head == null" />
     <th-block th:if="${head != null}" th:replace="${head}"></th-block>

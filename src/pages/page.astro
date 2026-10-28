@@ -4,10 +4,11 @@ import Actions from "../components/layout/Actions.astro";
 import Aside from "../components/aside/Aside.astro";
 import ArticleBody from "../components/post/ArticleBody.astro";
 import CommentSection from "../components/post/CommentSection.astro";
-import "../styles/pages/post.less";
+import "../styles/pages/post.css";
 ---
 
 <BaseLayout
+  pageScript="post"
   title="singlePage.spec.title + ' - ' + site.title"
   pageClass="page-post page-sheet"
 >
@@ -15,12 +16,8 @@ import "../styles/pages/post.less";
     <ArticleBody subject="singlePage" />
     <CommentSection subject="singlePage" kind="SinglePage" />
   </div>
-  <th-block th:if="${theme.config.aside.enable_sheet_aside}">
+  <th-block th:if="${theme.config.aside.on_page}">
     <Aside />
   </th-block>
   <Actions slot="actions" editKind="page" />
 </BaseLayout>
-
-<script>
-  import "../scripts/pages/post";
-</script>

@@ -7,13 +7,16 @@
  * - "before"：容器之前的整宽内容，如首页大图、面包屑
  * - "head"：额外的 <head> 内容
  * - "actions"：自定义悬浮按钮（默认使用 <Actions />）
+ *
+ * 无刷新切页（swup）时只替换 #swup 内的内容；导航与页脚常驻，切页后由脚本同步状态。
  */
 import Head from "../components/head/Head.astro";
 import Navbar from "../components/navbar/Navbar.astro";
 import Footer from "../components/layout/Footer.astro";
 import Actions from "../components/layout/Actions.astro";
 import BigBanner from "../components/home/BigBanner.astro";
-import "../styles/pages/big-banner.less";
+import "../styles/pages/big-banner.css";
+import type { PageScript } from "../scripts/core/page-scripts";
 
 interface Props {
   /** 页面标题 SpEL 表达式（不含 `${}`） */
@@ -26,6 +29,8 @@ interface Props {
   bigBanner?: "fullscreen" | "normal" | false;
   /** 大图标题表达式（默认站点标题） */
   heading?: string;
+  /** 页面脚本名，对应 src/scripts/core/page-scripts.ts 中的注册项 */
+  pageScript?: PageScript;
 }
 
 const {
@@ -34,11 +39,15 @@ const {
   container = true,
   bigBanner = false,
   heading,
+  pageScript,
 } = Astro.props;
 ---
 
 <!doctype html>
-<html th:lang="${#locale.toLanguageTag}">
+<html
+  th:lang="${#locale.toLanguageTag}"
+  th:attr="data-transition=${theme.config.effects.page_transition ?: 'native'}"
+>
   <head>
     <Head title={title}>
       <slot name="head" />
@@ -47,23 +56,28 @@ const {
   <body>
     <div id="Joe">
       <Navbar />
-      {bigBanner && (
-        <th-block th:if="${theme.config.beauty.enable_big_banner}">
-          <BigBanner fullscreen={bigBanner === "fullscreen"} title={heading} />
-        </th-block>
-      )}
-      <slot name="before" />
-      {container ? (
-        <div
-          class:list={["joe_container joe_main_container", pageClass]}
-          th:classappend="|${theme.config.theme.enable_show_in_up ? 'animated showInUp' : ''} ${theme.config.aside.aside_position == 'left' ? 'revert' : ''}|"
-        >
+      <div id="swup" class="joe_swup" data-joe-script={pageScript}>
+        {bigBanner && (
+          <th-block th:if="${theme.config.hero.enabled}">
+            <BigBanner
+              fullscreen={bigBanner === "fullscreen"}
+              title={heading}
+            />
+          </th-block>
+        )}
+        <slot name="before" />
+        {container ? (
+          <div
+            class:list={["joe_container joe_main_container", pageClass]}
+            th:classappend="|${theme.config.effects.reveal ? 'animated showInUp' : ''} ${theme.config.aside.position == 'left' ? 'revert' : ''}|"
+          >
+            <slot />
+          </div>
+        ) : (
           <slot />
-        </div>
-      ) : (
-        <slot />
-      )}
-      {Astro.slots.has("actions") ? <slot name="actions" /> : <Actions />}
+        )}
+        {Astro.slots.has("actions") ? <slot name="actions" /> : <Actions />}
+      </div>
       <Footer />
     </div>
     <halo-footer></halo-footer>

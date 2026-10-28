@@ -1,9 +1,10 @@
 /** 首页：轮播、大图、加载更多 */
-import { $, headerOffset, onReady } from "../core/dom";
+import { $, headerOffset } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { initBanner } from "../features/banner";
 import { initBigBanner } from "../features/big-banner";
 import { initReveal } from "../features/reveal";
+import { observe } from "../core/lifecycle";
 
 /** 「查看更多」：抓取下一页并追加文章；开启自动加载时进入视口即触发 */
 function initLoadMore(): void {
@@ -49,15 +50,14 @@ function initLoadMore(): void {
 
   button.addEventListener("click", () => void load());
   if (getThemeConfig().enableAutoAjax && "IntersectionObserver" in window) {
-    new IntersectionObserver(
-      (entries) => entries[0]?.isIntersecting && void load(),
-      { threshold: 1 },
-    ).observe(container);
+    observe((entries) => entries[0]?.isIntersecting && void load(), {
+      threshold: 1,
+    }).observe(container);
   }
 }
 
-onReady(() => {
+export default function init(): void {
   initBigBanner();
   initLoadMore();
   void initBanner();
-});
+}

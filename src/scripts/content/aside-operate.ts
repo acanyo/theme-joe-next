@@ -3,6 +3,7 @@
  * 空间不足（窄屏、侧栏在左等）时反之。
  */
 import { $, $$, headerOffset, isMobile, throttle } from "../core/dom";
+import { listen } from "../core/lifecycle";
 
 /** 悬浮栏宽度 44px + 间距，文章左侧至少需要的空白 */
 const MIN_GUTTER = 75;
@@ -36,5 +37,5 @@ export function initAsideOperate(): void {
     duplicates.forEach((el) => (el.hidden = show));
   };
   update();
-  window.addEventListener("resize", throttle(update, 200));
+  listen(window, "resize", throttle(update, 200));
 }

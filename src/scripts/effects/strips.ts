@@ -3,6 +3,8 @@
  * 鼠标移入博主卡片时撒彩带，移出后停止生成并让剩余彩带落完。
  * 系统开启「减少动态效果」时不运行。
  */
+import { onCleanup } from "../core/lifecycle";
+
 const COLORS = ["DodgerBlue", "OliveDrab", "Gold", "Pink", "SlateBlue", "LightBlue", "Violet", "PaleGreen", "SteelBlue", "SandyBrown", "Chocolate", "Crimson"];
 
 interface Particle {
@@ -73,6 +75,10 @@ export default function start(card: HTMLElement): void {
     else ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
+  onCleanup(() => {
+    active = false;
+    cancelAnimationFrame(frame);
+  });
   card.addEventListener("mouseenter", () => {
     if (active) return;
     active = true;

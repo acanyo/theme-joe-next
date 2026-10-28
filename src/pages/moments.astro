@@ -4,11 +4,12 @@ import Aside from "../components/aside/Aside.astro";
 import Pagination from "../components/list/Pagination.astro";
 import MomentHeader from "../components/moment/MomentHeader.astro";
 import MomentItem from "../components/moment/MomentItem.astro";
-import "../styles/pages/journals.less";
+import "../styles/pages/journals.css";
 ---
 
 <BaseLayout
-  title="(theme.config.journals.journals_title ?: '我的动态') + ' - ' + site.title"
+  pageScript="moments"
+  title="(theme.config.moments.title ?: '我的动态') + ' - ' + site.title"
   pageClass="page-journals"
 >
   <div class="joe_main">
@@ -22,16 +23,12 @@ import "../styles/pages/journals.less";
       <p
         class="joe_journals__empty"
         th:if="${#lists.isEmpty(moments.items)}"
-        th:text="${theme.config.journals.journals_empty_text ?: '暂无动态'}"
+        th:text="${theme.config.moments.empty ?: '暂无动态'}"
       ></p>
       <Pagination result="moments" />
     </div>
   </div>
-  <th-block th:if="${theme.config.aside.enable_journals_aside}">
+  <th-block th:if="${theme.config.aside.on_moments}">
     <Aside />
   </th-block>
 </BaseLayout>
-
-<script>
-  import "../scripts/pages/moments";
-</script>

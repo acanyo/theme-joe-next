@@ -29,10 +29,10 @@
   border-radius: 16px;
   cursor: pointer;
   user-select: none;
-  background: var(--background);
-  color: var(--routine);
+  background: var(--bg-page);
+  color: var(--text-regular);
   transition: transform 0.25s;
-  box-shadow: var(--box-shadow);
+  box-shadow: var(--shadow);
 
   &:active {
     transform: scale(0.75);
@@ -43,33 +43,7 @@
   }
 }
 
-.joe_empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 50px 0;
-  user-select: none;
-  font-style: italic;
-  color: var(--routine);
-
-  &-icon {
-    width: 90px;
-    height: 90px;
-    margin-bottom: 20px;
-    fill: var(--routine);
-  }
-
-  &.mini {
-    padding: 20px 0;
-  }
-
-  &.hide {
-    display: none;
-  }
-}
-
-// 顶部加载进度条（替代 nprogress）
+/* 顶部加载进度条（替代 nprogress）*/
 .joe_loading_bar {
   position: fixed;
   top: 0;
@@ -95,7 +69,7 @@
   }
 }
 
-// 消息提示（替代 Qmsg）
+/* 消息提示（替代 Qmsg）*/
 .joe_toast {
   position: fixed;
   top: 20px;
@@ -107,40 +81,39 @@
   gap: 10px;
   transform: translateX(-50%);
   pointer-events: none;
+}
+.joe_toast__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  border-radius: var(--radius-wrap);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition:
+    opacity 0.25s,
+    transform 0.25s;
 
-  &__item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    font-size: 14px;
-    color: var(--main);
-    background: var(--background);
-    border-radius: var(--radius-wrap);
-    box-shadow: var(--box-shadow);
-    opacity: 0;
-    transform: translateY(-10px);
-    transition:
-      opacity 0.25s,
-      transform 0.25s;
-
-    &.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
   }
-
-  &__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-    font-size: 12px;
-    color: #fff;
-    border-radius: 50%;
-  }
-
+}
+.joe_toast__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  color: #fff;
+  border-radius: 50%;
+}
+.joe_toast {
   .is-success .joe_toast__icon {
     background: #67c23a;
   }
@@ -155,7 +128,7 @@
   }
 }
 
-// 进入视口时触发的动画（替代 WOW.js）
+/* 进入视口时触发的动画（替代 WOW.js）*/
 .joe-reveal {
   visibility: hidden;
 
