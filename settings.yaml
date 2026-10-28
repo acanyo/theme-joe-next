@@ -2441,7 +2441,7 @@ spec:
         - $el: div
           attrs:
             style: "margin-bottom: 4px; padding: 10px 14px; border: 0; border-radius: 8px; font-size: 13px; line-height: 20px; color: rgb(30 64 175); background: rgb(59 130 246 / 8%);"
-          children: 语法高亮由 Halo 代码高亮插件（推荐应用市场中的 Shiki）提供，主题只负责下面的代码块外观与交互；未安装插件时代码块不着色。
+          children: 语法高亮由 Halo 代码高亮插件（推荐应用市场中的 Shiki）提供，主题只负责下面的代码块外观与交互；未安装插件时代码块不着色。Shiki 支持行标注：在行尾写注释 [!code highlight] 高亮、[!code ++] / [!code --] 增删、[!code focus] 聚焦、[!code error] / [!code warning] 错误与警告，例如 // [!code highlight]。
         - $formkit: switch
           value: false
           name: title
