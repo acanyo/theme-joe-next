@@ -641,3 +641,125 @@ html:has(.joe_header--islands) .joe_progress_bar {
     max-width: calc(var(--content-max-width, 1400px) - 30px);
   }
 }
+
+/* 阅读条：明暗切换按钮。太阳的光芒收起、圆心被「咬」掉一块即成月亮 */
+.joe_header__mode {
+  display: none;
+}
+
+.joe_header--islands .joe_header__mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-regular);
+  cursor: pointer;
+  transition:
+    color var(--dur-base) var(--ease-out),
+    background var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-spring);
+
+  &:hover {
+    color: var(--theme);
+    background: var(--tint);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    overflow: visible;
+  }
+
+  .mode-core {
+    fill: currentColor;
+    transform-origin: center;
+    transition: r var(--dur-slow) var(--ease-spring);
+  }
+
+  .mode-cut {
+    transition:
+      cx var(--dur-slow) var(--ease-spring),
+      cy var(--dur-slow) var(--ease-spring);
+  }
+
+  .mode-rays {
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    transform-origin: center;
+    transition:
+      opacity var(--dur-base) var(--ease-out),
+      transform var(--dur-slow) var(--ease-spring);
+  }
+}
+
+html[data-mode="dark"] .joe_header--islands .joe_header__mode {
+  .mode-core {
+    r: 9;
+  }
+
+  .mode-cut {
+    cx: 17;
+    cy: 7;
+  }
+
+  .mode-rays {
+    opacity: 0;
+    transform: rotate(-60deg) scale(0.5);
+  }
+}
+
+/* 阅读条中已有明暗切换，桌面端隐藏右下角重复的按钮（移动端导航较窄，仍用悬浮按钮） */
+@media (min-width: 769px) {
+  html:has(.joe_header--islands .joe_header__mode) .joe_action_item.mode {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .joe_header--islands .joe_header__mode {
+    display: none;
+  }
+}
+
+/* 搜索快捷键提示 */
+.joe_header__kbd {
+  display: none;
+}
+
+.joe_header--islands .joe_header__above-search .submit:has(.joe_header__kbd) {
+  width: auto;
+  gap: 6px;
+  padding: 0 8px 0 10px;
+}
+
+.joe_header--islands .joe_header__kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  font: 600 11px/1.4 inherit;
+  font-family: inherit;
+  color: var(--text-secondary);
+  background: var(--bg-muted);
+}
+
+@media (max-width: 992px) {
+  .joe_header--islands .joe_header__kbd {
+    display: none;
+  }
+
+  .joe_header--islands .joe_header__above-search .submit:has(.joe_header__kbd) {
+    width: 36px;
+    padding: 0;
+  }
+}

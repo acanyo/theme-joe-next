@@ -231,12 +231,23 @@ function initNavBar(): void {
 let barToCurrent = (): void => {};
 
 function initSearch(): void {
-  $$("[data-joe-search]").forEach((button) =>
+  const buttons = $$("[data-joe-search]");
+  buttons.forEach((button) =>
     button.addEventListener("click", (event) => {
       event.preventDefault();
       window.SearchWidget?.open();
     }),
   );
+  if (!buttons.length) return;
+  // ⌘K / Ctrl K 打开搜索；Windows / Linux 上提示改为 Ctrl K
+  if (!/Mac|iPhone|iPad/.test(navigator.platform))
+    $$(".joe_header__kbd").forEach((kbd) => (kbd.textContent = "Ctrl K"));
+  document.addEventListener("keydown", (event) => {
+    if (event.key.toLowerCase() !== "k" || !(event.metaKey || event.ctrlKey))
+      return;
+    event.preventDefault();
+    window.SearchWidget?.open();
+  });
 }
 
 export function initNavigation(): void {

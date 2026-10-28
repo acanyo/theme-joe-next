@@ -69,3 +69,14 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* 明暗切换的圆形扩散：只让新画面按 clip-path 展开，不叠加页面切换的淡入淡出 */
+html.is-mode-switching::view-transition-old(root),
+html.is-mode-switching::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html.is-mode-switching::view-transition-group(joe-header) {
+  animation: none;
+}

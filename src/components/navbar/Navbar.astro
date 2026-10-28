@@ -124,10 +124,37 @@ const MENU =
           type="button"
           class="submit"
           aria-label="搜索"
+          aria-keyshortcuts="Control+K Meta+K"
           data-joe-search
           th:if="${pluginFinder.available('PluginSearchWidget')}"
         >
           <i class="joe-font joe-icon-search" aria-hidden="true"></i>
+          <kbd class="joe_header__kbd" aria-hidden="true">⌘K</kbd>
+        </button>
+        <!-- 阅读条样式：明暗切换（太阳 / 月亮变形），仅「访客切换」模式显示 -->
+        <button
+          type="button"
+          class="joe_header__mode"
+          aria-label="切换明暗模式"
+          th:if="${theme.config.general.color_mode == 'user'}"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <mask id="joe-mode-mask">
+              <rect width="24" height="24" fill="#fff"></rect>
+              <circle class="mode-cut" cx="24" cy="4" r="9" fill="#000"></circle>
+            </mask>
+            <circle class="mode-core" cx="12" cy="12" r="5" mask="url(#joe-mode-mask)"></circle>
+            <g class="mode-rays">
+              <line x1="12" y1="1.5" x2="12" y2="3.5"></line>
+              <line x1="12" y1="20.5" x2="12" y2="22.5"></line>
+              <line x1="1.5" y1="12" x2="3.5" y2="12"></line>
+              <line x1="20.5" y1="12" x2="22.5" y2="12"></line>
+              <line x1="4.6" y1="4.6" x2="6" y2="6"></line>
+              <line x1="18" y1="18" x2="19.4" y2="19.4"></line>
+              <line x1="4.6" y1="19.4" x2="6" y2="18"></line>
+              <line x1="18" y1="6" x2="19.4" y2="4.6"></line>
+            </g>
+          </svg>
         </button>
         <div class="nav_login" th:if="${theme.config.navbar.login}">
           <a
