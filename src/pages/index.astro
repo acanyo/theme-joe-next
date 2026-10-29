@@ -21,6 +21,8 @@ import "../styles/pages/moments-stack.css";
         <HotCategories />
       </th-block>
       <MomentsStack />
+      <!-- 继续阅读（设置 home.resume_bar）：老访客上次读到一半的文章，由 features/resume-bar.ts 填入 -->
+      <a class="joe_resume_bar" th:if="${theme.config.home.resume_bar}" data-joe-resume-bar hidden></a>
       <div class="joe_index__article">
         <div class="joe_index__title">
           <!-- 分类标签页（设置 home.category_tabs）：服务端输出全部分类，脚本按文章数保留前几个，点击在原地切换（scripts/pages/index.ts） -->

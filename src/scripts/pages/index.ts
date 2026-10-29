@@ -8,6 +8,7 @@ import { initReveal } from "../features/reveal";
 import { cleanExcerpts } from "../content/excerpt";
 import { fillEmptyImages } from "../features/image-fallback";
 import { initCategoryTabs } from "../features/category-tabs";
+import { initResumeBar } from "../features/resume-bar";
 import { observe } from "../core/lifecycle";
 
 /** 「查看更多」：抓取下一页并追加文章；开启自动加载时进入视口即触发 */
@@ -67,5 +68,6 @@ export default function init(): void {
   initMomentsStack();
   initLoadMore();
   initCategoryTabs();
+  initResumeBar();
   void initBanner();
 }

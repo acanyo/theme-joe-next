@@ -316,3 +316,81 @@
   }
 
 }
+
+/* 首页「继续阅读」（features/resume-bar.ts）：文章列表上方一条可点击的提示 */
+.joe_resume_bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 15px;
+  padding: 12px 16px;
+  border-radius: var(--radius-wrap);
+  color: var(--text-regular);
+  background: var(--bg-page);
+  box-shadow: var(--shadow);
+  transition:
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-spring);
+
+  &[hidden] {
+    display: none;
+  }
+
+  &:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-1px);
+  }
+
+  /* 小进度环：conic-gradient 画出已读比例 */
+  .ring {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background:
+      radial-gradient(closest-side, var(--bg-page) 72%, transparent 73%),
+      conic-gradient(var(--theme) calc(var(--p) * 1%), color-mix(in srgb, var(--theme) 15%, transparent) 0);
+  }
+
+  .text {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .label {
+    flex: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--theme-text);
+  }
+
+  .title {
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-title);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .meta {
+    flex: none;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .joe-font {
+    flex: none;
+    color: var(--text-secondary);
+    transform: rotate(-90deg);
+  }
+
+  @media (max-width: 500px) {
+    .meta {
+      display: none;
+    }
+  }
+}

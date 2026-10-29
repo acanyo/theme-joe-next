@@ -960,6 +960,20 @@ spec:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
               children: 分页方式与缩略图
         - $formkit: switch
+          name: resume_bar
+          id: resume_bar
+          key: resume_bar
+          label: 继续阅读提示
+          value: true
+          help: 访客上次有文章读到一半时，在文章列表上方提示「上次读到《…》45%」，点击回到上次的位置；阅读记录只保存在访客的浏览器里
+        - $formkit: switch
+          name: freshness_badge
+          id: freshness_badge
+          key: freshness_badge
+          label: 新文章 / 更新标记
+          value: true
+          help: 7 天内发布的文章标「新」；早先发布、7 天内又修改过的标「已更新」
+        - $formkit: switch
           name: category_tabs
           id: category_tabs
           key: category_tabs

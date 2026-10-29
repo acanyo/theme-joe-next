@@ -64,6 +64,14 @@ const COVER = coverOf("post");
       >
         置顶
       </span>
+      <!-- 新鲜度（设置 home.freshness_badge）：7 天内发布为「新」；发布超过 7 天、之后 7 天内又修改过为「已更新」 -->
+      <th-block
+        th:if="${theme.config.home.freshness_badge and !post.spec.pinned}"
+        th:with="now = ${T(java.time.Instant).now()}, ageDays = ${T(java.time.Duration).between(post.spec.publishTime, now).toDays()}, editedDays = ${post.status.lastModifyTime != null ? T(java.time.Duration).between(post.status.lastModifyTime, now).toDays() : 9999}"
+      >
+        <span class="badge badge--new" th:if="${ageDays < 7}">新</span>
+        <span class="badge badge--updated" th:if="${ageDays >= 7 and editedDays < 7}">已更新</span>
+      </th-block>
       <span th:text="${post.spec.title}"></span>
     </a>
     <a
