@@ -59,8 +59,21 @@ const CLOUD_PROVIDERS = [
     <span class="track"><span class="fill"></span></span>
   </div>
   <div class="joe_container joe_footer__bar">
-    <!-- 左列：版权与备案、运行时间与纪念文字、云服务商、公安备案 -->
+    <!-- 左列：运行时间与纪念文字、版权与备案、云服务商、公安备案 -->
     <div class="meta">
+      <p class="site_life" th:if="${theme.config.footer.uptime}">
+        <Icon name="runtime" />已运行
+        <strong class="joe_run__day">00</strong>天
+        <strong class="joe_run__hour">00</strong>时
+        <strong class="joe_run__minute">00</strong>分
+        <strong class="joe_run__second">00</strong>秒
+        <span
+          class="site_anniversary"
+          th:if="${theme.config.footer.anniversary}"
+          th:attr="data-years=${theme.config.footer.anniversary_years ?: 10}, data-label=${theme.config.footer.anniversary_label ?: '十年之约'}"
+          hidden
+        ></span>
+      </p>
       <p>
         ©
         <span th:text="${#strings.isEmpty(theme.config.footer.since) ? '' : #strings.substring(theme.config.footer.since, 0, 4) + ' - '}"></span>
@@ -75,19 +88,6 @@ const CLOUD_PROVIDERS = [
             th:text="${theme.config.footer.filing.icp}"
           ></a>
         </th-block>
-      </p>
-      <p class="site_life" th:if="${theme.config.footer.uptime}">
-        <Icon name="runtime" />已运行
-        <strong class="joe_run__day">00</strong>天
-        <strong class="joe_run__hour">00</strong>时
-        <strong class="joe_run__minute">00</strong>分
-        <strong class="joe_run__second">00</strong>秒
-        <span
-          class="site_anniversary"
-          th:if="${theme.config.footer.anniversary}"
-          th:attr="data-years=${theme.config.footer.anniversary_years ?: 10}, data-label=${theme.config.footer.anniversary_label ?: '十年之约'}"
-          hidden
-        ></span>
       </p>
       <p
         class="site_driven"
@@ -138,24 +138,8 @@ const CLOUD_PROVIDERS = [
         ></a>
       </p>
     </div>
-    <!-- 右列：Powered by、RSS / 站点地图、访问统计 -->
+    <!-- 右列：RSS / 站点地图、Powered by、访问统计 -->
     <div class="side">
-      <p class="site_powered" th:if="${theme.config.footer.powered_by}">
-        Powered by&nbsp;<a
-          class="a-powered"
-          href="https://www.halo.run/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Halo</a>
-        <span class="sep">·</span>
-        Theme&nbsp;<a
-          class="a-theme"
-          th:href="${theme.spec.repo}"
-          th:title="|${theme.spec.displayName} v${theme.spec.version}|"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Joe Next</a>
-      </p>
       <p class="feeds" th:if="${theme.config.footer.rss or theme.config.footer.sitemap}">
         <a
           th:if="${theme.config.footer.rss}"
@@ -175,6 +159,22 @@ const CLOUD_PROVIDERS = [
         >
           站点地图
         </a>
+      </p>
+      <p class="site_powered" th:if="${theme.config.footer.powered_by}">
+        Powered by&nbsp;<a
+          class="a-powered"
+          href="https://www.halo.run/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Halo</a>
+        <span class="sep">·</span>
+        Theme&nbsp;<a
+          class="a-theme"
+          th:href="${theme.spec.repo}"
+          th:title="|${theme.spec.displayName} v${theme.spec.version}|"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Joe Next</a>
       </p>
       <div
         class="busuanzi-statistic"
