@@ -972,9 +972,54 @@
   container: joe-index-list / inline-size;
 }
 
+/* 窄屏：单列，并改为左图右文的紧凑卡片，避免每篇一整屏大图 */
 @container joe-index-list (max-width: 600px) {
   .joe_list.joe_list--cards {
     grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+
+    > .joe_list__item.default {
+      flex-direction: row;
+      align-items: stretch;
+
+      .thumbnail {
+        flex: none;
+        width: 34%;
+        max-width: 150px;
+        aspect-ratio: auto;
+        min-height: 96px;
+
+        .cover-category {
+          top: 6px;
+          left: 6px;
+          height: 18px;
+          padding: 0 7px;
+          font-size: 11px;
+          line-height: 18px;
+        }
+      }
+
+      .information {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        padding: 10px 12px;
+      }
+
+      .title {
+        margin-bottom: 4px;
+        font-size: 15px;
+      }
+
+      .abstract {
+        margin-bottom: 6px;
+        -webkit-line-clamp: 1;
+      }
+
+      .meta {
+        margin-top: auto;
+      }
+    }
   }
 }
 
