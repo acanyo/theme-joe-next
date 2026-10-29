@@ -30,6 +30,10 @@ export const ICONS = {
   user: "lucide:circle-user",
   home: "lucide:house",
   "menu-item": "lucide:hash",
+  console: "lucide:layout-dashboard",
+  sun: "lucide:sun",
+  moon: "lucide:moon",
+  close: "lucide:x",
   // 文章与列表
   toc: "lucide:list-tree",
   link: "lucide:link",

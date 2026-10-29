@@ -84,6 +84,8 @@
 .joe_journal_body {
   position: relative;
   box-sizing: content-box;
+  /* 访客在控制中心调整字号时随之缩放（styles/layout/console.css） */
+  font-size: calc(14px * var(--reading-scale, 1));
   max-height: 300px;
   overflow: hidden;
   padding: 10px 12px;

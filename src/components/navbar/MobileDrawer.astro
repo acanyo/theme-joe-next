@@ -75,6 +75,18 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
       </li>
     </ul>
 
+    <button
+      type="button"
+      class="joe_header__slideout-console"
+      th:if="${theme.config.navbar.console}"
+      data-joe-console
+      aria-haspopup="dialog"
+    >
+      <Icon name="console" />
+      <span>控制中心</span>
+      <Icon name="chevron-right" />
+    </button>
+
     <ul class="joe_header__slideout-menu panel-box">
       <li>
         <a class="link panel in" href="#" rel="nofollow">

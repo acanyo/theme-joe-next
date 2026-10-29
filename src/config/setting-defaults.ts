@@ -65,6 +65,7 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
   "home.random_thumbnail": false,
   "home.thumbnail": false,
   "navbar.active_glow": false,
+  "navbar.console": true,
   "navbar.full_width": false,
   "navbar.glass": false,
   "navbar.icon_animation": false,

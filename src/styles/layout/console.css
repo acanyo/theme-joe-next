@@ -1,0 +1,629 @@
+/*
+ * 控制中心（components/navbar/ConsolePanel.astro，features/console.ts / console-content.ts）
+ *
+ * 一块从导航按钮下方弹出的小面板（约 400px 宽），不遮住整页：
+ *   开关方块（2×2，开启时整块染主题色）/ 年度进度环 + 运行天数 + 一言 / 站点动态时间线 / 底部页签
+ * 窄屏（≤ 768px）改为从底部滑出的抽屉。
+ */
+.joe_cc {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+/* 面板外：很淡的遮罩，只为点击关闭与聚焦面板，不模糊页面 */
+.joe_cc::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(15 23 42 / 8%);
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+.joe_cc.is-open::before {
+  opacity: 1;
+}
+
+html[data-mode="dark"] .joe_cc::before {
+  background: rgb(0 0 0 / 30%);
+}
+
+.joe_cc__sheet {
+  position: absolute;
+  top: var(--cc-top, 72px);
+  right: var(--cc-right, 16px);
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  max-height: calc(100dvh - var(--cc-top, 72px) - 16px);
+  padding: 14px;
+  border-radius: 20px;
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  opacity: 0;
+  transform: translateY(-8px) scale(0.96);
+  transform-origin: top right;
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-slow) var(--ease-spring);
+
+  .joe_cc.is-open & {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* —— 开关方块 —— */
+.joe_cc__tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 0;
+    padding: 10px 10px 9px;
+    border: 0;
+    border-radius: 14px;
+    font: inherit;
+    text-align: left;
+    color: var(--text-regular);
+    background: var(--fill-base);
+    cursor: pointer;
+    transition:
+      background-color var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out),
+      transform var(--dur-fast) var(--ease-spring);
+
+    &:hover {
+      background: color-mix(in srgb, var(--fill-base) 80%, var(--theme) 20%);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    /* 开启：整块染主题色，像系统控制中心的开关 */
+    &[aria-pressed="true"] {
+      color: #fff;
+      background: var(--theme-solid);
+
+      .state {
+        color: rgb(255 255 255 / 80%);
+      }
+    }
+  }
+
+  .glyph {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    margin-bottom: 4px;
+    border-radius: 50%;
+    font-size: 15px;
+    background: rgb(255 255 255 / 55%);
+
+    [aria-pressed="true"] & {
+      background: rgb(255 255 255 / 22%);
+    }
+  }
+
+  html[data-mode="dark"] & .glyph {
+    background: rgb(255 255 255 / 8%);
+  }
+
+  .glyph--text {
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .name {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .state {
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+}
+
+/* —— 时间感：进度环 + 事实 + 一言 —— */
+.joe_cc__time {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--fill-base);
+
+  .ring {
+    position: relative;
+    flex: none;
+    width: 52px;
+    height: 52px;
+
+    svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    circle {
+      fill: none;
+      stroke-width: 3.5;
+    }
+
+    .track {
+      stroke: color-mix(in srgb, var(--theme) 15%, transparent);
+    }
+
+    .value {
+      stroke: var(--theme);
+      stroke-linecap: round;
+      stroke-dasharray: calc(var(--p, 0) * 1) 100;
+      transition: stroke-dasharray 0.9s var(--ease-out);
+    }
+
+    .pct {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-title);
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  .facts {
+    min-width: 0;
+  }
+
+  .fact {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-regular);
+
+    strong {
+      font-variant-numeric: tabular-nums;
+      color: var(--theme-text);
+    }
+  }
+
+  .quote {
+    margin: 4px 0 0;
+    overflow: hidden;
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    &:empty {
+      display: none;
+    }
+  }
+}
+
+/* —— 页签内容 —— */
+.joe_cc__pages {
+  flex: 1;
+  min-height: 0;
+  margin-top: 10px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.joe_cc__label {
+  margin: 12px 4px 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.joe_cc__empty {
+  margin: 0;
+  padding: 16px 6px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* 时间线：左侧一根细线，每条一个按类型着色的圆点 */
+.joe_cc__feed {
+  position: relative;
+  margin: 0;
+  padding: 2px 0 2px 18px;
+  list-style: none;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    background: var(--border-lighter);
+  }
+
+  a,
+  div {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 10px;
+    padding: 7px 8px;
+    border-radius: 10px;
+    color: var(--text-regular);
+    transition: background-color var(--dur-fast) var(--ease-out);
+  }
+
+  a:hover,
+  a:focus-visible {
+    background: var(--tint);
+  }
+
+  .kind {
+    position: absolute;
+    left: -15px;
+    top: 13px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--text-placeholder);
+    box-shadow: 0 0 0 3px var(--glass-bg-strong);
+  }
+
+  .kind--post {
+    background: var(--theme);
+  }
+
+  .kind--comment {
+    background: #22a06b;
+  }
+
+  .kind--moment {
+    background: #8b5cf6;
+  }
+
+  .line {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 13px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .who {
+    font-weight: 600;
+    color: var(--text-title);
+  }
+
+  .act {
+    margin-right: 4px;
+    color: var(--text-secondary);
+  }
+
+  .who + .act {
+    margin-left: 4px;
+  }
+
+  .obj {
+    color: var(--text-title);
+
+    a:hover & {
+      color: var(--theme-text);
+    }
+  }
+
+  .text {
+    grid-column: 1 / -1;
+    margin-top: 2px;
+    overflow: hidden;
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  time {
+    grid-row: 1;
+    grid-column: 2;
+    font-size: 11px;
+    color: var(--text-placeholder);
+    white-space: nowrap;
+  }
+}
+
+/* 我的足迹：继续阅读 + 最近看过 */
+.joe_cc__resume a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--text-title);
+  background: var(--tint);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme) 25%, transparent);
+
+  .tag {
+    flex: none;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    color: #fff;
+    background: var(--theme-solid);
+  }
+
+  .text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .pct {
+    flex: none;
+    font-size: 12px;
+    color: var(--theme-text);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.joe_cc__history {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 8px;
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--text-regular);
+    transition: background-color var(--dur-fast) var(--ease-out);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--theme-text);
+      background: var(--tint);
+    }
+  }
+
+  .text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .bar {
+    flex: none;
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background:
+      linear-gradient(var(--theme), var(--theme)) 0 / var(--p) 100% no-repeat,
+      var(--fill-base);
+  }
+
+  time {
+    flex: none;
+    width: 4.5em;
+    font-size: 11px;
+    text-align: right;
+    color: var(--text-placeholder);
+  }
+}
+
+/* —— 底部：分段页签 + 图标按钮 —— */
+.joe_cc__foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-lighter);
+}
+
+.joe_cc__seg {
+  display: flex;
+  flex: 1;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--fill-base);
+
+  button {
+    flex: 1;
+    padding: 6px 0;
+    border: 0;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: transparent;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+
+    &[aria-selected="true"] {
+      color: var(--text-title);
+      font-weight: 600;
+      background: var(--bg-raised);
+      box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+    }
+  }
+}
+
+.joe_cc__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  color: var(--text-secondary);
+  background: var(--fill-base);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+
+  &:hover {
+    color: var(--theme-text);
+    background: var(--tint);
+  }
+}
+
+.joe_cc__icon--top .joe-font {
+  transform: rotate(180deg);
+}
+
+/* 导航中的按钮：与阅读条中的明暗切换按钮同尺寸 */
+.joe_header__console {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-inner);
+  color: var(--text-regular);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+
+  &:hover,
+  &[aria-expanded="true"] {
+    color: var(--theme-text);
+    background: var(--tint);
+  }
+
+  .joe-font {
+    font-size: 18px;
+  }
+
+  /* 盖在大图上（导航透明）时：打开状态用白色半透明底，图上也看得清 */
+  .joe_header__above.is-top &[aria-expanded="true"] {
+    color: #fff;
+    background: rgb(255 255 255 / 22%);
+  }
+}
+
+/* 手机侧滑菜单中的入口 */
+.joe_header__slideout-console {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: var(--radius-wrap);
+  font: inherit;
+  font-size: 14px;
+  color: var(--text-regular);
+  background: var(--tint);
+  cursor: pointer;
+
+  .joe-font:first-child {
+    color: var(--theme);
+  }
+
+  span {
+    flex: 1;
+    text-align: left;
+  }
+}
+
+/* 打开控制中心时锁定页面滚动 */
+html.joe-console-open {
+  overflow: hidden;
+}
+
+/* 访客偏好：隐藏侧边栏（正文铺满） */
+html.joe-no-aside .joe_aside {
+  display: none;
+}
+
+/*
+ * 访客偏好：正文字号。只设置缩放比例 --reading-scale，
+ * 正文（content/article.css）与瞬间（pages/journals.css）的字号乘以它，桌面与手机同步放大。
+ */
+html[data-joe-font="1"] {
+  --reading-scale: 1.125;
+}
+
+html[data-joe-font="2"] {
+  --reading-scale: 1.25;
+}
+
+/* 访客偏好：关闭动画与过渡 */
+html.joe-no-motion *,
+html.joe-no-motion *::before,
+html.joe-no-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* 窄屏：底部抽屉 */
+@media (max-width: 768px) {
+  .joe_cc__sheet {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    max-height: 82dvh;
+    padding: 10px 14px calc(14px + env(safe-area-inset-bottom));
+    border-radius: 22px 22px 0 0;
+    transform: translateY(24px);
+    transform-origin: bottom center;
+
+    /* 顶部抓手 */
+    &::before {
+      content: "";
+      align-self: center;
+      width: 36px;
+      height: 4px;
+      margin-bottom: 10px;
+      border-radius: 2px;
+      background: var(--border-base);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .joe_cc::before,
+  .joe_cc__sheet,
+  .joe_cc__time .ring .value {
+    transition: none;
+  }
+}

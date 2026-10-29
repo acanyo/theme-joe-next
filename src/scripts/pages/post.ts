@@ -3,6 +3,7 @@ import { initCodeBlocks } from "../content/code-block";
 import { initShortcodes } from "../content/shortcodes";
 import { initGallery } from "../content/gallery";
 import { initAsideOperate } from "../content/aside-operate";
+import { recordReading } from "../features/visitor";
 import {
   ensureHeadingIds,
   initCopyright,
@@ -21,6 +22,7 @@ export default function init(): void {
   initWordCount();
   initToc();
   initSeries();
+  recordReading();
   initLike();
   initAsideOperate();
   initShare();
