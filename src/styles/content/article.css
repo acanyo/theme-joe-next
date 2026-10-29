@@ -760,7 +760,9 @@
   }
 }
 
-.joe_detail {
+/* 打赏：正文下方操作区里的图标，悬停弹出收款码（components/post/PostOperate.astro）。
+   操作区在 .joe_detail 外面，选择器不能挂在 .joe_detail 下，否则这些样式都不生效、收款码直接铺开 */
+.joe_detail__operate {
   .joe_donate {
     position: relative;
     z-index: 10;
