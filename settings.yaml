@@ -437,7 +437,7 @@ spec:
               label: 小黑猫
               render: /themes/theme-joe-next/assets/previews/cursor-black_cat.webp
           render-type: image
-          size: 112
+          size: 80
           gap: 8
         - $formkit: select
           name: cursor_effect
