@@ -1,6 +1,7 @@
 ---
-/** 页脚：版权、备案、Powered by、云服务商、运行时间、RSS/站点地图、访问统计 */
+/** 页脚：导航链接组与社交图标、版权、备案、Powered by、云服务商、运行时间与建站纪念、RSS/站点地图、访问统计 */
 import Icon from "../common/Icon.astro";
+import SocialLinks from "../blogger/SocialLinks.astro";
 const CLOUD_PROVIDERS = [
   { key: "aliyun", url: "https://www.aliyun.com" },
   { key: "tencent", url: "https://cloud.tencent.com" },
@@ -17,6 +18,30 @@ const CLOUD_PROVIDERS = [
   th:if="${theme.config.footer.enabled}"
   th:classappend="|${theme.config.footer.position == 'fixed' ? 'fixed' : ''} ${theme.config.footer.full_width ? 'full' : ''}|"
 >
+  <!-- 页脚导航（设置 footer.nav）：几组链接 + 博主社交账号图标 -->
+  <nav
+    class="joe_container joe_footer__nav"
+    aria-label="页脚导航"
+    th:if="${theme.config.footer.nav and (not #lists.isEmpty(theme.config.footer.nav_groups) or theme.config.footer.nav_social)}"
+  >
+    <div class="groups">
+      <div class="group" th:each="group : ${theme.config.footer.nav_groups}">
+        <h2 class="title" th:text="${group.title}"></h2>
+        <ul>
+          <li th:each="link : ${group.links}">
+            <a
+              th:href="${link.url}"
+              th:text="${link.name}"
+              th:attr="target=${#strings.startsWith(link.url, 'http') ? '_blank' : null}, rel=${#strings.startsWith(link.url, 'http') ? 'noopener noreferrer' : null}"
+            ></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <th-block th:if="${theme.config.footer.nav_social}">
+      <SocialLinks />
+    </th-block>
+  </nav>
   <div
     class="joe_container"
     th:classappend="${!theme.config.footer.rss and !theme.config.footer.sitemap} ? 'central' : ''"
@@ -102,6 +127,16 @@ const CLOUD_PROVIDERS = [
         <strong class="joe_run__hour">00</strong> 时
         <strong class="joe_run__minute">00</strong> 分
         <strong class="joe_run__second">00</strong> 秒
+      </div>
+      <!-- 建站纪念（设置 footer.anniversary）：从起始时间到第 N 年的进度，由 features/footer.ts 计算 -->
+      <div
+        class="site_anniversary"
+        th:if="${theme.config.footer.uptime and theme.config.footer.anniversary}"
+        th:attr="data-years=${theme.config.footer.anniversary_years ?: 10}, data-label=${theme.config.footer.anniversary_label ?: '十年之约'}"
+        hidden
+      >
+        <span class="text"></span>
+        <span class="bar" aria-hidden="true"><span></span></span>
       </div>
       <p
         class="site_police"

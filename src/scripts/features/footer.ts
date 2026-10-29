@@ -1,4 +1,4 @@
-/** 页脚：固定定位间距、站点运行时间 */
+/** 页脚：固定定位间距、站点运行时间、建站纪念进度 */
 import { $ } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 
@@ -54,7 +54,36 @@ function initRuntime(): void {
   setInterval(tick, 1000);
 }
 
+/** 建站纪念：从起始时间到第 N 年（如「十年之约」）走了多少，达成后显示已坚持的年数 */
+export function anniversaryProgress(since: Date, years: number, now = new Date()): { ratio: number; daysLeft: number } {
+  const goal = new Date(since);
+  goal.setFullYear(since.getFullYear() + years);
+  const total = goal.getTime() - since.getTime();
+  const ratio = Math.min(1, Math.max(0, (now.getTime() - since.getTime()) / total));
+  return { ratio, daysLeft: Math.max(0, Math.ceil((goal.getTime() - now.getTime()) / 86_400_000)) };
+}
+
+function initAnniversary(): void {
+  const box = $<HTMLElement>(".site_anniversary");
+  const since = parseBirthday(getThemeConfig().birthday);
+  if (!box || !since) return;
+  const years = Math.max(1, Number(box.dataset.years) || 10);
+  const label = box.dataset.label || `${years} 年之约`;
+  const { ratio, daysLeft } = anniversaryProgress(since, years);
+  const pct = Math.floor(ratio * 100);
+  const text = $(".text", box);
+  if (text)
+    text.innerHTML =
+      daysLeft > 0
+        ? `${label}已走过 <strong>${pct}%</strong>，还有 <strong>${daysLeft.toLocaleString("zh-CN")}</strong> 天`
+        : `${label}已达成 🎉`;
+  $<HTMLElement>(".bar > span", box)?.style.setProperty("width", `${ratio * 100}%`);
+  box.title = `起始于 ${since.toLocaleDateString("zh-CN")}，目标 ${years} 年`;
+  box.hidden = false;
+}
+
 export function initFooter(): void {
   initFixedFooter();
   initRuntime();
+  initAnniversary();
 }

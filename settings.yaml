@@ -2994,6 +2994,61 @@ spec:
           key: enabled
           label: 页脚
           value: true
+        - $formkit: switch
+          if: $get(enabled).value == true
+          name: nav
+          id: nav
+          key: nav
+          label: 页脚导航
+          value: false
+          help: 在页脚上方显示几组链接，可同时显示博主的社交账号图标
+        - $formkit: repeater
+          if: $get(nav).value == true
+          name: nav_groups
+          id: nav_groups
+          key: nav_groups
+          label: 链接分组
+          value: []
+          max: 5
+          children:
+            - $formkit: text
+              name: title
+              id: title
+              key: title
+              label: 分组标题
+              value: ""
+              validation: required
+            - $formkit: repeater
+              name: links
+              id: links
+              key: links
+              label: 链接
+              value: []
+              max: 8
+              children:
+                - $formkit: text
+                  name: name
+                  id: name
+                  key: name
+                  label: 名称
+                  value: ""
+                  validation: required
+                - $formkit: text
+                  name: url
+                  id: url
+                  key: url
+                  label: 链接
+                  value: ""
+                  validation: required
+                  help: 站内页面写 /archives 这样的路径；站外链接写完整地址，会在新窗口打开
+        - $formkit: switch
+          if: $get(nav).value == true
+          name: nav_social
+          id: nav_social
+          key: nav_social
+          label: 显示社交账号图标
+          value: true
+          help: 使用「博主信息 → 社交账号」中的配置
         - $formkit: toggle
           if: $get(enabled).value == true
           name: position
@@ -3034,6 +3089,31 @@ spec:
           label: 起始时间
           value: 2021/11/11 06:30
           help: 格式 2021/11/11 06:30
+        - $formkit: switch
+          if: $get(uptime).value == true
+          name: anniversary
+          id: anniversary
+          key: anniversary
+          label: 建站纪念进度
+          value: false
+          help: 在运行时间下方显示一条进度：从起始时间到第 N 年（如「十年之约」）已走过多少
+        - $formkit: number
+          if: $get(anniversary).value == true
+          name: anniversary_years
+          id: anniversary_years
+          key: anniversary_years
+          label: 目标年数
+          value: 10
+          min: 1
+          max: 100
+          validation: required|between:1,100
+        - $formkit: text
+          if: $get(anniversary).value == true
+          name: anniversary_label
+          id: anniversary_label
+          key: anniversary_label
+          label: 纪念名称
+          value: 十年之约
         - $formkit: switch
           if: $get(enabled).value == true
           name: powered_by
