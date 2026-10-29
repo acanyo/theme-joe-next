@@ -1,14 +1,32 @@
 ---
 /**
  * 上一篇 / 下一篇：封面缩略图做背景，标题压在渐变遮罩上；没有封面时用主题色渐变。
+ *
+ * 方向按文章列表（新的在上）理解：「上一篇」是更新发布的一篇（cursor.next），
+ * 「下一篇」是更早发布的一篇（cursor.previous）。
+ * 已是最新 / 最早的一篇时，对应位置显示一张文案卡片，不留空。
  */
 import Icon from "../common/Icon.astro";
 import { coverOf } from "../../config/expressions";
 import { responsiveImage } from "../../config/images";
 
 const LINKS = [
-  { side: "prev", label: "上一篇", has: "cursor.hasPrevious()", item: "cursor.previous", icon: "chevron-left" },
-  { side: "next", label: "下一篇", has: "cursor.hasNext()", item: "cursor.next", icon: "chevron-right" },
+  {
+    side: "prev",
+    label: "上一篇",
+    has: "cursor.hasNext()",
+    item: "cursor.next",
+    icon: "chevron-left",
+    empty: { title: "这已经是最新的一篇", hint: "新的故事正在酝酿，过几天再来看看吧" },
+  },
+  {
+    side: "next",
+    label: "下一篇",
+    has: "cursor.hasPrevious()",
+    item: "cursor.previous",
+    icon: "chevron-right",
+    empty: { title: "故事从这里开始", hint: "这是最早的一篇，去归档看看全部文章", href: "/archives" },
+  },
 ] as const;
 ---
 
@@ -18,29 +36,46 @@ const LINKS = [
   th:with="cursor = ${postFinder.cursor(post.metadata.name)}"
 >
   {LINKS.map((l) => (
-    <a
-      class={`joe_post__pagination-item ${l.side}`}
-      th:if={`\${${l.has}}`}
-      th:with={`navPost = \${${l.item}}, navCover = \${${coverOf(l.item)}}`}
-      th:href="@{${navPost.status.permalink}}"
-      th:title="${navPost.spec.title}"
-    >
-      <img
-        th:if="${not #strings.isEmpty(navCover)}"
-        class="cover"
-        alt=""
-        loading="lazy"
-        {...responsiveImage("navCover", "(max-width: 768px) 100vw, 480px", ["s", "m"])}
-        data-fallback="thumbnail"
-      />
-      <span class="body">
-        <span class="label">
-          {l.side === "prev" && <Icon name={l.icon} />}
-          {l.label}
-          {l.side === "next" && <Icon name={l.icon} />}
+    <>
+      <a
+        class={`joe_post__pagination-item ${l.side}`}
+        th:if={`\${${l.has}}`}
+        th:with={`navPost = \${${l.item}}, navCover = \${${coverOf(l.item)}}`}
+        th:href="@{${navPost.status.permalink}}"
+        th:title="${navPost.spec.title}"
+      >
+        <img
+          th:if="${not #strings.isEmpty(navCover)}"
+          class="cover"
+          alt=""
+          loading="lazy"
+          {...responsiveImage("navCover", "(max-width: 768px) 100vw, 480px", ["s", "m"])}
+          data-fallback="thumbnail"
+        />
+        <span class="body">
+          <span class="label">
+            {l.side === "prev" && <Icon name={l.icon} />}
+            {l.label}
+            {l.side === "next" && <Icon name={l.icon} />}
+          </span>
+          <span class="title" th:text="${navPost.spec.title}"></span>
         </span>
-        <span class="title" th:text="${navPost.spec.title}"></span>
-      </span>
-    </a>
+      </a>
+      {"href" in l.empty ? (
+        <a class={`joe_post__pagination-item ${l.side} is-empty`} th:unless={`\${${l.has}}`} th:href={`@{${l.empty.href}}`}>
+          <span class="body">
+            <span class="label">{l.empty.hint}</span>
+            <span class="title">{l.empty.title}</span>
+          </span>
+        </a>
+      ) : (
+        <div class={`joe_post__pagination-item ${l.side} is-empty`} th:unless={`\${${l.has}}`}>
+          <span class="body">
+            <span class="label">{l.empty.hint}</span>
+            <span class="title">{l.empty.title}</span>
+          </span>
+        </div>
+      )}
+    </>
   ))}
 </nav>

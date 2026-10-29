@@ -139,6 +139,33 @@
   }
 }
 
+/* 已是最新 / 最早一篇时的文案卡片：虚线框、浅底，比真实文章更安静 */
+.joe_post__pagination-item.is-empty {
+  background: color-mix(in srgb, var(--theme) 5%, var(--bg-page));
+  box-shadow: inset 0 0 0 1px var(--border-lighter);
+
+  .label {
+    color: var(--text-secondary);
+  }
+
+  .title {
+    font-weight: 500;
+    color: var(--text-regular);
+  }
+
+  &:is(a):hover {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme) 45%, transparent);
+
+    .title {
+      color: var(--theme-text);
+    }
+  }
+
+  &:not(a):hover {
+    box-shadow: inset 0 0 0 1px var(--border-lighter);
+  }
+}
+
 @media (max-width: 500px) {
   .joe_post__pagination {
     grid-template-columns: 1fr;
