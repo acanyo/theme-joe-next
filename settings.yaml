@@ -173,27 +173,13 @@ spec:
           label: 导航菜单
           value: ""
           help: 留空使用 Halo 的主菜单
-        - $formkit: switch
-          name: logo
-          id: logo
-          key: logo
-          label: 显示 Logo
-          help: 使用 Halo 站点设置中的 Logo
-          value: false
-        - $formkit: text
-          name: logo_link
-          id: logo_link
-          key: logo_link
-          label: Logo 链接
-          value: ""
-          help: "留空回到首页，填 # 不跳转"
         - $formkit: number
           name: logo_radius
           id: logo_radius
           key: logo_radius
           label: Logo 圆角
           value: 4
-          help: 单位 px
+          help: 单位 px；在 Halo「系统设置 → 基本设置」里设置了 Logo 时显示 Logo，否则显示站点标题
           min: 0
           max: 40
         - $formkit: switch

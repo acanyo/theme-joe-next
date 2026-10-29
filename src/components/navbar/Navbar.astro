@@ -40,11 +40,12 @@ const MENU =
         <Icon name="menu" />
       </button>
 
+      <!-- Logo：Halo 站点设置里有 Logo 时显示图片，否则显示站点标题；都链接到首页 -->
       <a
-        th:if="${theme.config.navbar.logo}"
+        th:if="${not #strings.isEmpty(site.logo)}"
         class="joe_header__above-logo"
         th:title="${site.title}"
-        th:href="${#strings.isEmpty(theme.config.navbar.logo_link) ? site.url : (theme.config.navbar.logo_link == '#' ? 'javascript:;' : theme.config.navbar.logo_link)}"
+        th:href="${site.url}"
       >
         <img
           th:src="${site.logo}"
@@ -55,7 +56,7 @@ const MENU =
         />
       </a>
       <a
-        th:unless="${theme.config.navbar.logo}"
+        th:if="${#strings.isEmpty(site.logo)}"
         class="joe_header__above-logo joe_header__above-logo--text"
         th:href="${site.url}"
         th:title="${site.title}"

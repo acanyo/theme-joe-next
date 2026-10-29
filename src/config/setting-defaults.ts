@@ -78,7 +78,6 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
   "navbar.icon_animation": false,
   "navbar.icons": false,
   "navbar.login": false,
-  "navbar.logo": false,
   "navbar.sticky": false,
   "pages.archives_categories": false,
   "pages.categories_count": false,
