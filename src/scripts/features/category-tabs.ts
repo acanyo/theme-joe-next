@@ -11,6 +11,7 @@ import { $, $$ } from "../core/dom";
 import { cleanExcerpts } from "../content/excerpt";
 import { fillEmptyImages } from "./image-fallback";
 import { hideReadBadges } from "./freshness";
+import { dedupeCommenters } from "./commenters";
 import { initReveal } from "./reveal";
 
 /** 分类页的文章列表与首页列表的条目结构相同（components/list/PostItem.astro） */
@@ -73,6 +74,7 @@ export function initCategoryTabs(): void {
     cleanExcerpts(list);
     fillEmptyImages(list);
     hideReadBadges(list);
+    dedupeCommenters(list);
     initReveal(list);
     requestAnimationFrame(() => list.classList.remove("is-switching"));
     list.removeAttribute("aria-busy");

@@ -53,6 +53,7 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
   "footer.rss": false,
   "footer.sitemap": false,
   "footer.uptime": false,
+  "home.card_commenters": true,
   "home.carousel": false,
   "home.carousel_arrows": false,
   "home.carousel_autoplay": false,

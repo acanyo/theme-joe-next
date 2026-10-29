@@ -1026,3 +1026,31 @@
 html[data-mode="dark"] .joe_list__item .information .title .badge--new {
   color: #fbbf24;
 }
+
+/* 文章卡片的评论者头像（设置 home.card_commenters）：叠放，后一个压住前一个的边 */
+.joe_list__item .meta .commenters {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  /* 紧跟统计数字，把分类推到最右 */
+  margin-right: auto;
+  margin-left: 12px;
+
+  img {
+    width: 22px;
+    height: 22px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--bg-page);
+
+    & + img {
+      margin-left: -7px;
+    }
+  }
+}
+
+/* 双列卡片：分类在封面角标上，头像放到右侧 */
+.joe_list.joe_list--cards .meta .commenters {
+  margin-right: 0;
+  margin-left: auto;
+}

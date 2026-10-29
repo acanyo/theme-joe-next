@@ -112,6 +112,26 @@ const COVER = coverOf("post");
           <span th:text="${post.stats.upvote}">0</span>
         </li>
       </ul>
+      <!-- 评论者头像（设置 home.card_commenters）：最近几位评论者叠在一起；只有有评论的文章才查询，
+           同一人多次评论由 features/commenters.ts 去重 -->
+      <span
+        class="commenters"
+        th:if={`\${theme.config.home.card_commenters and ${COMMENT_ENABLED} and post.stats.comment > 0}`}
+        th:with="cardComments = ${commentFinder.list({group: 'content.halo.run', kind: 'Post', name: post.metadata.name}, 1, 8).items}"
+        th:attr="title=|${post.stats.comment} 条评论|"
+      >
+        <img
+          th:each="comment : ${cardComments}"
+          width="22"
+          height="22"
+          loading="lazy"
+          sizes="22px"
+          th:src="${comment.owner.avatar}"
+          th:alt="${comment.owner.displayName}"
+          th:attr="data-text-avatar=${comment.owner.displayName}, data-name=${comment.owner.displayName}"
+          data-fallback="avatar"
+        />
+      </span>
       <ul class="categories" th:unless="${#lists.isEmpty(post.categories)}">
         <li class="pcate" th:each="category : ${post.categories}">
           <svg

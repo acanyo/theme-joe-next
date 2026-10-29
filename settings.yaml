@@ -960,6 +960,13 @@ spec:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
               children: 分页方式与缩略图
         - $formkit: switch
+          name: card_commenters
+          id: card_commenters
+          key: card_commenters
+          label: 文章卡片显示评论者头像
+          value: true
+          help: 在文章卡片底部叠放最近几位评论者的头像；每篇有评论的文章会多一次评论查询
+        - $formkit: switch
           name: compact_mobile
           id: compact_mobile
           key: compact_mobile
