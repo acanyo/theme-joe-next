@@ -1,15 +1,23 @@
 /* 文章左侧悬浮操作栏（点赞、评论、分享、打赏）。*/
 /* 宽屏下文章左侧有足够空间时显示，否则由正文下方的操作区替代（见 scripts/content/aside-operate.ts）。*/
 /* 内部按钮使用 <button>，重置浏览器默认样式。*/
+/* 与右侧栏一样用 sticky：初始与文章卡片顶部对齐，滚动时停在导航栏下方，跟随文章区域、到底自然停止。
+   由浏览器在合成线程处理，快速滑动时不会像脚本定位那样慢一拍、闪到头图上。
+   高度为 0 的外层占位（.joe_post 的第一个子元素），竖条本身挂在左侧外边。 */
 .aside_operations {
   display: none;
-  position: fixed;
-  top: 250px;
-  margin-left: -66px;
+  position: sticky;
+  top: 75px;
   z-index: 10;
+  height: 0;
   user-select: none;
-  /* 一条竖条装下全部按钮，底色与文章卡片一致（压在头图上也不会透出杂色）；
-     顶部与文章卡片对齐，滚动后停在导航栏下方（top 由 scripts/content/aside-operate.ts 设置） */
+}
+
+.aside_operations > .rail {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 22px);
+  /* 一条竖条装下全部按钮，底色与文章卡片一致（压在头图上也不会透出杂色） */
   padding: 6px;
   border-radius: 24px;
   background: var(--bg-page);
@@ -291,7 +299,7 @@
   }
 }
 
-.aside_operations > li > button,
+.aside_operations .rail > li > button,
 .aside_operations .post-operate-share > button {
   appearance: none;
   display: block;
@@ -307,14 +315,6 @@
 
 .aside_operations.is-visible {
   display: block;
-  transition:
-    opacity var(--dur-base) var(--ease-out),
-    translate var(--dur-base) var(--ease-out);
 }
 
-/* 滚过文章区域后淡出（scripts/content/aside-operate.ts） */
-.aside_operations.is-past {
-  opacity: 0;
-  translate: 0 -8px;
-  pointer-events: none;
-}
+

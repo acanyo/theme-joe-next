@@ -40,13 +40,4 @@ export function initAsideOperate(): void {
   };
   update();
   listen(window, "resize", throttle(update, 200));
-
-  // 顶部与文章卡片对齐，滚动后停在导航栏下方；滚过文章区域（进入页脚）时淡出，不压在页脚上
-  const follow = () => {
-    const { top, bottom } = post.getBoundingClientRect();
-    rail.style.top = `${Math.round(Math.max(headerOffset() + 20, top))}px`;
-    rail.classList.toggle("is-past", bottom < rail.getBoundingClientRect().bottom + 40);
-  };
-  follow();
-  listen(window, "scroll", throttle(follow, 100), { passive: true });
 }
