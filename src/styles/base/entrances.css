@@ -2,7 +2,15 @@
  * 入场动画（替代 animate.css）：元素带上 `animated` 和效果名即播放一次。
  * 用于列表入场（features/reveal.ts，效果由设置 effects.list_animation_name 决定）
  * 以及模板中静态写出的 `animated fadeIn` 等。系统开启「减少动态效果」时不播放。
+ *
+ * swup 切过页之后（html.is-swup-visited，core/swup.ts）：页面由切换动画整体出现，
+ * 主体缓入与模板里写死的淡入不再播放，否则新内容会先透明再淡入一次，看起来像卡顿。
+ * 列表入场（.joe_list__item 等进入视口时播放）不受影响。
  */
+html.is-swup-visited .animated:is(.showInUp, .fadeIn):not(.joe-reveal) {
+  animation: none;
+}
+
 .animated {
   animation-duration: 0.6s;
   animation-timing-function: var(--ease-out);

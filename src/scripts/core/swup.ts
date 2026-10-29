@@ -141,7 +141,11 @@ export function initSwup({
   });
 
   // 切页前：释放当前页面的事件、定时器与实例
-  swup.hooks.on("visit:start", () => runCleanups());
+  swup.hooks.on("visit:start", () => {
+    runCleanups();
+    // 之后的页面都由切换动画（View Transition）负责出现，入场动画只在首次打开页面时播放（styles/base/entrances.css）
+    document.documentElement.classList.add("is-swup-visited");
+  });
 
   // 内容替换后：登录态、评论数等可能变化，不复用旧缓存
   swup.hooks.on("content:replace", (visit, { page }) => {

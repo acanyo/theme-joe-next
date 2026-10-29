@@ -12,17 +12,27 @@
     view-transition-name: joe-header;
   }
 
+  /* 导航栏在两个页面里的样子可能不同（滚动后的悬浮条 / 顶部透明），交叉淡化会叠出重影：
+     直接换成新页面的样子，不做过渡 */
   ::view-transition-group(joe-header) {
     animation: none;
   }
 
-  /* 旧画面快速淡出，新画面稍晚开始并带一点上移，交叠的那段时间正好盖住替换内容的瞬间 */
+  ::view-transition-old(joe-header) {
+    display: none;
+  }
+
+  ::view-transition-new(joe-header) {
+    animation: none;
+  }
+
+  /* 旧画面先淡出，完全消失后新画面再进入：两页布局、滚动位置都不同，叠在一起会出现重影 */
   ::view-transition-old(root) {
-    animation: 160ms cubic-bezier(0.4, 0, 1, 1) both joe-vt-out;
+    animation: 120ms cubic-bezier(0.4, 0, 1, 1) both joe-vt-out;
   }
 
   ::view-transition-new(root) {
-    animation: 260ms cubic-bezier(0, 0, 0.2, 1) 60ms both joe-vt-in;
+    animation: 240ms cubic-bezier(0, 0, 0.2, 1) 120ms both joe-vt-in;
   }
 
   html[data-animation="fade"]::view-transition-old(root) {

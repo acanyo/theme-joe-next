@@ -451,7 +451,7 @@
   }
 }
 
-/* 手机端紧凑首页（设置 home.compact_mobile）：精品分类横向滑动一行，瞬间只留最新一条 */
+/* 手机端紧凑首页（设置 home.compact_mobile）：精选推荐横向滑动一行，瞬间只留最新一条 */
 @media (max-width: 768px) {
   .joe_index--compact {
     .joe_index__hot-list {

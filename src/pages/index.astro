@@ -13,7 +13,7 @@ import "../styles/pages/moments-stack.css";
 
 <BaseLayout pageScript="index" pageClass="page-index" bigBanner="fullscreen">
   <div class="joe_main">
-    <!-- 手机端紧凑首页（设置 home.compact_mobile）：精品分类改为横向滑动一行、瞬间只显示最新一条 -->
+    <!-- 手机端紧凑首页（设置 home.compact_mobile）：精选推荐改为横向滑动一行、瞬间只显示最新一条 -->
     <div class="joe_index" th:classappend="${theme.config.home.compact_mobile ? 'joe_index--compact' : ''}">
       <th-block th:if="${theme.config.home.carousel and not #lists.isEmpty(theme.config.home.carousel_slides)}">
         <Banner />

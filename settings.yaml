@@ -805,25 +805,40 @@ spec:
                 - $el: span
                   attrs:
                     style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
-                - 精选分类
+                - 精选推荐
             - $el: div
               attrs:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
-              children: 首页顶部的分类卡片
+              children: 首页顶部的图片卡片，可以放分类，也可以放任意链接
         - $formkit: switch
           value: false
           name: featured
           id: featured
           key: featured
-          label: 精选分类
-          help: 首页顶部的精选分类卡片
+          label: 精选推荐
+          help: 首页顶部的一排图片卡片
+        - $formkit: text
+          name: featured_title
+          id: featured_title
+          key: featured_title
+          if: $get(featured).value
+          label: 标题
+          value: 精选推荐
+        - $formkit: switch
+          name: featured_more
+          id: featured_more
+          key: featured_more
+          if: $get(featured).value
+          label: 显示「全部分类」入口
+          value: false
+          help: 卡片主要放分类时可以打开，标题右侧显示到分类页的链接
         - $formkit: array
           name: featured_items
           id: featured_items
           key: featured_items
           if: $get(featured).value
           max: 4
-          label: 精选分类内容
+          label: 卡片
           value: []
           itemLabels:
             - type: image
@@ -950,7 +965,7 @@ spec:
           key: compact_mobile
           label: 手机端紧凑首页
           value: true
-          help: 屏幕较窄时，精品分类改为横向滑动的一行，瞬间只显示最新一条，让文章列表更早出现在第一屏
+          help: 屏幕较窄时，精选推荐改为横向滑动的一行，瞬间只显示最新一条，让文章列表更早出现在第一屏
         - $formkit: switch
           name: resume_bar
           id: resume_bar

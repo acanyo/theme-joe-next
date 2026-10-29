@@ -36,7 +36,7 @@ export const SIZES = {
   listThumb: "(max-width: 768px) 120px, 210px",
   /** 首页轮播：内容区宽度 */
   banner: "(max-width: 768px) 100vw, (max-width: 1360px) 75vw, 1000px",
-  /** 精选分类、标签 / 分类卡片 */
+  /** 精选推荐、标签 / 分类卡片 */
   card: "(max-width: 500px) 50vw, (max-width: 992px) 33vw, 240px",
   /** 文章沉浸头图背景：整宽 */
   hero: "100vw",
