@@ -3211,6 +3211,7 @@ spec:
           key: icp
           label: ICP 备案号
           value: false
+          help: 打开后在下方填写备案号
         - $formkit: switch
           if: $get(enabled).value === true
           name: police
@@ -3218,39 +3219,45 @@ spec:
           key: police
           label: 公安备案号
           value: false
+          help: 打开后在下方填写备案号
+        # 子项的 id 不能与上面的开关（icp / police）重名，否则 $get(icp) 读到的是输入框的值，整组永远不显示
         - $formkit: group
           name: filing
           id: filing
           key: filing
           label: 备案信息
+          if: $get(enabled).value === true && ($get(icp).value === true || $get(police).value === true)
           children:
             - $formkit: text
+              if: $get(icp).value === true
               name: icp
-              id: icp
-              key: icp
+              id: filing_icp
+              key: filing_icp
               label: ICP 备案号
               value: ""
-              help: ICP 备案信息将展示在页脚中，不填不展示（示例：鄂ICP备20001234号-1）
+              help: 显示在页脚版权后面，例如：鄂ICP备20001234号-1
             - $formkit: text
+              if: $get(icp).value === true
               name: icp_link
-              id: icp_link
-              key: icp_link
-              label: ICP备案跳转链接
+              id: filing_icp_link
+              key: filing_icp_link
+              label: ICP 备案跳转链接
               value: https://beian.miit.gov.cn/
             - $formkit: text
+              if: $get(police).value === true
               name: police
-              id: police
-              key: police
-              label: 公网安备号
+              id: filing_police
+              key: filing_police
+              label: 公安备案号
               value: ""
-              help: 公网安备信息将展示在页脚中，不填不展示，也可在 “页脚” 一栏中单独关闭（示例：鄂公网安备42011102001234号）
+              help: 显示在页脚最下方，例如：鄂公网安备42011102001234号
             - $formkit: text
+              if: $get(police).value === true
               name: police_link
-              id: police_link
-              key: police_link
-              label: 公安联网备案跳转链接
+              id: filing_police_link
+              key: filing_police_link
+              label: 公安备案跳转链接
               value: https://beian.mps.gov.cn/#/query/webSearch
-          if: $get(enabled).value === true && ($get(icp).value === true || $get(police).value === true)
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"

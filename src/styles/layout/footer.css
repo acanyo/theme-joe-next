@@ -337,7 +337,7 @@ html[data-mode="dark"] .site_driven img {
     align-items: center;
     padding-top: 12px;
     /* 手机上悬浮按钮在右下角叠放两个，底部多留一段，滚到底时不压住文字 */
-    padding-bottom: 96px;
+    padding-bottom: 150px;
     text-align: center;
 
     .meta,
