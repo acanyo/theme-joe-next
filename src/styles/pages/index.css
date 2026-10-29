@@ -317,54 +317,85 @@
 
 }
 
-/* 首页「继续阅读」（features/resume-bar.ts）：文章列表上方一条可点击的提示 */
+/* 首页「继续阅读」（features/resume-bar.ts）：文章列表上方一条浅色提示，与列表左右对齐 */
 .joe_resume_bar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin: 0 0 15px;
-  padding: 12px 16px;
+  margin: 15px 15px 0;
   border-radius: var(--radius-wrap);
-  color: var(--text-regular);
-  background: var(--bg-page);
-  box-shadow: var(--shadow);
+  background: color-mix(in srgb, var(--theme) 7%, var(--bg-page));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme) 14%, transparent);
   transition:
-    box-shadow var(--dur-base) var(--ease-out),
-    transform var(--dur-base) var(--ease-spring);
+    background var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
 
   &[hidden] {
     display: none;
   }
 
   &:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-1px);
+    background: color-mix(in srgb, var(--theme) 11%, var(--bg-page));
   }
 
-  /* 小进度环：conic-gradient 画出已读比例 */
+  &.is-leaving {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  .link {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 10px 4px 10px 12px;
+  }
+
+  /* 进度环：conic-gradient 画出已读比例，中间写百分比 */
   .ring {
+    display: grid;
     flex: none;
-    width: 28px;
-    height: 28px;
+    place-items: center;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background:
-      radial-gradient(closest-side, var(--bg-page) 72%, transparent 73%),
-      conic-gradient(var(--theme) calc(var(--p) * 1%), color-mix(in srgb, var(--theme) 15%, transparent) 0);
+    background: conic-gradient(var(--theme) calc(var(--p) * 1%), color-mix(in srgb, var(--theme) 16%, transparent) 0);
+
+    /* 数字与 % 横排（grid 会把 ::after 排到下一行） */
+    > span {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--theme-text);
+      line-height: 28px;
+      font-variant-numeric: tabular-nums;
+      background: var(--bg-page);
+
+      &::after {
+        content: "%";
+        margin-left: 1px;
+        font-size: 8px;
+        font-weight: 500;
+      }
+    }
   }
 
   .text {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
+    display: grid;
     flex: 1;
+    gap: 2px;
     min-width: 0;
   }
 
   .label {
-    flex: none;
     font-size: 12px;
-    font-weight: 600;
-    color: var(--theme-text);
+    color: var(--text-secondary);
   }
 
   .title {
@@ -374,23 +405,48 @@
     color: var(--text-title);
     white-space: nowrap;
     text-overflow: ellipsis;
+    transition: color var(--dur-fast) var(--ease-out);
   }
 
-  .meta {
-    flex: none;
-    font-size: 12px;
-    color: var(--text-secondary);
+  .link:hover .title {
+    color: var(--theme-text);
   }
 
-  .joe-font {
+  .go {
     flex: none;
-    color: var(--text-secondary);
+    color: var(--theme-text);
     transform: rotate(-90deg);
+    transition: transform var(--dur-base) var(--ease-spring);
   }
 
-  @media (max-width: 500px) {
-    .meta {
-      display: none;
+  .link:hover .go {
+    transform: rotate(-90deg) translateY(3px);
+  }
+
+  .close {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: var(--text-secondary);
+    background: none;
+    cursor: pointer;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out);
+
+    &:hover {
+      color: var(--text-title);
+      background: color-mix(in srgb, var(--theme) 12%, transparent);
+    }
+
+    .joe-font {
+      font-size: 14px;
     }
   }
 }
