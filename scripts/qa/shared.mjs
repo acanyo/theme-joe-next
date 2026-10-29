@@ -45,10 +45,12 @@ export async function open(ctx, route) {
   const errors = [];
   page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
   page.on("console", (m) => m.type() === "error" && errors.push(`console: ${m.text()}`));
-  const res = await page.goto(BASE + route, { waitUntil: "load" }).catch((e) => {
+  // 不等 load：一言、不蒜子等外部请求慢时会把 load 拖过超时；DOM 就绪后再等站内资源基本加载完
+  const res = await page.goto(BASE + route, { waitUntil: "domcontentloaded" }).catch((e) => {
     errors.push(`goto: ${e.message}`);
     return null;
   });
+  await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
   await page.waitForTimeout(1200);
   return { page, status: res?.status() ?? 0, errors };
 }
