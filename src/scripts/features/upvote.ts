@@ -56,6 +56,9 @@ export function bindUpvoteButtons(
       button.classList.toggle("active", active);
       button.querySelector(".icon-like")?.classList.toggle("active", !active);
       button.querySelector(".icon-unlike")?.classList.toggle("active", active);
+      // 每个浏览器只能点一次：点过后提示文字（悬浮栏的提示取自 aria-label）改为「已点赞」
+      button.setAttribute("aria-label", active ? "已点赞" : "点赞");
+      button.setAttribute("aria-pressed", String(active));
     }
   };
   const increment = () => {
