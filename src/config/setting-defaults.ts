@@ -110,10 +110,7 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
   "share.donate": false,
   "share.enabled": true,
   "share.link": true,
-  "share.qq": true,
-  "share.qzone": true,
-  "share.wechat": true,
-  "share.weibo": true
+  "share.poster": true
 };
 
 /** 非布尔设置项中有默认值的项（文本 / 数字 / 选项） */

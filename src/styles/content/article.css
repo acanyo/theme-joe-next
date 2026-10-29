@@ -717,38 +717,22 @@
     border-radius: 50px;
     transition: all var(--dur-fast) var(--ease-out);
 
-    a {
-      position: relative;
-      display: inline-block;
+    /* 复制链接 / 生成海报：两个圆形小按钮 */
+    .share-action {
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
       margin: 0 3px;
-    }
-  }
+      border-radius: 50%;
+      font-size: 15px;
+      color: var(--text-regular);
+      background: var(--bg-page);
+      transition: color var(--dur-fast) var(--ease-out);
 
-  .qrcode_wrapper {
-    display: none;
-    position: absolute;
-    top: -199px;
-    left: -68px;
-    padding: 10px;
-    background: #fff;
-    border-radius: var(--radius-inner);
-    box-shadow: var(--shadow-block);
-
-    &:after {
-      position: absolute;
-      content: "";
-      width: 0;
-      height: 0;
-      margin: 10px 0 0 62px;
-      border: 10px solid transparent;
-      border-top-color: #e0e0e0;
-    }
-
-    p {
-      padding: 6px 0 0;
-      text-align: center;
-      font-size: 12px;
-      color: #666;
+      &:hover {
+        color: var(--theme-text);
+      }
     }
   }
 
@@ -770,12 +754,6 @@
     }
   }
 
-  #share_to_weixin:hover .qrcode_wrapper,
-  #share_to_weixin:focus .qrcode_wrapper,
-  [data-joe-share-weixin]:hover .qrcode_wrapper,
-  [data-joe-share-weixin]:focus .qrcode_wrapper {
-    display: block;
-  }
 }
 
 /* 打赏：正文下方操作区里的图标，悬停弹出收款码（components/post/PostOperate.astro）。

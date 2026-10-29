@@ -1,4 +1,5 @@
 /** 文章页入口 */
+import { initPoster } from "../content/poster";
 import { initCodeBlocks } from "../content/code-block";
 import { initShortcodes } from "../content/shortcodes";
 import { initGallery } from "../content/gallery";
@@ -31,6 +32,7 @@ export default function init(): void {
   initAsideOperate();
   initShare();
   initDonate();
+  initPoster();
   initCopyright();
   initProgressBar();
   initGallery();

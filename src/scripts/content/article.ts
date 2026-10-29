@@ -96,26 +96,6 @@ export function initShare(): void {
     }),
   );
 
-  // 微信二维码：悬停或键盘聚焦时才生成
-  $$("[data-joe-share-weixin]").forEach((weixin) => {
-    const qrcode = $(".qrcode_wx", weixin);
-    if (!qrcode) return;
-    let rendered = false;
-    const render = async () => {
-      if (rendered) return;
-      rendered = true;
-      const { toCanvas } = await import("qrcode");
-      const canvas = document.createElement("canvas");
-      await toCanvas(canvas, weixin.dataset.url || location.href, {
-        width: 140,
-        margin: 1,
-      });
-      canvas.setAttribute("aria-label", "文章链接二维码");
-      qrcode.replaceChildren(canvas);
-    };
-    weixin.addEventListener("mouseenter", () => void render());
-    weixin.addEventListener("focus", () => void render());
-  });
 }
 
 /** 复制正文时附加版权信息 */

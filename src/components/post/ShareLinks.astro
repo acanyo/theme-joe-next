@@ -1,66 +1,36 @@
 ---
 /**
- * 文章分享链接列表（复制链接、微博、QQ 空间、QQ、微信二维码）。
- * 正文下方操作区与左侧悬浮栏共用；需在外层定义 `postUrl` 变量。
- * 交互逻辑见 scripts/content/article.ts 的 initShare（按 data 属性绑定，支持多处实例）。
+ * 文章分享：复制链接、生成分享海报（scripts/content/poster.ts）。
+ * 正文末尾操作栏与左侧悬浮栏共用；需在外层定义 `postUrl` 变量。
+ * 海报需要的标题、摘要、封面、作者等写在 data-* 上，脚本只读这些，不依赖页面结构。
  */
-import { POST_ICONS } from "../../data/post-icons";
+import Icon from "../common/Icon.astro";
+import { coverOf } from "../../config/expressions";
 
-const SHARE_TEXT =
-  "'『' + post.spec.title + '』，作者：' + post.owner.displayName";
-const SHARES = [
-  {
-    key: "weibo",
-    title: "分享到新浪微博",
-    href: `'https://service.weibo.com/share/share.php?title=' + #uris.escapeQueryParam('分享：' + ${SHARE_TEXT} + '，原文链接：' + postUrl) + '&pic=' + #uris.escapeQueryParam(post.spec.cover ?: '')`,
-  },
-  {
-    key: "qzone",
-    title: "分享到QQ空间",
-    href: `'https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + #uris.escapeQueryParam(postUrl) + '&title=' + #uris.escapeQueryParam(${SHARE_TEXT})`,
-  },
-  {
-    key: "qq",
-    title: "分享到QQ",
-    href: `'https://connect.qq.com/widget/shareqq/index.html?url=' + #uris.escapeQueryParam(postUrl) + '&title=' + #uris.escapeQueryParam(${SHARE_TEXT})`,
-  },
-] as const;
+const COVER = coverOf("post");
 ---
 
 <div class="share-icon-list">
   <a
     th:if="${theme.config.share.link}"
-    class="icon-share-link"
+    class="share-action"
     href="javascript:;"
     title="复制文章链接"
     aria-label="复制文章链接"
     data-joe-share-link
     th:attr="data-url=${postUrl}, data-title=${post.spec.title}, data-description=${post.status.excerpt}, data-author=${post.owner.displayName}, data-template=${theme.config.share.link_template}"
-    set:html={POST_ICONS.link}
-  />
-  {SHARES.map((share) => (
-    <a
-      th:if={`\${theme.config.share.${share.key}}`}
-      th:href={`\${${share.href}}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      title={share.title}
-      aria-label={share.title}
-      set:html={POST_ICONS[share.key]}
-    />
-  ))}
-  <a
-    th:if="${theme.config.share.wechat}"
-    href="javascript:;"
-    title="分享到微信"
-    aria-label="分享到微信"
-    data-joe-share-weixin
-    th:attr="data-url=${postUrl}"
   >
-    <Fragment set:html={POST_ICONS.weixin} />
-    <div class="qrcode_wrapper animated bounceIn">
-      <div class="qrcode_wx"></div>
-      <p>微信扫一扫</p>
-    </div>
+    <Icon name="link" />
+  </a>
+  <a
+    th:if="${theme.config.share.poster}"
+    class="share-action"
+    href="javascript:;"
+    title="生成分享海报"
+    aria-label="生成分享海报"
+    data-joe-share-poster
+    th:attr={`data-url=\${postUrl}, data-title=\${post.spec.title}, data-excerpt=\${post.status.excerpt}, data-cover=\${${COVER}}, data-author=\${post.owner.displayName}, data-avatar=\${post.owner.avatar}, data-date=\${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}, data-site=\${site.title}, data-category=\${#lists.isEmpty(post.categories) ? '' : post.categories[0].spec.displayName}`}
+  >
+    <Icon name="image" />
   </a>
 </div>

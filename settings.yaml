@@ -2462,7 +2462,7 @@ spec:
             - $el: div
               attrs:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
-              children: 文章底部的分享按钮
+              children: 复制文章链接、生成分享海报
         - $formkit: switch
           name: enabled
           id: enabled
@@ -2471,35 +2471,18 @@ spec:
           value: true
           help: 单篇文章可用元数据 enable_share 关闭
         - $formkit: switch
-          name: wechat
-          id: wechat
-          key: wechat
-          label: 微信
-          value: true
-        - $formkit: switch
-          name: qq
-          id: qq
-          key: qq
-          label: QQ
-          value: true
-        - $formkit: switch
-          name: qzone
-          id: qzone
-          key: qzone
-          label: QQ 空间
-          value: true
-        - $formkit: switch
-          name: weibo
-          id: weibo
-          key: weibo
-          label: 微博
-          value: true
-        - $formkit: switch
           name: link
           id: link
           key: link
           label: 复制链接
           value: true
+        - $formkit: switch
+          name: poster
+          id: poster
+          key: poster
+          label: 分享海报
+          value: true
+          help: 生成一张带封面、标题、摘要和文章二维码的图片，可保存或复制后发到微信、朋友圈等
         - $formkit: textarea
           if: $get(link).value === true
           name: link_template
