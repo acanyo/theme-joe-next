@@ -87,7 +87,11 @@ export function initSwup({
 
   const swup = new Swup({
     containers: ["#swup"],
-    animationSelector: ".joe_swup",
+    // 支持 View Transitions 的浏览器用原生过渡：新页面加载完才开始，旧画面与新画面交叉过渡，
+    // 不会出现「先淡出、等加载、再淡入」中间的空白；不支持时退回下方 animationSelector 的 CSS 过渡。
+    // 动画为「关闭」时两种都不用（styles/base/transitions.css）。
+    native: document.documentElement.dataset.animation !== "none",
+    animationSelector: document.documentElement.dataset.animation === "none" ? false : ".joe_swup",
     cache: true,
     ignoreVisit: (url, { el } = {}) => shouldIgnore(url, el),
     plugins: [

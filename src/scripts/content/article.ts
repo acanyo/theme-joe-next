@@ -167,9 +167,8 @@ export function initToc(): void {
     headingsOffset: offset,
     scrollSmoothOffset: -offset,
     scrollSmooth: true,
-    positionFixedSelector: ".toc-container",
-    positionFixedClass: "is-position-fixed",
-    fixedSidebarOffset: "auto",
+    // 不用 tocbot 的「目录固定」：侧栏吸顶由 CSS sticky 完成；而且它在节流后的滚动回调里查找 .toc-container，
+    // swup 切到没有目录的页面后回调仍会执行一次，找不到元素就报错
     onClick: () => mobile && closeOverlays(),
   });
   if (!$(tocSelector)?.children.length) {
