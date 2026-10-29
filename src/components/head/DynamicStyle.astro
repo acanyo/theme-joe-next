@@ -7,7 +7,7 @@
  */
 const css = `
 @layer reset, tokens, vendor, base, components, layout, content, pages;
-[# th:if="\${(theme.config.effects.page_transition ?: 'native') == 'native'}"]
+[# th:if="\${!theme.config.effects.swup and theme.config.effects.page_animation != 'none'}"]
 @media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }
 [/]
 html body {

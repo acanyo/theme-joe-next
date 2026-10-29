@@ -18,7 +18,7 @@ export const SERVER_CONFIG_FIELDS = {
   enableBack2top: "theme.config.effects.back_to_top",
   enableBack2topSmooth: "theme.config.effects.back_to_top_smooth",
   enableFixedHeader: "theme.config.navbar.sticky",
-  pageTransition: "theme.config.effects.page_transition",
+  pageTransition: "theme.config.effects.swup ? 'swup' : (theme.config.effects.page_animation == 'none' ? 'none' : 'native')",
   swupPreload: "theme.config.effects.swup_preload",
   cursorEffect: "theme.config.effects.cursor_effect",
   backdrop: "theme.config.effects.backdrop",

@@ -1,8 +1,9 @@
-/* 页面切换动画。*/
-/* - native：浏览器原生跨页过渡。`@view-transition` 是文档级规则，无法按属性选择开关，*/
-/*   因此由服务端仅在设置为 native 时输出（见 components/head/DynamicStyle.astro），这里只定义动画样式。*/
-/* - swup：无刷新切换，内容区域淡出 → 替换 → 淡入（swup 在 <html> 上添加的状态类）。*/
-/* 系统开启「减少动态效果」时两种模式都不做动画。*/
+/* 页面切换动画（设置 effects.page_animation，写在 <html data-animation>）：*/
+/* - swup 开启（effects.swup）：无刷新切换，内容区域淡出 → 替换 → 淡入（swup 在 <html> 上添加的状态类）。*/
+/* - swup 关闭：浏览器原生跨页过渡。`@view-transition` 是文档级规则，无法按属性选择开关，*/
+/*   因此由服务端仅在关闭 swup 且动画不为「关闭」时输出（见 components/head/DynamicStyle.astro）。*/
+/* - slide：淡入并上移；fade：只淡入淡出；none：不做动画。*/
+/* 系统开启「减少动态效果」时都不做动画。*/
 
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-old(root) {
@@ -11,6 +12,14 @@
 
   ::view-transition-new(root) {
     animation: joe-page-in 0.28s ease-out both;
+  }
+
+  html[data-animation="fade"]::view-transition-old(root) {
+    animation-name: joe-page-fade-out;
+  }
+
+  html[data-animation="fade"]::view-transition-new(root) {
+    animation-name: joe-page-fade-in;
   }
 
   /* 导航栏在原生过渡中保持不动*/
@@ -22,18 +31,21 @@
     animation: none;
   }
 
-  html.is-changing .joe_swup {
+  html:not([data-animation="none"]).is-changing .joe_swup {
     transition:
       opacity 0.22s var(--ease-out),
       transform 0.22s var(--ease-out);
   }
 
-  html.is-animating .joe_swup {
+  html:not([data-animation="none"]).is-animating .joe_swup {
     opacity: 0;
+  }
+
+  html[data-animation="slide"].is-animating .joe_swup {
     transform: translateY(8px);
   }
 
-  html.is-leaving .joe_swup {
+  html[data-animation="slide"].is-leaving .joe_swup {
     transform: translateY(-4px);
   }
 }
@@ -49,6 +61,18 @@
   from {
     opacity: 0;
     transform: translateY(8px);
+  }
+}
+
+@keyframes joe-page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes joe-page-fade-in {
+  from {
+    opacity: 0;
   }
 }
 
