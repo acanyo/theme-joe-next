@@ -394,3 +394,35 @@
     }
   }
 }
+
+/* 手机端紧凑首页（设置 home.compact_mobile）：精品分类横向滑动一行，瞬间只留最新一条 */
+@media (max-width: 768px) {
+  .joe_index--compact {
+    .joe_index__hot-list {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: 40%;
+      gap: 10px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .item {
+        scroll-snap-align: start;
+      }
+
+      &.hotlist .item .link .inner {
+        height: 80px;
+      }
+    }
+
+    .joe_moments_stack__list li:nth-child(n + 2) {
+      display: none;
+    }
+  }
+}

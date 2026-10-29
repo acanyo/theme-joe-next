@@ -960,6 +960,13 @@ spec:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
               children: 分页方式与缩略图
         - $formkit: switch
+          name: compact_mobile
+          id: compact_mobile
+          key: compact_mobile
+          label: 手机端紧凑首页
+          value: true
+          help: 屏幕较窄时，精品分类改为横向滑动的一行，瞬间只显示最新一条，让文章列表更早出现在第一屏
+        - $formkit: switch
           name: resume_bar
           id: resume_bar
           key: resume_bar

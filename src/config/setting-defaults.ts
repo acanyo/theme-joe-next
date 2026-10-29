@@ -57,6 +57,7 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
   "home.carousel_draggable": false,
   "home.carousel_loop": false,
   "home.category_tabs": true,
+  "home.compact_mobile": true,
   "home.featured": false,
   "home.freshness_badge": true,
   "home.hero": false,
