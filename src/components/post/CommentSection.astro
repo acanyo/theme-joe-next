@@ -4,8 +4,7 @@
  * `subject` 为当前内容变量名；`kind` 为评论主体类型。
  */
 import { POST_ICONS } from "../../data/post-icons";
-import { COMMENT_ENABLED, COMMENT_TEXT, el } from "../../config/expressions";
-import Icon from "../common/Icon.astro";
+import { COMMENT_ENABLED, el } from "../../config/expressions";
 
 interface Props {
   subject: string;
@@ -46,39 +45,6 @@ const enabledGlobally =
         th:with="me = ${contributorFinder.getContributor(#authentication.name)}"
         th:attr="data-name=${me?.displayName}"
       ></span>
-    </th-block>
-
-    <!-- 热评：本页点赞最多的评论（至少 1 个赞），最多 3 条（features/comment-greeting.ts 排序） -->
-    <!-- th:if 先于 th:with 求值：候选放在外层 th-block，条件放在 section 上 -->
-    <th-block
-      th:with={`hotPool = \${commentFinder.list({group: '${group}', version: 'v1alpha1', kind: '${kind}', name: ${subject}.metadata.name}, 1, 50).items.?[stats.upvote > 0]}`}
-    >
-    <section class="joe_comment__hot" th:if="${not #lists.isEmpty(hotPool)}" aria-label="热门评论">
-      <h3 class="title"><Icon name="hot" />热门评论</h3>
-      <!-- Finder 不能按点赞排序：服务端输出候选，脚本按 data-upvote 排序后保留前 3 条 -->
-      <ol data-joe-hot-comments>
-        <li th:each="comment : ${hotPool}" th:attr="data-upvote=${comment.stats.upvote}">
-          <img
-            class="avatar"
-            width="32"
-            height="32"
-            loading="lazy"
-            th:src="${comment.owner.avatar}"
-            sizes="32px"
-            alt=""
-            th:attr="data-text-avatar=${comment.owner.displayName}"
-            data-fallback="avatar"
-          />
-          <div class="body">
-            <p class="meta">
-              <span class="who" th:text="${comment.owner.displayName}"></span>
-              <span class="likes"><Icon name="heart-fill" /><span th:text="${comment.stats.upvote}"></span></span>
-            </p>
-            <p class="what" th:text={el(COMMENT_TEXT)}></p>
-          </div>
-        </li>
-      </ol>
-    </section>
     </th-block>
 
     <div th:if={el(COMMENT_ENABLED)}>

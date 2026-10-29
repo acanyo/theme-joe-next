@@ -1,22 +1,10 @@
 /**
  * 评论区增强（components/post/CommentSection.astro）：
  * - 问候：登录用户 / 评论组件记住的访客，在评论框上方看到「欢迎回来」与 Ta 在本站的评论数
- * - 热评：服务端输出点赞 ≥ 1 的评论，这里按点赞数排序并保留前 3 条
  * - 表情面板强调色：评论组件只接受「r, g, b」形式的变量，按当前主题色换算
  */
-import { $, $$ } from "../core/dom";
+import { $ } from "../core/dom";
 import { commentIdentity } from "./visitor";
-
-const HOT_MAX = 3;
-
-function sortHotComments(): void {
-  const list = $("[data-joe-hot-comments]");
-  if (!list) return;
-  const items = $$<HTMLElement>(":scope > li", list).sort(
-    (a, b) => Number(b.dataset.upvote) - Number(a.dataset.upvote),
-  );
-  items.forEach((li, i) => (i < HOT_MAX ? list.appendChild(li) : li.remove()));
-}
 
 /** 把任意 CSS 颜色换成「r, g, b」（借助浏览器解析），失败返回 null */
 function rgbTriplet(color: string): string | null {
@@ -53,7 +41,6 @@ async function greet(box: HTMLElement): Promise<void> {
 export function initCommentEnhancements(): void {
   const box = $<HTMLElement>(".joe_comment");
   if (!box) return;
-  sortHotComments();
   syncEmojiAccent(box);
   document.addEventListener("joe:color-mode", () => syncEmojiAccent(box));
   void greet(box);
