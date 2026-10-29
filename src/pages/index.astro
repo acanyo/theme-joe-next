@@ -34,7 +34,14 @@ import "../styles/pages/moments-stack.css";
             data-joe-category-tabs
             th:attr="data-max=${theme.config.home.category_tabs_count ?: 5}"
           >
-            <button type="button" role="tab" class="item active" aria-selected="true" th:attr="data-href=@{/}">
+            <button
+              type="button"
+              role="tab"
+              class="item active"
+              aria-selected="true"
+              th:attr="data-href=@{/}"
+              th:text="${theme.config.home.list_sort == 'views' ? '最多阅读' : (theme.config.home.list_sort == 'updated' ? '最近更新' : '最新文章')}"
+            >
               最新文章
             </button>
             <th-block
@@ -66,12 +73,14 @@ import "../styles/pages/moments-stack.css";
           </div>
         </div>
         <div class="joe_index__list">
+          <!-- 排序（设置 home.list_sort）：默认沿用 Halo 首页的发布时间排序；其余按同一页码与每页条数重新查询，分页与加载更多不变 -->
           <ul
             class="joe_list"
             data-joe-post-list
             th:classappend="${theme.config.home.list_layout == 'cards' ? 'joe_list--cards' : ''}"
+            th:with="homeSort = ${theme.config.home.list_sort == 'views' ? 'stats.visit,desc' : (theme.config.home.list_sort == 'updated' ? 'status.lastModifyTime,desc' : null)}, homePosts = ${homeSort == null ? posts.items : postFinder.list({page: posts.page, size: posts.size, sort: {'spec.pinned,desc', homeSort, 'metadata.creationTimestamp,asc'}}).items}"
           >
-            <th-block th:each="post, iter : ${posts.items}">
+            <th-block th:each="post, iter : ${homePosts}">
               <PostItem reveal />
             </th-block>
           </ul>

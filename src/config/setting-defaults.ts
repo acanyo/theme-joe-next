@@ -159,6 +159,7 @@ export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "home.hero_wave_dark": "#fff",
   "home.hero_wave_light": "#fff",
   "home.list_layout": "list",
+  "home.list_sort": "published",
   "home.moments_stack_count": 4,
   "home.qq_group_text": "欢迎加入QQ交流群",
   "home.random_thumbnail_api": "https://imgapi.xl0408.top/index.php",

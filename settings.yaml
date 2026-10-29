@@ -996,6 +996,20 @@ spec:
           min: 1
           max: 10
           if: $get(category_tabs).value === true
+        - $formkit: select
+          name: list_sort
+          id: list_sort
+          key: list_sort
+          label: 文章排序
+          value: published
+          help: 首页文章列表的顺序，置顶文章始终在最前；分类、标签等页面不受影响
+          options:
+            - value: published
+              label: 最新发布
+            - value: updated
+              label: 最近更新
+            - value: views
+              label: 最多阅读
         - $formkit: toggle
           name: list_layout
           id: list_layout
