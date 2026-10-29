@@ -45,7 +45,7 @@ const MENU =
         th:if="${not #strings.isEmpty(site.logo)}"
         class="joe_header__above-logo"
         th:title="${site.title}"
-        th:href="${site.url}"
+        th:href="@{/}"
       >
         <img
           th:src="${site.logo}"
@@ -58,7 +58,7 @@ const MENU =
       <a
         th:if="${#strings.isEmpty(site.logo)}"
         class="joe_header__above-logo joe_header__above-logo--text"
-        th:href="${site.url}"
+        th:href="@{/}"
         th:title="${site.title}"
         th:text="${site.title}"
       ></a>

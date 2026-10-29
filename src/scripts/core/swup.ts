@@ -95,7 +95,8 @@ export function initSwup({
     cache: true,
     ignoreVisit: (url, { el } = {}) => shouldIgnore(url, el),
     plugins: [
-      new SwupHeadPlugin({ awaitAssets: true, timeout: 3000 }),
+      // 运行时按需加载的第三方样式（core/stylesheet.ts）在切页时保留
+      new SwupHeadPlugin({ awaitAssets: true, timeout: 3000, persistTags: "style[data-joe-runtime]" }),
       new SwupScrollPlugin({
         animateScroll: {
           betweenPages: false,
