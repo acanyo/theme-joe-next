@@ -6,6 +6,7 @@
 import BloggerCard from "../blogger/BloggerCard.astro";
 import CloudWidget from "./CloudWidget.astro";
 import PostListWidget from "./PostListWidget.astro";
+import PostTabsWidget from "./PostTabsWidget.astro";
 import SimpleWidget from "./SimpleWidget.astro";
 ---
 
@@ -36,6 +37,9 @@ import SimpleWidget from "./SimpleWidget.astro";
       </th-block>
       <th-block th:case="'recent_popular'">
         <PostListWidget kind="recent" />
+      </th-block>
+      <th-block th:case="'post_tabs'">
+        <PostTabsWidget />
       </th-block>
       <th-block th:case="'life'">
         <SimpleWidget type="lifetime" />

@@ -1627,6 +1627,8 @@ spec:
                   label: 热门文章
                 - value: recent_popular
                   label: 近期热门
+                - value: post_tabs
+                  label: 文章（最新 / 热门 / 近期热门三合一）
                 - value: life
                   label: 人生倒计时
                 - value: comments

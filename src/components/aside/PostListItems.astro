@@ -1,0 +1,45 @@
+---
+/**
+ * 侧栏文章列表的内容（不含外框）：最新文章 / 热门文章 / 近期热门。
+ * PostListWidget（单独一张卡片）与 PostTabsWidget（三合一标签切换）共用。
+ * 近期热门：在访问量最高的 50 篇里取最近 N 天（aside.recent_days）发布的，按访问量排列。
+ */
+import Icon from "../common/Icon.astro";
+
+export type PostListKind = "newest" | "hot" | "recent";
+
+interface Props {
+  kind: PostListKind;
+}
+
+const { kind } = Astro.props;
+const count = (size: string) => `#conversions.convert(${size} ?: 5, 'java.lang.Integer')`;
+const list = (size: string, sort: string) =>
+  `postFinder.list({page: 1, size: ${size}, sort: {${sort}, 'metadata.creationTimestamp,asc'}}).items`;
+const RECENT_DAYS = "#conversions.convert(theme.config.aside.recent_days ?: 30, 'java.lang.Long')";
+const QUERIES: Record<PostListKind, string> = {
+  newest: list(count("theme.config.aside.latest_count"), "'spec.publishTime,desc'"),
+  hot: list(count("theme.config.aside.popular_count"), "'stats.visit,desc'"),
+  // 选择表达式 .?[] 内的根对象是每篇文章，取不到 theme；天数先放进变量 recentDays
+  recent:
+    `${list("50", "'stats.visit,desc'")}` +
+    ".?[T(java.time.Duration).between(spec.publishTime, T(java.time.Instant).now()).toDays() < #vars.recentDays]",
+};
+const max = count(kind === "recent" ? "theme.config.aside.popular_count" : "50");
+---
+
+<ul class="list" th:with={`recentDays = \${${RECENT_DAYS}}, asidePosts = \${${QUERIES[kind]}}`}>
+  <li class="item" th:each="asidePost, iter : ${asidePosts}" th:if={`\${iter.index < ${max}}`}>
+    <a
+      class="link"
+      th:href="@{${asidePost.status.permalink}}"
+      th:text="${asidePost.spec.title}"
+    ></a>
+    {kind === "newest" ? (
+      <Icon name="link" />
+    ) : (
+      <span class="views" th:text="${asidePost.stats.visit}" th:title="|${asidePost.stats.visit} 次阅读|"></span>
+    )}
+  </li>
+  {kind === "recent" && <li class="empty" th:if="${#lists.isEmpty(asidePosts)}">最近没有新文章</li>}
+</ul>

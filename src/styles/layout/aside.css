@@ -1108,3 +1108,61 @@ html[data-mode="dark"] .motto_day_words {
     --cloud-text: color-mix(in oklab, var(--cloud-color) 72%, #fff);
   }
 }
+
+/* 文章三合一卡片（components/aside/PostTabsWidget.astro）：标题栏放标签，当前标签下方一小段主题色 */
+.joe_aside__item.post-tabs {
+  .tabs {
+    display: flex;
+    gap: 16px;
+    height: 100%;
+  }
+
+  [role="tab"] {
+    position: relative;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: none;
+    cursor: pointer;
+    transition: color var(--dur-fast) var(--ease-out);
+
+    &:hover {
+      color: var(--text-title);
+    }
+
+    &[aria-selected="true"] {
+      font-weight: 600;
+      color: var(--text-title);
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: 8px;
+        width: 16px;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--theme);
+        transform: translateX(-50%);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--theme);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+  }
+
+  [role="tabpanel"][hidden] {
+    display: none;
+  }
+
+  /* 没有脚本时三组依次显示，组间留出间距 */
+  [role="tabpanel"] + [role="tabpanel"] {
+    margin-top: 15px;
+  }
+}
