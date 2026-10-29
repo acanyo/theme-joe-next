@@ -32,7 +32,8 @@ const CLOUD_COLORS = [
 function renderCloud3d(list: HTMLElement): void {
   const links = $$<HTMLAnchorElement>("a", list);
   if (!links.length) return;
-  const size = 250;
+  // 标签少时缩小球体，避免一大片空白；最多占满 250px
+  const size = Math.round(Math.min(250, 150 + links.length * 8));
   const radius = size * 0.38;
   const cloud = document.createElement("div");
   cloud.className = "joe_cloud3d";
@@ -74,9 +75,11 @@ function renderCloud3d(list: HTMLElement): void {
       p.z = -p.x * sy + z1 * cy;
       p.x = x2;
       p.y = y1;
-      const scale = (p.z + radius * 2) / (radius * 3);
+      // 纵深：背面的标签缩小、变淡，但不小于原字号的 75%（约 10.5px），保证可读
+      const depth = (p.z + radius) / (radius * 2);
+      const scale = 0.75 + 0.35 * depth;
       p.el.style.transform = `translate(-50%, -50%) translate(${p.x}px, ${p.y}px) scale(${scale})`;
-      p.el.style.opacity = String(0.35 + 0.65 * scale);
+      p.el.style.opacity = String(0.45 + 0.55 * depth);
       p.el.style.zIndex = String(Math.round(scale * 100));
     }
   });

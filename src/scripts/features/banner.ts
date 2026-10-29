@@ -39,6 +39,12 @@ const EFFECTS: Record<string, () => Promise<[SwiperModule, string]>> = {
 export async function initBanner(): Promise<void> {
   const el = $("[data-joe-banner]");
   if (!el || !el.querySelector(".swiper-slide")) return;
+  // 第一张在首屏：不要等懒加载，立即以高优先级下载（Swiper 稍后才加载）
+  const first = el.querySelector<HTMLImageElement>(".swiper-slide img");
+  if (first) {
+    first.loading = "eager";
+    first.fetchPriority = "high";
+  }
   const banner = getThemeConfig().banner;
   const effect = EFFECTS[banner.effect] as (typeof EFFECTS)[string] | undefined;
   const [{ default: Swiper }, autoplay, pagination, navigation, effectModule] =

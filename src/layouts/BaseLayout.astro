@@ -53,6 +53,16 @@ const {
 >
   <head>
     <Head title={title}>
+      {/* 首屏大图是 CSS 背景，浏览器要等样式解析后才发现它：提前预加载（LCP） */}
+      {bigBanner && (
+        <link
+          rel="preload"
+          as="image"
+          fetchpriority="high"
+          th:if="${theme.config.home.hero and not #strings.isEmpty(theme.config.home.hero_image) and #strings.isEmpty(theme.config.home.hero_video)}"
+          th:href="${theme.config.home.hero_image}"
+        />
+      )}
       <slot name="head" />
     </Head>
   </head>

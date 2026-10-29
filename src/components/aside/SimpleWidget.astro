@@ -4,7 +4,7 @@
  * 根据 `type` 渲染其一；数据来自当前侧栏配置项变量 `widget`。
  */
 import AsideCard from "./AsideCard.astro";
-import { COMMENT_ENABLED, el } from "../../config/expressions";
+import { COMMENT_ENABLED, el, COMMENT_TEXT } from "../../config/expressions";
 
 interface Props {
   type:
@@ -143,9 +143,8 @@ const SUBJECT_LINK =
           </div>
         </div>
         <div class="reply">
-          <a class="link aside-reply-content" th:href={el(SUBJECT_LINK)}>
-            <p th:utext="${comment.spec.content}" />
-          </a>
+          <!-- 纯文本预览：评论 HTML 中的表情图片换成 alt 文字，标签去掉，最多两行 -->
+          <a class="link aside-reply-content" th:href={el(SUBJECT_LINK)} th:text={el(COMMENT_TEXT)}></a>
         </div>
       </li>
     </ul>

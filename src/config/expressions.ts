@@ -39,3 +39,14 @@ export const COMMENT_TEXT =
   "#strings.abbreviate(#strings.trim((comment.spec.content ?: '')" +
   ".replaceAll('<img[^>]*?alt=[\"'']([^\"'']*)[\"''][^>]*>', '$1')" +
   ".replaceAll('<[^>]+>', ' ').replaceAll('&nbsp;', ' ').replaceAll('\\s+', ' ')), 120)";
+
+/**
+ * 封面图（文章、分类、标签）：自身封面 → 设置中的默认缩略图 → 随机图接口 → 空。
+ * Halo 中「没有封面」存的是空字符串而不是 null，所以用 isEmpty 判断，不能用 ?:。
+ * @param item 变量名，如 "post"、"category"
+ */
+export const coverOf = (item: string): string =>
+  `(not #strings.isEmpty(${item}.spec.cover) ? ${item}.spec.cover : ` +
+  `(not #strings.isEmpty(theme.config.home.default_thumbnail) ? theme.config.home.default_thumbnail : ` +
+  `(theme.config.home.random_thumbnail and not #strings.isEmpty(theme.config.home.random_thumbnail_api) ? ` +
+  `theme.config.home.random_thumbnail_api + '?pageid=' + ${item}.metadata.name : '')))`;
