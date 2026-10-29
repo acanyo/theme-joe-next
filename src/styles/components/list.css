@@ -599,6 +599,11 @@
           transform 0.4s cubic-bezier(0.4, 0, 0.25, 1);
       }
 
+      /* 封面分类角标只在双列卡片模式显示 */
+      .cover-category {
+        display: none;
+      }
+
       time {
         position: absolute;
         z-index: 1;
@@ -911,9 +916,32 @@
         border-radius: 0;
       }
 
+      /* 日期已在卡片底部，封面角标改为分类 */
       time {
-        transform: none;
+        display: none;
       }
+
+      .cover-category {
+        display: block;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        left: 10px;
+        height: 22px;
+        padding: 0 9px;
+        font-size: 12px;
+        line-height: 22px;
+        color: #fff;
+        border-radius: 11px;
+        background: rgb(0 0 0 / 38%);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+      }
+    }
+
+    /* 分类已在封面角标上，底部不再重复；没有封面的卡片仍显示 */
+    .thumbnail ~ .information .categories {
+      display: none;
     }
 
     .information {

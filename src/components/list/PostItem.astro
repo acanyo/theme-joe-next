@@ -49,6 +49,12 @@ const COVER = coverOf("post");
       th:datetime="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
       th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
     ></time>
+    <!-- 双列卡片模式：封面角标显示第一个分类（日期已在卡片底部），列表模式下隐藏 -->
+    <span
+      class="cover-category"
+      th:unless="${#lists.isEmpty(post.categories)}"
+      th:text="${post.categories[0].spec.displayName}"
+    ></span>
     <Icon name="image" />
   </a>
   <div class="information">
