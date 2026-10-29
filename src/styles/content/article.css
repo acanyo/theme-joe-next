@@ -1319,3 +1319,41 @@ html[data-mode="dark"] {
     }
   }
 }
+
+/* 灯箱底部的照片信息（content/exif.ts）：说明 + EXIF */
+.joe_photo_info {
+  position: absolute;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  max-width: min(92vw, 720px);
+  padding: 10px 16px;
+  border-radius: 14px;
+  text-align: center;
+  color: rgb(255 255 255 / 92%);
+  background: rgb(0 0 0 / 45%);
+  backdrop-filter: blur(10px);
+  transform: translateX(-50%);
+  pointer-events: none;
+
+  &[hidden] {
+    display: none;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .caption {
+    font-size: 14px;
+  }
+
+  .exif {
+    font-size: 12px;
+    color: rgb(255 255 255 / 70%);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .caption + .exif {
+    margin-top: 2px;
+  }
+}

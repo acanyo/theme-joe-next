@@ -5,6 +5,7 @@ import { $, $$ } from "../core/dom";
 import { initReveal } from "../features/reveal";
 import { loadStylesheet } from "../core/stylesheet";
 import photoswipeCss from "photoswipe/style.css?url";
+import { addPhotoInfo } from "../content/exif";
 import { observe } from "../core/lifecycle";
 
 let activeGroup = "*";
@@ -76,12 +77,14 @@ function initLightbox(grid: HTMLElement): void {
     const lightbox = new PhotoSwipeLightbox({
       dataSource: visible.map((el) => ({
         src: el.dataset.full || el.src,
+        exifSrc: el.dataset.full || el.src,
         width: el.naturalWidth * 2 || 1600,
         height: el.naturalHeight * 2 || 1200,
         alt: el.alt,
       })),
       pswpModule: () => import("photoswipe"),
     });
+    addPhotoInfo(lightbox);
     lightbox.init();
     lightbox.loadAndOpen(visible.indexOf(img));
   });
