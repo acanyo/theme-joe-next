@@ -29,7 +29,6 @@ export const SERVER_CONFIG_FIELDS = {
   enableConsoleTheme: "theme.config.footer.console_banner",
   enableDebug: "theme.config.footer.debug",
   showLoadedTime: "theme.config.footer.console_timing",
-  favicon: "theme.config.general.favicon",
   footerPosition: "theme.config.footer.position",
   enableBirthday: "theme.config.footer.uptime",
   birthday: "theme.config.footer.since",
@@ -109,7 +108,6 @@ export interface ThemeConfig {
   enableConsoleTheme: boolean;
   enableDebug: boolean;
   showLoadedTime: boolean;
-  favicon: string;
   footerFixed: boolean;
   enableBirthday: boolean;
   birthday: string;
@@ -237,7 +235,6 @@ export function normalizeThemeConfig(
     enableConsoleTheme: toBool(raw.enableConsoleTheme),
     enableDebug: toBool(raw.enableDebug),
     showLoadedTime: toBool(raw.showLoadedTime),
-    favicon: toStr(raw.favicon),
     footerFixed: toStr(raw.footerPosition) === "fixed",
     enableBirthday: toBool(raw.enableBirthday),
     birthday: toStr(raw.birthday),

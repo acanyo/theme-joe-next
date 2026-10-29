@@ -38,13 +38,6 @@ spec:
           label: 内容最大宽度
           value: 1320
           help: 单位 px，默认 1320
-        - $formkit: attachment
-          name: favicon
-          id: favicon
-          key: favicon
-          label: 网站图标
-          value: ""
-          help: 覆盖 Halo 的站点图标，建议 64×64 的 png
     - group: appearance
       label: 外观
       formSchema:

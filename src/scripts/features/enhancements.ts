@@ -1,5 +1,5 @@
 /**
- * 低优先级的可选增强：鼠标/背景特效、离屏标题、自定义 favicon、调试面板、控制台信息。
+ * 低优先级的可选增强：鼠标/背景特效、离屏标题、调试面板、控制台信息。
  * 全部按需动态加载，未开启时不会产生任何下载。
  */
 import { isMobile } from "../core/dom";
@@ -57,18 +57,6 @@ function initOffscreenTitle(): void {
   });
 }
 
-function initFavicon(): void {
-  const { favicon } = getThemeConfig();
-  if (!favicon) return;
-  let link = document.querySelector<HTMLLinkElement>("link[rel~='icon']");
-  if (!link) {
-    link = document.createElement("link");
-    link.rel = "icon";
-    document.head.appendChild(link);
-  }
-  link.href = favicon;
-}
-
 async function initDebug(): Promise<void> {
   if (!getThemeConfig().enableDebug) return;
   const { default: VConsole } = await import("vconsole");
@@ -94,7 +82,6 @@ function printConsoleInfo(): void {
 export function initEnhancements(): void {
   initEffects();
   initOffscreenTitle();
-  initFavicon();
   void initDebug();
   printConsoleInfo();
 }
