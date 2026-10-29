@@ -148,7 +148,6 @@ export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "general.color_mode": "user",
   "general.content_width": 1320,
   "general.light_hours": "5:00~19:00",
-  "general.link_target": "default",
   "home.carousel_direction": "horizontal",
   "home.carousel_effect": "slide",
   "home.carousel_interval": 3500,

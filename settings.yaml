@@ -27,9 +27,10 @@ spec:
           name: light_hours
           id: light_hours
           key: light_hours
+          if: $get(color_mode).value === 'auto'
           label: 浅色时段
           value: 5:00~19:00
-          help: 仅自动模式生效，格式 5:00~19:00，时段外为暗黑模式
+          help: 格式 5:00~19:00，时段外为暗黑模式
         - $formkit: number
           name: content_width
           id: content_width
@@ -44,20 +45,6 @@ spec:
           label: 网站图标
           value: ""
           help: 覆盖 Halo 的站点图标，建议 64×64 的 png
-        - $formkit: toggle
-          name: link_target
-          id: link_target
-          key: link_target
-          label: 链接打开方式
-          value: default
-          help: 默认：文章正文和瞬间里的链接在新标签打开；当前页 / 新标签：内容区域（不含导航栏与页脚）的所有链接统一按此打开
-          options:
-            - value: default
-              label: 默认
-            - value: current
-              label: 当前页
-            - value: new
-              label: 新标签
     - group: appearance
       label: 外观
       formSchema:

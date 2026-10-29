@@ -17,7 +17,6 @@ export const SERVER_CONFIG_FIELDS = {
   enableBack2top: "theme.config.effects.back_to_top",
   enableBack2topSmooth: "theme.config.effects.back_to_top_smooth",
   enableFixedHeader: "theme.config.navbar.sticky",
-  linkBehavior: "theme.config.general.link_target",
   pageTransition: "theme.config.effects.page_transition",
   swupPreload: "theme.config.effects.swup_preload",
   cursorEffect: "theme.config.effects.cursor_effect",
@@ -98,7 +97,6 @@ export interface ThemeConfig {
   enableBack2top: boolean;
   enableBack2topSmooth: boolean;
   enableFixedHeader: boolean;
-  linkBehavior: "default" | "current" | "new";
   pageTransition: "none" | "native" | "swup";
   swupPreload: boolean;
   cursorEffect: string;
@@ -214,7 +212,6 @@ export function normalizeThemeConfig(
   assetsBase: string,
 ): ThemeConfig {
   const themeMode = toStr(raw.themeMode, "user");
-  const linkBehavior = toStr(raw.linkBehavior, "default");
   return {
     themeMode: (["user", "auto", "light", "dark"].includes(themeMode)
       ? themeMode
@@ -230,9 +227,6 @@ export function normalizeThemeConfig(
       ? toStr(raw.pageTransition)
       : "native") as ThemeConfig["pageTransition"],
     swupPreload: toBool(raw.swupPreload, true),
-    linkBehavior: (["default", "current", "new"].includes(linkBehavior)
-      ? linkBehavior
-      : "default") as ThemeConfig["linkBehavior"],
     cursorEffect: toStr(raw.cursorEffect, "off"),
     backdrop: toStr(raw.backdrop, "off"),
     enableContextMenu: toBool(raw.enableContextMenu),
