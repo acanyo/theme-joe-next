@@ -739,7 +739,7 @@ spec:
               label: 创意性
               render: /themes/theme-joe-next/assets/previews/carousel-creative.svg
           render-type: image
-          size: 112
+          size: 80
           gap: 8
         - $formkit: switch
           value: false
