@@ -23,9 +23,19 @@
   .item {
     cursor: pointer;
     margin-right: 16px;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-weight: 500;
+    white-space: nowrap;
     user-select: none;
     color: var(--text-regular);
+    background: none;
     transition: color var(--dur-base) var(--ease-out);
+
+    &:hover {
+      color: var(--text-title);
+    }
 
     /* 当前标签：标题色加粗，下方一小段主题色（与导航的下划线一致） */
     &.active {
@@ -812,5 +822,123 @@
 @media (max-width: 500px) {
   .joe_archive {
     border-radius: 0;
+  }
+}
+
+/* 分类标签页（features/category-tabs.ts）：标签多时横向滚动；切换时列表淡出淡入 */
+[data-joe-category-tabs] {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+[data-joe-post-list] {
+  transition: opacity var(--dur-fast) var(--ease-out);
+
+  &.is-switching {
+    opacity: 0.35;
+  }
+}
+
+/* 切到分类后，列表下方的「查看该分类全部文章」 */
+.joe_index__more {
+  display: block;
+  margin: 16px auto 0;
+  padding: 10px 0;
+  border-radius: var(--radius-wrap);
+  font-size: 14px;
+  text-align: center;
+  color: var(--theme-text);
+  background: var(--bg-page);
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--dur-fast) var(--ease-out);
+
+  &:hover {
+    box-shadow: var(--shadow-hover);
+  }
+}
+
+/*
+ * 双列卡片（设置 home.list_layout = cards）：大图在上，标题与摘要在下，
+ * 列表宽度不足（容器查询）时回到单列。没有封面的文章只显示文字。
+ * 选择器带上 .joe_list--cards，盖过上面列表样式与容器查询中的缩略图尺寸。
+ */
+.joe_list.joe_list--cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 15px 0;
+
+  > .joe_list__item.default,
+  > .joe_list__item.none {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: var(--radius-wrap);
+    background: var(--bg-page);
+    box-shadow: var(--shadow);
+    transition:
+      box-shadow var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-spring);
+
+    &:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .thumbnail {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      margin: 0;
+      border-radius: 0;
+
+      img {
+        border-radius: 0;
+      }
+
+      time {
+        transform: none;
+      }
+    }
+
+    .information {
+      height: auto;
+      padding: 12px 14px 14px;
+    }
+
+    .title {
+      margin-bottom: 6px;
+      font-size: 16px;
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .abstract {
+      display: -webkit-box;
+      margin-bottom: 10px;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+}
+
+/* 卡片列：.joe_list 本身是容器，不能查询自己的宽度，按其父级（.joe_index__list）判断 */
+.joe_index__list {
+  container: joe-index-list / inline-size;
+}
+
+@container joe-index-list (max-width: 600px) {
+  .joe_list.joe_list--cards {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

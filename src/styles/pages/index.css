@@ -243,16 +243,6 @@
     gap: 10px;
   }
 
-  .joe_index__title-title {
-    .item {
-      display: none;
-
-      &:nth-child(1),
-      &:nth-child(2) {
-        display: block;
-      }
-    }
-  }
 }
 
 @media (max-width: 768px) {
@@ -325,14 +315,4 @@
     display: none;
   }
 
-  .joe_index__title-title {
-    .item {
-      display: none;
-
-      &:nth-child(1),
-      &:nth-child(2) {
-        display: block;
-      }
-    }
-  }
 }
