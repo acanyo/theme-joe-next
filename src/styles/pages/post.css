@@ -47,6 +47,7 @@
 }
 
 /* 上一篇 / 下一篇：两张并排的卡片，小字说明方向，大字显示文章标题 */
+/* 上一篇 / 下一篇（components/post/PostNav.astro）：封面做背景，标题压在底部渐变上 */
 .joe_post__pagination {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -55,47 +56,190 @@
 }
 
 .joe_post__pagination-item {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
   min-width: 0;
+  min-height: 96px;
+  overflow: hidden;
+  border-radius: var(--radius-wrap);
+  /* 没有封面时的底色 */
+  background: linear-gradient(135deg, color-mix(in srgb, var(--theme) 26%, var(--bg-page)), color-mix(in srgb, var(--theme) 8%, var(--bg-page)));
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--dur-base) var(--ease-out);
 
-  a {
-    display: block;
+  .cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
     height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  &:has(.cover)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / 68%), rgb(0 0 0 / 12%));
+  }
+
+  .body {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 4px;
+    width: 100%;
+    min-width: 0;
     padding: 14px 16px;
-    border-radius: var(--radius-wrap);
-    background: var(--bg-page);
-    box-shadow: var(--shadow);
-    transition: box-shadow var(--dur-base) var(--ease-out);
-
-    &:hover {
-      box-shadow: var(--shadow-hover);
-
-      .title {
-        color: var(--theme);
-      }
-    }
   }
 
   .label {
-    display: block;
-    margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
     font-size: 12px;
     color: var(--text-secondary);
   }
 
   .title {
-    display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 15px;
     font-weight: 600;
     color: var(--text-title);
-    transition: color var(--dur-base) var(--ease-out);
+  }
+
+  &:has(.cover) {
+    .label {
+      color: rgb(255 255 255 / 78%);
+    }
+
+    .title {
+      color: #fff;
+    }
+  }
+
+  &:hover {
+    box-shadow: var(--shadow-hover);
+
+    .cover {
+      transform: scale(1.05);
+    }
   }
 
   &.next {
     grid-column: 2;
     text-align: right;
+
+    .label {
+      justify-self: end;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .joe_post__pagination {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .joe_post__pagination-item {
+    min-height: 76px;
+
+    &.next {
+      grid-column: auto;
+    }
+  }
+}
+
+/* 正文下方的相关文章卡片（components/post/RelatedPosts.astro） */
+.joe_related {
+  margin-bottom: 15px;
+  padding: 14px 16px 16px;
+  border-radius: var(--radius-wrap);
+  background: var(--bg-page);
+  box-shadow: var(--shadow);
+}
+
+.joe_related__title {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-title);
+}
+
+.joe_related__list {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 3 * 12px) / 4);
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  li {
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  a {
+    display: grid;
+    gap: 6px;
+  }
+
+  .cover {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-inner);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--theme) 22%, transparent), color-mix(in srgb, var(--theme) 6%, transparent));
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      color: transparent;
+      transition: transform 0.6s var(--ease-out);
+    }
+  }
+
+  a:hover .cover img {
+    transform: scale(1.05);
+  }
+
+  .title {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--text-title);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  a:hover .title {
+    color: var(--theme-text);
+  }
+
+  time {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 768px) {
+    grid-auto-columns: 44%;
   }
 }
 

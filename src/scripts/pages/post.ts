@@ -11,7 +11,7 @@ import {
   initCopyright,
   initLike,
   initProgressBar,
-  initShare,
+  initShare, initDonate,
   initSeries,
   initToc,
   initWordCount,
@@ -30,6 +30,7 @@ export default function init(): void {
   initLike();
   initAsideOperate();
   initShare();
+  initDonate();
   initCopyright();
   initProgressBar();
   initGallery();

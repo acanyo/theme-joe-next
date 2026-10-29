@@ -2198,7 +2198,7 @@ spec:
           name: related
           id: related
           key: related
-          label: 相关文章
+          label: 侧栏相关文章
           help: 侧边栏显示同分类或同标签的文章
           value: true
         - $formkit: number
@@ -2211,6 +2211,13 @@ spec:
           help: 默认 5
           min: 1
           max: 20
+        - $formkit: switch
+          name: related_cards
+          id: related_cards
+          key: related_cards
+          label: 正文下方的相关文章卡片
+          value: true
+          help: 在上一篇 / 下一篇下方显示最多 4 篇带封面的相关文章；手机上侧栏隐藏时也能看到
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"

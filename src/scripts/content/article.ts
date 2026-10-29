@@ -45,6 +45,38 @@ export function initLike(): void {
   });
 }
 
+/**
+ * 打赏（正文末尾操作栏）：桌面悬停即显示收款码（纯 CSS）；触屏没有悬停，点按图标切换，
+ * 点到别处或按 Esc 收起。
+ */
+export function initDonate(): void {
+  const donate = $(".joe_detail__operate .joe_donate");
+  const icon = donate && $(".joe-font", donate);
+  if (!donate || !icon) return;
+  icon.setAttribute("role", "button");
+  icon.setAttribute("tabindex", "0");
+  icon.setAttribute("aria-label", "打赏");
+  icon.removeAttribute("aria-hidden");
+  const toggle = (open = !donate.classList.contains("is-open")) => {
+    donate.classList.toggle("is-open", open);
+    icon.setAttribute("aria-expanded", String(open));
+  };
+  icon.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggle();
+  });
+  icon.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggle();
+    }
+  });
+  listen(document, "click", (event: MouseEvent) => {
+    if (!donate.contains(event.target as Node)) toggle(false);
+  });
+  listen(document, "keydown", (event: KeyboardEvent) => event.key === "Escape" && toggle(false));
+}
+
 export function initShare(): void {
   $$("[data-joe-share-link]").forEach((link) =>
     link.addEventListener("click", (event) => {

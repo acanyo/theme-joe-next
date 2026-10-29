@@ -1,0 +1,43 @@
+---
+/**
+ * 正文下方的相关文章（设置 post.related_cards）：同分类（没有分类时同标签）的几篇文章，
+ * 带封面的卡片，横向排列，窄屏可横向滑动。侧栏的相关文章列表在手机上看不到，这里补上。
+ */
+import { coverOf } from "../../config/expressions";
+import { responsiveImage } from "../../config/images";
+
+const SIZE = "#conversions.convert((theme.config.post.related_count ?: 5) + 1, 'java.lang.Integer')";
+const QUERY = `#lists.isEmpty(post.categories) ? postFinder.listByTag(1, ${SIZE}, post.tags[0].metadata.name) : postFinder.listByCategory(1, ${SIZE}, post.categories[0].metadata.name)`;
+const COVER = coverOf("item");
+---
+
+<section
+  class="joe_related"
+  aria-label="相关文章"
+  th:if="${theme.config.post.related_cards and (not #lists.isEmpty(post.categories) or not #lists.isEmpty(post.tags))}"
+  th:with={`relatedPosts = \${(${QUERY}).items.?[metadata.name != #vars.post.metadata.name]}`}
+>
+  <th-block th:unless="${#lists.isEmpty(relatedPosts)}">
+    <h2 class="joe_related__title">相关文章</h2>
+    <ul class="joe_related__list">
+      <li th:each="item, iter : ${relatedPosts}" th:if="${iter.index < 4}" th:with={`cover = \${${COVER}}`}>
+        <a th:href="@{${item.status.permalink}}" th:title="${item.spec.title}">
+          <span class="cover">
+            <img
+              th:if="${not #strings.isEmpty(cover)}"
+              alt=""
+              loading="lazy"
+              {...responsiveImage("cover", "(max-width: 768px) 45vw, 220px", ["s", "m"])}
+              data-fallback="thumbnail"
+            />
+          </span>
+          <span class="title" th:text="${item.spec.title}"></span>
+          <time
+            th:datetime="${#dates.format(item.spec.publishTime, 'yyyy-MM-dd')}"
+            th:text="${#dates.format(item.spec.publishTime, 'yyyy-MM-dd')}"
+          ></time>
+        </a>
+      </li>
+    </ul>
+  </th-block>
+</section>

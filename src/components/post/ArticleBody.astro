@@ -160,21 +160,7 @@ const ARTICLE_CLASS = [
       ></div>
     </article>
 
-    {isPost && (
-      <div
-        class="joe_detail__agree"
-        th:if="${theme.config.post.like and #annotations.getOrDefault(post, 'enable_like', 'true') == 'true'}"
-      >
-        <button type="button" class="agree" data-joe-like aria-label="点赞">
-          <span class="icon">
-            <Icon name="like" class="icon-like" />
-            <Icon name="like-fill" class="icon-unlike" />
-          </span>
-          <span class="nums" th:text="${post.stats.upvote}">
-            0
-          </span>
-        </button>
-      </div>
-    )}
+    <!-- 正文下方的操作栏（文章页：标签、点赞、分享、打赏，components/post/PostOperate.astro） -->
+    <slot name="footer" />
   </div>
 </div>

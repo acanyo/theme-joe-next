@@ -1,5 +1,9 @@
 ---
-/** 文章标签、分享、打赏（正文下方） */
+/**
+ * 正文末尾的操作栏（放在文章卡片内，components/post/ArticleBody.astro 的 footer 插槽）：
+ * 左侧标签，右侧点赞 / 分享 / 打赏三个圆形按钮。
+ * 左侧悬浮栏显示时，这里重复的三个按钮会被隐藏（scripts/content/aside-operate.ts）。
+ */
 import DonateList from "./DonateList.astro";
 import ShareLinks from "./ShareLinks.astro";
 import Icon from "../common/Icon.astro";
@@ -20,13 +24,28 @@ import {
     ></a>
   </div>
 
-  <div class="joe_detail__operate-share" th:if={el(SHARE_ENABLED)}>
-    <Icon name="share" />
-    <ShareLinks />
-  </div>
+  <div class="joe_detail__operate-actions">
+    <div
+      class="joe_detail__agree"
+      th:if="${theme.config.post.like and #annotations.getOrDefault(post, 'enable_like', 'true') == 'true'}"
+    >
+      <button type="button" class="agree" data-joe-like aria-label="点赞">
+        <span class="icon">
+          <Icon name="like" class="icon-like" />
+          <Icon name="like-fill" class="icon-unlike" />
+        </span>
+        <span class="nums" th:text="${post.stats.upvote}">0</span>
+      </button>
+    </div>
 
-  <div class="joe_donate" th:if={el(DONATE_ENABLED)}>
-    <Icon name="reward" />
-    <DonateList />
+    <div class="joe_detail__operate-share" th:if={el(SHARE_ENABLED)}>
+      <Icon name="share" />
+      <ShareLinks />
+    </div>
+
+    <div class="joe_donate" th:if={el(DONATE_ENABLED)}>
+      <Icon name="reward" />
+      <DonateList />
+    </div>
   </div>
 </div>

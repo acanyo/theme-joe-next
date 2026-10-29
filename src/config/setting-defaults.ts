@@ -103,6 +103,7 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
   "post.outdated_notice": false,
   "post.progress": true,
   "post.related": true,
+  "post.related_cards": true,
   "post.title_shadow": false,
   "post.toc": true,
   "post.toc_mobile": true,

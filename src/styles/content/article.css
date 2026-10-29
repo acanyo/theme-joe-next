@@ -518,69 +518,87 @@
   }
 }
 
+/* 点赞（操作栏里的第一个按钮）：圆形图标 + 右侧计数，点过后变红 */
 .joe_detail__agree {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 30px 0 10px;
-
   .agree {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+    border: 0;
     font-size: 12px;
     color: var(--text-secondary);
+    background: none;
+    cursor: pointer;
     user-select: none;
+    font-variant-numeric: tabular-nums;
 
     .icon {
-      cursor: pointer;
       position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 42px;
-      height: 42px;
-      margin-bottom: 8px;
-      background: #f56c6c;
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
+      background: color-mix(in srgb, #f56c6c 14%, transparent);
+      transition:
+        background var(--dur-fast) var(--ease-out),
+        transform var(--dur-base) var(--ease-spring);
+    }
+
+    .joe-font {
+      position: absolute;
+      font-size: 17px;
+      color: #f56c6c;
+      opacity: 0;
+      transform: scale(0.4);
+      transition:
+        transform var(--dur-base) var(--ease-spring),
+        opacity var(--dur-fast) var(--ease-out);
 
       &.active {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    &:hover .icon {
+      background: color-mix(in srgb, #f56c6c 22%, transparent);
+      transform: scale(1.08);
+    }
+
+    &.active {
+      color: #f56c6c;
+
+      .icon {
+        background: #f56c6c;
         animation: box_shadow 1s;
-        box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
       }
 
       .joe-font {
-        position: absolute;
-        opacity: 0;
-        font-size: 26px;
         color: #fff;
-        transform: scale(0);
-        transition:
-          transform 0.85s var(--ease-out),
-          opacity 0.85s var(--ease-out);
-
-        &.active {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-
-      .icon-like {
-        border-radius: 50%;
-
-        &:hover {
-          animation: box_shadow 1s infinite;
-          box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
-        }
       }
     }
   }
 }
 
+/* 正文末尾的操作栏（在文章卡片内）：左侧标签，右侧点赞 / 分享 / 打赏，上方一条分隔线 */
 .joe_detail__operate {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
-  padding-top: 20px;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-lighter);
   color: var(--text-regular);
+}
+
+.joe_detail__operate-actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
 }
 
 .joe_detail__operate-tags {
@@ -763,23 +781,24 @@
 /* 打赏：正文下方操作区里的图标，悬停弹出收款码（components/post/PostOperate.astro）。
    操作区在 .joe_detail 外面，选择器不能挂在 .joe_detail 下，否则这些样式都不生效、收款码直接铺开 */
 .joe_detail__operate {
+  /* 与点赞、分享同样大小的圆形按钮 */
   .joe_donate {
     position: relative;
     z-index: 10;
     width: 30px;
     height: 30px;
-    font-size: 30px;
-    margin-left: 5px;
     text-align: center;
 
     .joe-font {
       cursor: pointer;
-      display: block;
+      display: grid;
+      place-items: center;
       width: 30px;
       height: 30px;
-      font-size: 30px;
+      font-size: 17px;
       color: #f16520;
       border-radius: 50%;
+      background: color-mix(in srgb, #f16520 14%, transparent);
     }
 
     .joe_donate_list {
@@ -809,6 +828,14 @@
 
       li {
         float: left;
+
+        /* 「微信打赏」等标题：不继承正文字号 */
+        p {
+          margin: 0 0 8px;
+          font-size: 13px;
+          line-height: 1.4;
+          color: var(--text-secondary);
+        }
 
         img {
           display: block;
@@ -845,9 +872,9 @@
   }
 }
 
+/* 版权信息：操作栏已移进文章卡片，这里不再需要分隔线，与上下的卡片保持同样间距 */
 .joe_detail__copyright {
-  padding-top: 15px;
-  border-top: 1px solid var(--border-lighter);
+  margin-bottom: 15px;
 
   .content {
     background: var(--fill-base);
@@ -1079,10 +1106,43 @@
   }
 }
 
+/* 窄屏：收款码改为在打赏按钮上方居中弹出，宽度不超出屏幕；点按打开（scripts/content/article.ts 的 initDonate） */
 @media (max-width: 768px) {
-  .joe_donate {
-    display: none;
+  .joe_detail__operate .joe_donate {
+    position: static;
+
+    .joe_donate_list {
+      top: auto;
+      right: 50%;
+      bottom: calc(100% + 12px);
+      max-width: calc(100vw - 32px);
+      transform: translate(50%, 10px);
+
+      &:before {
+        display: none;
+      }
+
+      li img {
+        width: min(160px, calc((100vw - 80px) / 2));
+        height: auto;
+        aspect-ratio: 1;
+      }
+    }
+
+    &:hover .joe_donate_list,
+    &.is-open .joe_donate_list {
+      transform: translate(50%, 0);
+    }
   }
+
+  .joe_detail__operate {
+    position: relative;
+  }
+}
+
+.joe_detail__operate .joe_donate.is-open .joe_donate_list {
+  pointer-events: initial;
+  opacity: 1;
 }
 
 @media (max-width: 500px) {

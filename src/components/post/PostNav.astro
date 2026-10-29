@@ -1,0 +1,46 @@
+---
+/**
+ * 上一篇 / 下一篇：封面缩略图做背景，标题压在渐变遮罩上；没有封面时用主题色渐变。
+ */
+import Icon from "../common/Icon.astro";
+import { coverOf } from "../../config/expressions";
+import { responsiveImage } from "../../config/images";
+
+const LINKS = [
+  { side: "prev", label: "上一篇", has: "cursor.hasPrevious()", item: "cursor.previous", icon: "chevron-left" },
+  { side: "next", label: "下一篇", has: "cursor.hasNext()", item: "cursor.next", icon: "chevron-right" },
+] as const;
+---
+
+<nav
+  class="joe_post__pagination"
+  aria-label="上一篇与下一篇"
+  th:with="cursor = ${postFinder.cursor(post.metadata.name)}"
+>
+  {LINKS.map((l) => (
+    <a
+      class={`joe_post__pagination-item ${l.side}`}
+      th:if={`\${${l.has}}`}
+      th:with={`navPost = \${${l.item}}, navCover = \${${coverOf(l.item)}}`}
+      th:href="@{${navPost.status.permalink}}"
+      th:title="${navPost.spec.title}"
+    >
+      <img
+        th:if="${not #strings.isEmpty(navCover)}"
+        class="cover"
+        alt=""
+        loading="lazy"
+        {...responsiveImage("navCover", "(max-width: 768px) 100vw, 480px", ["s", "m"])}
+        data-fallback="thumbnail"
+      />
+      <span class="body">
+        <span class="label">
+          {l.side === "prev" && <Icon name={l.icon} />}
+          {l.label}
+          {l.side === "next" && <Icon name={l.icon} />}
+        </span>
+        <span class="title" th:text="${navPost.spec.title}"></span>
+      </span>
+    </a>
+  ))}
+</nav>
