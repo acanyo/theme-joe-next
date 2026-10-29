@@ -122,6 +122,7 @@ export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "aside.latest_count": 5,
   "aside.popular_count": 5,
   "aside.position": "right",
+  "aside.recent_days": 30,
   "blogger.avatar_frame": "0",
   "blogger.avatar_pendant": "0",
   "blogger.avatar_shape": "circle",

@@ -475,6 +475,11 @@
     .list {
       padding-top: 1px;
 
+      .empty {
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+
       .item {
         margin-bottom: 15px;
         display: flex;
@@ -510,6 +515,15 @@
 
         &:last-child {
           margin-bottom: 0;
+        }
+
+        /* 近期热门：行尾阅读数 */
+        .views {
+          flex: none;
+          margin-left: 10px;
+          font-size: 12px;
+          color: var(--text-secondary);
+          font-variant-numeric: tabular-nums;
         }
 
         .title {

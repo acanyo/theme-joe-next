@@ -34,6 +34,9 @@ import SimpleWidget from "./SimpleWidget.astro";
       <th-block th:case="'popular'">
         <PostListWidget kind="hot" />
       </th-block>
+      <th-block th:case="'recent_popular'">
+        <PostListWidget kind="recent" />
+      </th-block>
       <th-block th:case="'life'">
         <SimpleWidget type="lifetime" />
       </th-block>

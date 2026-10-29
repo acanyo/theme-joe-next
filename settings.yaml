@@ -1589,6 +1589,16 @@ spec:
           value: 5
           min: 1
           max: 20
+          help: 「热门文章」与「近期热门」共用
+        - $formkit: number
+          name: recent_days
+          id: recent_days
+          key: recent_days
+          label: 近期热门的时间范围（天）
+          value: 30
+          min: 1
+          max: 365
+          help: 「近期热门」只统计这么多天内发布的文章
         - $formkit: array
           name: widgets
           id: widgets
@@ -1627,6 +1637,8 @@ spec:
                   label: 最新文章
                 - value: popular
                   label: 热门文章
+                - value: recent_popular
+                  label: 近期热门
                 - value: life
                   label: 人生倒计时
                 - value: comments
