@@ -2987,7 +2987,7 @@ spec:
           key: nav
           label: 页脚导航
           value: false
-          help: 在页脚上方显示几组链接，可同时显示博主的社交账号图标
+          help: 在页脚上方显示站点名、博主座右铭、社交账号图标和几组链接
         - $formkit: repeater
           if: $get(nav).value == true
           name: nav_groups

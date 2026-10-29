@@ -18,13 +18,24 @@ const CLOUD_PROVIDERS = [
   th:if="${theme.config.footer.enabled}"
   th:classappend="|${theme.config.footer.position == 'fixed' ? 'fixed' : ''} ${theme.config.footer.full_width ? 'full' : ''}|"
 >
-  <!-- 页脚导航（设置 footer.nav）：几组链接 + 博主社交账号图标 -->
+  <!-- 页脚导航（设置 footer.nav）：左侧站点名、座右铭与社交图标，右侧几组链接 -->
   <nav
     class="joe_container joe_footer__nav"
     aria-label="页脚导航"
-    th:if="${theme.config.footer.nav and (not #lists.isEmpty(theme.config.footer.nav_groups) or theme.config.footer.nav_social)}"
+    th:if="${theme.config.footer.nav}"
   >
-    <div class="groups">
+    <div class="brand">
+      <a class="name" th:href="@{/}" th:text="${site.title}"></a>
+      <p
+        class="motto"
+        th:if="${not #strings.isEmpty(theme.config.blogger.motto)}"
+        th:text="${theme.config.blogger.motto}"
+      ></p>
+      <th-block th:if="${theme.config.footer.nav_social}">
+        <SocialLinks />
+      </th-block>
+    </div>
+    <div class="groups" th:unless="${#lists.isEmpty(theme.config.footer.nav_groups)}">
       <div class="group" th:each="group : ${theme.config.footer.nav_groups}">
         <h2 class="title" th:text="${group.title}"></h2>
         <ul>
@@ -38,13 +49,10 @@ const CLOUD_PROVIDERS = [
         </ul>
       </div>
     </div>
-    <th-block th:if="${theme.config.footer.nav_social}">
-      <SocialLinks />
-    </th-block>
   </nav>
   <div
-    class="joe_container"
-    th:classappend="${!theme.config.footer.rss and !theme.config.footer.sitemap} ? 'central' : ''"
+    class="joe_container joe_footer__bar"
+    th:classappend="${!theme.config.footer.rss and !theme.config.footer.sitemap and !theme.config.footer.uptime and !theme.config.footer.busuanzi} ? 'central' : ''"
   >
     <div class="item">
       <p>
@@ -121,23 +129,6 @@ const CLOUD_PROVIDERS = [
         </th-block>
         提供云服务
       </p>
-      <div class="site_life" th:if="${theme.config.footer.uptime}">
-        <Icon name="runtime" />已运行&nbsp;
-        <strong class="joe_run__day">00</strong> 天
-        <strong class="joe_run__hour">00</strong> 时
-        <strong class="joe_run__minute">00</strong> 分
-        <strong class="joe_run__second">00</strong> 秒
-      </div>
-      <!-- 建站纪念（设置 footer.anniversary）：从起始时间到第 N 年的进度，由 features/footer.ts 计算 -->
-      <div
-        class="site_anniversary"
-        th:if="${theme.config.footer.uptime and theme.config.footer.anniversary}"
-        th:attr="data-years=${theme.config.footer.anniversary_years ?: 10}, data-label=${theme.config.footer.anniversary_label ?: '十年之约'}"
-        hidden
-      >
-        <span class="text"></span>
-        <span class="bar" aria-hidden="true"><span></span></span>
-      </div>
       <p
         class="site_police"
         th:if="${theme.config.footer.police and not #strings.isEmpty(theme.config.footer.filing?.police)}"
@@ -151,6 +142,25 @@ const CLOUD_PROVIDERS = [
       </p>
     </div>
     <div class="side-col">
+      <!-- 运行时间与建站纪念（footer.uptime / footer.anniversary），由 features/footer.ts 计时 -->
+      <div class="site_life" th:if="${theme.config.footer.uptime}">
+        <p class="uptime">
+          <Icon name="runtime" />已运行&nbsp;
+          <strong class="joe_run__day">00</strong> 天
+          <strong class="joe_run__hour">00</strong> 时
+          <strong class="joe_run__minute">00</strong> 分
+          <strong class="joe_run__second">00</strong> 秒
+        </p>
+        <div
+          class="site_anniversary"
+          th:if="${theme.config.footer.anniversary}"
+          th:attr="data-years=${theme.config.footer.anniversary_years ?: 10}, data-label=${theme.config.footer.anniversary_label ?: '十年之约'}"
+          hidden
+        >
+          <span class="text"></span>
+          <span class="bar" aria-hidden="true"><span></span></span>
+        </div>
+      </div>
       <div
         class="item"
         th:if="${theme.config.footer.rss or theme.config.footer.sitemap}"

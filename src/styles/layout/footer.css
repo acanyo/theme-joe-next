@@ -69,11 +69,27 @@
       }
     }
 
+    /* 运行时间与建站纪念：右侧一张浅底小卡片 */
     .site_life {
-      padding-top: 2px;
+      display: grid;
+      gap: 6px;
+      min-width: 240px;
+      padding: 10px 14px;
       font-size: 12px;
+      border-radius: var(--radius-inner);
+      background: color-mix(in srgb, var(--theme) 6%, transparent);
 
-      > i {
+      .uptime {
+        margin: 0;
+        font-variant-numeric: tabular-nums;
+
+        /* 数字与「天 / 时 / 分 / 秒」之间留一点空隙（模板压缩后空格会被去掉） */
+        strong {
+          margin: 0 4px;
+        }
+      }
+
+      .joe-font {
         display: inline-block;
         margin-right: 3px;
         font-size: 14px;
@@ -220,6 +236,7 @@
       }
 
       .site_life {
+        min-width: 0;
         margin: 0;
       }
     }
@@ -235,22 +252,40 @@ html[data-mode="dark"] .site_driven img {
   }
 }
 
-/* 页脚导航（设置 footer.nav）：链接分组在左，社交图标在右 */
+/* 页脚导航（设置 footer.nav）：左侧站点名、座右铭与社交图标，右侧链接分组 */
 .joe_footer .joe_footer__nav {
   align-items: flex-start;
-  gap: 24px;
-  padding-top: 24px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--border-lighter);
+  gap: 32px;
+  padding-top: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px dashed var(--border-lighter);
+
+  .brand {
+    display: grid;
+    gap: 8px;
+    max-width: 320px;
+
+    .name {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-title);
+    }
+
+    .motto {
+      margin: 0;
+      line-height: 1.6;
+    }
+  }
 
   .groups {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px 56px;
+    gap: 16px 64px;
   }
 
   .title {
-    margin: 0 0 10px;
+    margin: 0 0 12px;
     font-size: 13px;
     font-weight: 600;
     color: var(--text-title);
@@ -271,38 +306,50 @@ html[data-mode="dark"] .site_driven img {
   /* 复用博主卡片的社交图标（components/blogger/SocialLinks.astro），去掉卡片里的分隔线 */
   .social-account {
     flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 6px;
-    max-width: 240px;
-    padding-top: 0;
+    justify-content: flex-start;
+    gap: 4px;
+    margin-left: -4px;
+    padding-top: 4px;
     border-top: 0;
   }
 
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
-    padding-top: 18px;
+    gap: 20px;
+    padding-top: 20px;
+    padding-bottom: 16px;
+    text-align: center;
+
+    .brand {
+      justify-items: center;
+    }
 
     .groups {
       justify-content: center;
       gap: 16px 40px;
-      text-align: center;
     }
 
     .social-account {
       justify-content: center;
-      max-width: none;
+      margin-left: 0;
     }
+  }
+}
+
+/* 版权一行：右侧运行时间卡片与 RSS / 站点地图上下排列 */
+.joe_footer .joe_footer__bar .side-col {
+  gap: 8px;
+
+  > .item {
+    padding: 0;
   }
 }
 
 /* 建站纪念进度（features/footer.ts） */
 .joe_footer .site_anniversary {
   display: grid;
-  gap: 4px;
-  max-width: 280px;
-  padding-top: 4px;
-  font-size: 12px;
+  gap: 5px;
 
   &[hidden] {
     display: none;
@@ -328,9 +375,5 @@ html[data-mode="dark"] .site_driven img {
       background: var(--theme);
       transition: width 1s var(--ease-out);
     }
-  }
-
-  @media (max-width: 768px) {
-    margin: 0 auto;
   }
 }
