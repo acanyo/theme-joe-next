@@ -8,13 +8,12 @@
   margin-left: -66px;
   z-index: 10;
   user-select: none;
-  /* 一条玻璃竖条装下全部按钮，不再是四个分开的白色大圆 */
+  /* 一条竖条装下全部按钮，底色与文章卡片一致（压在头图上也不会透出杂色）；
+     顶部与文章卡片对齐，滚动后停在导航栏下方（top 由 scripts/content/aside-operate.ts 设置） */
   padding: 6px;
   border-radius: 24px;
-  background: var(--glass-bg);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
+  background: var(--bg-page);
+  box-shadow: var(--shadow);
 
   > li {
     position: relative;

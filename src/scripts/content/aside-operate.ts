@@ -41,9 +41,10 @@ export function initAsideOperate(): void {
   update();
   listen(window, "resize", throttle(update, 200));
 
-  // 滚到文章区域下方（评论读完、进入页脚）时淡出，不压在页脚上
+  // 顶部与文章卡片对齐，滚动后停在导航栏下方；滚过文章区域（进入页脚）时淡出，不压在页脚上
   const follow = () => {
-    const bottom = post.getBoundingClientRect().bottom;
+    const { top, bottom } = post.getBoundingClientRect();
+    rail.style.top = `${Math.round(Math.max(headerOffset() + 20, top))}px`;
     rail.classList.toggle("is-past", bottom < rail.getBoundingClientRect().bottom + 40);
   };
   follow();
