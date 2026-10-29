@@ -104,7 +104,7 @@ function footerNodes(footer: Element | null | undefined): Element[] {
 function restoreFooter(footer: Element | null | undefined, nodes: Element[]): void {
   if (!footer) return;
   footer.querySelector(":scope > .joe_index__more")?.remove();
-  nodes.forEach((n) => footer.insertBefore(n, tailAnchor(footer)));
+  nodes.forEach((n) => footer.appendChild(n));
 }
 
 function replaceFooter(
@@ -122,10 +122,5 @@ function replaceFooter(
   more.className = "joe_index__more";
   more.href = href;
   more.textContent = `查看「${name}」全部 ${total} 篇文章`;
-  footer.insertBefore(more, tailAnchor(footer));
-}
-
-/** 分页与「查看全部」放在分类橱窗（components/home/CategoryShowcase.astro）之前；没有橱窗时追加到末尾 */
-function tailAnchor(footer: Element): Element | null {
-  return footer.querySelector(":scope > .joe_showcase");
+  footer.appendChild(more);
 }
