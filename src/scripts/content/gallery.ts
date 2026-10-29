@@ -2,6 +2,7 @@
 import { $$ } from "../core/dom";
 import { loadStylesheet } from "../core/stylesheet";
 import photoswipeCss from "photoswipe/style.css?url";
+import { addPhotoInfo } from "./exif";
 
 const SELECTOR =
   ".joe_detail__article img:not([class]), .joe_journal_body img:not([class])";
@@ -23,6 +24,8 @@ export function initGallery(selector = SELECTOR): void {
       const instance = new PhotoSwipeLightbox({
         dataSource: images.map((img) => ({
           src: img.currentSrc || img.src,
+          // Halo 生成的缩略图（srcset）不保留 EXIF：照片信息从原图地址读取
+          exifSrc: img.getAttribute("src") || img.src,
           width: img.naturalWidth || 1200,
           height: img.naturalHeight || 800,
           alt: img.alt,
@@ -30,6 +33,7 @@ export function initGallery(selector = SELECTOR): void {
         pswpModule: () => import("photoswipe"),
         bgOpacity: 0.9,
       });
+      addPhotoInfo(instance);
       instance.init();
       lightbox = instance;
     }

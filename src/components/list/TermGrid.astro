@@ -4,6 +4,7 @@
  * 注意：Thymeleaf 会把表达式中的 `__x__` 当作预处理语法，因此 BEM 类名只能写在静态 class 中。
  */
 import { responsiveImage, SIZES } from "../../config/images";
+import { coverOf } from "../../config/expressions";
 interface Props {
   kind: "tags" | "categories";
 }
@@ -20,7 +21,7 @@ const CONFIG = {
 }[kind];
 const cfg = (key: string) => `theme.config.pages.${CONFIG.group}_${key}`;
 const v = CONFIG.item;
-const COVER = `${v}.spec.cover ?: (#strings.isEmpty(theme.config.home.default_thumbnail) ? (theme.config.home.random_thumbnail and not #strings.isEmpty(theme.config.home.random_thumbnail_api) ? theme.config.home.random_thumbnail_api + '?pageid=' + ${v}.metadata.name : '') : theme.config.home.default_thumbnail)`;
+const COVER = coverOf(v);
 const SHOW_NUM = `\${${cfg("count")}}`;
 const NUM_TEXT = `|\${${v}.status.visiblePostCount ?: 0}篇|`;
 const NAME = `\${${v}.spec.displayName}`;

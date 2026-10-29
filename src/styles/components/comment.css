@@ -1,3 +1,25 @@
+/*
+ * 评论组件（PluginCommentWidget）跟随主题：组件在 Shadow DOM 中，通过它公开的 CSS 变量换色与圆角。
+ * 变量写在 .joe_comment 上，向下继承进 <halo-comment>；暗黑模式随主题的 data-color-scheme 切换，
+ * 这里的值写在主题自己的层里，组件自带的暗色值（选择器 [data-color-scheme=dark]）不会盖过它们，
+ * 所以明暗两套都在下面给出。
+ */
+.joe_comment {
+  --halo-cw-primary-1-color: var(--theme-solid);
+  --halo-cw-primary-2-color: color-mix(in oklab, var(--theme-solid) 85%, #000);
+  --halo-cw-primary-3-color: color-mix(in oklab, var(--theme-solid) 70%, #000);
+  --halo-cw-text-1-color: var(--text-title);
+  --halo-cw-text-2-color: var(--text-regular);
+  --halo-cw-text-3-color: var(--text-secondary);
+  --halo-cw-muted-1-color: var(--text-placeholder);
+  --halo-cw-muted-2-color: var(--border-base);
+  --halo-cw-muted-3-color: var(--fill-base);
+  --halo-cw-base-rounded: var(--radius-wrap);
+  --halo-cw-avatar-rounded: 50%;
+  --halo-cw-base-font-family: var(--font-default);
+  --halo-cw-emoji-picker-rgb-accent: 251, 108, 40;
+}
+
 .joe_comment_box {
   text-align: revert;
   .box_title {
@@ -23,6 +45,28 @@
   background: var(--bg-page);
   border-radius: var(--radius-wrap);
   box-shadow: var(--shadow);
+}
+
+/* 认出访客的问候 */
+.joe_comment__hello {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border-radius: var(--radius-wrap);
+  font-size: 13px;
+  color: var(--text-regular);
+  background: var(--tint);
+
+  &::before {
+    content: "👋";
+    font-size: 16px;
+  }
+
+  &[hidden] {
+    display: none;
+  }
 }
 
 .joe_comment__close {

@@ -14,20 +14,12 @@
  * 若干条隐藏的记录，脚本按时间合并排序（features/console-content.ts）。
  */
 import Icon from "../common/Icon.astro";
-import { COMMENT_ENABLED, el } from "../../config/expressions";
+import { COMMENT_ENABLED, COMMENT_TEXT, el } from "../../config/expressions";
 
 /** 时间线每类最多取的条数 */
 const PER_KIND = 8;
 /** 「我的评论」在最近多少条公开评论中查找 */
 const POOL = 100;
-/**
- * 评论预览：评论内容是 HTML，表情图片（<img alt="[微笑]">）换成 alt 文字，
- * 其余标签、&nbsp; 与多余空白去掉后截取。SpEL 字符串中的单引号写作 ''。
- */
-const COMMENT_TEXT =
-  "#strings.abbreviate(#strings.trim((comment.spec.content ?: '')" +
-  ".replaceAll('<img[^>]*?alt=[\"'']([^\"'']*)[\"''][^>]*>', '$1')" +
-  ".replaceAll('<[^>]+>', ' ').replaceAll('&nbsp;', ' ').replaceAll('\\s+', ' ')), 60)";
 const MOMENT_TEXT =
   "#strings.abbreviate(#strings.trim((moment.spec.content.html ?: '')" +
   ".replaceAll('<[^>]+>', ' ').replaceAll('&nbsp;', ' ').replaceAll('\\s+', ' ')), 60)";

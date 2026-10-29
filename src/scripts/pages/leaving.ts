@@ -1,5 +1,6 @@
 /** 留言板：随机位置与配色的便签，支持拖拽（Pointer Events，替代 Draggabilly） */
 import { $, $$ } from "../core/dom";
+import { initCommentEnhancements } from "../features/comment-greeting";
 
 const COLORS = [
   "#dcc10c",
@@ -84,4 +85,5 @@ function layoutNotes(list: HTMLElement): void {
 export default function init(): void {
   const list = $(".joe_leaving-list");
   if (list) layoutNotes(list);
+  initCommentEnhancements();
 }

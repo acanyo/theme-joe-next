@@ -3,7 +3,7 @@
  * 文章列表项。依赖循环变量 `post` 与 `iter`（th:each="post, iter : ...")。
  * 首页可开启进入视口动画（data-reveal）。
  */
-import { COMMENT_ENABLED, el } from "../../config/expressions";
+import { COMMENT_ENABLED, coverOf, el } from "../../config/expressions";
 import Icon from "../common/Icon.astro";
 import { responsiveImage, SIZES } from "../../config/images";
 
@@ -13,8 +13,7 @@ interface Props {
 }
 
 const { reveal = false } = Astro.props;
-const COVER =
-  "post.spec.cover ?: (#strings.isEmpty(theme.config.home.default_thumbnail) ? (theme.config.home.random_thumbnail and not #strings.isEmpty(theme.config.home.random_thumbnail_api) ? theme.config.home.random_thumbnail_api + '?pageid=' + post.metadata.name : '') : theme.config.home.default_thumbnail)";
+const COVER = coverOf("post");
 ---
 
 <li

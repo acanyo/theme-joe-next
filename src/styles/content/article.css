@@ -1206,3 +1206,154 @@ html[data-mode="dark"] {
     margin: 20px 0;
   }
 }
+
+/* 选中文字工具条（content/selection-toolbar.ts）：选区上方的小胶囊 */
+.joe_selbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 950;
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  opacity: 0;
+  translate: 0 4px;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    translate var(--dur-base) var(--ease-spring);
+
+  &.is-shown {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border: 0;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 13px;
+    white-space: nowrap;
+    color: var(--text-regular);
+    background: transparent;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--theme-text);
+      background: var(--tint);
+    }
+
+    .joe-font {
+      font-size: 14px;
+    }
+  }
+}
+
+/* 「上次读到这里」（features/visitor.ts）：页面底部居中的小胶囊 */
+.joe_resume_hint {
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  z-index: 900;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 8px 8px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--text-regular);
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  cursor: pointer;
+  opacity: 0;
+  transform: translate(-50%, 16px);
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-slow) var(--ease-spring);
+
+  &.is-shown {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .pct {
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: #fff;
+    background: var(--theme-solid);
+  }
+
+  .close {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--text-secondary);
+
+    &:hover {
+      background: var(--fill-base);
+    }
+  }
+}
+
+/* 灯箱底部的照片信息（content/exif.ts）：说明 + EXIF */
+.joe_photo_info {
+  position: absolute;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  max-width: min(92vw, 720px);
+  padding: 10px 16px;
+  border-radius: 14px;
+  text-align: center;
+  color: rgb(255 255 255 / 92%);
+  background: rgb(0 0 0 / 45%);
+  backdrop-filter: blur(10px);
+  transform: translateX(-50%);
+  pointer-events: none;
+
+  &[hidden] {
+    display: none;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .caption {
+    font-size: 14px;
+  }
+
+  .exif {
+    font-size: 12px;
+    color: rgb(255 255 255 / 70%);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .caption + .exif {
+    margin-top: 2px;
+  }
+}

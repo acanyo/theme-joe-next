@@ -23,9 +23,32 @@ import "../styles/pages/moments-stack.css";
       <MomentsStack />
       <div class="joe_index__article">
         <div class="joe_index__title">
-          <ul class="joe_index__title-title passage-list-tabs default">
-            <li class="item active">最新文章</li>
-          </ul>
+          <!-- 分类标签页（设置 home.category_tabs）：服务端输出全部分类，脚本按文章数保留前几个，点击在原地切换（scripts/pages/index.ts） -->
+          <div
+            class="joe_index__title-title passage-list-tabs default"
+            role="tablist"
+            aria-label="文章分类"
+            data-joe-category-tabs
+            th:attr="data-max=${theme.config.home.category_tabs_count ?: 5}"
+          >
+            <button type="button" role="tab" class="item active" aria-selected="true" th:attr="data-href=@{/}">
+              最新文章
+            </button>
+            <th-block
+              th:if="${theme.config.home.category_tabs}"
+              th:with="tabCats = ${categoryFinder.listAll().?[postCount > 0 and spec.hideFromList != true]}"
+            >
+              <button
+                type="button"
+                role="tab"
+                class="item"
+                aria-selected="false"
+                th:each="cat : ${tabCats}"
+                th:attr="data-href=@{${cat.status.permalink}}, data-count=${cat.postCount}"
+                th:text="${cat.spec.displayName}"
+              ></button>
+            </th-block>
+          </div>
           <div
             class="joe_index__title-notice"
             th:if="${not #strings.isEmpty(theme.config.home.qq_group)}"
@@ -40,7 +63,11 @@ import "../styles/pages/moments-stack.css";
           </div>
         </div>
         <div class="joe_index__list">
-          <ul class="joe_list" data-joe-post-list>
+          <ul
+            class="joe_list"
+            data-joe-post-list
+            th:classappend="${theme.config.home.list_layout == 'cards' ? 'joe_list--cards' : ''}"
+          >
             <th-block th:each="post, iter : ${posts.items}">
               <PostItem reveal />
             </th-block>

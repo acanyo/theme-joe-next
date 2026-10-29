@@ -2,7 +2,10 @@
 /** 首页「精品分类」：指定分类或自定义入口（设置 home.data_hot_category） */
 import Icon from "../common/Icon.astro";
 import { responsiveImage, SIZES } from "../../config/images";
-const FALLBACK = "#theme.assets('/images/hot_cover1.jpg')";
+/** 没有封面时轮流使用主题自带的 4 张封面（按卡片位置），避免几张卡片同一张图 */
+const FALLBACK = "#theme.assets('/images/hot_cover' + (iter.index % 4 + 1) + '.jpg')";
+/** 封面为空字符串时 ?: 不生效，用 isEmpty 判断 */
+const cover = (expr: string) => `#strings.isEmpty(${expr}) ? ${FALLBACK} : ${expr}`;
 ---
 
 <div class="joe_index__hot">
@@ -17,7 +20,7 @@ const FALLBACK = "#theme.assets('/images/hot_cover1.jpg')";
     </div>
   </div>
   <ul class="joe_index__hot-list hotlist">
-    <th-block th:each="hot : ${theme.config.home.featured_items}">
+    <th-block th:each="hot, iter : ${theme.config.home.featured_items}">
       <th-block th:switch="${hot.source}">
         <th-block
           th:case="'category'"
@@ -35,7 +38,7 @@ const FALLBACK = "#theme.assets('/images/hot_cover1.jpg')";
                   height="120"
                   class="image"
                   loading="lazy"
-                  {...responsiveImage(`category.spec.cover ?: ${FALLBACK}`, SIZES.card, ["s", "m"])}
+                  {...responsiveImage(cover("category.spec.cover"), SIZES.card, ["s", "m"])}
                   th:alt="${category.spec.displayName}"
                   data-fallback="thumbnail"
                 />
@@ -65,7 +68,7 @@ const FALLBACK = "#theme.assets('/images/hot_cover1.jpg')";
                 height="120"
                 class="image"
                 loading="lazy"
-                {...responsiveImage(`custom?.image ?: ${FALLBACK}`, SIZES.card, ["s", "m"])}
+                {...responsiveImage(cover("custom?.image"), SIZES.card, ["s", "m"])}
                 th:alt="${custom?.title}"
                 data-fallback="thumbnail"
               />

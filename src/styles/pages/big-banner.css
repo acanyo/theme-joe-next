@@ -9,12 +9,16 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: transparent;
-  background-position: center;
-  background-size: cover;
   overflow: hidden;
   transition: height 1.6s var(--ease-out);
-  background-image: var(--joe-big-banner-image, none);
+  /* 大图在上，下面垫一层主题色渐变：图片（尤其是外链随机图）到达前不会是一大块空白 */
+  background-color: color-mix(in srgb, var(--theme) 55%, #1e293b);
+  background-image:
+    var(--joe-big-banner-image, none),
+    radial-gradient(120% 90% at 20% 10%, color-mix(in srgb, var(--theme) 60%, #fff), transparent 60%),
+    radial-gradient(90% 80% at 85% 85%, color-mix(in srgb, var(--theme) 75%, #000), transparent 65%);
+  background-position: center;
+  background-size: cover;
 
   &::after {
     content: "";

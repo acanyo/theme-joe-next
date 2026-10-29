@@ -124,6 +124,19 @@ function handleError(event: Event): void {
   if (next && next !== img.getAttribute("src")) img.src = next;
 }
 
+/**
+ * 没有地址的图片（如匿名评论者没有头像）不会触发 error 事件，直接补上回退图。
+ * root 为新插入的内容（控制中心、加载更多等）时只处理其中的图片。
+ */
+export function fillEmptyImages(root: ParentNode = document): void {
+  root.querySelectorAll<HTMLImageElement>("img[data-fallback]").forEach((img) => {
+    if (img.dataset.fallbackApplied === "true" || (img.getAttribute("src") ?? "").trim()) return;
+    img.dataset.fallbackApplied = "true";
+    const next = fallbackFor(img, (img.dataset.fallback as FallbackKind | undefined) ?? "image");
+    if (next) img.src = next;
+  });
+}
+
 /** 在捕获阶段统一监听图片错误，覆盖后续动态插入的图片 */
 export function initImageFallback(): void {
   document.addEventListener("error", handleError, true);

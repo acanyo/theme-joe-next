@@ -1,12 +1,13 @@
 ---
 /** 首页轮播。数据来源：指定文章、热门文章、自定义项（设置 carousel.banner_data_group） */
 import BannerSlide from "./BannerSlide.astro";
+import { coverOf } from "../../config/expressions";
 
 const RANDOM_COVER = (key: string) =>
   `(#strings.isEmpty(theme.config.home.default_thumbnail) ? (theme.config.home.random_thumbnail and not #strings.isEmpty(theme.config.home.random_thumbnail_api) ? theme.config.home.random_thumbnail_api + '?pageid=' + ${key} : '') : theme.config.home.default_thumbnail)`;
 const POST_VARS =
-  "cover = ${slidePost.spec.cover ?: " +
-  RANDOM_COVER("slidePost.metadata.name") +
+  "cover = ${" +
+  coverOf("slidePost") +
   "}, title = ${slidePost.spec.title}, excerpt = ${slidePost.status.excerpt}, autoExcerpt = ${slidePost.spec.excerpt?.autoGenerate != false}, href = ${slidePost.status.permalink}";
 const HOT_QUERY =
   "postFinder.list({page: 1, size: #conversions.convert(slide.popular_count ?: 3, 'java.lang.Integer'), sort: {'stats.visit,desc'}}).items";
@@ -45,7 +46,7 @@ const HOT_QUERY =
             <div
               class="swiper-slide"
               th:with={
-                "cover = ${custom?.image ?: " +
+                "cover = ${not #strings.isEmpty(custom?.image) ? custom.image : " +
                 RANDOM_COVER("custom?.title") +
                 "}, title = ${custom?.title}, excerpt = ${custom?.subtitle}, autoExcerpt = false, href = ${custom?.url}"
               }

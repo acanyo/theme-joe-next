@@ -30,3 +30,23 @@ export const el = (expr: string): string => `\${${expr}}`;
 
 /** 主题内静态资源地址，供属性中拼接使用（`#theme.assets` 已处理 base 与 CDN） */
 export const asset = (path: string): string => `#theme.assets('${path}')`;
+
+/**
+ * 评论的纯文本预览（变量 comment）：评论内容是 HTML，表情图片（<img alt="[微笑]">）换成 alt 文字，
+ * 其余标签、&nbsp; 与多余空白去掉后截取。SpEL 字符串中的单引号写作 ''。
+ */
+export const COMMENT_TEXT =
+  "#strings.abbreviate(#strings.trim((comment.spec.content ?: '')" +
+  ".replaceAll('<img[^>]*?alt=[\"'']([^\"'']*)[\"''][^>]*>', '$1')" +
+  ".replaceAll('<[^>]+>', ' ').replaceAll('&nbsp;', ' ').replaceAll('\\s+', ' ')), 120)";
+
+/**
+ * 封面图（文章、分类、标签）：自身封面 → 设置中的默认缩略图 → 随机图接口 → 空。
+ * Halo 中「没有封面」存的是空字符串而不是 null，所以用 isEmpty 判断，不能用 ?:。
+ * @param item 变量名，如 "post"、"category"
+ */
+export const coverOf = (item: string): string =>
+  `(not #strings.isEmpty(${item}.spec.cover) ? ${item}.spec.cover : ` +
+  `(not #strings.isEmpty(theme.config.home.default_thumbnail) ? theme.config.home.default_thumbnail : ` +
+  `(theme.config.home.random_thumbnail and not #strings.isEmpty(theme.config.home.random_thumbnail_api) ? ` +
+  `theme.config.home.random_thumbnail_api + '?pageid=' + ${item}.metadata.name : '')))`;

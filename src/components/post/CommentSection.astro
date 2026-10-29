@@ -35,6 +35,18 @@ const enabledGlobally =
     <div class="box_title">
       <h2>评论区</h2>
     </div>
+
+    <!-- 认出访客：留过言的访客 / 登录用户在评论框上方看到问候（features/comment-greeting.ts） -->
+    <p class="joe_comment__hello" data-joe-comment-hello hidden></p>
+    <th-block sec:authorize="isAuthenticated()">
+      <span
+        hidden
+        data-joe-comment-user
+        th:with="me = ${contributorFinder.getContributor(#authentication.name)}"
+        th:attr="data-name=${me?.displayName}"
+      ></span>
+    </th-block>
+
     <div th:if={el(COMMENT_ENABLED)}>
       <halo-comment
         group={group}
