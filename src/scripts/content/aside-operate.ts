@@ -35,6 +35,8 @@ export function initAsideOperate(): void {
       post.getBoundingClientRect().left >= MIN_GUTTER;
     rail.classList.toggle("is-visible", show);
     duplicates.forEach((el) => (el.hidden = show));
+    // 收款码在透明的弹层里，懒加载要等悬停才开始下载，弹出时会先空白一下：栏显示后提前加载
+    if (show) $$<HTMLImageElement>(".post-operate-donate img[loading=lazy]", rail).forEach((img) => (img.loading = "eager"));
   };
   update();
   listen(window, "resize", throttle(update, 200));
