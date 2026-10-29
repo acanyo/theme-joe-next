@@ -1,255 +1,173 @@
 ---
 /**
- * 中控台（设置 navbar.console）：导航按钮打开的全屏玻璃面板，内容来自访客在站点的互动。
+ * 控制中心（设置 navbar.console）：从导航按钮下方弹出的一块小面板，像系统的控制中心。
  *
- * 借鉴星度（thyuu.com）与 Heo（blog.zhheo.com）的中控台，并做了这些改进：
- * - 欢迎条认得出访客：用评论时填写的昵称或登录账号打招呼，并显示 Ta 的评论数
- * - 两个视图「全站动态 / 我的互动」：
- *   全站动态 = 最新评论墙（谁、在哪篇文章、说了什么，点击直达文章）+ 发文日历 + 文章（最近 / 热门 / 置顶）+ 热门标签
- *   我的互动 = 访客自己的评论（按评论组件保存的邮箱，在浏览器中算哈希比对）+ 最近看过的文章
- * - 底部快捷开关：明暗、侧栏、动画、回到顶部，偏好存在浏览器
+ *   ┌ 开关方块：外观 / 侧栏 / 动画 / 字号 ┐
+ *   │ 年度进度环 · 站点已运行 · 一言       │
+ *   │ 站点动态：新文章、新评论、新瞬间混排的时间线 │
+ *   └ 页签：站点动态 / 我的足迹 ┘
  *
- * 内容放在 <template> 中，首次打开时才放入页面；数据由服务端 Finder 生成，不新增接口。
+ * 「我的足迹」：访客自己的评论（评论组件记住的邮箱，在浏览器中算哈希与公开评论比对）、
+ * 读到一半的文章（继续阅读）与最近看过的文章。
+ *
+ * 内容放在 <template> 中，首次打开时才放入页面；时间线的数据由服务端 Finder 生成为
+ * 若干条隐藏的记录，脚本按时间合并排序（features/console-content.ts）。
  */
 import Icon from "../common/Icon.astro";
 import { COMMENT_ENABLED, el } from "../../config/expressions";
 
-/** 每栏文章条数 */
-const SIZE = 7;
-/** 评论墙条数（三列 × 4 行） */
-const WALL = 12;
-const LIST = (sort: string, extra = "") =>
-  `postFinder.list({page: 1, size: ${SIZE}${extra}, sort: {${sort}}}).items`;
-const NAME = "theme.config.blogger.name ?: site.title";
+/** 时间线每类最多取的条数 */
+const PER_KIND = 8;
+/** 「我的评论」在最近多少条公开评论中查找 */
+const POOL = 100;
 /**
  * 评论预览：评论内容是 HTML，表情图片（<img alt="[微笑]">）换成 alt 文字，
- * 其余标签、&nbsp; 与多余空白去掉后截取。
+ * 其余标签、&nbsp; 与多余空白去掉后截取。SpEL 字符串中的单引号写作 ''。
  */
 const COMMENT_TEXT =
   "#strings.abbreviate(#strings.trim((comment.spec.content ?: '')" +
   ".replaceAll('<img[^>]*?alt=[\"'']([^\"'']*)[\"''][^>]*>', '$1')" +
-  ".replaceAll('<[^>]+>', ' ').replaceAll('&nbsp;', ' ').replaceAll('\\s+', ' ')), 80)";
+  ".replaceAll('<[^>]+>', ' ').replaceAll('&nbsp;', ' ').replaceAll('\\s+', ' ')), 60)";
+const MOMENT_TEXT =
+  "#strings.abbreviate(#strings.trim((moment.spec.content.html ?: '')" +
+  ".replaceAll('<[^>]+>', ' ').replaceAll('&nbsp;', ' ').replaceAll('\\s+', ' ')), 60)";
+const SUBJECT =
+  "comment.spec.subjectRef.kind == 'Post' ? postFinder.getByName(comment.spec.subjectRef.name) : (comment.spec.subjectRef.kind == 'SinglePage' ? singlePageFinder.getByName(comment.spec.subjectRef.name) : null)";
+const ISO = (expr: string) => `#dates.format(${expr}, 'yyyy-MM-dd''T''HH:mm:ssXXX')`;
 ---
 
 <template id="joe-console-template" th:if="${theme.config.navbar.console}">
-  <div class="joe_console" role="dialog" aria-modal="true" aria-label="中控台" hidden>
-    <div
-      class="joe_console__panel"
-      th:with="stats = ${siteStatsFinder.getStats()}"
-      th:attr={`data-site-name=\${${NAME}}`}
-    >
-      <!-- 登录用户：昵称与头像供欢迎语、我的评论使用 -->
+  <div class="joe_cc" role="dialog" aria-modal="true" aria-label="控制中心" hidden>
+    <div class="joe_cc__sheet">
+      <!-- 登录用户：昵称供「我的足迹」识别评论 -->
       <span
         hidden
         data-console-user
         sec:authorize="isAuthenticated()"
         th:with="me = ${contributorFinder.getContributor(#authentication.name)}"
-        th:attr="data-name=${me?.displayName}, data-avatar=${me?.avatar}"
+        th:attr="data-name=${me?.displayName}"
       ></span>
-      <!-- 顶栏：认得出访客的欢迎语 + 站点数据 + 搜索 -->
-      <header class="joe_console__bar">
-        <p class="joe_console__hello">
-          <span class="wave" aria-hidden="true">👋</span>
-          <span data-console-greeting>
-            欢迎来到 <strong th:text={el(NAME)}></strong>，为你导读全站动态
-          </span>
-        </p>
-        <ul class="joe_console__stats" aria-label="站点数据">
-          <li><strong th:text="${stats.post}">0</strong><span>文章</span></li>
-          <li th:if={el(COMMENT_ENABLED)}><strong th:text="${stats.comment}">0</strong><span>评论</span></li>
-          <li><strong th:text="${stats.visit}">0</strong><span>访问</span></li>
-          <li><strong th:text="${stats.upvote}">0</strong><span>点赞</span></li>
-        </ul>
+
+      <!-- 开关方块 -->
+      <div class="joe_cc__tiles" role="group" aria-label="显示偏好">
         <button
           type="button"
-          class="joe_console__search"
+          class="tile"
+          data-console-action="mode"
+          th:if="${theme.config.general.color_mode == 'user'}"
+          aria-pressed="false"
+        >
+          <span class="glyph" data-console-icon="mode"></span>
+          <span class="name">外观</span>
+          <span class="state" data-console-state="mode"></span>
+        </button>
+        <button type="button" class="tile" data-console-toggle="aside" aria-pressed="true">
+          <span class="glyph"><Icon name="category" /></span>
+          <span class="name">侧栏</span>
+          <span class="state" data-console-state="aside"></span>
+        </button>
+        <button type="button" class="tile" data-console-toggle="motion" aria-pressed="true">
+          <span class="glyph"><Icon name="runtime" /></span>
+          <span class="name">动画</span>
+          <span class="state" data-console-state="motion"></span>
+        </button>
+        <button type="button" class="tile" data-console-action="font" aria-pressed="false">
+          <span class="glyph glyph--text" aria-hidden="true">Aa</span>
+          <span class="name">字号</span>
+          <span class="state" data-console-state="font"></span>
+        </button>
+      </div>
+
+      <!-- 时间感：年度进度环 + 站点已运行 + 一言 -->
+      <div class="joe_cc__time" th:attr="data-since=${theme.config.footer.since}">
+        <div class="ring" data-console-year role="img">
+          <svg viewBox="0 0 36 36" aria-hidden="true">
+            <circle class="track" cx="18" cy="18" r="15.5"></circle>
+            <circle class="value" cx="18" cy="18" r="15.5" pathLength="100"></circle>
+          </svg>
+          <span class="pct"></span>
+        </div>
+        <div class="facts">
+          <p class="fact" data-console-year-text></p>
+          <p class="fact" data-console-uptime hidden></p>
+          <p class="quote" data-console-quote></p>
+        </div>
+      </div>
+
+      <!-- 页签内容 -->
+      <div class="joe_cc__pages">
+        <section class="joe_cc__page" data-console-view="site" aria-label="站点动态">
+          <ol class="joe_cc__feed" data-console-feed></ol>
+          <p class="joe_cc__empty" data-console-feed-empty hidden>站点还很安静，去写点什么吧</p>
+
+          <!-- 时间线数据：文章、评论、瞬间，脚本按时间合并 -->
+          <ul hidden data-console-source>
+            <li
+              th:each={`item : \${postFinder.list({page: 1, size: ${PER_KIND}, sort: {'spec.publishTime,desc'}}).items}`}
+              data-kind="post"
+              th:attr={`data-time=\${${ISO("item.spec.publishTime")}}, data-href=@{\${item.status.permalink}}, data-title=\${item.spec.title}`}
+            ></li>
+            <th-block th:if={el(COMMENT_ENABLED)}>
+              <li
+                th:each={`comment : \${commentFinder.list(null, 1, ${PER_KIND}).items}`}
+                th:with={`subject = \${${SUBJECT}}`}
+                data-kind="comment"
+                th:attr={`data-time=\${${ISO("comment.metadata.creationTimestamp")}}, data-who=\${comment.owner.displayName}, data-href=\${subject != null ? subject.status.permalink : null}, data-title=\${subject?.spec?.title}`}
+                th:text={el(COMMENT_TEXT)}
+              ></li>
+            </th-block>
+            <th-block th:if="${pluginFinder.available('PluginMoments')}">
+              <li
+                th:each={`moment : \${momentFinder.list(1, ${PER_KIND}).items}`}
+                data-kind="moment"
+                th:attr={`data-time=\${${ISO("moment.spec.releaseTime")}}, data-who=\${moment.owner?.displayName}, data-href=@{/moments}`}
+                th:text={el(MOMENT_TEXT)}
+              ></li>
+            </th-block>
+          </ul>
+        </section>
+
+        <section class="joe_cc__page" data-console-view="me" aria-label="我的足迹" hidden>
+          <div class="joe_cc__resume" data-console-resume hidden></div>
+          <h3 class="joe_cc__label">我的评论</h3>
+          <ol class="joe_cc__feed" data-console-mine></ol>
+          <p class="joe_cc__empty" data-console-mine-empty hidden>
+            在文章下留言后，你的评论会出现在这里（按留言时填写的邮箱识别，只在你的浏览器中比对）
+          </p>
+          <h3 class="joe_cc__label">最近看过</h3>
+          <ol class="joe_cc__history" data-console-history></ol>
+          <p class="joe_cc__empty" data-console-history-empty hidden>看过的文章会出现在这里</p>
+
+          <!-- 「我的评论」候选：最近的公开评论（含邮箱哈希） -->
+          <ul hidden data-console-pool th:if={el(COMMENT_ENABLED)}>
+            <li
+              th:each={`comment : \${commentFinder.list(null, 1, ${POOL}).items}`}
+              th:with={`subject = \${${SUBJECT}}`}
+              th:attr={`data-email-hash=\${comment.spec.owner.annotations?.get('email-hash')}, data-owner=\${comment.owner.displayName}, data-owner-kind=\${comment.owner.kind}, data-time=\${${ISO("comment.metadata.creationTimestamp")}}, data-href=\${subject != null ? subject.status.permalink : null}, data-title=\${subject?.spec?.title}`}
+              th:text={el(COMMENT_TEXT)}
+            ></li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- 底部：页签 + 搜索 + 回到顶部 -->
+      <footer class="joe_cc__foot">
+        <div class="joe_cc__seg" role="tablist" aria-label="控制中心页面">
+          <button type="button" role="tab" aria-selected="true" data-console-switch="site">站点动态</button>
+          <button type="button" role="tab" aria-selected="false" data-console-switch="me">我的足迹</button>
+        </div>
+        <button
+          type="button"
+          class="joe_cc__icon"
           data-console-action="search"
+          aria-label="搜索"
           th:if="${pluginFinder.available('PluginSearchWidget')}"
         >
-          <Icon name="search" /><span>搜索文章</span><kbd data-console-kbd>⌘K</kbd>
+          <Icon name="search" />
         </button>
-      </header>
-
-      <!-- 视图一：全站动态 -->
-      <div class="joe_console__view" data-console-view="site">
-        <section
-          class="joe_console__wall"
-          th:if={el(COMMENT_ENABLED)}
-          th:with={`comments = \${commentFinder.list(null, 1, ${WALL})}`}
-          aria-label="最新评论"
-        >
-          <article
-            class="joe_console__comment"
-            th:each="comment : ${comments.items}"
-            th:with="subject = ${comment.spec.subjectRef.kind == 'Post' ? postFinder.getByName(comment.spec.subjectRef.name) : (comment.spec.subjectRef.kind == 'SinglePage' ? singlePageFinder.getByName(comment.spec.subjectRef.name) : null)}"
-            th:attr="data-email-hash=${comment.spec.owner.annotations?.get('email-hash')}, data-owner=${comment.owner.displayName}"
-          >
-            <img
-              class="avatar"
-              width="40"
-              height="40"
-              loading="lazy"
-              th:src="${comment.owner.avatar}"
-              sizes="40px"
-              alt=""
-              th:attr="data-text-avatar=${comment.owner.displayName}"
-              data-fallback="avatar"
-            />
-            <div class="body">
-              <p class="meta">
-                <span class="who" th:text="${comment.owner.displayName}"></span>
-                <time
-                  th:datetime="${#dates.format(comment.metadata.creationTimestamp, 'yyyy-MM-dd''T''HH:mm:ssXXX')}"
-                  th:text="${#dates.format(comment.metadata.creationTimestamp, 'yyyy-MM-dd')}"
-                ></time>
-              </p>
-              <p class="what" th:text={el(COMMENT_TEXT)}></p>
-              <a
-                class="where"
-                th:if="${subject != null}"
-                th:href="@{${subject.status.permalink}}"
-                th:title="${subject.spec.title}"
-              >
-                <Icon name="link" /><span th:text="${subject.spec.title}"></span>
-              </a>
-            </div>
-          </article>
-          <p class="empty" th:if="${#lists.isEmpty(comments.items)}">还没有评论，来做第一个留言的人吧</p>
-        </section>
-
-        <section class="joe_console__grid">
-          <div
-            class="joe_console__card joe_console__calendar"
-            th:with="published = ${postFinder.list({page: 1, size: 100, sort: {'spec.publishTime,desc'}}).items}"
-          >
-            <h3 class="title"><Icon name="calendar" /><span data-console-month>发文日历</span></h3>
-            <!-- 最近发布的文章日期，脚本据此在日历中标出当月有文章的日子 -->
-            <ul hidden data-console-published>
-              <li
-                th:each="item : ${published}"
-                th:attr="data-date=${#dates.format(item.spec.publishTime, 'yyyy-MM-dd')}, data-href=@{${item.status.permalink}}, data-title=${item.spec.title}"
-              ></li>
-            </ul>
-            <div class="grid" data-console-calendar></div>
-          </div>
-
-          <div class="joe_console__card joe_console__posts">
-            <div class="tabs" role="tablist" aria-label="文章">
-              <button type="button" role="tab" aria-selected="true" data-console-tab="recent">最近</button>
-              <button type="button" role="tab" aria-selected="false" data-console-tab="hot">热门</button>
-              <button type="button" role="tab" aria-selected="false" data-console-tab="pinned">置顶</button>
-            </div>
-            <ol data-console-tabpanel="recent" th:with={`recent = \${${LIST("'spec.publishTime,desc'")}}`}>
-              <li th:each="item : ${recent}">
-                <a th:href="@{${item.status.permalink}}" th:title="${item.spec.title}">
-                  <time th:text="${#dates.format(item.spec.publishTime, 'yyyy-MM-dd')}"></time>
-                  <span class="text" th:text="${item.spec.title}"></span>
-                </a>
-              </li>
-            </ol>
-            <ol data-console-tabpanel="hot" hidden th:with={`hot = \${${LIST("'stats.visit,desc'")}}`}>
-              <li th:each="item, iter : ${hot}">
-                <a th:href="@{${item.status.permalink}}" th:title="${item.spec.title}">
-                  <span class="rank" th:text="${iter.count}"></span>
-                  <span class="text" th:text="${item.spec.title}"></span>
-                  <span class="num" th:text="|${item.stats.visit} 阅读|"></span>
-                </a>
-              </li>
-            </ol>
-            <ol
-              data-console-tabpanel="pinned"
-              hidden
-              th:with={`pinned = \${${LIST("'spec.publishTime,desc'", ", pinned: true")}}`}
-            >
-              <li th:each="item : ${pinned}">
-                <a th:href="@{${item.status.permalink}}" th:title="${item.spec.title}">
-                  <time th:text="${#dates.format(item.spec.publishTime, 'yyyy-MM-dd')}"></time>
-                  <span class="text" th:text="${item.spec.title}"></span>
-                </a>
-              </li>
-              <li class="empty" th:if="${#lists.isEmpty(pinned)}">还没有置顶文章</li>
-            </ol>
-          </div>
-
-          <div class="joe_console__card joe_console__tags" th:with="tags = ${tagFinder.listAll().?[postCount > 0]}">
-            <h3 class="title"><Icon name="tag" />热门标签</h3>
-            <div class="cloud" th:unless="${#lists.isEmpty(tags)}">
-              <a
-                th:each="tag, iter : ${tags}"
-                th:if="${iter.index < 24}"
-                th:href="@{${tag.status.permalink}}"
-                th:title="|${tag.spec.displayName}（${tag.postCount} 篇）|"
-              >
-                <span th:text="${tag.spec.displayName}"></span><em th:text="${tag.postCount}"></em>
-              </a>
-            </div>
-            <p class="empty" th:if="${#lists.isEmpty(tags)}">还没有标签</p>
-          </div>
-        </section>
-      </div>
-
-      <!-- 「我的评论」的候选：最近的公开评论（含邮箱哈希），脚本在浏览器中挑出属于访客的那些 -->
-      <ul
-        hidden
-        data-console-pool
-        th:if={el(COMMENT_ENABLED)}
-        th:with="pool = ${commentFinder.list(null, 1, 100)}"
-      >
-        <li
-          th:each="comment : ${pool.items}"
-          th:with="subject = ${comment.spec.subjectRef.kind == 'Post' ? postFinder.getByName(comment.spec.subjectRef.name) : (comment.spec.subjectRef.kind == 'SinglePage' ? singlePageFinder.getByName(comment.spec.subjectRef.name) : null)}"
-          th:attr="data-email-hash=${comment.spec.owner.annotations?.get('email-hash')}, data-owner=${comment.owner.displayName}, data-owner-kind=${comment.owner.kind}, data-avatar=${comment.owner.avatar}, data-time=${#dates.format(comment.metadata.creationTimestamp, 'yyyy-MM-dd''T''HH:mm:ssXXX')}, data-href=${subject != null ? subject.status.permalink : null}, data-title=${subject?.spec?.title}"
-          th:text={el(COMMENT_TEXT)}
-        ></li>
-      </ul>
-
-      <!-- 视图二：我的互动（由脚本根据浏览器本地数据生成） -->
-      <div class="joe_console__view" data-console-view="me" hidden>
-        <section class="joe_console__me">
-          <div class="joe_console__card joe_console__mine">
-            <h3 class="title"><Icon name="comment" />我的评论</h3>
-            <div class="list" data-console-mine></div>
-            <p class="empty" data-console-mine-empty hidden>
-              还没有找到你的评论。在文章下留言后，这里会显示你最近的评论（按留言时填写的邮箱识别，只在你的浏览器中比对）。
-            </p>
-          </div>
-          <div class="joe_console__card joe_console__history">
-            <h3 class="title"><Icon name="views" />最近看过</h3>
-            <ol data-console-history></ol>
-            <p class="empty" data-console-history-empty hidden>还没有阅读记录，看过的文章会出现在这里</p>
-          </div>
-        </section>
-      </div>
-
-      <!-- 底部：视图切换 + 快捷开关 -->
-      <footer class="joe_console__dock">
-        <div class="joe_console__switch" role="tablist" aria-label="中控台视图">
-          <button type="button" role="tab" aria-selected="true" data-console-switch="site">
-            <Icon name="category" />全站动态
-          </button>
-          <button type="button" role="tab" aria-selected="false" data-console-switch="me">
-            <Icon name="user" />我的互动
-          </button>
-        </div>
-        <div class="joe_console__toggles" aria-label="快捷开关">
-          <button
-            type="button"
-            data-console-action="mode"
-            th:if="${theme.config.general.color_mode == 'user'}"
-            aria-label="切换明暗模式"
-          >
-            <span class="icon" data-console-icon="mode"></span><span class="label">明暗</span>
-          </button>
-          <button type="button" data-console-toggle="aside" aria-pressed="true" aria-label="侧边栏">
-            <span class="icon"><Icon name="category" /></span><span class="label">侧栏</span>
-          </button>
-          <button type="button" data-console-toggle="motion" aria-pressed="true" aria-label="动画效果">
-            <span class="icon"><Icon name="runtime" /></span><span class="label">动画</span>
-          </button>
-          <button type="button" data-console-action="top" aria-label="回到顶部">
-            <span class="icon"><Icon name="chevron-down" /></span><span class="label">顶部</span>
-          </button>
-        </div>
+        <button type="button" class="joe_cc__icon joe_cc__icon--top" data-console-action="top" aria-label="回到顶部">
+          <Icon name="chevron-down" />
+        </button>
       </footer>
     </div>
   </div>

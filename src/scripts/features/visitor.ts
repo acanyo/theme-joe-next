@@ -39,8 +39,25 @@ function writeHistory(list: HistoryItem[]): void {
   }
 }
 
+/** 从控制中心「继续阅读」进入时，滚动到上次读到的位置 */
+function resumePosition(): void {
+  let target: { href?: string; progress?: number } = {};
+  try {
+    target = JSON.parse(sessionStorage.getItem("joe-next:resume") ?? "{}");
+    sessionStorage.removeItem("joe-next:resume");
+  } catch {
+    return;
+  }
+  if (target.href !== location.pathname || !target.progress) return;
+  requestAnimationFrame(() => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: Math.round(max * target.progress!) - 80, behavior: "instant" });
+  });
+}
+
 /** 文章页调用：记录本次阅读，并随滚动更新进度 */
 export function recordReading(): void {
+  resumePosition();
   const title = $("h1")?.textContent?.trim() || document.title.split(" - ")[0]!.trim();
   const href = location.pathname;
   const now = Date.now();

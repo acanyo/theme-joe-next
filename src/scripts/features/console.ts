@@ -1,9 +1,9 @@
 /**
- * 中控台（components/navbar/ConsolePanel.astro）：导航按钮打开的全屏玻璃面板。
+ * 控制中心（components/navbar/ConsolePanel.astro）：从导航按钮下方弹出的面板。
  *
- * - 面板内容在 <template> 中，首次打开时才放入页面（不影响首屏，图片也不会提前加载）
- * - 打开时锁定页面滚动、焦点移入面板；Esc、再次点击按钮、点击面板外关闭，焦点回到按钮
- * - 快捷开关是访客自己的偏好，保存在浏览器中，页面加载时即生效（applyConsolePrefs）
+ * - 面板内容在 <template> 中，首次打开时才放入页面（不影响首屏）
+ * - 桌面端贴着按钮弹出；窄屏从底部滑出。Esc、再次点击按钮、点击面板外关闭，焦点回到按钮
+ * - 开关方块是访客自己的偏好（外观、侧栏、动画、字号），保存在浏览器中，页面加载时即生效
  */
 import { $, $$ } from "../core/dom";
 import { toggleColorModeAt, currentMode } from "./color-mode";
@@ -18,7 +18,11 @@ interface Prefs {
   noAside?: boolean;
   /** 关闭页面动画与过渡 */
   noMotion?: boolean;
+  /** 正文字号档位：0 标准、1 大、2 特大 */
+  font?: number;
 }
+
+const FONT_STEPS = ["标准", "大", "特大"] as const;
 
 function readPrefs(): Prefs {
   try {
@@ -42,6 +46,7 @@ export function applyConsolePrefs(): void {
   const root = document.documentElement;
   root.classList.toggle("joe-no-aside", !!prefs.noAside);
   root.classList.toggle("joe-no-motion", !!prefs.noMotion);
+  root.dataset.joeFont = String(prefs.font ?? 0);
 }
 
 let panel: HTMLElement | null = null;
@@ -58,7 +63,7 @@ function mount(): HTMLElement | null {
   bindSwitches(panel);
   panel.addEventListener("click", (event) => {
     // 点击面板外（遮罩区域）关闭
-    if (!(event.target as HTMLElement).closest(".joe_console__panel")) close();
+    if (!(event.target as HTMLElement).closest(".joe_cc__sheet")) close();
     // 面板中的链接：跳转前关闭，swup 切页时面板不残留
     else if ((event.target as HTMLElement).closest("a[href]")) close(false);
   });
@@ -67,17 +72,21 @@ function mount(): HTMLElement | null {
 
 function syncSwitches(root: HTMLElement): void {
   const prefs = readPrefs();
-  const state: Record<string, boolean> = { aside: !prefs.noAside, motion: !prefs.noMotion };
-  $$<HTMLButtonElement>("[data-console-toggle]", root).forEach((button) =>
-    button.setAttribute("aria-pressed", String(state[button.dataset.consoleToggle!] ?? true)),
-  );
+  const state = (name: string, on: boolean, text: string) => {
+    const tile = $<HTMLElement>(`[data-console-toggle='${name}'], [data-console-action='${name}']`, root);
+    tile?.setAttribute("aria-pressed", String(on));
+    const label = $(`[data-console-state='${name}']`, root);
+    if (label) label.textContent = text;
+  };
+  state("aside", !prefs.noAside, prefs.noAside ? "已隐藏" : "显示");
+  state("motion", !prefs.noMotion, prefs.noMotion ? "已关闭" : "开启");
+  const font = prefs.font ?? 0;
+  state("font", font > 0, FONT_STEPS[font] ?? "标准");
   const mode = $("[data-console-icon='mode']", root);
   if (mode) {
     const dark = currentMode() === "dark";
     mode.innerHTML = iconHtml(dark ? "moon" : "sun");
-    mode.parentElement?.setAttribute("aria-pressed", String(dark));
-    const label = mode.parentElement?.querySelector(".label");
-    if (label) label.textContent = dark ? "暗黑" : "浅色";
+    state("mode", dark, dark ? "暗黑" : "浅色");
   }
 }
 
@@ -94,6 +103,9 @@ function bindSwitches(root: HTMLElement): void {
         break;
       case "motion":
         prefs.noMotion = !prefs.noMotion;
+        break;
+      case "font":
+        prefs.font = ((prefs.font ?? 0) + 1) % FONT_STEPS.length;
         break;
       case "mode": {
         const rect = button.getBoundingClientRect();
@@ -140,12 +152,23 @@ function onKeydown(event: KeyboardEvent): void {
   }
 }
 
+/** 桌面端：面板右上角对齐按钮下方；窄屏由 CSS 改为底部抽屉 */
+function position(root: HTMLElement, button: HTMLElement): void {
+  const sheet = $(".joe_cc__sheet", root);
+  if (!sheet) return;
+  const rect = button.getBoundingClientRect();
+  const fromNav = button.classList.contains("joe_header__console");
+  sheet.style.setProperty("--cc-top", `${fromNav ? rect.bottom + 10 : 72}px`);
+  sheet.style.setProperty("--cc-right", `${fromNav ? Math.max(12, window.innerWidth - rect.right - 8) : 12}px`);
+}
+
 function open(button: HTMLElement): void {
   const root = mount();
   if (!root) return;
   opener = button;
   syncSwitches(root);
   refreshConsoleContent(root);
+  position(root, button);
   root.hidden = false;
   document.documentElement.classList.add("joe-console-open");
   // 下一帧再加 is-open，让进入动画从初始状态开始
@@ -171,7 +194,7 @@ function close(restoreFocus = true): void {
   if (opener) {
     opener.setAttribute("aria-expanded", "false");
     if (opener.classList.contains("joe_header__console")) {
-      opener.setAttribute("aria-label", "打开中控台");
+      opener.setAttribute("aria-label", "打开控制中心");
       opener.innerHTML = iconHtml("console");
     }
     if (restoreFocus) opener.focus({ preventScroll: true });
