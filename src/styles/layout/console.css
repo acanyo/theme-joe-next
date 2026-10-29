@@ -571,13 +571,16 @@ html.joe-no-aside .joe_aside {
   display: none;
 }
 
-/* 访客偏好：正文字号 */
-html[data-joe-font="1"] .joe_detail__article {
-  font-size: 17.5px;
+/*
+ * 访客偏好：正文字号。只设置缩放比例 --reading-scale，
+ * 正文（content/article.css）与瞬间（pages/journals.css）的字号乘以它，桌面与手机同步放大。
+ */
+html[data-joe-font="1"] {
+  --reading-scale: 1.125;
 }
 
-html[data-joe-font="2"] .joe_detail__article {
-  font-size: 19px;
+html[data-joe-font="2"] {
+  --reading-scale: 1.25;
 }
 
 /* 访客偏好：关闭动画与过渡 */

@@ -199,7 +199,7 @@
 
 .joe_detail__article {
   padding: 10px 0;
-  font-size: 16px;
+  font-size: calc(16px * var(--reading-scale, 1));
   line-height: 1.85;
   word-break: break-word;
   color: var(--text-regular);
@@ -1045,7 +1045,7 @@
 
   .joe_detail__article {
     padding: 10px 0;
-    font-size: 14px;
+    font-size: calc(14px * var(--reading-scale, 1));
 
     pre[class*="language-"] {
       font-size: 13px;
@@ -1160,7 +1160,7 @@
 
   .joe_detail__article {
     padding: 10px 0;
-    font-size: 14px;
+    font-size: calc(14px * var(--reading-scale, 1));
 
     pre[class*="language-"] {
       font-size: 13px;

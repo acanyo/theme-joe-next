@@ -71,9 +71,15 @@ const ISO = (expr: string) => `#dates.format(${expr}, 'yyyy-MM-dd''T''HH:mm:ssXX
           <span class="name">动画</span>
           <span class="state" data-console-state="motion"></span>
         </button>
-        <button type="button" class="tile" data-console-action="font" aria-pressed="false">
+        <button
+          type="button"
+          class="tile"
+          data-console-action="font"
+          aria-pressed="false"
+          title="文章与瞬间正文的字号，点击切换：标准 / 大 / 特大"
+        >
           <span class="glyph glyph--text" aria-hidden="true">Aa</span>
-          <span class="name">字号</span>
+          <span class="name">正文字号</span>
           <span class="state" data-console-state="font"></span>
         </button>
       </div>

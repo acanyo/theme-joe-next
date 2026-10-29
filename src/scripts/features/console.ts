@@ -9,6 +9,7 @@ import { $, $$ } from "../core/dom";
 import { toggleColorModeAt, currentMode } from "./color-mode";
 import { iconHtml } from "../core/icons";
 import { closeOverlays } from "./navigation";
+import { toast } from "../core/toast";
 import { refreshConsoleContent, renderConsoleContent } from "./console-content";
 
 const PREFS_KEY = "joe-next:console";
@@ -104,9 +105,13 @@ function bindSwitches(root: HTMLElement): void {
       case "motion":
         prefs.noMotion = !prefs.noMotion;
         break;
-      case "font":
+      case "font": {
         prefs.font = ((prefs.font ?? 0) + 1) % FONT_STEPS.length;
+        // 字号只作用于文章与瞬间正文：当前页面没有正文时提示一下，避免以为没生效
+        if (!document.querySelector(".joe_detail__article, .joe_journal_body"))
+          toast(`正文字号：${FONT_STEPS[prefs.font]}（在文章和瞬间页面生效）`);
         break;
+      }
       case "mode": {
         const rect = button.getBoundingClientRect();
         // 图标与文字在 joe:color-mode 事件中更新（View Transitions 下模式在回调里才切换）
