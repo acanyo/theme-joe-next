@@ -308,4 +308,14 @@
 
 .aside_operations.is-visible {
   display: block;
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    translate var(--dur-base) var(--ease-out);
+}
+
+/* 滚过文章区域后淡出（scripts/content/aside-operate.ts） */
+.aside_operations.is-past {
+  opacity: 0;
+  translate: 0 -8px;
+  pointer-events: none;
 }

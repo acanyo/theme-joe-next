@@ -40,4 +40,12 @@ export function initAsideOperate(): void {
   };
   update();
   listen(window, "resize", throttle(update, 200));
+
+  // 滚到文章区域下方（评论读完、进入页脚）时淡出，不压在页脚上
+  const follow = () => {
+    const bottom = post.getBoundingClientRect().bottom;
+    rail.classList.toggle("is-past", bottom < rail.getBoundingClientRect().bottom + 40);
+  };
+  follow();
+  listen(window, "scroll", throttle(follow, 100), { passive: true });
 }

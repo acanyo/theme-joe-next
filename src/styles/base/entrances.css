@@ -52,9 +52,12 @@ html.is-swup-visited .animated:is(.showInUp, .fadeIn):not(.joe-reveal) {
     animation-name: enter-blur;
   }
 
-  /* 主体模块缓入（effects.reveal）沿用 animations.css 中的 showInUp，只保留其原时长 */
+  /* 主体模块缓入（effects.reveal）沿用 animations.css 中的 showInUp，只保留其原时长。
+     只保留起始帧（backwards），结束后不留 transform：带 transform 的祖先会让里面 position: fixed 的
+     元素（文章左侧悬浮栏等）跟着页面滚走 */
   &.showInUp {
     animation-duration: 0.35s;
+    animation-fill-mode: backwards;
   }
 
   &.bounceIn {
