@@ -1,7 +1,7 @@
 /* 全局 CSS 变量。断点：500 / 768 / 992 / 1200 / 1360px（见 README「样式」）*/
 html {
   --font-default:
-    "Joe Font", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   /* --theme: #fb6c28; */
   --bg-inverse: #000;

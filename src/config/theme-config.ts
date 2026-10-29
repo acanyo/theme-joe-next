@@ -11,8 +11,9 @@
 
 /** 前端字段名 -> 服务端 SpEL 取值表达式 */
 export const SERVER_CONFIG_FIELDS = {
-  themeMode: "theme.config.general.color_mode",
-  lightTimeScope: "theme.config.general.light_hours",
+  // 这三项从「基础」移到了「外观」，读不到时回退旧位置
+  themeMode: "theme.config.appearance?.color_mode ?: (theme.config.general?.color_mode ?: 'user')",
+  lightTimeScope: "theme.config.appearance?.light_hours ?: theme.config.general?.light_hours",
   enableLoadingBar: "theme.config.effects.loading_bar",
   enableBack2top: "theme.config.effects.back_to_top",
   enableBack2topSmooth: "theme.config.effects.back_to_top_smooth",

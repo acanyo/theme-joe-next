@@ -8,6 +8,11 @@
 /** 评论是否可用：由 Halo 判定（已安装并启用评论组件插件，且未被全局关闭） */
 export const COMMENT_ENABLED = "haloCommentEnabled == true";
 
+/**
+ * 颜色模式：设置从「基础」分组移到「外观」后，已保存旧值的站点仍读得到（appearance → general → 默认 user）。
+ */
+export const COLOR_MODE = "theme.config.appearance?.color_mode ?: (theme.config.general?.color_mode ?: 'user')";
+
 /** 博主显示名：昵称为空时回退到站点标题 */
 export const BLOGGER_NAME = "theme.config.blogger.name ?: site.title";
 

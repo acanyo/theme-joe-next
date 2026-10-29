@@ -2,7 +2,6 @@
 
 /** 布尔设置项及其默认值（true = 默认开启） */
 export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
-  "appearance.grayscale": false,
   "aside.enabled": true,
   "aside.on_archives": true,
   "aside.on_categories": true,
@@ -118,6 +117,9 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
 export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "appearance.accent_dark": "#9999ff",
   "appearance.accent_light": "#fb6c28",
+  "appearance.color_mode": "user",
+  "appearance.content_width": 1320,
+  "appearance.light_hours": "5:00~19:00",
   "appearance.scrollbar_width": 8,
   "aside.latest_count": 5,
   "aside.popular_count": 5,
@@ -145,9 +147,6 @@ export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "footer.cloud": "none",
   "footer.position": "none",
   "footer.since": "2021/11/11 06:30",
-  "general.color_mode": "user",
-  "general.content_width": 1320,
-  "general.light_hours": "5:00~19:00",
   "home.carousel_direction": "horizontal",
   "home.carousel_effect": "slide",
   "home.carousel_interval": 3500,

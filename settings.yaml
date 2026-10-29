@@ -4,9 +4,25 @@ metadata:
   name: theme-joe-next-setting
 spec:
   forms:
-    - group: general
-      label: 基础
+    - group: appearance
+      label: 外观
       formSchema:
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 显示
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 明暗模式与内容宽度
         - $formkit: select
           name: color_mode
           id: color_mode
@@ -38,9 +54,6 @@ spec:
           label: 内容最大宽度
           value: 1320
           help: 单位 px，默认 1320
-    - group: appearance
-      label: 外观
-      formSchema:
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
@@ -98,11 +111,11 @@ spec:
                 - $el: span
                   attrs:
                     style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
-                - 背景与字体
+                - 背景
             - $el: div
               attrs:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
-              children: 背景图、自定义字体与灰色模式
+              children: 浅色 / 暗黑模式的背景图
         - $formkit: attachment
           name: background_light
           id: background_light
@@ -117,20 +130,6 @@ spec:
           label: 暗黑背景图
           help: 填写后暗黑模式使用这张背景图，留空使用默认背景色
           value: ""
-        - $formkit: attachment
-          name: custom_font
-          id: custom_font
-          key: custom_font
-          label: 自定义字体
-          value: ""
-          help: 字体文件地址，建议 woff2；留空使用系统字体
-        - $formkit: switch
-          name: grayscale
-          id: grayscale
-          key: grayscale
-          label: 全站灰色
-          value: false
-          help: 用于哀悼日等场景
     - group: navbar
       label: 导航
       formSchema:

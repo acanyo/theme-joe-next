@@ -10,6 +10,7 @@
  * 文章页向下阅读时，中间一段由菜单换成「当前章节」，点击展开迷你目录（features/nav-chapter.ts）。
  */
 import MenuLink from "./MenuLink.astro";
+import { COLOR_MODE } from "../../config/expressions";
 import MobileDrawer from "./MobileDrawer.astro";
 import ConsolePanel from "./ConsolePanel.astro";
 import Icon from "../common/Icon.astro";
@@ -136,7 +137,7 @@ const MENU =
           type="button"
           class="joe_header__mode"
           aria-label="切换明暗模式"
-          th:if="${theme.config.general.color_mode == 'user'}"
+          th:if={`\${(${COLOR_MODE}) == 'user'}`}
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <mask id="joe-mode-mask">

@@ -4,6 +4,7 @@
  * 不再在模板中按 htmlType 字符串分支。
  */
 import Icon from "../common/Icon.astro";
+import { COLOR_MODE } from "../../config/expressions";
 interface Props {
   /** 文章/页面的编辑入口：内容类型 */
   editKind?: "post" | "page";
@@ -75,7 +76,7 @@ const editOwner =
   <button
     type="button"
     class="joe_action_item mode"
-    th:if="${theme.config.general.color_mode == 'user'}"
+    th:if={`\${(${COLOR_MODE}) == 'user'}`}
     aria-label="切换明暗模式"
   >
     <svg
