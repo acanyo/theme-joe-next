@@ -50,7 +50,11 @@ export const SERVER_CONFIG_FIELDS = {
   bigBannerTitle: "theme.config.home.hero_title",
   enableBigBannerHitokoto: "theme.config.home.hero_hitokoto",
   defaultAvatar: "theme.config.blogger.fallback_avatar",
-  generateAvatarOpts: "theme.config.blogger.text_avatar",
+  textAvatarBg: "theme.config.blogger.text_avatar_bg",
+  textAvatarColor: "theme.config.blogger.text_avatar_color",
+  textAvatarGradient: "theme.config.blogger.text_avatar_gradient",
+  // 旧版「文字头像样式」（一段对象字面量），拆成上面三项之后仍读取，作为回退
+  generateAvatarOpts: "theme.config.blogger?.text_avatar",
   linksDefaultLogo: "theme.config.pages.links_fallback_logo",
   enableCodeTitle: "theme.config.code.title",
   enableCodeHr: "theme.config.code.title_divider",
@@ -183,6 +187,16 @@ const toNumber = (v: RawValue, fallback: number): number => {
 const toStr = (v: RawValue, fallback = ""): string =>
   v === null || v === undefined ? fallback : String(v);
 
+/** 文字头像：新的三项设置优先，没填的项用旧版对象字面量里的值 */
+function avatarOptions(raw: RawThemeConfig): AvatarOptions {
+  const legacy = parseAvatarOptions(toStr(raw.generateAvatarOpts));
+  return {
+    bgColor: toStr(raw.textAvatarBg) || legacy.bgColor || "",
+    textColor: toStr(raw.textAvatarColor) || legacy.textColor || "",
+    useTextGradient: toBool(raw.textAvatarGradient) || legacy.useTextGradient === true,
+  };
+}
+
 /**
  * 解析 `{bgColor:'',textColor:'',useTextGradient:false}` 这种宽松对象字面量。
  * 设置项历史上就是这种格式，这里做一次安全的规范化，不使用 eval。
@@ -261,7 +275,7 @@ export function normalizeThemeConfig(
       hitokoto: toBool(raw.enableBigBannerHitokoto, true),
     },
     defaultAvatar: toStr(raw.defaultAvatar),
-    avatarOptions: parseAvatarOptions(toStr(raw.generateAvatarOpts)),
+    avatarOptions: avatarOptions(raw),
     linksDefaultLogo: toStr(raw.linksDefaultLogo),
     code: {
       title: toBool(raw.enableCodeTitle, true),

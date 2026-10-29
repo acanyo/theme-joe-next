@@ -1157,13 +1157,27 @@ spec:
           label: 头像加载失败时
           value: /themes/theme-joe-next/assets/images/peeps-avatar.png
           help: 留空则按昵称首字生成文字头像
-        - $formkit: text
-          name: text_avatar
-          id: text_avatar
-          key: text_avatar
-          label: 文字头像样式
-          value: "{bgColor:'',textColor:'',useTextGradient:false}"
-          help: "格式 {bgColor: '', textColor: '', useTextGradient: false}，留空颜色为随机渐变"
+        - $formkit: color
+          name: text_avatar_bg
+          id: text_avatar_bg
+          key: text_avatar_bg
+          label: 文字头像背景色
+          value: ""
+          help: 没有头像时按昵称首字生成文字头像；留空为随机渐变
+        - $formkit: color
+          name: text_avatar_color
+          id: text_avatar_color
+          key: text_avatar_color
+          label: 文字头像文字颜色
+          value: ""
+          help: 留空时按背景自动选黑或白
+        - $formkit: switch
+          name: text_avatar_gradient
+          id: text_avatar_gradient
+          key: text_avatar_gradient
+          label: 文字使用随机渐变
+          value: false
+          help: 未设置文字颜色时生效
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
