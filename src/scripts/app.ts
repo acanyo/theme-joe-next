@@ -23,6 +23,7 @@ import { initNavigation, refreshNavigation } from "./features/navigation";
 import { initNavChapter } from "./features/nav-chapter";
 import { initReveal } from "./features/reveal";
 import { cleanExcerpts } from "./content/excerpt";
+import { hideReadBadges } from "./features/freshness";
 
 function initShell(): void {
   initColorMode();
@@ -35,6 +36,7 @@ function initShell(): void {
 async function initPage(): Promise<void> {
   cleanExcerpts();
   fillEmptyImages();
+  hideReadBadges();
   initNavChapter();
   refreshNavigation();
   refreshConsole();

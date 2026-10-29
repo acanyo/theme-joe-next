@@ -979,7 +979,7 @@ spec:
           key: freshness_badge
           label: 新文章 / 更新标记
           value: true
-          help: 7 天内发布的文章标「新」；早先发布、7 天内又修改过的标「已更新」
+          help: 7 天内发布的文章标「新」；早先发布、7 天内又修改过的标「已更新」。访客读过后自动去掉
         - $formkit: switch
           name: category_tabs
           id: category_tabs
