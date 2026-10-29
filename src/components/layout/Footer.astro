@@ -74,129 +74,113 @@ const CLOUD_PROVIDERS = [
       ></span>
     </p>
   </div>
+  <!-- 两行对齐：第一行版权与两个备案号 / Powered by，第二行云服务商 / 订阅与访问统计；窄屏改为居中堆叠 -->
   <div class="joe_container joe_footer__bar">
-    <!-- 左列：版权与备案、云服务商、公安备案 -->
-    <div class="meta">
-      <p>
+    <p class="row-start">
+      <span class="copyright">
         ©
         <span th:text="${#strings.isEmpty(theme.config.footer.since) ? '' : #strings.substring(theme.config.footer.since, 0, 4) + ' - '}"></span>
         <span th:text="${#dates.year(#dates.createNow())}"></span>&nbsp;<a th:href="${site.url}" th:text="${site.title}"></a>
-        <th-block th:if="${theme.config.footer.icp and not #strings.isEmpty(theme.config.footer.filing?.icp)}">
-          <span class="sep">·</span>
+      </span>
+      <th-block th:if="${theme.config.footer.icp and not #strings.isEmpty(theme.config.footer.filing?.icp)}">
+        <a
+          class="icp"
+          th:href="${theme.config.footer.filing.icp_link ?: 'https://beian.miit.gov.cn/'}"
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          th:text="${theme.config.footer.filing.icp}"
+        ></a>
+      </th-block>
+      <th-block th:if="${theme.config.footer.police and not #strings.isEmpty(theme.config.footer.filing?.police)}">
+        <span class="site_police">
           <a
-            class="icp"
-            th:href="${theme.config.footer.filing.icp_link ?: 'https://beian.miit.gov.cn/'}"
+            th:href="${theme.config.footer.filing.police_link ?: 'https://beian.mps.gov.cn/#/query/webSearch'}"
             target="_blank"
             rel="noopener noreferrer nofollow"
-            th:text="${theme.config.footer.filing.icp}"
+            th:text="${theme.config.footer.filing.police}"
           ></a>
-        </th-block>
-      </p>
-      <p
-        class="site_driven"
-        th:if="${theme.config.footer.cloud != null and theme.config.footer.cloud != 'none'}"
-      >
-        本站点由
-        <th-block th:switch="${theme.config.footer.cloud}">
-          {CLOUD_PROVIDERS.map((p) => (
-            <a
-              th:case={`'${p.key}'`}
-              href={p.url}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-            >
-              <img
-                class={p.key}
-                th:src={`@{/assets/images/cloud/${p.key}.svg}`}
-                alt="云服务商"
-                data-fallback="image"
-              />
-            </a>
-          ))}
+        </span>
+      </th-block>
+    </p>
+    <p class="row-end site_powered" th:if="${theme.config.footer.powered_by}">
+      Powered by&nbsp;<a
+        class="a-powered"
+        href="https://www.halo.run/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Halo</a>
+      <span class="sep">·</span>
+      Theme&nbsp;<a
+        class="a-theme"
+        th:href="${theme.spec.repo}"
+        th:title="|${theme.spec.displayName} v${theme.spec.version}|"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Joe Next</a>
+    </p>
+    <p
+      class="row-start site_driven"
+      th:if="${theme.config.footer.cloud != null and theme.config.footer.cloud != 'none'}"
+    >
+      本站点由
+      <th-block th:switch="${theme.config.footer.cloud}">
+        {CLOUD_PROVIDERS.map((p) => (
           <a
-            th:case="'custom'"
-            th:href="${theme.config.footer.cloud_url}"
+            th:case={`'${p.key}'`}
+            href={p.url}
             target="_blank"
             rel="noopener noreferrer nofollow"
           >
             <img
-              class="custom"
-              th:src="${theme.config.footer.cloud_logo}"
+              class={p.key}
+              th:src={`@{/assets/images/cloud/${p.key}.svg}`}
               alt="云服务商"
               data-fallback="image"
             />
           </a>
-        </th-block>
-        提供云服务
-      </p>
-      <p
-        class="site_police"
-        th:if="${theme.config.footer.police and not #strings.isEmpty(theme.config.footer.filing?.police)}"
-      >
+        ))}
         <a
-          th:href="${theme.config.footer.filing.police_link ?: 'https://beian.mps.gov.cn/#/query/webSearch'}"
+          th:case="'custom'"
+          th:href="${theme.config.footer.cloud_url}"
           target="_blank"
           rel="noopener noreferrer nofollow"
-          th:text="${theme.config.footer.filing.police}"
-        ></a>
-      </p>
-    </div>
-    <!-- 右列：RSS / 站点地图、Powered by、访问统计 -->
-    <div class="side">
-      <p class="feeds" th:if="${theme.config.footer.rss or theme.config.footer.sitemap}">
-        <a
-          th:if="${theme.config.footer.rss}"
-          class="rss"
-          th:href="@{/rss.xml}"
-          target="_blank"
-          rel="noopener noreferrer"
         >
-          <Icon name="rss" />RSS
+          <img
+            class="custom"
+            th:src="${theme.config.footer.cloud_logo}"
+            alt="云服务商"
+            data-fallback="image"
+          />
         </a>
-        <span class="sep" th:if="${theme.config.footer.rss and theme.config.footer.sitemap}">·</span>
-        <a
-          th:if="${theme.config.footer.sitemap}"
-          th:href="@{/sitemap.xml}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          站点地图
-        </a>
-      </p>
-      <p class="site_powered" th:if="${theme.config.footer.powered_by}">
-        Powered by&nbsp;<a
-          class="a-powered"
-          href="https://www.halo.run/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Halo</a>
-        <span class="sep">·</span>
-        Theme&nbsp;<a
-          class="a-theme"
-          th:href="${theme.spec.repo}"
-          th:title="|${theme.spec.displayName} v${theme.spec.version}|"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Joe Next</a>
-      </p>
-      <div
-        class="busuanzi-statistic"
-        th:if="${theme.config.footer.busuanzi}"
+      </th-block>
+      提供云服务
+    </p>
+    <p class="row-end extras" th:if="${theme.config.footer.rss or theme.config.footer.sitemap or theme.config.footer.busuanzi}">
+      <th-block th:if="${theme.config.footer.busuanzi}">
+        <span class="busuanzi-statistic">
+          <span><Icon name="page-views" />访问 <em id="busuanzi_value_site_pv">0</em></span>
+          <span><Icon name="visitors" />访客 <em id="busuanzi_value_site_uv">0</em></span>
+          <span><Icon name="page-visitors" />本页 <em id="busuanzi_value_page_pv">0</em></span>
+        </span>
+      </th-block>
+      <a
+        th:if="${theme.config.footer.rss}"
+        class="rss"
+        th:href="@{/rss.xml}"
+        target="_blank"
+        rel="noopener noreferrer"
       >
-        <span class="site-pv">
-          <Icon name="page-views" />访问量
-          <em id="busuanzi_value_site_pv">0</em>
-        </span>
-        <span class="site-uv">
-          <Icon name="visitors" />访客量
-          <em id="busuanzi_value_site_uv">0</em>
-        </span>
-        <span class="site-page-pv">
-          <Icon name="page-visitors" />本页访客
-          <em id="busuanzi_value_page_pv">0</em>
-        </span>
-      </div>
-    </div>
+        <Icon name="rss" />RSS
+      </a>
+      <a
+        th:if="${theme.config.footer.sitemap}"
+        th:href="@{/sitemap.xml}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        站点地图
+      </a>
+    </p>
   </div>
 </footer>
 <script

@@ -132,31 +132,50 @@
   border-top: 1px solid var(--border-lighter);
 }
 
-/* 信息带 */
+/* 信息带：两列网格，左列内容靠左、右列靠右，同一行上下对齐；某一项没开时另一列照常占位 */
 .joe_footer__bar {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 8px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 24px;
   padding-top: 16px;
   padding-bottom: 18px;
   font-size: 12.5px;
   line-height: 22px;
 
-  .meta,
-  .side {
-    display: grid;
-    gap: 2px;
+  /* 各项之间用间距分隔（不用「·」），换行时不会在行尾留下孤立的分隔符 */
+  > p {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 14px;
+    min-width: 0;
   }
 
-  .side {
-    justify-items: end;
+  .copyright,
+  .icp,
+  .site_police a {
+    white-space: nowrap;
   }
 
-  .busuanzi-statistic {
-    margin-top: 6px;
+  /* 「Powered by Halo · Theme Joe Next」「本站点由 … 提供云服务」是一句话，内部不加大间距 */
+  > .site_powered,
+  > .site_driven {
+    gap: 0;
   }
 
+  a {
+    margin: 0;
+  }
+
+  .row-start {
+    grid-column: 1;
+  }
+
+  .row-end {
+    grid-column: 2;
+    justify-content: flex-end;
+  }
 }
 
 /* 右下角悬浮按钮（返回顶部等）约 48px 宽：宽屏时两行右侧都留出位置；
@@ -276,50 +295,30 @@ html[data-mode="dark"] .site_driven img {
   background-size: 100% 100%;
 }
 
-/* 不蒜子访问统计：三枚小徽章 */
+/* 不蒜子访问统计：与其他页脚文字同样轻的一行，数字等宽 */
 .busuanzi-statistic {
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
-  gap: 4px 6px;
+  gap: 0 12px;
   user-select: none;
 
-  span {
-    position: relative;
+  > span {
     display: inline-flex;
     align-items: center;
-    height: 22px;
-    padding-left: 24px;
-    overflow: hidden;
-    font-size: 12px;
-    color: var(--border-light);
-    background: var(--bg-inverse);
-    border-radius: var(--radius-inner);
+    gap: 3px;
+    white-space: nowrap;
+  }
 
-    .joe-font {
-      position: absolute;
-      left: 8px;
-      font-size: 13px;
-    }
+  .joe-font {
+    font-size: 13px;
+    opacity: 0.75;
+  }
 
-    em {
-      height: 22px;
-      margin-left: 6px;
-      padding: 0 8px;
-      font-style: normal;
-      color: #fff;
-    }
-
-    &.site-pv em {
-      background: linear-gradient(0deg, #d0339b, #d03336);
-    }
-
-    &.site-uv em {
-      background: linear-gradient(0deg, #e2c63a, #f58044);
-    }
-
-    &.site-page-pv em {
-      background: linear-gradient(0deg, #367eda, #964fdb);
-    }
+  em {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--text-regular);
+    font-variant-numeric: tabular-nums;
   }
 }
 
@@ -349,16 +348,17 @@ html[data-mode="dark"] .site_driven img {
   }
 
   .joe_footer__bar {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
     padding-top: 12px;
     /* 手机上悬浮按钮在右下角叠放两个，底部多留一段，滚到底时不压住文字 */
     padding-bottom: 150px;
     text-align: center;
 
-    .meta,
-    .side {
-      justify-items: center;
+    > p,
+    .row-end {
+      grid-column: 1;
+      justify-content: center;
     }
 
     .busuanzi-statistic {
