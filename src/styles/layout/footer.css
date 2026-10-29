@@ -3,7 +3,8 @@
  *
  * - 导航（footer.nav）：左侧站点名、座右铭与社交图标，右侧链接分组
  * - 分隔线：开启建站纪念时兼作进度条，主题色填到已走过的比例
- * - 信息带：上行运行时间与订阅，下行版权与 Powered by；两列底部对齐
+ * - 运行时间：进度条下方居中一行
+ * - 信息带：左列版权与备案，右列订阅与 Powered by；两列底部对齐
  */
 .joe_footer {
   color: var(--text-secondary);
@@ -163,9 +164,24 @@
 @media (min-width: 769px) {
   .joe_footer .joe_footer__nav,
   .joe_footer .joe_footer__bar,
-  .joe_footer .joe_footer__progress {
+  .joe_footer .joe_footer__progress,
+  .joe_footer .joe_footer__life {
     padding-right: 76px;
   }
+}
+
+/* 运行时间与纪念进度：进度条下方居中一行 */
+.joe_footer .joe_footer__life {
+  display: flex;
+  justify-content: center;
+  padding-top: 14px;
+  font-size: 12.5px;
+  line-height: 22px;
+  text-align: center;
+}
+
+.joe_footer__life + .joe_footer__bar {
+  padding-top: 10px;
 }
 
 /* 运行时间：数字等宽，时间跳动时不抖 */

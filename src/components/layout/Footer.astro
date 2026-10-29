@@ -58,22 +58,25 @@ const CLOUD_PROVIDERS = [
   >
     <span class="track"><span class="fill"></span></span>
   </div>
+  <!-- 运行时间与纪念进度：进度条下方居中一行（footer.uptime / footer.anniversary），由 features/footer.ts 计时 -->
+  <div class="joe_container joe_footer__life" th:if="${theme.config.footer.uptime}">
+    <p class="site_life" th:if="${theme.config.footer.uptime}">
+      <Icon name="runtime" />已运行
+      <strong class="joe_run__day">00</strong>天
+      <strong class="joe_run__hour">00</strong>时
+      <strong class="joe_run__minute">00</strong>分
+      <strong class="joe_run__second">00</strong>秒
+      <span
+        class="site_anniversary"
+        th:if="${theme.config.footer.anniversary}"
+        th:attr="data-years=${theme.config.footer.anniversary_years ?: 10}, data-label=${theme.config.footer.anniversary_label ?: '十年之约'}"
+        hidden
+      ></span>
+    </p>
+  </div>
   <div class="joe_container joe_footer__bar">
-    <!-- 左列：运行时间与纪念文字、版权与备案、云服务商、公安备案 -->
+    <!-- 左列：版权与备案、云服务商、公安备案 -->
     <div class="meta">
-      <p class="site_life" th:if="${theme.config.footer.uptime}">
-        <Icon name="runtime" />已运行
-        <strong class="joe_run__day">00</strong>天
-        <strong class="joe_run__hour">00</strong>时
-        <strong class="joe_run__minute">00</strong>分
-        <strong class="joe_run__second">00</strong>秒
-        <span
-          class="site_anniversary"
-          th:if="${theme.config.footer.anniversary}"
-          th:attr="data-years=${theme.config.footer.anniversary_years ?: 10}, data-label=${theme.config.footer.anniversary_label ?: '十年之约'}"
-          hidden
-        ></span>
-      </p>
       <p>
         ©
         <span th:text="${#strings.isEmpty(theme.config.footer.since) ? '' : #strings.substring(theme.config.footer.since, 0, 4) + ' - '}"></span>
