@@ -630,11 +630,11 @@ spec:
           value: []
           itemLabels:
             - type: image
-              label: $value.data_by_custom.banner_img
+              label: $value.custom.image
             - type: text
-              label: $value.banner_section_type
+              label: $value.custom.title
             - type: text
-              label: $value.data_by_custom.banner_title
+              label: $value.source
           children:
             - $formkit: select
               name: source
@@ -817,15 +817,21 @@ spec:
           key: featured
           label: 精选分类
           help: 首页顶部的精选分类卡片
-        - $formkit: repeater
+        - $formkit: array
           name: featured_items
           id: featured_items
           key: featured_items
           if: $get(featured).value
           max: 4
-          min: 1
           label: 精选分类内容
           value: []
+          itemLabels:
+            - type: image
+              label: $value.custom.image
+            - type: text
+              label: $value.custom.title
+            - type: text
+              label: $value.category.name
           children:
             - $formkit: radio
               name: source
@@ -1410,9 +1416,9 @@ spec:
           value: []
           itemLabels:
             - type: text
-              label: $value.socials_select
+              label: $value.platform
             - type: text
-              label: $value.socialUrl
+              label: $value.url
           children:
             - $formkit: select
               name: platform
@@ -1479,9 +1485,9 @@ spec:
           label: 社交账号（自定义）
           itemLabels:
             - type: text
-              label: $value.socials_name
+              label: $value.name
             - type: text
-              label: $value.socials_url
+              label: $value.url
           children:
             - $formkit: text
               name: name
@@ -1581,7 +1587,7 @@ spec:
                 count: "15"
           itemLabels:
             - type: text
-              label: $value.template_aside
+              label: $value.type
           children:
             - $formkit: select
               name: type
@@ -1661,11 +1667,11 @@ spec:
                   value: []
                   itemLabels:
                     - type: image
-                      label: $value.reward_url
+                      label: $value.image
                     - type: text
-                      label: $value.reward_label
+                      label: $value.label
                     - type: text
-                      label: $value.reward_type
+                      label: $value.kind
                   children:
                     - $formkit: text
                       name: label
@@ -2287,11 +2293,9 @@ spec:
           value: []
           itemLabels:
             - type: image
-              label: $value.ads_img
+              label: $value.image
             - type: text
-              label: $value.ads_url
-            - type: code
-              label: $value.ads_code
+              label: $value.url
           children:
             - $formkit: attachment
               name: image
@@ -2335,11 +2339,9 @@ spec:
           value: []
           itemLabels:
             - type: image
-              label: $value.ads_img
+              label: $value.image
             - type: text
-              label: $value.ads_url
-            - type: code
-              label: $value.ads_code
+              label: $value.url
           children:
             - $formkit: attachment
               name: image
@@ -2383,11 +2385,9 @@ spec:
           value: []
           itemLabels:
             - type: image
-              label: $value.ads_img
+              label: $value.image
             - type: text
-              label: $value.ads_url
-            - type: code
-              label: $value.ads_code
+              label: $value.url
           children:
             - $formkit: attachment
               name: image
@@ -2983,7 +2983,7 @@ spec:
           label: 页脚导航
           value: false
           help: 在页脚上方显示站点名、博主座右铭、社交账号图标和几组链接
-        - $formkit: repeater
+        - $formkit: array
           if: $get(nav).value == true
           name: nav_groups
           id: nav_groups
@@ -2991,6 +2991,9 @@ spec:
           label: 链接分组
           value: []
           max: 5
+          itemLabels:
+            - type: text
+              label: $value.title
           children:
             - $formkit: text
               name: title
@@ -2999,13 +3002,18 @@ spec:
               label: 分组标题
               value: ""
               validation: required
-            - $formkit: repeater
+            - $formkit: array
               name: links
               id: links
               key: links
               label: 链接
               value: []
               max: 8
+              itemLabels:
+                - type: text
+                  label: $value.name
+                - type: text
+                  label: $value.url
               children:
                 - $formkit: text
                   name: name
