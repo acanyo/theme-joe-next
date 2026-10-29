@@ -24,7 +24,7 @@ import { initNavChapter } from "./features/nav-chapter";
 import { initReveal } from "./features/reveal";
 import { cleanExcerpts } from "./content/excerpt";
 import { hideReadBadges } from "./features/freshness";
-import { dedupeCommenters } from "./features/commenters";
+import { dedupeCommenters, initCommenterCards } from "./features/commenters";
 
 function initShell(): void {
   initColorMode();
@@ -39,6 +39,7 @@ async function initPage(): Promise<void> {
   fillEmptyImages();
   hideReadBadges();
   dedupeCommenters();
+  initCommenterCards();
   initNavChapter();
   refreshNavigation();
   refreshConsole();

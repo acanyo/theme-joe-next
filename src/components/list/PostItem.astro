@@ -3,7 +3,7 @@
  * 文章列表项。依赖循环变量 `post` 与 `iter`（th:each="post, iter : ...")。
  * 首页可开启进入视口动画（data-reveal）。
  */
-import { COMMENT_ENABLED, coverOf, el } from "../../config/expressions";
+import { COMMENT_ENABLED, COMMENT_TEXT, coverOf, el } from "../../config/expressions";
 import Icon from "../common/Icon.astro";
 import { responsiveImage, SIZES } from "../../config/images";
 
@@ -112,13 +112,14 @@ const COVER = coverOf("post");
           <span th:text="${post.stats.upvote}">0</span>
         </li>
       </ul>
-      <!-- 评论者头像（设置 home.card_commenters）：最近几位评论者叠在一起；只有有评论的文章才查询，
-           同一人多次评论由 features/commenters.ts 去重 -->
+      <!-- 评论者头像（设置 home.card_commenters）：最近几位评论者叠在一起；只有有评论的文章才查询。
+           悬停头像弹出资料卡（features/commenters.ts）：昵称、站内用户 / 访客、访客留下的网址、在这篇的最近一条评论。
+           Halo 不公开登录用户的用户名，资料只能取评论里带的这些 -->
       <span
         class="commenters"
         th:if={`\${theme.config.home.card_commenters and ${COMMENT_ENABLED} and post.stats.comment > 0}`}
         th:with="cardComments = ${commentFinder.list({group: 'content.halo.run', kind: 'Post', name: post.metadata.name}, 1, 8).items}"
-        th:attr="title=|${post.stats.comment} 条评论|"
+        th:attr="data-count=${post.stats.comment}"
       >
         <img
           th:each="comment : ${cardComments}"
@@ -126,9 +127,10 @@ const COVER = coverOf("post");
           height="22"
           loading="lazy"
           sizes="22px"
+          tabindex="0"
           th:src="${comment.owner.avatar}"
           th:alt="${comment.owner.displayName}"
-          th:attr="data-text-avatar=${comment.owner.displayName}, data-name=${comment.owner.displayName}"
+          th:attr={`data-text-avatar=\${comment.owner.displayName}, data-name=\${comment.owner.displayName}, data-kind=\${comment.owner.kind}, data-site=\${comment.owner.kind == 'Email' ? comment.spec.owner.annotations?.get('website') : null}, data-text=\${${COMMENT_TEXT}}, data-time=\${comment.spec.creationTime}`}
           data-fallback="avatar"
         />
       </span>
