@@ -168,7 +168,7 @@
 
 .joe_detail__overdue-wrapper {
   padding: 15px;
-  color: #db7c22;
+  color: var(--overdue-text);
   border: 1px solid var(--overdue-border);
   background: var(--overdue-background);
   border-radius: var(--radius-inner);
