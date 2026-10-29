@@ -6,9 +6,11 @@ import Pagination from "../components/list/Pagination.astro";
 import Banner from "../components/home/Banner.astro";
 import HotCategories from "../components/home/HotCategories.astro";
 import MomentsStack from "../components/home/MomentsStack.astro";
+import CategoryShowcase from "../components/home/CategoryShowcase.astro";
 import "../styles/pages/index.css";
 import Icon from "../components/common/Icon.astro";
 import "../styles/pages/moments-stack.css";
+import "../styles/pages/showcase.css";
 ---
 
 <BaseLayout pageScript="index" pageClass="page-index" bigBanner="fullscreen">
@@ -93,6 +95,7 @@ import "../styles/pages/moments-stack.css";
         查看更多
       </button>
     </div>
+    <CategoryShowcase />
   </div>
   <th-block th:if="${theme.config.aside.enabled}">
     <Aside />

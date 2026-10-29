@@ -960,6 +960,32 @@ spec:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
               children: 分页方式与缩略图
         - $formkit: switch
+          name: showcase
+          id: showcase
+          key: showcase
+          label: 分类橱窗
+          value: false
+          help: 在首页文章列表下方，为选中的分类各显示一行横向滑动的最新文章（只在第一页显示）
+        - $formkit: categorySelect
+          name: showcase_categories
+          id: showcase_categories
+          key: showcase_categories
+          if: $get(showcase).value === true
+          multiple: true
+          label: 橱窗分类
+          value: []
+          help: 按选择顺序排列
+        - $formkit: number
+          name: showcase_count
+          id: showcase_count
+          key: showcase_count
+          if: $get(showcase).value === true
+          label: 每行文章数
+          value: 6
+          min: 3
+          max: 12
+          validation: required|between:3,12
+        - $formkit: switch
           name: compact_mobile
           id: compact_mobile
           key: compact_mobile
