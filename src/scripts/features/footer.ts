@@ -64,22 +64,23 @@ export function anniversaryProgress(since: Date, years: number, now = new Date()
 }
 
 function initAnniversary(): void {
-  const box = $<HTMLElement>(".site_anniversary");
+  const label = $<HTMLElement>(".site_anniversary");
   const since = parseBirthday(getThemeConfig().birthday);
-  if (!box || !since) return;
-  const years = Math.max(1, Number(box.dataset.years) || 10);
-  const label = box.dataset.label || `${years} 年之约`;
+  if (!label || !since) return;
+  const years = Math.max(1, Number(label.dataset.years) || 10);
+  const name = label.dataset.label || `${years} 年之约`;
   const { ratio, daysLeft } = anniversaryProgress(since, years);
-  const pct = Math.floor(ratio * 100);
-  const text = $(".text", box);
-  if (text)
-    text.innerHTML =
-      daysLeft > 0
-        ? `${label}已走过 <strong>${pct}%</strong>，还有 <strong>${daysLeft.toLocaleString("zh-CN")}</strong> 天`
-        : `${label}已达成 🎉`;
-  $<HTMLElement>(".bar > span", box)?.style.setProperty("width", `${ratio * 100}%`);
-  box.title = `起始于 ${since.toLocaleDateString("zh-CN")}，目标 ${years} 年`;
-  box.hidden = false;
+  label.innerHTML =
+    daysLeft > 0
+      ? `${name} <strong>${Math.floor(ratio * 100)}%</strong>`
+      : `${name}已达成 🎉`;
+  label.title =
+    daysLeft > 0
+      ? `从 ${since.toLocaleDateString("zh-CN")} 到第 ${years} 年，还有 ${daysLeft.toLocaleString("zh-CN")} 天`
+      : `从 ${since.toLocaleDateString("zh-CN")} 起已满 ${years} 年`;
+  label.hidden = false;
+  // 上下两部分之间的分隔线兼进度条
+  $<HTMLElement>(".joe_footer__progress .fill")?.style.setProperty("width", `${ratio * 100}%`);
 }
 
 export function initFooter(): void {

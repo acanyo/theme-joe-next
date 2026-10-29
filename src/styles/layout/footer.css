@@ -1,3 +1,10 @@
+/*
+ * 页脚（components/layout/Footer.astro）
+ *
+ * - 导航（footer.nav）：左侧站点名、座右铭与社交图标，右侧链接分组
+ * - 分隔线：开启建站纪念时兼作进度条，主题色填到已走过的比例
+ * - 信息带：左列版权与运行时间，右列 Powered by 与订阅；两列各两行，底部对齐
+ */
 .joe_footer {
   color: var(--text-secondary);
   background: var(--bg-page);
@@ -6,185 +13,31 @@
   z-index: -1;
 
   .joe_container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     margin: 0 auto;
-    padding: 15px 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+  }
 
-    &.central {
-      justify-content: center;
+  a {
+    color: var(--text-secondary);
+    transition: color var(--dur-fast) var(--ease-out);
 
-      .item {
-        text-align: center;
-      }
+    &:hover {
+      color: var(--theme-text);
     }
+  }
 
-    .item {
-      a {
-        margin: 0 5px;
-      }
-    }
+  p {
+    margin: 0;
+  }
 
-    a {
-      color: var(--text-secondary);
-      transition: all var(--dur-base) var(--ease-out);
+  .sep {
+    margin: 0 6px;
+    opacity: 0.5;
+  }
 
-      &:hover {
-        color: var(--theme);
-      }
-    }
-
-    .site_powered {
-      padding: 2px 0;
-
-      .a-powered {
-        font-weight: 600;
-        color: #0064d6;
-
-        html[data-mode="dark"] & {
-          color: #4d9fff;
-        }
-      }
-
-      .a-theme {
-        font-weight: 600;
-        color: var(--theme-text);
-      }
-    }
-
-    .site_driven {
-      a {
-        margin: 0 3px;
-      }
-
-      img {
-        height: 18px;
-
-        &.huawei,
-        &.jinshan {
-          height: 22px;
-        }
-      }
-    }
-
-    /* 运行时间与建站纪念：右侧一张浅底小卡片 */
-    .site_life {
-      display: grid;
-      gap: 6px;
-      min-width: 240px;
-      padding: 10px 14px;
-      font-size: 12px;
-      border-radius: var(--radius-inner);
-      background: color-mix(in srgb, var(--theme) 6%, transparent);
-
-      .uptime {
-        margin: 0;
-        font-variant-numeric: tabular-nums;
-
-        /* 数字与「天 / 时 / 分 / 秒」之间留一点空隙（模板压缩后空格会被去掉） */
-        strong {
-          margin: 0 4px;
-        }
-      }
-
-      .joe-font {
-        display: inline-block;
-        margin-right: 3px;
-        font-size: 14px;
-        color: #5dad16;
-        vertical-align: bottom;
-        animation: swing 1s ease infinite;
-      }
-    }
-
-    .site_police {
-      padding-top: 5px;
-
-      a {
-        margin-left: 0;
-        font-size: 12px;
-
-        &::before {
-          display: inline-block;
-          margin-right: 4px;
-          vertical-align: text-bottom;
-          content: "";
-          width: 14px;
-          height: 14px;
-          background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAABGdBTUEAALGPC/xhBQAAAwBQTFRFtJR+///krYt6n2hV0a52/b9Ummlc2aht27qH//eX26xi8Na74bNo+M562rB75MGP5LaA5LaC47xp68l57N2y/vrs369n/++G1qx+/tiP6sN6+//e//nQ79l/+NqC6MZ87NmN+PPJ3qdc3alT25xR46xT57xs69KY57Vcw38+2a+C05NwyoRb6che5LxZ5MJt7d6A4bBn0Ktx+/TQ3KdZ8d/H9N+L7+ij8+mS9/O48deu///i7NOF+fG28+eq/vzgAAAAgVg6o31ShGlK7HEtxGsznl8wp41Z+sREcoWUHD6XlIx1xa58tYA/6Zc09oI24kYeo5mEBAVtbmJiNhpNtJlYAAiR96Q53bZp2U4qFzCJa3OEeWRg14pGxb2H/+Jj0RUKvbp+7XE02Mx3AABqzcJxfHp502U9CwZn/7VJzng6/Mxk24Y43Z9CXllm2QAG8F4eu0wo07yHuk0kk2A2yrZ4aX6O9LBA4JU504c9+9Jv46pKABB65G82vwAR2203YB5Q118zzCcT/S0U1Ugq00AmzaxSxicTTg5OxVIkyz0h/SsKDABdzD4txBgKrKJzjYZ3/75gQiREVDhTyQACaQI2XF94wQwLqbSRzxcR0QwR+59GuYtYABuOTAA5tgAQxj4dsQ4OAABhtKNm1JY94qlXyVkqbHmKVk5vzywa/I4sTjVP/9JmhI+Z8K9I1sB41jEfvZBe0iEa83wo7cJi/+9t/9hN469L1hoX6KA945M925tF+MRY15FT2J5Y8M1k67tc3oMy8dNp1XQo1o480oM92pZK68Vd5rZW5sBV6cpt7tRw6K5J7LlP6bFL6bdS7r5Q6L9O4KRM6LlP8slW58Rm6F8mAACAlI+B0zgiAAR33pBE13U41mUw2kko1AMJ6YI+8stuAABm/sVSORQ4cniCk3ha/9te4rJT5L5R8Nh21ZBG5bFQ3qNJ57ta3plE7c1m7Mlb6cFg6r1Z7cph68BX5rlZ6cZe9eNzAABuzgACAAB51z4g1h8Y/9JY5LVdEd5zqQAAAEF0Uk5TyxjR92/D++WYNfUc+cGpn7HH4MSDIdu+rrLmKUzsMPsnWsbG0uS8jOScSBRd8PTs4ecCXOtBunyrAmkclEJBCABK/YzMAAABgElEQVQY02NwgABGKwYmK2sohwFM2vIxuzk6O7FJyCAE7Tc+KXG95hLR/2SOPUzQmnf1s833b0b+mj1jsqQ9RFCaJyRv1aa/K+/NnD4xepKUAliQ0/u6e8H9DTtm3ZxyLfHnBDmQIDfrjVu+Afl///z5++tP8s80cVGgIEt44PVQ/1/Llry8nZCU+vPGPxGgIIefT1iwR/GCu3fqY+NjfseV8wMF2XMeegUVPmjpamytTc+IelUhBhTkysr0/D2/+27nnQfNdSlljyuFgIICudlFc+ct7Gtvutc7taa06oUNUFDw9tI1a289WtTR0PPo99Pn/6uFgYLy+/buerj+2fLFbdNWPN2yc/d2WaCg4su3rw/veb7t8bp/W/8dfP3iox3IR8a6J48e+XDgzbv9h94fO6VvC/amqeH37ye+Hv/05fPbb6evmtiBBc1+vPr///ObT+ffX/r27sMPC7CgvY3e5SsXzp098/XjxS8G5pbQQNbW0VRWUdVQUlPXMgLxASGRxIfJhdfLAAAAAElFTkSuQmCC)
-            no-repeat center;
-          background-size: 100% 100%;
-        }
-      }
-    }
-
-    .busuanzi-statistic {
-      opacity: 0.8;
-      margin-top: 10px;
-      user-select: none;
-      text-align: center;
-
-      span {
-        position: relative;
-        display: inline-block;
-        margin: 0 0 4px 6px;
-        padding-left: 26px;
-        height: 24px;
-        line-height: 24px;
-        overflow: hidden;
-        font-size: 12px;
-        font-weight: bold;
-        color: var(--border-light);
-        background: var(--bg-inverse);
-        border-radius: var(--radius-inner);
-
-        .joe-font {
-          position: absolute;
-          left: 9px;
-          margin-right: 3px;
-          font-size: 14px;
-        }
-
-        em {
-          display: inline-block;
-          margin-left: 6px;
-          padding: 0 10px;
-          height: 24px;
-          line-height: 24px;
-          font-style: normal;
-          font-weight: normal;
-          color: #fff;
-          background: #29deb3;
-        }
-
-        &.site-pv em {
-          background: linear-gradient(0deg, #d0339b, #d03336);
-        }
-
-        &.site-uv em {
-          background: linear-gradient(0deg, #e2c63a, #f58044);
-        }
-
-        &.site-page-pv em {
-          background: linear-gradient(0deg, #367eda, #964fdb);
-        }
-      }
-    }
-
-    .rss {
-      i {
-        font-size: 14px;
-        color: #f18651;
-      }
-    }
-
-    .side-col {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-    }
+  &.full .joe_container {
+    max-width: 100%;
   }
 
   &.fixed {
@@ -194,71 +47,16 @@
     z-index: 2;
     box-shadow: -2px 0 4px 0 var(--border-faint);
   }
-
-  &.full {
-    .joe_container {
-      max-width: 100%;
-    }
-  }
 }
 
-/* 响应式 */
-@media (max-width: 768px) {
-  .joe_footer {
-    .joe_container {
-      flex-direction: column;
-      justify-content: center;
-      padding-top: 10px;
-      padding-bottom: 10px;
-
-      > .item {
-        padding: 5px 0;
-        text-align: center;
-      }
-
-      .side-col {
-        align-items: center;
-      }
-    }
-  }
-}
-
-@media (max-width: 500px) {
-  .joe_footer {
-    .joe_container {
-      flex-direction: column;
-      justify-content: center;
-      margin-bottom: 0;
-
-      > .item {
-        padding: 5px 0;
-        text-align: center;
-      }
-
-      .site_life {
-        min-width: 0;
-        margin: 0;
-      }
-    }
-  }
-}
-
-/* 暗黑模式：深色的备案/驱动徽标反色 */
-html[data-mode="dark"] .site_driven img {
-  &.baidu,
-  &.huawei,
-  &.jinshan {
-    filter: invert(1);
-  }
-}
-
-/* 页脚导航（设置 footer.nav）：左侧站点名、座右铭与社交图标，右侧链接分组 */
-.joe_footer .joe_footer__nav {
+/* 导航 */
+.joe_footer__nav {
+  display: flex;
   align-items: flex-start;
+  justify-content: space-between;
   gap: 32px;
-  padding-top: 28px;
-  padding-bottom: 24px;
-  border-bottom: 1px dashed var(--border-lighter);
+  padding-top: 32px;
+  padding-bottom: 28px;
 
   .brand {
     display: grid;
@@ -266,14 +64,12 @@ html[data-mode="dark"] .site_driven img {
     max-width: 320px;
 
     .name {
-      margin: 0;
       font-size: 16px;
       font-weight: 600;
       color: var(--text-title);
     }
 
     .motto {
-      margin: 0;
       line-height: 1.6;
     }
   }
@@ -299,10 +95,6 @@ html[data-mode="dark"] .site_driven img {
     list-style: none;
   }
 
-  a {
-    margin: 0;
-  }
-
   /* 复用博主卡片的社交图标（components/blogger/SocialLinks.astro），去掉卡片里的分隔线 */
   .social-account {
     flex-wrap: wrap;
@@ -312,13 +104,217 @@ html[data-mode="dark"] .site_driven img {
     padding-top: 4px;
     border-top: 0;
   }
+}
 
-  @media (max-width: 768px) {
+/* 分隔线 / 建站纪念进度 */
+/* .joe_container 是 flex 容器，轨道要显式撑满 */
+.joe_footer__progress .track {
+  display: block;
+  flex: 1;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--theme) 10%, var(--border-lighter));
+
+  .fill {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--theme) 35%, transparent), var(--theme));
+    transition: width 1.2s var(--ease-out);
+  }
+}
+
+/* 没有进度条时，导航与信息带之间用一条细线隔开 */
+.joe_footer__nav + .joe_footer__bar {
+  border-top: 1px solid var(--border-lighter);
+}
+
+/* 信息带 */
+.joe_footer__bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding-top: 16px;
+  padding-bottom: 18px;
+  font-size: 12.5px;
+  line-height: 22px;
+
+  .meta,
+  .side {
+    display: grid;
+    gap: 2px;
+  }
+
+  .side {
+    justify-items: end;
+  }
+
+  .busuanzi-statistic {
+    margin-top: 6px;
+  }
+
+}
+
+/* 右下角悬浮按钮（返回顶部等）约 48px 宽：宽屏时两行右侧都留出位置；
+   选择器要比 .joe_footer .joe_container 的左右内边距更具体 */
+@media (min-width: 769px) {
+  .joe_footer .joe_footer__nav,
+  .joe_footer .joe_footer__bar,
+  .joe_footer .joe_footer__progress {
+    padding-right: 76px;
+  }
+}
+
+/* 运行时间：数字等宽，时间跳动时不抖 */
+.site_life {
+  font-variant-numeric: tabular-nums;
+
+  .joe-font {
+    margin-right: 4px;
+    font-size: 14px;
+    color: #5dad16;
+    vertical-align: -2px;
+  }
+
+  /* 数字颜色见 content/runtime.css */
+  strong {
+    margin: 0 2px;
+  }
+
+  .site_anniversary {
+    &::before {
+      content: "·";
+      margin: 0 6px;
+      opacity: 0.5;
+    }
+
+    strong {
+      color: var(--theme-text);
+    }
+  }
+}
+
+.site_powered {
+  .a-powered,
+  .a-theme {
+    font-weight: 600;
+  }
+
+  .a-powered {
+    color: #0064d6;
+
+    html[data-mode="dark"] & {
+      color: #4d9fff;
+    }
+  }
+
+  .a-theme {
+    color: var(--theme-text);
+  }
+}
+
+.feeds .rss .joe-font {
+  margin-right: 3px;
+  font-size: 13px;
+  color: #f18651;
+  vertical-align: -1px;
+}
+
+.site_driven {
+  a {
+    margin: 0 3px;
+  }
+
+  img {
+    height: 18px;
+    vertical-align: middle;
+
+    &.huawei,
+    &.jinshan {
+      height: 22px;
+    }
+  }
+}
+
+/* 暗黑模式：深色的云服务商徽标反色 */
+html[data-mode="dark"] .site_driven img {
+  &.baidu,
+  &.huawei,
+  &.jinshan {
+    filter: invert(1);
+  }
+}
+
+.site_police a::before {
+  display: inline-block;
+  margin-right: 4px;
+  vertical-align: text-bottom;
+  content: "";
+  width: 14px;
+  height: 14px;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAABGdBTUEAALGPC/xhBQAAAwBQTFRFtJR+///krYt6n2hV0a52/b9Ummlc2aht27qH//eX26xi8Na74bNo+M562rB75MGP5LaA5LaC47xp68l57N2y/vrs369n/++G1qx+/tiP6sN6+//e//nQ79l/+NqC6MZ87NmN+PPJ3qdc3alT25xR46xT57xs69KY57Vcw38+2a+C05NwyoRb6che5LxZ5MJt7d6A4bBn0Ktx+/TQ3KdZ8d/H9N+L7+ij8+mS9/O48deu///i7NOF+fG28+eq/vzgAAAAgVg6o31ShGlK7HEtxGsznl8wp41Z+sREcoWUHD6XlIx1xa58tYA/6Zc09oI24kYeo5mEBAVtbmJiNhpNtJlYAAiR96Q53bZp2U4qFzCJa3OEeWRg14pGxb2H/+Jj0RUKvbp+7XE02Mx3AABqzcJxfHp502U9CwZn/7VJzng6/Mxk24Y43Z9CXllm2QAG8F4eu0wo07yHuk0kk2A2yrZ4aX6O9LBA4JU504c9+9Jv46pKABB65G82vwAR2203YB5Q118zzCcT/S0U1Ugq00AmzaxSxicTTg5OxVIkyz0h/SsKDABdzD4txBgKrKJzjYZ3/75gQiREVDhTyQACaQI2XF94wQwLqbSRzxcR0QwR+59GuYtYABuOTAA5tgAQxj4dsQ4OAABhtKNm1JY94qlXyVkqbHmKVk5vzywa/I4sTjVP/9JmhI+Z8K9I1sB41jEfvZBe0iEa83wo7cJi/+9t/9hN469L1hoX6KA945M925tF+MRY15FT2J5Y8M1k67tc3oMy8dNp1XQo1o480oM92pZK68Vd5rZW5sBV6cpt7tRw6K5J7LlP6bFL6bdS7r5Q6L9O4KRM6LlP8slW58Rm6F8mAACAlI+B0zgiAAR33pBE13U41mUw2kko1AMJ6YI+8stuAABm/sVSORQ4cniCk3ha/9te4rJT5L5R8Nh21ZBG5bFQ3qNJ57ta3plE7c1m7Mlb6cFg6r1Z7cph68BX5rlZ6cZe9eNzAABuzgACAAB51z4g1h8Y/9JY5LVdEd5zqQAAAEF0Uk5TyxjR92/D++WYNfUc+cGpn7HH4MSDIdu+rrLmKUzsMPsnWsbG0uS8jOScSBRd8PTs4ecCXOtBunyrAmkclEJBCABK/YzMAAABgElEQVQY02NwgABGKwYmK2sohwFM2vIxuzk6O7FJyCAE7Tc+KXG95hLR/2SOPUzQmnf1s833b0b+mj1jsqQ9RFCaJyRv1aa/K+/NnD4xepKUAliQ0/u6e8H9DTtm3ZxyLfHnBDmQIDfrjVu+Afl///z5++tP8s80cVGgIEt44PVQ/1/Llry8nZCU+vPGPxGgIIefT1iwR/GCu3fqY+NjfseV8wMF2XMeegUVPmjpamytTc+IelUhBhTkysr0/D2/+27nnQfNdSlljyuFgIICudlFc+ct7Gtvutc7taa06oUNUFDw9tI1a289WtTR0PPo99Pn/6uFgYLy+/buerj+2fLFbdNWPN2yc/d2WaCg4su3rw/veb7t8bp/W/8dfP3iox3IR8a6J48e+XDgzbv9h94fO6VvC/amqeH37ye+Hv/05fPbb6evmtiBBc1+vPr///ObT+ffX/r27sMPC7CgvY3e5SsXzp098/XjxS8G5pbQQNbW0VRWUdVQUlPXMgLxASGRxIfJhdfLAAAAAElFTkSuQmCC)
+    no-repeat center;
+  background-size: 100% 100%;
+}
+
+/* 不蒜子访问统计：三枚小徽章 */
+.busuanzi-statistic {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  user-select: none;
+
+  span {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding-left: 24px;
+    overflow: hidden;
+    font-size: 12px;
+    color: var(--border-light);
+    background: var(--bg-inverse);
+    border-radius: var(--radius-inner);
+
+    .joe-font {
+      position: absolute;
+      left: 8px;
+      font-size: 13px;
+    }
+
+    em {
+      height: 22px;
+      margin-left: 6px;
+      padding: 0 8px;
+      font-style: normal;
+      color: #fff;
+    }
+
+    &.site-pv em {
+      background: linear-gradient(0deg, #d0339b, #d03336);
+    }
+
+    &.site-uv em {
+      background: linear-gradient(0deg, #e2c63a, #f58044);
+    }
+
+    &.site-page-pv em {
+      background: linear-gradient(0deg, #367eda, #964fdb);
+    }
+  }
+}
+
+/* 窄屏：全部居中，两列改为上下排列 */
+@media (max-width: 768px) {
+  .joe_footer__nav {
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    padding-top: 20px;
-    padding-bottom: 16px;
+    padding-top: 24px;
+    padding-bottom: 20px;
     text-align: center;
 
     .brand {
@@ -335,45 +331,22 @@ html[data-mode="dark"] .site_driven img {
       margin-left: 0;
     }
   }
-}
 
-/* 版权一行：右侧运行时间卡片与 RSS / 站点地图上下排列 */
-.joe_footer .joe_footer__bar .side-col {
-  gap: 8px;
+  .joe_footer__bar {
+    flex-direction: column;
+    align-items: center;
+    padding-top: 12px;
+    /* 手机上悬浮按钮在右下角叠放两个，底部多留一段，滚到底时不压住文字 */
+    padding-bottom: 96px;
+    text-align: center;
 
-  > .item {
-    padding: 0;
-  }
-}
+    .meta,
+    .side {
+      justify-items: center;
+    }
 
-/* 建站纪念进度（features/footer.ts） */
-.joe_footer .site_anniversary {
-  display: grid;
-  gap: 5px;
-
-  &[hidden] {
-    display: none;
-  }
-
-  strong {
-    font-weight: 500;
-    color: var(--theme-text);
-  }
-
-  .bar {
-    display: block;
-    height: 4px;
-    overflow: hidden;
-    border-radius: 2px;
-    background: color-mix(in srgb, var(--theme) 14%, transparent);
-
-    > span {
-      display: block;
-      width: 0;
-      height: 100%;
-      border-radius: inherit;
-      background: var(--theme);
-      transition: width 1s var(--ease-out);
+    .busuanzi-statistic {
+      justify-content: center;
     }
   }
 }
