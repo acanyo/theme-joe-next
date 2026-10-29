@@ -70,6 +70,8 @@ export async function initBanner(): Promise<void> {
     direction: banner.direction,
     loop: banner.loop,
     effect: (effect ? banner.effect : "slide") as "slide",
+    // 淡入淡出：切换时旧图淡出、新图淡入，不是当前的幻灯片保持完全透明
+    fadeEffect: { crossFade: true },
     speed: banner.speed,
     grabCursor: banner.handle,
     allowTouchMove: banner.handle,
