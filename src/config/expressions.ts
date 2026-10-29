@@ -30,3 +30,12 @@ export const el = (expr: string): string => `\${${expr}}`;
 
 /** 主题内静态资源地址，供属性中拼接使用（`#theme.assets` 已处理 base 与 CDN） */
 export const asset = (path: string): string => `#theme.assets('${path}')`;
+
+/**
+ * 评论的纯文本预览（变量 comment）：评论内容是 HTML，表情图片（<img alt="[微笑]">）换成 alt 文字，
+ * 其余标签、&nbsp; 与多余空白去掉后截取。SpEL 字符串中的单引号写作 ''。
+ */
+export const COMMENT_TEXT =
+  "#strings.abbreviate(#strings.trim((comment.spec.content ?: '')" +
+  ".replaceAll('<img[^>]*?alt=[\"'']([^\"'']*)[\"''][^>]*>', '$1')" +
+  ".replaceAll('<[^>]+>', ' ').replaceAll('&nbsp;', ' ').replaceAll('\\s+', ' ')), 120)";

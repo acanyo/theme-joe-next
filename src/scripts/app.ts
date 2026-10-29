@@ -16,7 +16,7 @@ import { initConsole, refreshConsole } from "./features/console";
 import { initContextMenu } from "./features/context-menu";
 import { initEnhancements } from "./features/enhancements";
 import { initFooter } from "./features/footer";
-import { initImageFallback } from "./features/image-fallback";
+import { fillEmptyImages, initImageFallback } from "./features/image-fallback";
 import { initLinkBehavior } from "./features/link-behavior";
 import { finishLoadingBar, startLoadingBar } from "./features/loading-bar";
 import { initNavigation, refreshNavigation } from "./features/navigation";
@@ -34,6 +34,7 @@ function initShell(): void {
 
 async function initPage(): Promise<void> {
   cleanExcerpts();
+  fillEmptyImages();
   initNavChapter();
   refreshNavigation();
   refreshConsole();

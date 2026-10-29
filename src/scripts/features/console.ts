@@ -10,6 +10,7 @@ import { toggleColorModeAt, currentMode } from "./color-mode";
 import { iconHtml } from "../core/icons";
 import { closeOverlays } from "./navigation";
 import { toast } from "../core/toast";
+import { fillEmptyImages } from "./image-fallback";
 import { refreshConsoleContent, renderConsoleContent } from "./console-content";
 
 const PREFS_KEY = "joe-next:console";
@@ -60,6 +61,7 @@ function mount(): HTMLElement | null {
   panel = template.content.firstElementChild?.cloneNode(true) as HTMLElement | null;
   if (!panel) return null;
   document.body.appendChild(panel);
+  fillEmptyImages(panel);
   renderConsoleContent(panel);
   bindSwitches(panel);
   panel.addEventListener("click", (event) => {

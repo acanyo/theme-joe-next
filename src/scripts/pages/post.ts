@@ -4,6 +4,7 @@ import { initShortcodes } from "../content/shortcodes";
 import { initGallery } from "../content/gallery";
 import { initAsideOperate } from "../content/aside-operate";
 import { recordReading } from "../features/visitor";
+import { initCommentEnhancements } from "../features/comment-greeting";
 import {
   ensureHeadingIds,
   initCopyright,
@@ -23,6 +24,7 @@ export default function init(): void {
   initToc();
   initSeries();
   recordReading();
+  initCommentEnhancements();
   initLike();
   initAsideOperate();
   initShare();
