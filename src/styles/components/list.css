@@ -193,9 +193,11 @@
             color: #fff;
             white-space: nowrap;
             font-size: 12px;
-            background-image: linear-gradient(to right, #fc712a, #f84c39);
-            background-color: #f84c39;
-            border-radius: 8px;
+            font-style: normal;
+            background: rgb(0 0 0 / 42%);
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+            border-radius: 9px;
           }
         }
       }
@@ -260,23 +262,6 @@
           border-radius: 0 0 var(--radius-inner) var(--radius-inner);
         }
 
-        /* .views {*/
-        /*   display: flex;*/
-        /*   align-items: center;*/
-        /*   position: absolute;*/
-        /*   z-index: 1;*/
-        /*   top: 5px;*/
-        /*   right: 5px;*/
-        /*   height: 18px;*/
-        /*   padding: 0 8px;*/
-        /*   color: #fff;*/
-        /*   white-space: nowrap;*/
-        /*   font-size: 12px;*/
-        /*   background-image: linear-gradient(to right, #fc712a, #f84c39);*/
-        /*   background-color: #f84c39;*/
-        /*   border-radius: 8px;*/
-        /* }*/
-
         .post-nums {
           display: flex;
           align-items: center;
@@ -290,9 +275,10 @@
           color: #fff;
           white-space: nowrap;
           font-size: 12px;
-          background-image: linear-gradient(to right, #2afcfc, #4f3edd);
-          background-color: #4f3edd;
-          border-radius: 8px;
+          background: rgb(0 0 0 / 42%);
+          -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+          border-radius: 9px;
         }
       }
     }
