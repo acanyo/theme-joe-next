@@ -385,6 +385,13 @@ spec:
           label: 平滑滚动到顶部
           value: false
           if: $get(back_to_top).value === true
+        - $formkit: switch
+          name: random_post
+          id: random_post
+          key: random_post
+          label: 「随便看看」按钮
+          value: true
+          help: 右下角的骰子按钮与右键菜单，随机打开一篇文章
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"

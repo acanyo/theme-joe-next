@@ -1,8 +1,9 @@
-/** 悬浮操作按钮：返回顶部、友链随机跳转 */
+/** 悬浮操作按钮：返回顶部、友链随机跳转、随便看看 */
 import { $, $$, throttle } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { notify } from "../core/toast";
 import { listen } from "../core/lifecycle";
+import { openRandomPost } from "./random-post";
 
 function initBackToTop(): void {
   const button = $(".joe_action_item.back2top");
@@ -35,7 +36,19 @@ function initRandomLink(): void {
   });
 }
 
+function initRandomPost(): void {
+  const button = $(".joe_action_item.random-post");
+  if (!button) return;
+  listen(button, "click", async () => {
+    button.classList.remove("is-rolling");
+    void button.offsetWidth; // 重新触发动画
+    button.classList.add("is-rolling");
+    await openRandomPost();
+  });
+}
+
 export function initActions(): void {
   initBackToTop();
   initRandomLink();
+  initRandomPost();
 }

@@ -36,6 +36,7 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
   "effects.list_animation": false,
   "effects.loading_bar": false,
   "effects.offscreen_title": false,
+  "effects.random_post": true,
   "effects.reveal": false,
   "effects.swup": true,
   "effects.swup_preload": true,

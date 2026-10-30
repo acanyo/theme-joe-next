@@ -44,6 +44,16 @@ const editOwner =
       </svg>
     </button>
   )}
+  <!-- 随便看看：随机打开一篇文章（features/random-post.ts） -->
+  <button
+    type="button"
+    class="joe_action_item random-post"
+    th:if="${theme.config.effects.random_post}"
+    aria-label="随便看看"
+    title="随便看看"
+  >
+    <Icon name="dice" />
+  </button>
   {toc && (
     <button
       type="button"

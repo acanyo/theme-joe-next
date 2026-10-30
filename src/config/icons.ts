@@ -38,6 +38,7 @@ export const ICONS = {
   toc: "lucide:list-tree",
   link: "lucide:link",
   external: "lucide:arrow-up-right",
+  dice: "lucide:dices",
   share: "lucide:share-2",
   pinned: "lucide:pin",
   "fresh-new": "lucide:sparkles",
