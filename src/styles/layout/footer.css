@@ -1,10 +1,8 @@
 /*
- * 页脚（components/layout/Footer.astro）
- *
- * - 导航（footer.nav）：左侧站点名、座右铭与社交图标，右侧链接分组
- * - 分隔线：开启建站纪念时兼作进度条，主题色填到已走过的比例
- * - 运行时间：进度条下方居中一行
- * - 信息带：左列版权与备案，右列订阅与 Powered by；两列底部对齐
+ * 页脚（components/layout/Footer.astro），两层：
+ * - 展示层：左侧运行天数大字、建站纪念进度、站点数据；右侧链接分组与社交图标
+ * - 底栏：左侧版权与 Powered by，右侧云服务商、备案号、订阅链接
+ * 整条页脚只有运行天数和进度条用主题色，其余都是灰色文字，链接悬停时才变色。
  */
 .joe_footer {
   color: var(--text-secondary);
@@ -32,11 +30,6 @@
     margin: 0;
   }
 
-  .sep {
-    margin: 0 6px;
-    opacity: 0.5;
-  }
-
   &.full .joe_container {
     max-width: 100%;
   }
@@ -50,35 +43,119 @@
   }
 }
 
-/* 导航 */
-.joe_footer__nav {
+/* 展示层：左右两块，没有导航时运行时间独占一行 */
+.joe_footer__show {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 32px;
-  padding-top: 32px;
-  padding-bottom: 28px;
+  gap: 32px 64px;
+  padding-top: 36px;
+  padding-bottom: 32px;
+}
 
-  .brand {
-    display: grid;
-    gap: 8px;
-    max-width: 320px;
+/* 运行时间与纪念进度 */
+.joe_footer__life {
+  display: grid;
+  gap: 8px;
+  width: min(360px, 100%);
 
-    .name {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-title);
+  .label {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+
+  .days {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    line-height: 1;
+
+    strong {
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--theme-text);
+      font-variant-numeric: tabular-nums;
     }
 
-    .motto {
-      line-height: 1.6;
+    .unit {
+      font-size: 14px;
+      color: var(--text-regular);
     }
   }
+
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 14px;
+    margin-top: 4px;
+    font-size: 12.5px;
+
+    em {
+      margin-right: 2px;
+      font-style: normal;
+      font-weight: 600;
+      color: var(--text-regular);
+      font-variant-numeric: tabular-nums;
+    }
+  }
+}
+
+.site_anniversary {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
+
+  &[hidden] {
+    display: none;
+  }
+
+  .head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--text-regular);
+  }
+
+  .pct {
+    font-weight: 600;
+    color: var(--theme-text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .track {
+    display: block;
+    height: 4px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--theme) 12%, var(--border-lighter));
+  }
+
+  .fill {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--theme) 45%, transparent), var(--theme));
+    transition: width 1.2s var(--ease-out);
+  }
+
+  .hint {
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* 链接分组与社交图标 */
+.joe_footer__nav {
+  display: grid;
+  justify-items: end;
+  gap: 20px;
 
   .groups {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px 64px;
+    gap: 16px 56px;
   }
 
   .title {
@@ -99,58 +176,32 @@
   /* 复用博主卡片的社交图标（components/blogger/SocialLinks.astro），去掉卡片里的分隔线 */
   .social-account {
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: flex-end;
     gap: 4px;
-    margin-left: -4px;
-    padding-top: 4px;
+    margin-right: -4px;
+    padding-top: 0;
     border-top: 0;
   }
 }
 
-/* 分隔线 / 建站纪念进度 */
-/* .joe_container 是 flex 容器，轨道要显式撑满 */
-.joe_footer__progress .track {
-  display: block;
-  flex: 1;
-  height: 3px;
-  overflow: hidden;
-  border-radius: 2px;
-  background: color-mix(in srgb, var(--theme) 10%, var(--border-lighter));
-
-  .fill {
-    display: block;
-    width: 0;
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(90deg, color-mix(in srgb, var(--theme) 35%, transparent), var(--theme));
-    transition: width 1.2s var(--ease-out);
-  }
-}
-
-/* 没有进度条时，导航与信息带之间用一条细线隔开 */
-.joe_footer__nav + .joe_footer__bar {
-  border-top: 1px solid var(--border-lighter);
-}
-
-/* 信息带：两列网格，左列内容靠左、右列靠右，同一行上下对齐；某一项没开时另一列照常占位 */
+/* 底栏 */
 .joe_footer__bar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  /* 左侧换成两行时，右侧与第一行对齐，而不是夹在两行中间 */
-  align-items: start;
-  gap: 4px 24px;
-  padding-top: 16px;
-  padding-bottom: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 24px;
+  padding-top: 14px;
+  padding-bottom: 16px;
   font-size: 12.5px;
   line-height: 22px;
 
-  /* 各项之间用间距分隔（不用「·」），换行时不会在行尾留下孤立的分隔符 */
-  > p {
+  .start,
+  .end {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0 14px;
-    min-width: 0;
+    gap: 0 16px;
   }
 
   .copyright,
@@ -159,68 +210,28 @@
     white-space: nowrap;
   }
 
-  /* 一整句的内容（Powered by、本站点由…提供云服务）内部不加大间距 */
-  .site_powered,
-  .site_driven {
-    display: inline-flex;
-    align-items: center;
-  }
-
   a {
     margin: 0;
   }
-
-  .row-start {
-    grid-column: 1;
-  }
-
-  .row-end {
-    grid-column: 2;
-    justify-content: flex-end;
-  }
 }
 
-/* 右下角悬浮按钮（返回顶部等）约 48px 宽：宽屏时两行右侧都留出位置；
+.joe_footer__show + .joe_footer__bar {
+  border-top: 1px solid var(--border-lighter);
+}
+
+/* 右下角悬浮按钮（返回顶部等）约 48px 宽：宽屏时右侧留出位置；
    选择器要比 .joe_footer .joe_container 的左右内边距更具体 */
 @media (min-width: 769px) {
-  .joe_footer .joe_footer__nav,
-  .joe_footer .joe_footer__bar,
-  .joe_footer .joe_footer__progress {
+  .joe_footer .joe_footer__show,
+  .joe_footer .joe_footer__bar {
     padding-right: 76px;
   }
 }
 
-/* 运行时间：数字等宽，时间跳动时不抖；整条页脚只有这里的数字用主题色 */
-.site_life {
-  gap: 0 !important;
-  font-variant-numeric: tabular-nums;
-
-  .joe-font {
-    margin-right: 4px;
-    font-size: 13px;
-    opacity: 0.7;
-  }
-
-  /* 数字颜色见 content/runtime.css */
-  strong {
-    margin: 0 2px;
-  }
-
-  .site_anniversary {
-    &::before {
-      content: "·";
-      margin: 0 6px;
-      opacity: 0.5;
-    }
-
-    strong {
-      color: var(--theme-text);
-    }
-  }
-}
-
-/* Halo、Joe Next 只加粗，不再各用一种颜色 */
 .site_powered {
+  display: inline-flex;
+  align-items: center;
+
   .a-powered,
   .a-theme {
     font-weight: 600;
@@ -235,18 +246,23 @@
 }
 
 .site_driven {
-  a {
-    margin: 0 3px;
-  }
+  display: inline-flex;
+  align-items: center;
 
   img {
-    height: 18px;
-    vertical-align: middle;
+    display: block;
+    height: 16px;
+    opacity: 0.7;
+    transition: opacity var(--dur-fast) var(--ease-out);
 
     &.huawei,
     &.jinshan {
-      height: 22px;
+      height: 20px;
     }
+  }
+
+  a:hover img {
+    opacity: 1;
   }
 }
 
@@ -271,41 +287,35 @@ html[data-mode="dark"] .site_driven img {
   background-size: 100% 100%;
 }
 
-/* 不蒜子访问统计：跟在云服务商后面的一组纯文字，数字等宽 */
-.busuanzi-statistic {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0 12px;
-  user-select: none;
-
-  > span {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    white-space: nowrap;
-  }
-
-  em {
-    font-style: normal;
-    font-weight: 500;
-    color: var(--text-regular);
-    font-variant-numeric: tabular-nums;
-  }
-}
-
-/* 窄屏：全部居中，两列改为上下排列 */
+/* 窄屏：上下排列、居中 */
 @media (max-width: 768px) {
-  .joe_footer__nav {
+  .joe_footer__show {
     flex-direction: column;
     align-items: center;
-    gap: 20px;
-    padding-top: 24px;
-    padding-bottom: 20px;
+    gap: 28px;
+    padding-top: 28px;
+    padding-bottom: 24px;
     text-align: center;
+  }
 
-    .brand {
-      justify-items: center;
+  .joe_footer__life {
+    justify-items: center;
+
+    .days {
+      justify-content: center;
     }
+
+    .stats {
+      justify-content: center;
+    }
+  }
+
+  .site_anniversary {
+    width: 100%;
+  }
+
+  .joe_footer__nav {
+    justify-items: center;
 
     .groups {
       justify-content: center;
@@ -314,25 +324,20 @@ html[data-mode="dark"] .site_driven img {
 
     .social-account {
       justify-content: center;
-      margin-left: 0;
+      margin-right: 0;
     }
   }
 
   .joe_footer__bar {
-    grid-template-columns: minmax(0, 1fr);
-    justify-items: center;
+    flex-direction: column;
+    justify-content: center;
     padding-top: 12px;
     /* 手机上悬浮按钮在右下角叠放两个，底部多留一段，滚到底时不压住文字 */
     padding-bottom: 150px;
     text-align: center;
 
-    > p,
-    .row-end {
-      grid-column: 1;
-      justify-content: center;
-    }
-
-    .busuanzi-statistic {
+    .start,
+    .end {
       justify-content: center;
     }
   }

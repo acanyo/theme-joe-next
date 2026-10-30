@@ -3001,7 +3001,7 @@ spec:
           key: nav
           label: 页脚导航
           value: false
-          help: 在页脚上方显示站点名、博主座右铭、社交账号图标和几组链接
+          help: 在页脚右侧显示几组链接，可同时显示社交账号图标
         - $formkit: array
           if: $get(nav).value == true
           name: nav_groups
@@ -3087,7 +3087,7 @@ spec:
           id: uptime
           key: uptime
           label: 运行时间
-          help: 实时显示网站已运行多久
+          help: 页脚左侧大字显示网站已运行的天数，并显示文章数等站点数据
           value: false
         - $formkit: text
           if: $get(uptime).value == true
@@ -3104,7 +3104,7 @@ spec:
           key: anniversary
           label: 建站纪念进度
           value: false
-          help: 在运行时间下方显示一条进度：从起始时间到第 N 年（如「十年之约」）已走过多少
+          help: 在运行天数下方显示一条进度：从起始时间到第 N 年（如「十年之约」）已走过多少
         - $formkit: number
           if: $get(anniversary).value == true
           name: anniversary_years
