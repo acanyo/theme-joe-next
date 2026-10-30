@@ -86,6 +86,7 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
   "navbar.login": false,
   "navbar.sticky": false,
   "pages.archives_categories": false,
+  "pages.archives_heatmap": true,
   "pages.categories_count": false,
   "pages.feed_subscribe": false,
   "pages.guestbook_source": true,

@@ -2794,6 +2794,13 @@ spec:
           key: archives_categories
           label: 归档页显示分类
           value: false
+        - $formkit: switch
+          name: archives_heatmap
+          id: archives_heatmap
+          key: archives_heatmap
+          label: 归档页发文热力图
+          value: true
+          help: 每年一行、每月一格，颜色越深当月写得越多，点一格进入当月归档
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
