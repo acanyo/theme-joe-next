@@ -67,8 +67,30 @@ function initAnniversary(): void {
   box.hidden = false;
 }
 
+/** 不蒜子统计：页脚进入视口前 600px 时才加载脚本；它只在加载时统计一次，所以只加载一次 */
+function initBusuanzi(): void {
+  const holder = $<HTMLTemplateElement>("template[data-joe-busuanzi]");
+  const footer = $(".joe_footer");
+  const src = holder?.dataset.joeBusuanzi;
+  if (!holder || !footer || !src) return;
+  const load = () => {
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = src;
+    document.body.appendChild(script);
+  };
+  if (!("IntersectionObserver" in window)) return load();
+  const io = new IntersectionObserver((entries) => {
+    if (!entries.some((e) => e.isIntersecting)) return;
+    io.disconnect();
+    load();
+  }, { rootMargin: "600px 0px" });
+  io.observe(footer);
+}
+
 export function initFooter(): void {
   initFixedFooter();
   initRuntime();
   initAnniversary();
+  initBusuanzi();
 }

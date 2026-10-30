@@ -1,5 +1,5 @@
 /** 首屏大图：打字机标题 + 一言轮播（原 EvanBigBanner，去除 jQuery） */
-import { $ } from "../core/dom";
+import { $, onIdle } from "../core/dom";
 import { every, later } from "../core/lifecycle";
 
 const PRINT_INTERVAL = 300;
@@ -45,8 +45,15 @@ async function rotateHitokoto(
       // 一言接口不可用时保持空白
     }
   };
+  // 首屏图片和脚本加载完、浏览器空闲时再请求一言，不和首屏资源抢连接；
+  // 外部图片很慢时 load 事件会迟迟不来，最多等 1.5 秒
+  await new Promise<void>((resolve) => {
+    onIdle(resolve);
+    setTimeout(resolve, 1500);
+  });
   await show();
-  every(HITOKOTO_ROTATE, () => void show());
+  // 标签页在后台时不轮换，省掉看不到的请求
+  every(HITOKOTO_ROTATE, () => document.visibilityState === "visible" && void show());
 }
 
 export function initBigBanner(): void {

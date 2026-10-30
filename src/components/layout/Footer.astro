@@ -175,9 +175,5 @@ const HAS_CLOUD = "theme.config.footer.cloud != null and theme.config.footer.clo
     </p>
   </div>
 </footer>
-<script
-  is:inline
-  th:if="${theme.config.footer.busuanzi}"
-  async
-  src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"
-></script>
+<!-- 不蒜子统计只填页脚的数字：页脚接近视口时再加载（features/footer.ts），不和首屏图片抢带宽 -->
+<template th:if="${theme.config.footer.busuanzi}" data-joe-busuanzi="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></template>
