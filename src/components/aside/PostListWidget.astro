@@ -1,40 +1,18 @@
 ---
-/** 侧栏文章列表：最新文章 / 热门文章 */
+/** 侧栏文章列表卡片：最新文章 / 热门文章 / 近期热门（各占一张卡片） */
 import AsideCard from "./AsideCard.astro";
-import Icon from "../common/Icon.astro";
+import PostListItems, { type PostListKind } from "./PostListItems.astro";
 
 interface Props {
-  kind: "newest" | "hot";
+  kind: PostListKind;
 }
 
 const { kind } = Astro.props;
-const SOURCES = {
-  newest: {
-    title: "最新文章",
-    size: "theme.config.aside.latest_count",
-    sort: "'spec.publishTime,desc'",
-  },
-  hot: {
-    title: "热门文章",
-    size: "theme.config.aside.popular_count",
-    sort: "'stats.visit,desc'",
-  },
-};
-const source = SOURCES[kind];
-const query = `postFinder.list({page: 1, size: #conversions.convert(${source.size} ?: 5, 'java.lang.Integer'), sort: {${source.sort}, 'metadata.creationTimestamp,asc'}})`;
+const TITLES: Record<PostListKind, string> = { newest: "最新文章", hot: "热门文章", recent: "近期热门" };
 ---
 
-<AsideCard variant="newest" icon="hot" title={source.title}>
+<AsideCard variant="newest" icon="hot" title={TITLES[kind]}>
   <div class="joe_aside__item-contain">
-    <ul class="list" th:with={`asidePosts = \${${query}}`}>
-      <li class="item" th:each="asidePost : ${asidePosts.items}">
-        <a
-          class="link"
-          th:href="@{${asidePost.status.permalink}}"
-          th:text="${asidePost.spec.title}"
-        ></a>
-        <Icon name="link" />
-      </li>
-    </ul>
+    <PostListItems kind={kind} />
   </div>
 </AsideCard>

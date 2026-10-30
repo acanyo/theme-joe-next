@@ -1,6 +1,13 @@
 ---
-/** 页脚：版权、备案、Powered by、云服务商、运行时间、RSS/站点地图、访问统计 */
+/**
+ * 页脚，两层：
+ * - 展示层：左侧「已运行 N 天」大字、建站纪念进度（footer.anniversary）、站点数据一行（文章数、访问统计）；
+ *   右侧页脚导航的链接分组与社交图标（footer.nav）。两侧都没开时整层不输出。
+ * - 底栏：左侧版权与 Powered by，右侧备案号与云服务商、订阅链接；窄屏三行居中。
+ * 运行天数与纪念进度由 features/footer.ts 计算填入。
+ */
 import Icon from "../common/Icon.astro";
+import SocialLinks from "../blogger/SocialLinks.astro";
 const CLOUD_PROVIDERS = [
   { key: "aliyun", url: "https://www.aliyun.com" },
   { key: "tencent", url: "https://cloud.tencent.com" },
@@ -10,6 +17,7 @@ const CLOUD_PROVIDERS = [
   { key: "huawei", url: "https://www.huaweicloud.com" },
   { key: "jinshan", url: "https://www.ksyun.com" },
 ];
+const HAS_CLOUD = "theme.config.footer.cloud != null and theme.config.footer.cloud != 'none'";
 ---
 
 <footer
@@ -18,108 +26,134 @@ const CLOUD_PROVIDERS = [
   th:classappend="|${theme.config.footer.position == 'fixed' ? 'fixed' : ''} ${theme.config.footer.full_width ? 'full' : ''}|"
 >
   <div
-    class="joe_container"
-    th:classappend="${!theme.config.footer.rss and !theme.config.footer.sitemap} ? 'central' : ''"
+    class="joe_container joe_footer__show"
+    th:if="${theme.config.footer.uptime or theme.config.footer.nav}"
   >
-    <div class="item">
-      <p>
+    <!-- 运行天数与纪念进度 -->
+    <section class="joe_footer__life" th:if="${theme.config.footer.uptime}" aria-label="本站运行时间">
+      <p class="label">本站已运行</p>
+      <p class="days site_life">
+        <strong class="joe_run__day">0</strong><span class="unit">天</span>
+      </p>
+      <div
+        class="site_anniversary"
+        th:if="${theme.config.footer.anniversary}"
+        th:attr="data-years=${theme.config.footer.anniversary_years ?: 10}, data-label=${theme.config.footer.anniversary_label ?: '十年之约'}"
+        hidden
+      >
+        <p class="head"><span class="name"></span><span class="pct"></span></p>
+        <span class="track" aria-hidden="true"><span class="fill"></span></span>
+        <p class="hint"></p>
+      </div>
+      <p class="stats" th:with="stats = ${siteStatsFinder.getStats()}">
+        <span><em th:text="${stats.post}">0</em> 篇文章</span>
+        <span th:if="${theme.config.footer.busuanzi}"><em id="busuanzi_value_site_pv">0</em> 次访问</span>
+        <span th:if="${theme.config.footer.busuanzi}"><em id="busuanzi_value_site_uv">0</em> 位访客</span>
+      </p>
+    </section>
+
+    <!-- 页脚导航：链接分组与社交图标 -->
+    <nav class="joe_footer__nav" aria-label="页脚导航" th:if="${theme.config.footer.nav}">
+      <div class="groups" th:unless="${#lists.isEmpty(theme.config.footer.nav_groups)}">
+        <div class="group" th:each="group : ${theme.config.footer.nav_groups}">
+          <h2 class="title" th:text="${group.title}"></h2>
+          <ul>
+            <li th:each="link : ${group.links}">
+              <a
+                th:href="${link.url}"
+                th:text="${link.name}"
+                th:attr="target=${#strings.startsWith(link.url, 'http') ? '_blank' : null}, rel=${#strings.startsWith(link.url, 'http') ? 'noopener noreferrer' : null}"
+              ></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <th-block th:if="${theme.config.footer.nav_social}">
+        <SocialLinks />
+      </th-block>
+    </nav>
+  </div>
+
+  <!-- 底栏 -->
+  <div class="joe_container joe_footer__bar">
+    <p class="start">
+      <span class="copyright">
         ©
         <span th:text="${#strings.isEmpty(theme.config.footer.since) ? '' : #strings.substring(theme.config.footer.since, 0, 4) + ' - '}"></span>
-        <span th:text="${#dates.year(#dates.createNow())}"></span>
-        <a th:href="${site.url}" th:text="${site.title}"></a>
-        <th-block th:if="${theme.config.footer.icp and not #strings.isEmpty(theme.config.footer.filing?.icp)}">
-          -
-          <a
-            class="icp"
-            th:href="${theme.config.footer.filing.icp_link ?: 'https://beian.miit.gov.cn/'}"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            th:text="${theme.config.footer.filing.icp}"
-          ></a>
-        </th-block>
-      </p>
-      <p class="site_powered" th:if="${theme.config.footer.powered_by}">
-        Powered by
-        <a
+        <span th:text="${#dates.year(#dates.createNow())}"></span>&nbsp;<a th:href="${site.url}" th:text="${site.title}"></a>
+      </span>
+      <span class="site_powered" th:if="${theme.config.footer.powered_by}">
+        Powered by&nbsp;<a
           class="a-powered"
           href="https://www.halo.run/"
           target="_blank"
           rel="noopener noreferrer"
-        >
-          Halo
-        </a>
-        &nbsp;|&nbsp;Theme
-        <a
+        >Halo</a>&nbsp;·&nbsp;<a
           class="a-theme"
           th:href="${theme.spec.repo}"
           th:title="|${theme.spec.displayName} v${theme.spec.version}|"
           target="_blank"
           rel="noopener noreferrer"
+        >Joe Next</a>
+      </span>
+    </p>
+    <p class="end">
+      <span class="filing" th:if="${(theme.config.footer.icp and not #strings.isEmpty(theme.config.footer.filing?.icp)) or (theme.config.footer.police and not #strings.isEmpty(theme.config.footer.filing?.police))}">
+        <a
+          class="icp"
+          th:if="${theme.config.footer.icp and not #strings.isEmpty(theme.config.footer.filing?.icp)}"
+          th:href="${theme.config.footer.filing.icp_link ?: 'https://beian.miit.gov.cn/'}"
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          th:text="${theme.config.footer.filing.icp}"
+        ></a>
+        <span
+          class="site_police"
+          th:if="${theme.config.footer.police and not #strings.isEmpty(theme.config.footer.filing?.police)}"
         >
-          Joe Next
-        </a>
-      </p>
-      <p
-        class="site_driven"
-        th:if="${theme.config.footer.cloud != null and theme.config.footer.cloud != 'none'}"
-      >
-        本站点由
-        <th-block th:switch="${theme.config.footer.cloud}">
-          {CLOUD_PROVIDERS.map((p) => (
+          <a
+            th:href="${theme.config.footer.filing.police_link ?: 'https://beian.mps.gov.cn/#/query/webSearch'}"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            th:text="${theme.config.footer.filing.police}"
+          ></a>
+        </span>
+      </span>
+      <span class="links">
+        <span class="site_driven" th:if={`\${${HAS_CLOUD}}`}>
+          <th-block th:switch="${theme.config.footer.cloud}">
+            {CLOUD_PROVIDERS.map((p) => (
+              <a
+                th:case={`'${p.key}'`}
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                title="云服务商"
+              >
+                <img
+                  class={p.key}
+                  th:src={`@{/assets/images/cloud/${p.key}.svg}`}
+                  alt="云服务商"
+                  data-fallback="image"
+                />
+              </a>
+            ))}
             <a
-              th:case={`'${p.key}'`}
-              href={p.url}
+              th:case="'custom'"
+              th:href="${theme.config.footer.cloud_url}"
               target="_blank"
               rel="noopener noreferrer nofollow"
+              title="云服务商"
             >
               <img
-                class={p.key}
-                th:src={`@{/assets/images/cloud/${p.key}.svg}`}
+                class="custom"
+                th:src="${theme.config.footer.cloud_logo}"
                 alt="云服务商"
                 data-fallback="image"
               />
             </a>
-          ))}
-          <a
-            th:case="'custom'"
-            th:href="${theme.config.footer.cloud_url}"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-          >
-            <img
-              class="custom"
-              th:src="${theme.config.footer.cloud_logo}"
-              alt="云服务商"
-              data-fallback="image"
-            />
-          </a>
-        </th-block>
-        提供云服务
-      </p>
-      <div class="site_life" th:if="${theme.config.footer.uptime}">
-        <Icon name="runtime" />已运行&nbsp;
-        <strong class="joe_run__day">00</strong> 天
-        <strong class="joe_run__hour">00</strong> 时
-        <strong class="joe_run__minute">00</strong> 分
-        <strong class="joe_run__second">00</strong> 秒
-      </div>
-      <p
-        class="site_police"
-        th:if="${theme.config.footer.police and not #strings.isEmpty(theme.config.footer.filing?.police)}"
-      >
-        <a
-          th:href="${theme.config.footer.filing.police_link ?: 'https://beian.mps.gov.cn/#/query/webSearch'}"
-          target="_blank"
-          rel="noopener noreferrer nofollow"
-          th:text="${theme.config.footer.filing.police}"
-        ></a>
-      </p>
-    </div>
-    <div class="side-col">
-      <div
-        class="item"
-        th:if="${theme.config.footer.rss or theme.config.footer.sitemap}"
-      >
+          </th-block>
+        </span>
         <a
           th:if="${theme.config.footer.rss}"
           class="rss"
@@ -127,7 +161,7 @@ const CLOUD_PROVIDERS = [
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Icon name="rss" />&nbsp;RSS
+          <Icon name="rss" />RSS
         </a>
         <a
           th:if="${theme.config.footer.sitemap}"
@@ -137,25 +171,8 @@ const CLOUD_PROVIDERS = [
         >
           站点地图
         </a>
-      </div>
-      <div
-        class="item busuanzi-statistic"
-        th:if="${theme.config.footer.busuanzi}"
-      >
-        <span class="site-pv">
-          <Icon name="page-views" />访问量
-          <em id="busuanzi_value_site_pv">0</em>
-        </span>
-        <span class="site-uv">
-          <Icon name="visitors" />访客量
-          <em id="busuanzi_value_site_uv">0</em>
-        </span>
-        <span class="site-page-pv">
-          <Icon name="page-visitors" />本页访客
-          <em id="busuanzi_value_page_pv">0</em>
-        </span>
-      </div>
-    </div>
+      </span>
+    </p>
   </div>
 </footer>
 <script

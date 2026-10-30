@@ -1,8 +1,9 @@
 /**
- * 侧栏增强：3D 标签云（原生 SVG 实现，替代 3dtag jQuery 插件）、人生倒计时。
+ * 侧栏增强：3D 标签云（原生 SVG 实现，替代 3dtag jQuery 插件）、人生倒计时、文章三合一卡片的标签切换。
  */
 import { $, $$, isMobile } from "../core/dom";
 import { loop, observe } from "../core/lifecycle";
+import { initAsideTabs } from "./aside-tabs";
 
 const CLOUD_COLORS = [
   "#F8D800",
@@ -165,4 +166,5 @@ export function initAsideWidgets(): void {
   initStrips();
   initClouds();
   initLifetime();
+  initAsideTabs();
 }

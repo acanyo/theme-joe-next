@@ -1,54 +1,88 @@
-/* 页面切换动画。*/
-/* - native：浏览器原生跨页过渡。`@view-transition` 是文档级规则，无法按属性选择开关，*/
-/*   因此由服务端仅在设置为 native 时输出（见 components/head/DynamicStyle.astro），这里只定义动画样式。*/
-/* - swup：无刷新切换，内容区域淡出 → 替换 → 淡入（swup 在 <html> 上添加的状态类）。*/
-/* 系统开启「减少动态效果」时两种模式都不做动画。*/
+/* 页面切换动画（设置 effects.page_animation，写在 <html data-animation>）。*/
+/* 优先用浏览器的 View Transitions：新页面准备好之后才开始，旧画面与新画面交叉过渡，中间没有空白。*/
+/* - swup 开启：swup 调用 document.startViewTransition 替换内容区（core/swup.ts 的 native 选项）。*/
+/* - swup 关闭：整页加载时的跨文档过渡。`@view-transition` 是文档级规则，无法按属性选择开关，*/
+/*   因此由服务端仅在关闭 swup 且动画不为「关闭」时输出（见 components/head/DynamicStyle.astro）。*/
+/* - 不支持 View Transitions 的浏览器 + swup：退回内容区的 CSS 过渡（html.is-animating 等状态类）。*/
+/* - slide：新内容轻微上移淡入、旧内容淡出；fade：只交叉淡化；none：不做动画。*/
+/* 导航栏单独命名，切换时保持不动；系统开启「减少动态效果」时都不做动画。*/
 
 @media (prefers-reduced-motion: no-preference) {
-  ::view-transition-old(root) {
-    animation: joe-page-out 0.18s ease-in both;
-  }
-
-  ::view-transition-new(root) {
-    animation: joe-page-in 0.28s ease-out both;
-  }
-
-  /* 导航栏在原生过渡中保持不动*/
-  html[data-transition="native"] .joe_header__above {
+  html:not([data-animation="none"]) .joe_header__above {
     view-transition-name: joe-header;
   }
 
+  /* 导航栏在两个页面里的样子可能不同（滚动后的悬浮条 / 顶部透明），交叉淡化会叠出重影：
+     直接换成新页面的样子，不做过渡 */
   ::view-transition-group(joe-header) {
     animation: none;
   }
 
-  html.is-changing .joe_swup {
+  ::view-transition-old(joe-header) {
+    display: none;
+  }
+
+  ::view-transition-new(joe-header) {
+    animation: none;
+  }
+
+  /* 旧画面先淡出，完全消失后新画面再进入：两页布局、滚动位置都不同，叠在一起会出现重影 */
+  ::view-transition-old(root) {
+    animation: 120ms cubic-bezier(0.4, 0, 1, 1) both joe-vt-out;
+  }
+
+  ::view-transition-new(root) {
+    animation: 240ms cubic-bezier(0, 0, 0.2, 1) 120ms both joe-vt-in;
+  }
+
+  html[data-animation="fade"]::view-transition-old(root) {
+    animation-name: joe-vt-fade-out;
+  }
+
+  html[data-animation="fade"]::view-transition-new(root) {
+    animation-name: joe-vt-fade-in;
+  }
+
+  /* 不支持 View Transitions 时的退路（swup 在 <html> 上加 swup-native 表示走原生过渡，此时不用）：
+     只在离开时降一点透明度，进入时直接显示，避免整块变空白 */
+  html:not([data-animation="none"], .swup-native).is-changing .joe_swup {
     transition:
-      opacity 0.22s var(--ease-out),
-      transform 0.22s var(--ease-out);
+      opacity 0.16s var(--ease-out),
+      transform 0.16s var(--ease-out);
   }
 
-  html.is-animating .joe_swup {
+  html:not([data-animation="none"], .swup-native).is-animating.is-leaving .joe_swup {
+    opacity: 0.35;
+  }
+
+  html[data-animation="slide"]:not(.swup-native).is-animating:not(.is-leaving) .joe_swup {
     opacity: 0;
-    transform: translateY(8px);
-  }
-
-  html.is-leaving .joe_swup {
-    transform: translateY(-4px);
+    transform: translateY(6px);
   }
 }
 
-@keyframes joe-page-out {
+@keyframes joe-vt-out {
   to {
     opacity: 0;
-    transform: translateY(-6px);
   }
 }
 
-@keyframes joe-page-in {
+@keyframes joe-vt-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
+  }
+}
+
+@keyframes joe-vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes joe-vt-fade-in {
+  from {
+    opacity: 0;
   }
 }
 

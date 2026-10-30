@@ -87,11 +87,16 @@ export function initSwup({
 
   const swup = new Swup({
     containers: ["#swup"],
-    animationSelector: ".joe_swup",
+    // 支持 View Transitions 的浏览器用原生过渡：新页面加载完才开始，旧画面与新画面交叉过渡，
+    // 不会出现「先淡出、等加载、再淡入」中间的空白；不支持时退回下方 animationSelector 的 CSS 过渡。
+    // 动画为「关闭」时两种都不用（styles/base/transitions.css）。
+    native: document.documentElement.dataset.animation !== "none",
+    animationSelector: document.documentElement.dataset.animation === "none" ? false : ".joe_swup",
     cache: true,
     ignoreVisit: (url, { el } = {}) => shouldIgnore(url, el),
     plugins: [
-      new SwupHeadPlugin({ awaitAssets: true, timeout: 3000 }),
+      // 运行时按需加载的第三方样式（core/stylesheet.ts）在切页时保留
+      new SwupHeadPlugin({ awaitAssets: true, timeout: 3000, persistTags: "style[data-joe-runtime]" }),
       new SwupScrollPlugin({
         animateScroll: {
           betweenPages: false,
@@ -137,7 +142,11 @@ export function initSwup({
   });
 
   // 切页前：释放当前页面的事件、定时器与实例
-  swup.hooks.on("visit:start", () => runCleanups());
+  swup.hooks.on("visit:start", () => {
+    runCleanups();
+    // 之后的页面都由切换动画（View Transition）负责出现，入场动画只在首次打开页面时播放（styles/base/entrances.css）
+    document.documentElement.classList.add("is-swup-visited");
+  });
 
   // 内容替换后：登录态、评论数等可能变化，不复用旧缓存
   swup.hooks.on("content:replace", (visit, { page }) => {

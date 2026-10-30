@@ -2,7 +2,6 @@
  * 文章页交互：点赞、分享、复制版权、阅读进度、目录、字数统计、评论定位。
  */
 import tocbot from "tocbot";
-import { buildRawToc, renderRawContent } from "./raw-content";
 import { readingStats } from "./reading-stats";
 import { $, $$, headerOffset } from "../core/dom";
 import { getThemeConfig } from "../core/config";
@@ -45,6 +44,38 @@ export function initLike(): void {
   });
 }
 
+/**
+ * 打赏（正文末尾操作栏）：桌面悬停即显示收款码（纯 CSS）；触屏没有悬停，点按图标切换，
+ * 点到别处或按 Esc 收起。
+ */
+export function initDonate(): void {
+  const donate = $(".joe_detail__operate .joe_donate");
+  const icon = donate && $(".joe-font", donate);
+  if (!donate || !icon) return;
+  icon.setAttribute("role", "button");
+  icon.setAttribute("tabindex", "0");
+  icon.setAttribute("aria-label", "打赏");
+  icon.removeAttribute("aria-hidden");
+  const toggle = (open = !donate.classList.contains("is-open")) => {
+    donate.classList.toggle("is-open", open);
+    icon.setAttribute("aria-expanded", String(open));
+  };
+  icon.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggle();
+  });
+  icon.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggle();
+    }
+  });
+  listen(document, "click", (event: MouseEvent) => {
+    if (!donate.contains(event.target as Node)) toggle(false);
+  });
+  listen(document, "keydown", (event: KeyboardEvent) => event.key === "Escape" && toggle(false));
+}
+
 export function initShare(): void {
   $$("[data-joe-share-link]").forEach((link) =>
     link.addEventListener("click", (event) => {
@@ -64,26 +95,6 @@ export function initShare(): void {
     }),
   );
 
-  // 微信二维码：悬停或键盘聚焦时才生成
-  $$("[data-joe-share-weixin]").forEach((weixin) => {
-    const qrcode = $(".qrcode_wx", weixin);
-    if (!qrcode) return;
-    let rendered = false;
-    const render = async () => {
-      if (rendered) return;
-      rendered = true;
-      const { toCanvas } = await import("qrcode");
-      const canvas = document.createElement("canvas");
-      await toCanvas(canvas, weixin.dataset.url || location.href, {
-        width: 140,
-        margin: 1,
-      });
-      canvas.setAttribute("aria-label", "文章链接二维码");
-      qrcode.replaceChildren(canvas);
-    };
-    weixin.addEventListener("mouseenter", () => void render());
-    weixin.addEventListener("focus", () => void render());
-  });
 }
 
 /** 复制正文时附加版权信息 */
@@ -129,8 +140,7 @@ export function initWordCount(): void {
   const targets = $$("[data-joe-word-count]");
   const content = $("#post-inner");
   if (!targets.length || !content) return;
-  const root = renderRawContent() ?? content;
-  const clone = root.cloneNode(true) as ParentNode & Node;
+  const clone = content.cloneNode(true) as ParentNode & Node;
   clone.querySelectorAll?.("pre, script, style").forEach((el) => el.remove());
   const { words, minutes } = readingStats(clone.textContent ?? "");
   const label = `${words.toLocaleString("zh-CN")} 字 · 约 ${minutes} 分钟`;
@@ -150,12 +160,6 @@ export function initToc(): void {
   const tocSelector = mobile ? "#js-toc-mobile" : "#js-toc";
   if (!$(tocSelector)) return;
   const offset = headerOffset();
-  const raw = renderRawContent();
-  if (raw) {
-    buildRawToc(raw, $(tocSelector)!, { offset, onNavigate: () => mobile && closeOverlays() });
-    showMobileTocButton(mobile);
-    return;
-  }
   onCleanup(() => tocbot.destroy());
   tocbot.init({
     tocSelector,
@@ -167,13 +171,23 @@ export function initToc(): void {
     headingsOffset: offset,
     scrollSmoothOffset: -offset,
     scrollSmooth: true,
-    positionFixedSelector: ".toc-container",
-    positionFixedClass: "is-position-fixed",
-    fixedSidebarOffset: "auto",
+    // 不用 tocbot 的「目录固定」：侧栏吸顶由 CSS sticky 完成；而且它在节流后的滚动回调里查找 .toc-container，
+    // swup 切到没有目录的页面后回调仍会执行一次，找不到元素就报错
     onClick: () => mobile && closeOverlays(),
   });
-  if (!$(tocSelector)?.children.length) {
-    $(tocSelector)!.innerHTML = '<div class="toc-nodata">暂无目录</div>';
+  finishToc(tocSelector, mobile);
+}
+
+/**
+ * 文章没有小标题时：侧栏不留一张「暂无目录」的空卡片，手机上也不显示目录按钮。
+ * 有目录时显示手机上的目录按钮。
+ */
+function finishToc(tocSelector: string, mobile: boolean): void {
+  const toc = $(tocSelector);
+  const empty = !toc?.querySelector("a");
+  if (empty) {
+    $(".toc-container")?.setAttribute("hidden", "");
+    return;
   }
   showMobileTocButton(mobile);
 }
@@ -186,10 +200,9 @@ function showMobileTocButton(mobile: boolean): void {
   button.addEventListener("click", () => openTocDrawer());
 }
 
-/** 目录展开层级：文章元数据 toc_depth 优先，其次主题设置 */
+/** 目录展开层级（设置 post.toc_depth） */
 function tocDepth(): number {
-  const own = Number.parseInt($(".joe_detail")?.dataset.tocDepth ?? "", 10);
-  return Number.isFinite(own) ? own : getThemeConfig().post.tocDepth;
+  return getThemeConfig().post.tocDepth;
 }
 
 /** Halo 文章标题未设置 id 时补齐，保证目录锚点可用 */
@@ -209,19 +222,4 @@ export function scrollToHash(): void {
     window.scrollTo({
       top: target.getBoundingClientRect().top + window.scrollY - headerOffset(),
     });
-}
-
-/** 文章系列：「展开全部」按钮 */
-export function initSeries(): void {
-  const button = $<HTMLButtonElement>("[data-joe-series-more]");
-  const list = $(".joe_series__list");
-  if (!button || !list) return;
-  if (!list.querySelector(".is-far")) {
-    button.remove();
-    return;
-  }
-  button.addEventListener("click", () => {
-    list.classList.add("is-expanded");
-    button.remove();
-  });
 }

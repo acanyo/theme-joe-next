@@ -1,7 +1,7 @@
 /*
  * 首页「瞬间叠放卡片」（components/home/MomentsStack.astro）。
  *
- * 收起：最新一条在最前，后面的每张缩小 6%、向上移 10px 只露出一条边，叠成一摞，整摞只占一张卡片的高度。
+ * 收起：最新一条在最前，后面的每张缩小 4%、向上移 7px 只露出一条带主题色的边，叠成一摞，整摞只占一张卡片的高度。
  * 展开（悬停 / 键盘聚焦）：各张恢复原大小、依次排开，高度随之撑开；带弹性缓动，后面的稍晚一点到位。
  * 触屏设备与「减少动态效果」下直接显示展开状态。
  */
@@ -35,7 +35,7 @@
   position: relative;
   display: grid;
   margin: 0;
-  padding: 30px 0 0; /* 给后面露出的边留空间 */
+  padding: 16px 0 0; /* 给后面露出的边留空间 */
   list-style: none;
   outline: none;
   transition: padding var(--dur-slow) var(--ease-spring);
@@ -43,9 +43,8 @@
   li {
     grid-area: 1 / 1; /* 所有卡片叠在同一格 */
     z-index: calc(10 - var(--i));
-    transform: translateY(calc(var(--i) * -10px)) scale(calc(1 - var(--i) * 0.06));
+    transform: translateY(calc(var(--i) * -7px)) scale(calc(1 - var(--i) * 0.04));
     transform-origin: top center;
-    opacity: calc(1 - var(--i) * 0.18);
     transition:
       transform var(--dur-slow) var(--ease-spring),
       opacity var(--dur-base) var(--ease-out);
@@ -55,6 +54,15 @@
   li:nth-child(n + 2) .card > * {
     opacity: 0;
     transition: opacity var(--dur-fast) var(--ease-out);
+  }
+
+  /* 后面的卡片带一点主题色，越往后越深，露出的边才看得出是一摞 */
+  li:nth-child(n + 2) .card {
+    background: color-mix(in srgb, var(--theme) calc(4% + var(--i) * 4%), var(--bg-page));
+    box-shadow: 0 -1px 0 color-mix(in srgb, var(--theme) 18%, transparent);
+    transition:
+      background var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out);
   }
 }
 
@@ -124,6 +132,11 @@
     opacity: 1;
     transition-delay: 120ms;
   }
+
+  li:nth-child(n + 2) .card {
+    background: var(--bg-page);
+    box-shadow: var(--shadow);
+  }
 }
 
 @container joe-moments-stack (max-width: 600px) {
@@ -152,6 +165,11 @@
 
     li:nth-child(n + 2) .card > * {
       opacity: 1;
+    }
+
+    li:nth-child(n + 2) .card {
+      background: var(--bg-page);
+      box-shadow: var(--shadow);
     }
   }
 }

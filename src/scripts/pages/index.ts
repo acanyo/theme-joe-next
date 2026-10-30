@@ -8,6 +8,9 @@ import { initReveal } from "../features/reveal";
 import { cleanExcerpts } from "../content/excerpt";
 import { fillEmptyImages } from "../features/image-fallback";
 import { initCategoryTabs } from "../features/category-tabs";
+import { initResumeBar } from "../features/resume-bar";
+import { hideReadBadges } from "../features/freshness";
+import { dedupeCommenters } from "../features/commenters";
 import { observe } from "../core/lifecycle";
 
 /** 「查看更多」：抓取下一页并追加文章；开启自动加载时进入视口即触发 */
@@ -33,6 +36,8 @@ function initLoadMore(): void {
         .forEach((item) => list.appendChild(item));
       cleanExcerpts(list);
       fillEmptyImages(list);
+      hideReadBadges(list);
+      dedupeCommenters(list);
       initReveal(list);
       const nextButton = doc.querySelector<HTMLButtonElement>(".joe_load");
       if (nextButton?.dataset.next) {
@@ -67,5 +72,6 @@ export default function init(): void {
   initMomentsStack();
   initLoadMore();
   initCategoryTabs();
+  initResumeBar();
   void initBanner();
 }

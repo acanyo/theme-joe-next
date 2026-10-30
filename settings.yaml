@@ -4,9 +4,25 @@ metadata:
   name: theme-joe-next-setting
 spec:
   forms:
-    - group: general
-      label: 基础
+    - group: appearance
+      label: 外观
       formSchema:
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 显示
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 明暗模式与内容宽度
         - $formkit: select
           name: color_mode
           id: color_mode
@@ -27,9 +43,10 @@ spec:
           name: light_hours
           id: light_hours
           key: light_hours
+          if: $get(color_mode).value === 'auto'
           label: 浅色时段
           value: 5:00~19:00
-          help: 仅自动模式生效，格式 5:00~19:00，时段外为暗黑模式
+          help: 格式 5:00~19:00，时段外为暗黑模式
         - $formkit: number
           name: content_width
           id: content_width
@@ -37,30 +54,6 @@ spec:
           label: 内容最大宽度
           value: 1320
           help: 单位 px，默认 1320
-        - $formkit: attachment
-          name: favicon
-          id: favicon
-          key: favicon
-          label: 网站图标
-          value: ""
-          help: 覆盖 Halo 的站点图标，建议 64×64 的 png
-        - $formkit: toggle
-          name: link_target
-          id: link_target
-          key: link_target
-          label: 链接打开方式
-          value: default
-          help: 默认：文章正文和瞬间里的链接在新标签打开；当前页 / 新标签：内容区域（不含导航栏与页脚）的所有链接统一按此打开
-          options:
-            - value: default
-              label: 默认
-            - value: current
-              label: 当前页
-            - value: new
-              label: 新标签
-    - group: appearance
-      label: 外观
-      formSchema:
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
@@ -118,11 +111,11 @@ spec:
                 - $el: span
                   attrs:
                     style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
-                - 背景与字体
+                - 背景
             - $el: div
               attrs:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
-              children: 背景图、自定义字体与灰色模式
+              children: 浅色 / 暗黑模式的背景图
         - $formkit: attachment
           name: background_light
           id: background_light
@@ -137,20 +130,6 @@ spec:
           label: 暗黑背景图
           help: 填写后暗黑模式使用这张背景图，留空使用默认背景色
           value: ""
-        - $formkit: attachment
-          name: custom_font
-          id: custom_font
-          key: custom_font
-          label: 自定义字体
-          value: ""
-          help: 字体文件地址，建议 woff2；留空使用系统字体
-        - $formkit: switch
-          name: grayscale
-          id: grayscale
-          key: grayscale
-          label: 全站灰色
-          value: false
-          help: 用于哀悼日等场景
     - group: navbar
       label: 导航
       formSchema:
@@ -194,27 +173,13 @@ spec:
           label: 导航菜单
           value: ""
           help: 留空使用 Halo 的主菜单
-        - $formkit: switch
-          name: logo
-          id: logo
-          key: logo
-          label: 显示 Logo
-          help: 使用 Halo 站点设置中的 Logo
-          value: false
-        - $formkit: text
-          name: logo_link
-          id: logo_link
-          key: logo_link
-          label: Logo 链接
-          value: ""
-          help: "留空回到首页，填 # 不跳转"
         - $formkit: number
           name: logo_radius
           id: logo_radius
           key: logo_radius
           label: Logo 圆角
           value: 4
-          help: 单位 px
+          help: 单位 px；在 Halo「系统设置 → 基本设置」里设置了 Logo 时显示 Logo，否则显示站点标题
           min: 0
           max: 40
         - $formkit: switch
@@ -312,27 +277,34 @@ spec:
               attrs:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
               children: 切页方式、入场动画、加载条与返回顶部
+        - $formkit: switch
+          name: swup
+          id: swup
+          key: swup
+          label: 无刷新切换（swup）
+          value: true
+          help: 只替换内容区域，导航与页脚不重新加载，切换更快、不闪白；关闭后为整页加载（支持的浏览器仍有淡入淡出）。如遇插件兼容问题可关闭
         - $formkit: select
-          name: page_transition
-          id: page_transition
-          key: page_transition
-          label: 页面切换方式
-          value: native
-          help: 原生过渡：浏览器自带的跨页面淡入淡出，仍是整页加载，最稳定（Chrome / Edge / Safari 18+ 生效，其他浏览器无影响）。无刷新切换（swup）：只替换内容区域，切换更快、页面不闪白，并预加载链接；如遇插件兼容问题可切回原生过渡。
+          name: page_animation
+          id: page_animation
+          key: page_animation
+          label: 切换动画
+          value: slide
+          help: 切换页面时内容区域的动画；系统开启「减少动态效果」时不做动画
           options:
+            - value: slide
+              label: 淡入并上移
+            - value: fade
+              label: 淡入淡出
             - value: none
               label: 关闭
-            - value: native
-              label: 原生过渡（推荐）
-            - value: swup
-              label: 无刷新切换（swup）
         - $formkit: switch
           name: swup_preload
           id: swup_preload
           key: swup_preload
           label: 预加载链接
           value: true
-          if: $get(page_transition).value === 'swup'
+          if: $get(swup).value === true
           help: 鼠标悬停或触摸链接时提前请求页面，点击后几乎立即切换
         - $formkit: switch
           name: reveal
@@ -465,7 +437,7 @@ spec:
               label: 小黑猫
               render: /themes/theme-joe-next/assets/previews/cursor-black_cat.webp
           render-type: image
-          size: 112
+          size: 80
           gap: 8
         - $formkit: select
           name: cursor_effect
@@ -658,11 +630,11 @@ spec:
           value: []
           itemLabels:
             - type: image
-              label: $value.data_by_custom.banner_img
+              label: $value.custom.image
             - type: text
-              label: $value.banner_section_type
+              label: $value.custom.title
             - type: text
-              label: $value.data_by_custom.banner_title
+              label: $value.source
           children:
             - $formkit: select
               name: source
@@ -767,7 +739,7 @@ spec:
               label: 创意性
               render: /themes/theme-joe-next/assets/previews/carousel-creative.svg
           render-type: image
-          size: 112
+          size: 80
           gap: 8
         - $formkit: switch
           value: false
@@ -833,27 +805,48 @@ spec:
                 - $el: span
                   attrs:
                     style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
-                - 精选分类
+                - 精选推荐
             - $el: div
               attrs:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
-              children: 首页顶部的分类卡片
+              children: 首页顶部的图片卡片，可以放分类，也可以放任意链接
         - $formkit: switch
           value: false
           name: featured
           id: featured
           key: featured
-          label: 精选分类
-          help: 首页顶部的精选分类卡片
-        - $formkit: repeater
+          label: 精选推荐
+          help: 首页顶部的一排图片卡片
+        - $formkit: text
+          name: featured_title
+          id: featured_title
+          key: featured_title
+          if: $get(featured).value
+          label: 标题
+          value: 精选推荐
+        - $formkit: switch
+          name: featured_more
+          id: featured_more
+          key: featured_more
+          if: $get(featured).value
+          label: 显示「全部分类」入口
+          value: false
+          help: 卡片主要放分类时可以打开，标题右侧显示到分类页的链接
+        - $formkit: array
           name: featured_items
           id: featured_items
           key: featured_items
           if: $get(featured).value
           max: 4
-          min: 1
-          label: 精选分类内容
+          label: 卡片
           value: []
+          itemLabels:
+            - type: image
+              label: $value.custom.image
+            - type: text
+              label: $value.custom.title
+            - type: text
+              label: $value.category.name
           children:
             - $formkit: radio
               name: source
@@ -960,6 +953,34 @@ spec:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
               children: 分页方式与缩略图
         - $formkit: switch
+          name: card_commenters
+          id: card_commenters
+          key: card_commenters
+          label: 文章卡片显示评论者头像
+          value: true
+          help: 在文章卡片底部叠放最近几位评论者的头像；每篇有评论的文章会多一次评论查询
+        - $formkit: switch
+          name: compact_mobile
+          id: compact_mobile
+          key: compact_mobile
+          label: 手机端紧凑首页
+          value: true
+          help: 屏幕较窄时，精选推荐改为横向滑动的一行，瞬间只显示最新一条，让文章列表更早出现在第一屏
+        - $formkit: switch
+          name: resume_bar
+          id: resume_bar
+          key: resume_bar
+          label: 继续阅读提示
+          value: true
+          help: 访客上次有文章读到一半时，在文章列表上方提示「上次读到《…》45%」，点击回到上次的位置；阅读记录只保存在访客的浏览器里
+        - $formkit: switch
+          name: freshness_badge
+          id: freshness_badge
+          key: freshness_badge
+          label: 新文章 / 更新标记
+          value: true
+          help: 7 天内发布的文章标「新」；早先发布、7 天内又修改过的标「已更新」。访客读过后自动去掉
+        - $formkit: switch
           name: category_tabs
           id: category_tabs
           key: category_tabs
@@ -975,6 +996,20 @@ spec:
           min: 1
           max: 10
           if: $get(category_tabs).value === true
+        - $formkit: select
+          name: list_sort
+          id: list_sort
+          key: list_sort
+          label: 文章排序
+          value: published
+          help: 首页文章列表的顺序，置顶文章始终在最前；分类、标签等页面不受影响
+          options:
+            - value: published
+              label: 最新发布
+            - value: updated
+              label: 最近更新
+            - value: views
+              label: 最多阅读
         - $formkit: toggle
           name: list_layout
           id: list_layout
@@ -1122,13 +1157,27 @@ spec:
           label: 头像加载失败时
           value: /themes/theme-joe-next/assets/images/peeps-avatar.png
           help: 留空则按昵称首字生成文字头像
-        - $formkit: text
-          name: text_avatar
-          id: text_avatar
-          key: text_avatar
-          label: 文字头像样式
-          value: "{bgColor:'',textColor:'',useTextGradient:false}"
-          help: "格式 {bgColor: '', textColor: '', useTextGradient: false}，留空颜色为随机渐变"
+        - $formkit: color
+          name: text_avatar_bg
+          id: text_avatar_bg
+          key: text_avatar_bg
+          label: 文字头像背景色
+          value: ""
+          help: 没有头像时按昵称首字生成文字头像；留空为随机渐变
+        - $formkit: color
+          name: text_avatar_color
+          id: text_avatar_color
+          key: text_avatar_color
+          label: 文字头像文字颜色
+          value: ""
+          help: 留空时按背景自动选黑或白
+        - $formkit: switch
+          name: text_avatar_gradient
+          id: text_avatar_gradient
+          key: text_avatar_gradient
+          label: 文字使用随机渐变
+          value: false
+          help: 未设置文字颜色时生效
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
@@ -1396,9 +1445,9 @@ spec:
           value: []
           itemLabels:
             - type: text
-              label: $value.socials_select
+              label: $value.platform
             - type: text
-              label: $value.socialUrl
+              label: $value.url
           children:
             - $formkit: select
               name: platform
@@ -1465,9 +1514,9 @@ spec:
           label: 社交账号（自定义）
           itemLabels:
             - type: text
-              label: $value.socials_name
+              label: $value.name
             - type: text
-              label: $value.socials_url
+              label: $value.url
           children:
             - $formkit: text
               name: name
@@ -1542,6 +1591,16 @@ spec:
           value: 5
           min: 1
           max: 20
+          help: 「热门文章」与「近期热门」共用
+        - $formkit: number
+          name: recent_days
+          id: recent_days
+          key: recent_days
+          label: 近期热门的时间范围（天）
+          value: 30
+          min: 1
+          max: 365
+          help: 「近期热门」只统计这么多天内发布的文章
         - $formkit: array
           name: widgets
           id: widgets
@@ -1557,7 +1616,7 @@ spec:
                 count: "15"
           itemLabels:
             - type: text
-              label: $value.template_aside
+              label: $value.type
           children:
             - $formkit: select
               name: type
@@ -1580,6 +1639,10 @@ spec:
                   label: 最新文章
                 - value: popular
                   label: 热门文章
+                - value: recent_popular
+                  label: 近期热门
+                - value: post_tabs
+                  label: 文章（最新 / 热门 / 近期热门三合一）
                 - value: life
                   label: 人生倒计时
                 - value: comments
@@ -1633,11 +1696,11 @@ spec:
                   value: []
                   itemLabels:
                     - type: image
-                      label: $value.reward_url
+                      label: $value.image
                     - type: text
-                      label: $value.reward_label
+                      label: $value.label
                     - type: text
-                      label: $value.reward_type
+                      label: $value.kind
                   children:
                     - $formkit: text
                       name: label
@@ -1898,7 +1961,6 @@ spec:
           id: on_page
           key: on_page
           label: 自定义页面
-          help: 单个页面可用元数据 enable_aside 关闭
         - $formkit: switch
           value: true
           name: on_tags
@@ -1997,7 +2059,7 @@ spec:
           id: outdated_notice
           key: outdated_notice
           label: 过期提醒
-          help: 文章长时间未更新时在顶部提示
+          help: 文章超过设定天数未更新时，在正文上方显示一行浅色提示
           value: false
         - $formkit: number
           if: $get(outdated_notice).value === true
@@ -2026,9 +2088,9 @@ spec:
           name: outdated_text
           id: outdated_text
           key: outdated_text
-          label: 提醒文字
+          label: 附加文字
           value: ""
-          help: 留空使用默认文字
+          help: 附在过期提示后面，例如「部分素材来自网络，如有侵权请联系删除」；填写后所有文章都会显示这一行
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
@@ -2051,7 +2113,6 @@ spec:
           key: image_align
           label: 图片对齐
           value: center
-          help: 单篇文章可用元数据 img_align 覆盖
           options:
             - value: left
               label: 左对齐
@@ -2065,13 +2126,21 @@ spec:
           key: image_max_width
           label: 图片最大宽度
           value: 100%
-          help: 需带单位，默认 100%；单篇文章可用元数据 img_max_width 覆盖
+          help: 需带单位，默认 100%
+        - $formkit: number
+          name: reading_width
+          id: reading_width
+          key: reading_width
+          label: 正文最大宽度
+          value: 760
+          help: 单位 px。正文文字、图片、代码块在文章卡片里居中，一行不会太长；填 0 不限制，铺满卡片
+          min: 0
+          max: 2000
         - $formkit: switch
           name: indent
           id: indent
           key: indent
           label: 段落首行缩进
-          help: 单篇文章可用元数据 enable_indent 覆盖
           value: false
         - $formkit: switch
           name: copyable
@@ -2100,7 +2169,6 @@ spec:
           id: toc
           key: toc
           label: 文章目录
-          help: 单篇文章可用元数据 enable_toc 关闭
           value: true
         - $formkit: switch
           name: toc_mobile
@@ -2135,7 +2203,7 @@ spec:
           name: related
           id: related
           key: related
-          label: 相关文章
+          label: 侧栏相关文章
           help: 侧边栏显示同分类或同标签的文章
           value: true
         - $formkit: number
@@ -2148,6 +2216,13 @@ spec:
           help: 默认 5
           min: 1
           max: 20
+        - $formkit: switch
+          name: related_cards
+          id: related_cards
+          key: related_cards
+          label: 正文下方的相关文章卡片
+          value: true
+          help: 在上一篇 / 下一篇下方显示最多 4 篇带封面的相关文章；手机上侧栏隐藏时也能看到
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
@@ -2259,11 +2334,9 @@ spec:
           value: []
           itemLabels:
             - type: image
-              label: $value.ads_img
+              label: $value.image
             - type: text
-              label: $value.ads_url
-            - type: code
-              label: $value.ads_code
+              label: $value.url
           children:
             - $formkit: attachment
               name: image
@@ -2307,11 +2380,9 @@ spec:
           value: []
           itemLabels:
             - type: image
-              label: $value.ads_img
+              label: $value.image
             - type: text
-              label: $value.ads_url
-            - type: code
-              label: $value.ads_code
+              label: $value.url
           children:
             - $formkit: attachment
               name: image
@@ -2355,11 +2426,9 @@ spec:
           value: []
           itemLabels:
             - type: image
-              label: $value.ads_img
+              label: $value.image
             - type: text
-              label: $value.ads_url
-            - type: code
-              label: $value.ads_code
+              label: $value.url
           children:
             - $formkit: attachment
               name: image
@@ -2398,37 +2467,12 @@ spec:
             - $el: div
               attrs:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
-              children: 文章底部的分享按钮
+              children: 复制文章链接、生成分享海报
         - $formkit: switch
           name: enabled
           id: enabled
           key: enabled
           label: 分享
-          value: true
-          help: 单篇文章可用元数据 enable_share 关闭
-        - $formkit: switch
-          name: wechat
-          id: wechat
-          key: wechat
-          label: 微信
-          value: true
-        - $formkit: switch
-          name: qq
-          id: qq
-          key: qq
-          label: QQ
-          value: true
-        - $formkit: switch
-          name: qzone
-          id: qzone
-          key: qzone
-          label: QQ 空间
-          value: true
-        - $formkit: switch
-          name: weibo
-          id: weibo
-          key: weibo
-          label: 微博
           value: true
         - $formkit: switch
           name: link
@@ -2436,6 +2480,13 @@ spec:
           key: link
           label: 复制链接
           value: true
+        - $formkit: switch
+          name: poster
+          id: poster
+          key: poster
+          label: 分享海报
+          value: true
+          help: 生成一张带封面、标题、摘要和文章二维码的图片，可保存或复制后发到微信、朋友圈等
         - $formkit: textarea
           if: $get(link).value === true
           name: link_template
@@ -2466,7 +2517,6 @@ spec:
           key: donate
           label: 打赏
           value: false
-          help: 单篇文章可用元数据 enable_donate 关闭
         - $formkit: attachment
           if: $get(donate).value === true
           name: donate_alipay
@@ -2947,6 +2997,69 @@ spec:
           key: enabled
           label: 页脚
           value: true
+        - $formkit: switch
+          if: $get(enabled).value == true
+          name: nav
+          id: nav
+          key: nav
+          label: 页脚导航
+          value: false
+          help: 在页脚右侧显示几组链接，可同时显示社交账号图标
+        - $formkit: array
+          if: $get(nav).value == true
+          name: nav_groups
+          id: nav_groups
+          key: nav_groups
+          label: 链接分组
+          value: []
+          max: 5
+          itemLabels:
+            - type: text
+              label: $value.title
+          children:
+            - $formkit: text
+              name: title
+              id: title
+              key: title
+              label: 分组标题
+              value: ""
+              validation: required
+            - $formkit: array
+              name: links
+              id: links
+              key: links
+              label: 链接
+              value: []
+              max: 8
+              itemLabels:
+                - type: text
+                  label: $value.name
+                - type: text
+                  label: $value.url
+              children:
+                - $formkit: text
+                  name: name
+                  id: name
+                  key: name
+                  label: 名称
+                  value: ""
+                  validation: required
+                - $formkit: text
+                  name: url
+                  id: url
+                  key: url
+                  label: 链接
+                  value: ""
+                  validation: required
+                  help: 站内页面写 /archives 这样的路径；站外链接写完整地址，会在新窗口打开
+        - $formkit: switch
+          if: $get(nav).value == true
+          name: nav_social
+          id: nav_social
+          key: nav_social
+          label: 显示社交账号图标
+          value: true
+          help: 使用「博主信息 → 社交账号」中的配置
         - $formkit: toggle
           if: $get(enabled).value == true
           name: position
@@ -2977,7 +3090,7 @@ spec:
           id: uptime
           key: uptime
           label: 运行时间
-          help: 实时显示网站已运行多久
+          help: 页脚左侧大字显示网站已运行的天数，并显示文章数等站点数据
           value: false
         - $formkit: text
           if: $get(uptime).value == true
@@ -2987,6 +3100,31 @@ spec:
           label: 起始时间
           value: 2021/11/11 06:30
           help: 格式 2021/11/11 06:30
+        - $formkit: switch
+          if: $get(uptime).value == true
+          name: anniversary
+          id: anniversary
+          key: anniversary
+          label: 建站纪念进度
+          value: false
+          help: 在运行天数下方显示一条进度：从起始时间到第 N 年（如「十年之约」）已走过多少
+        - $formkit: number
+          if: $get(anniversary).value == true
+          name: anniversary_years
+          id: anniversary_years
+          key: anniversary_years
+          label: 目标年数
+          value: 10
+          min: 1
+          max: 100
+          validation: required|between:1,100
+        - $formkit: text
+          if: $get(anniversary).value == true
+          name: anniversary_label
+          id: anniversary_label
+          key: anniversary_label
+          label: 纪念名称
+          value: 十年之约
         - $formkit: switch
           if: $get(enabled).value == true
           name: powered_by
@@ -3076,6 +3214,7 @@ spec:
           key: icp
           label: ICP 备案号
           value: false
+          help: 打开后在下方填写备案号
         - $formkit: switch
           if: $get(enabled).value === true
           name: police
@@ -3083,39 +3222,45 @@ spec:
           key: police
           label: 公安备案号
           value: false
+          help: 打开后在下方填写备案号
+        # 子项的 id 不能与上面的开关（icp / police）重名，否则 $get(icp) 读到的是输入框的值，整组永远不显示
         - $formkit: group
           name: filing
           id: filing
           key: filing
           label: 备案信息
+          if: $get(enabled).value === true && ($get(icp).value === true || $get(police).value === true)
           children:
             - $formkit: text
+              if: $get(icp).value === true
               name: icp
-              id: icp
-              key: icp
+              id: filing_icp
+              key: filing_icp
               label: ICP 备案号
               value: ""
-              help: ICP 备案信息将展示在页脚中，不填不展示（示例：鄂ICP备20001234号-1）
+              help: 显示在页脚版权后面，例如：鄂ICP备20001234号-1
             - $formkit: text
+              if: $get(icp).value === true
               name: icp_link
-              id: icp_link
-              key: icp_link
-              label: ICP备案跳转链接
+              id: filing_icp_link
+              key: filing_icp_link
+              label: ICP 备案跳转链接
               value: https://beian.miit.gov.cn/
             - $formkit: text
+              if: $get(police).value === true
               name: police
-              id: police
-              key: police
-              label: 公网安备号
+              id: filing_police
+              key: filing_police
+              label: 公安备案号
               value: ""
-              help: 公网安备信息将展示在页脚中，不填不展示，也可在 “页脚” 一栏中单独关闭（示例：鄂公网安备42011102001234号）
+              help: 显示在页脚最下方，例如：鄂公网安备42011102001234号
             - $formkit: text
+              if: $get(police).value === true
               name: police_link
-              id: police_link
-              key: police_link
-              label: 公安联网备案跳转链接
+              id: filing_police_link
+              key: filing_police_link
+              label: 公安备案跳转链接
               value: https://beian.mps.gov.cn/#/query/webSearch
-          if: $get(enabled).value === true && ($get(icp).value === true || $get(police).value === true)
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"

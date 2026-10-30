@@ -4,7 +4,6 @@
  * `subject` 为当前内容变量名：文章页为 "post"，独立页面为 "singlePage"。
  */
 import { COMMENT_ENABLED, el } from "../../config/expressions";
-import { POST_ICONS } from "../../data/post-icons";
 import PostAds from "./PostAds.astro";
 import Icon from "../common/Icon.astro";
 
@@ -14,11 +13,9 @@ interface Props {
 
 const { subject: s } = Astro.props;
 const isPost = s === "post";
-const ann = (key: string, fallback: string) =>
-  `#annotations.getOrDefault(${s}, '${key}', '${fallback}')`;
 const ARTICLE_CLASS = [
-  `#annotations.getOrDefault(${s}, 'img_align', theme.config.post.image_align ?: 'center') + '-img'`,
-  `${ann("enable_copy", "true")} == 'false' or !theme.config.post.copyable ? 'uncopy' : ''`,
+  "(theme.config.post.image_align ?: 'center') + '-img'",
+  "!theme.config.post.copyable ? 'uncopy' : ''",
   "theme.config.post.indent ? 'indent' : ''",
   "theme.config.code.line_numbers and !theme.config.code.wrap ? 'line-numbers' : ''",
   "theme.config.code.inline_select ? 'single_code_select' : ''",
@@ -29,7 +26,8 @@ const ARTICLE_CLASS = [
 
 <div
   class="joe_detail"
-  th:attr={`data-cid=\${${s}.metadata.name}, data-kind=${isPost ? "Post" : "SinglePage"}, data-likes=\${${s}.stats.upvote}, data-toc-depth=\${#annotations.getOrDefault(${s}, 'toc_depth', '')}, data-fold-long-code=\${#annotations.getOrDefault(${s}, 'enable_fold_long_code', 'true')}`}
+  th:style="|--reading-width: ${theme.config.post.reading_width == 0 ? 'none' : (theme.config.post.reading_width ?: 760) + 'px'}|"
+  th:attr={`data-cid=\${${s}.metadata.name}, data-kind=${isPost ? "Post" : "SinglePage"}, data-likes=\${${s}.stats.upvote}`}
   th:with={`author = \${contributorFinder.getContributor(${s}.spec.owner)}`}
 >
   {isPost && (
@@ -47,13 +45,6 @@ const ARTICLE_CLASS = [
       />
     </div>
   )}
-  {isPost && (
-    <span
-      class="joe_raw"
-      title="原始内容"
-      th:if={`\${${ann("use_raw_content", "false")} == 'true'}`}
-    ></span>
-  )}
   <div class="joe_detail-wrapper">
     <th-block th:unless={isPost ? "${(theme.config.post.header_style ?: 'immersive') == 'immersive'}" : "${false}"}>
     <h1
@@ -64,7 +55,7 @@ const ARTICLE_CLASS = [
 
     <div
       class="joe_detail__count"
-      th:if={`\${theme.config.post.meta and ${ann("enable_page_meta", "true")} == 'true'}`}
+      th:if="${theme.config.post.meta}"
     >
       <div class="joe_detail__count-information">
         <img
@@ -114,67 +105,43 @@ const ARTICLE_CLASS = [
     </div>
     </th-block>
 
-    <div
-      class="joe_detail__overdue"
-      th:if={`\${theme.config.post.outdated_notice and ${ann("enable_passage_tips", "true")} == 'true'}`}
-      th:with={`staleDays = \${(#dates.createNow().getTime() - ${s}.status.lastModifyTime.toEpochMilli()) / 86400000}`}
+    <!-- 过期提醒（设置 post.outdated_notice）：文章超过设定天数未更新时，正文上方一行浅色提示；
+         填了提醒文字时附在后面。没过期且没填文字时不显示 -->
+    <th-block
+      th:if="${theme.config.post.outdated_notice}"
+      th:with={`staleDays = \${(#dates.createNow().getTime() - ${s}.status.lastModifyTime.toEpochMilli()) / 86400000}, isStale = \${staleDays >= #conversions.convert(theme.config.post.outdated_days ?: 30, 'java.lang.Integer')}`}
     >
-      <div class="joe_detail__overdue-wrapper">
-        <div class="title">
-          <Fragment set:html={POST_ICONS.tip} />
-          <span class="text">温馨提示：</span>
-        </div>
-        <div class="content">
-          <th-block th:if="${staleDays >= #conversions.convert(theme.config.post.outdated_days ?: 30, 'java.lang.Integer')}">
-            <th-block
-              th:if="${theme.config.post.outdated_format}"
-              th:text={`|本文最后更新于 \${#dates.format(${s}.status.lastModifyTime, 'yyyy-MM-dd')}，若内容或图片失效，请留言反馈。|`}
-            ></th-block>
-            <th-block
-              th:unless="${theme.config.post.outdated_format}"
-              th:text="|本文最后更新于 ${staleDays} 天前，若内容或图片失效，请留言反馈。|"
-            ></th-block>
-          </th-block>
-          <span th:text="${theme.config.post.outdated_text ?: '部分素材来自网络，若不小心影响到您的利益，请联系我们删除。'}"></span>
-        </div>
-      </div>
-    </div>
+      <p
+        class="joe_detail__overdue"
+        th:if="${isStale or not #strings.isEmpty(theme.config.post.outdated_text)}"
+        role="note"
+      >
+        <Icon name="hourglass" />
+        <th-block th:if="${isStale}">
+          <span
+            th:if="${theme.config.post.outdated_format}"
+            th:text={`|本文最后更新于 \${#dates.format(${s}.status.lastModifyTime, 'yyyy-MM-dd')}，部分内容可能已过时|`}
+          ></span>
+          <span
+            th:unless="${theme.config.post.outdated_format}"
+            th:text="|本文最后更新于 ${staleDays} 天前，部分内容可能已过时|"
+          ></span>
+        </th-block>
+        <span class="extra" th:unless="${#strings.isEmpty(theme.config.post.outdated_text)}" th:text="${theme.config.post.outdated_text}"></span>
+      </p>
+    </th-block>
 
     {isPost && <PostAds position="top" />}
 
     <article
       class={`joe_detail__article animated fadeIn`}
       th:classappend={`|${ARTICLE_CLASS}|`}
-      th:style={`|--img-max-width: \${#annotations.getOrDefault(${s}, 'img_max_width', theme.config.post.image_max_width ?: '100%')}|`}
+      th:style="|--img-max-width: ${theme.config.post.image_max_width ?: '100%'}|"
     >
-      <div
-        id="post-inner"
-        th:if={`\${${ann("use_raw_content", "false")} != 'true'}`}
-        th:utext={`\${${s}.content.content}`}
-      ></div>
-      <div
-        id="post-inner"
-        th:if={`\${${ann("use_raw_content", "false")} == 'true'}`}
-        class="joe_raw_content"
-        th:text={`\${${s}.content.content}`}
-      ></div>
+      <div id="post-inner" th:utext={`\${${s}.content.content}`}></div>
     </article>
 
-    {isPost && (
-      <div
-        class="joe_detail__agree"
-        th:if="${theme.config.post.like and #annotations.getOrDefault(post, 'enable_like', 'true') == 'true'}"
-      >
-        <button type="button" class="agree" data-joe-like aria-label="点赞">
-          <span class="icon">
-            <Icon name="like" class="icon-like" />
-            <Icon name="like-fill" class="icon-unlike" />
-          </span>
-          <span class="nums" th:text="${post.stats.upvote}">
-            0
-          </span>
-        </button>
-      </div>
-    )}
+    <!-- 正文下方的操作栏（文章页：标签、点赞、分享、打赏，components/post/PostOperate.astro） -->
+    <slot name="footer" />
   </div>
 </div>

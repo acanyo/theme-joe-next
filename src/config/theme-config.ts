@@ -11,14 +11,14 @@
 
 /** 前端字段名 -> 服务端 SpEL 取值表达式 */
 export const SERVER_CONFIG_FIELDS = {
-  themeMode: "theme.config.general.color_mode",
-  lightTimeScope: "theme.config.general.light_hours",
+  // 这三项从「基础」移到了「外观」，读不到时回退旧位置
+  themeMode: "theme.config.appearance?.color_mode ?: (theme.config.general?.color_mode ?: 'user')",
+  lightTimeScope: "theme.config.appearance?.light_hours ?: theme.config.general?.light_hours",
   enableLoadingBar: "theme.config.effects.loading_bar",
   enableBack2top: "theme.config.effects.back_to_top",
   enableBack2topSmooth: "theme.config.effects.back_to_top_smooth",
   enableFixedHeader: "theme.config.navbar.sticky",
-  linkBehavior: "theme.config.general.link_target",
-  pageTransition: "theme.config.effects.page_transition",
+  pageTransition: "theme.config.effects.swup ? 'swup' : (theme.config.effects.page_animation == 'none' ? 'none' : 'native')",
   swupPreload: "theme.config.effects.swup_preload",
   cursorEffect: "theme.config.effects.cursor_effect",
   backdrop: "theme.config.effects.backdrop",
@@ -30,7 +30,6 @@ export const SERVER_CONFIG_FIELDS = {
   enableConsoleTheme: "theme.config.footer.console_banner",
   enableDebug: "theme.config.footer.debug",
   showLoadedTime: "theme.config.footer.console_timing",
-  favicon: "theme.config.general.favicon",
   footerPosition: "theme.config.footer.position",
   enableBirthday: "theme.config.footer.uptime",
   birthday: "theme.config.footer.since",
@@ -51,7 +50,11 @@ export const SERVER_CONFIG_FIELDS = {
   bigBannerTitle: "theme.config.home.hero_title",
   enableBigBannerHitokoto: "theme.config.home.hero_hitokoto",
   defaultAvatar: "theme.config.blogger.fallback_avatar",
-  generateAvatarOpts: "theme.config.blogger.text_avatar",
+  textAvatarBg: "theme.config.blogger.text_avatar_bg",
+  textAvatarColor: "theme.config.blogger.text_avatar_color",
+  textAvatarGradient: "theme.config.blogger.text_avatar_gradient",
+  // 旧版「文字头像样式」（一段对象字面量），拆成上面三项之后仍读取，作为回退
+  generateAvatarOpts: "theme.config.blogger?.text_avatar",
   linksDefaultLogo: "theme.config.pages.links_fallback_logo",
   enableCodeTitle: "theme.config.code.title",
   enableCodeHr: "theme.config.code.title_divider",
@@ -98,7 +101,6 @@ export interface ThemeConfig {
   enableBack2top: boolean;
   enableBack2topSmooth: boolean;
   enableFixedHeader: boolean;
-  linkBehavior: "default" | "current" | "new";
   pageTransition: "none" | "native" | "swup";
   swupPreload: boolean;
   cursorEffect: string;
@@ -111,7 +113,6 @@ export interface ThemeConfig {
   enableConsoleTheme: boolean;
   enableDebug: boolean;
   showLoadedTime: boolean;
-  favicon: string;
   footerFixed: boolean;
   enableBirthday: boolean;
   birthday: string;
@@ -186,6 +187,16 @@ const toNumber = (v: RawValue, fallback: number): number => {
 const toStr = (v: RawValue, fallback = ""): string =>
   v === null || v === undefined ? fallback : String(v);
 
+/** 文字头像：新的三项设置优先，没填的项用旧版对象字面量里的值 */
+function avatarOptions(raw: RawThemeConfig): AvatarOptions {
+  const legacy = parseAvatarOptions(toStr(raw.generateAvatarOpts));
+  return {
+    bgColor: toStr(raw.textAvatarBg) || legacy.bgColor || "",
+    textColor: toStr(raw.textAvatarColor) || legacy.textColor || "",
+    useTextGradient: toBool(raw.textAvatarGradient) || legacy.useTextGradient === true,
+  };
+}
+
 /**
  * 解析 `{bgColor:'',textColor:'',useTextGradient:false}` 这种宽松对象字面量。
  * 设置项历史上就是这种格式，这里做一次安全的规范化，不使用 eval。
@@ -214,7 +225,6 @@ export function normalizeThemeConfig(
   assetsBase: string,
 ): ThemeConfig {
   const themeMode = toStr(raw.themeMode, "user");
-  const linkBehavior = toStr(raw.linkBehavior, "default");
   return {
     themeMode: (["user", "auto", "light", "dark"].includes(themeMode)
       ? themeMode
@@ -230,9 +240,6 @@ export function normalizeThemeConfig(
       ? toStr(raw.pageTransition)
       : "native") as ThemeConfig["pageTransition"],
     swupPreload: toBool(raw.swupPreload, true),
-    linkBehavior: (["default", "current", "new"].includes(linkBehavior)
-      ? linkBehavior
-      : "default") as ThemeConfig["linkBehavior"],
     cursorEffect: toStr(raw.cursorEffect, "off"),
     backdrop: toStr(raw.backdrop, "off"),
     enableContextMenu: toBool(raw.enableContextMenu),
@@ -243,7 +250,6 @@ export function normalizeThemeConfig(
     enableConsoleTheme: toBool(raw.enableConsoleTheme),
     enableDebug: toBool(raw.enableDebug),
     showLoadedTime: toBool(raw.showLoadedTime),
-    favicon: toStr(raw.favicon),
     footerFixed: toStr(raw.footerPosition) === "fixed",
     enableBirthday: toBool(raw.enableBirthday),
     birthday: toStr(raw.birthday),
@@ -269,7 +275,7 @@ export function normalizeThemeConfig(
       hitokoto: toBool(raw.enableBigBannerHitokoto, true),
     },
     defaultAvatar: toStr(raw.defaultAvatar),
-    avatarOptions: parseAvatarOptions(toStr(raw.generateAvatarOpts)),
+    avatarOptions: avatarOptions(raw),
     linksDefaultLogo: toStr(raw.linksDefaultLogo),
     code: {
       title: toBool(raw.enableCodeTitle, true),

@@ -40,9 +40,9 @@ describe("normalizeBooleanSettings", () => {
   it("adds settings.yaml defaults to bare value settings", () => {
     assert.equal(
       normalizeBooleanSettings(
-        "<p th:if=\"${theme.config.general.color_mode == 'user'}\"></p>",
+        "<p th:if=\"${theme.config.appearance.color_mode == 'user'}\"></p>",
       ),
-      "<p th:if=\"${(theme.config.general.color_mode ?: 'user') == 'user'}\"></p>",
+      "<p th:if=\"${(theme.config.appearance.color_mode ?: 'user') == 'user'}\"></p>",
     );
   });
   it("keeps value fallbacks written in the template", () => {

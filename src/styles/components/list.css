@@ -433,18 +433,25 @@
       /*   color: var(--theme);*/
       /* }*/
 
+      /* 标题前的状态图标（置顶 / 新 / 已更新）：只有图标，与标题文字同高 */
       .badge {
-        height: 20px;
-        padding: 0 6px;
-        margin-right: 5px;
-        line-height: 20px;
-        font-size: 12px;
-        white-space: nowrap;
-        vertical-align: 2px;
-        font-weight: 600;
-        color: var(--theme);
-        background: var(--tint);
-        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        margin-right: 6px;
+        vertical-align: -2px;
+        color: var(--theme-text);
+
+        .joe-font {
+          font-size: 16px;
+        }
+      }
+
+      .badge--pinned .joe-font {
+        transform: rotate(35deg);
+      }
+
+      .badge--new {
+        color: #d97706;
       }
     }
 
@@ -590,6 +597,11 @@
         transition:
           opacity var(--dur-base) var(--ease-out),
           transform 0.4s cubic-bezier(0.4, 0, 0.25, 1);
+      }
+
+      /* 封面分类角标只在双列卡片模式显示 */
+      .cover-category {
+        display: none;
       }
 
       time {
@@ -904,9 +916,32 @@
         border-radius: 0;
       }
 
+      /* 日期已在卡片底部，封面角标改为分类 */
       time {
-        transform: none;
+        display: none;
       }
+
+      .cover-category {
+        display: block;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        left: 10px;
+        height: 22px;
+        padding: 0 9px;
+        font-size: 12px;
+        line-height: 22px;
+        color: #fff;
+        border-radius: 11px;
+        background: rgb(0 0 0 / 38%);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+      }
+    }
+
+    /* 分类已在封面角标上，底部不再重复；没有封面的卡片仍显示 */
+    .thumbnail ~ .information .categories {
+      display: none;
     }
 
     .information {
@@ -937,8 +972,58 @@
   container: joe-index-list / inline-size;
 }
 
+/* 窄屏：单列，并改为左图右文的紧凑卡片，避免每篇一整屏大图 */
 @container joe-index-list (max-width: 600px) {
   .joe_list.joe_list--cards {
     grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+
+    > .joe_list__item.default {
+      flex-direction: row;
+      align-items: stretch;
+
+      .thumbnail {
+        flex: none;
+        width: 34%;
+        max-width: 150px;
+        aspect-ratio: auto;
+        min-height: 96px;
+
+        .cover-category {
+          top: 6px;
+          left: 6px;
+          height: 18px;
+          padding: 0 7px;
+          font-size: 11px;
+          line-height: 18px;
+        }
+      }
+
+      .information {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        padding: 10px 12px;
+      }
+
+      .title {
+        margin-bottom: 4px;
+        font-size: 15px;
+      }
+
+      .abstract {
+        margin-bottom: 6px;
+        -webkit-line-clamp: 1;
+      }
+
+      .meta {
+        margin-top: auto;
+      }
+    }
   }
 }
+
+html[data-mode="dark"] .joe_list__item .information .title .badge--new {
+  color: #fbbf24;
+}
+

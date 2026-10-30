@@ -1,21 +1,25 @@
-/** 内容区链接打开方式（对应设置 theme.link_behavior） */
+/**
+ * 内容区链接的打开方式（固定规则，不再提供设置）：
+ * - 站外链接：新标签打开，并加 rel="noopener noreferrer nofollow"
+ * - 站内链接：不改动，由 swup 无刷新切换（core/swup.ts 不接管 target="_blank" 的链接，所以这里不给站内链接加）
+ * 作者在编辑器里给站内链接手动设了新标签打开的，保留作者的选择。
+ */
 import { $$ } from "../core/dom";
-import { getThemeConfig } from "../core/config";
 
-const CONTENT_LINKS = ".joe_detail__article a[href], .joe_journal_body a[href]";
-const ALL_LINKS = ".joe_main_container a[href]";
+const LINKS = ".joe_main_container a[href]";
 
 export function initLinkBehavior(): void {
-  const behavior = getThemeConfig().linkBehavior;
-  const links = $$<HTMLAnchorElement>(
-    behavior === "default" ? CONTENT_LINKS : ALL_LINKS,
-  );
-  for (const link of links) {
+  for (const link of $$<HTMLAnchorElement>(LINKS)) {
     const href = link.getAttribute("href") ?? "";
-    if (href.startsWith("javascript:") || href.startsWith("#")) continue;
-    const openInNew = behavior === "default" || behavior === "new";
-    if (openInNew) link.target = "_blank";
-    else link.removeAttribute("target");
+    if (!/^https?:\/\//i.test(href) && !href.startsWith("//")) continue;
+    let url: URL;
+    try {
+      url = new URL(href, location.href);
+    } catch {
+      continue;
+    }
+    if (url.origin === location.origin) continue;
+    link.target = "_blank";
     link.rel = "noopener noreferrer nofollow";
   }
 }

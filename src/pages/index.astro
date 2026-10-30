@@ -13,7 +13,8 @@ import "../styles/pages/moments-stack.css";
 
 <BaseLayout pageScript="index" pageClass="page-index" bigBanner="fullscreen">
   <div class="joe_main">
-    <div class="joe_index">
+    <!-- 手机端紧凑首页（设置 home.compact_mobile）：精选推荐改为横向滑动一行、瞬间只显示最新一条 -->
+    <div class="joe_index" th:classappend="${theme.config.home.compact_mobile ? 'joe_index--compact' : ''}">
       <th-block th:if="${theme.config.home.carousel and not #lists.isEmpty(theme.config.home.carousel_slides)}">
         <Banner />
       </th-block>
@@ -21,6 +22,8 @@ import "../styles/pages/moments-stack.css";
         <HotCategories />
       </th-block>
       <MomentsStack />
+      <!-- 继续阅读（设置 home.resume_bar）：老访客上次读到一半的文章，由 features/resume-bar.ts 填入 -->
+      <div class="joe_resume_bar" th:if="${theme.config.home.resume_bar}" data-joe-resume-bar hidden></div>
       <div class="joe_index__article">
         <div class="joe_index__title">
           <!-- 分类标签页（设置 home.category_tabs）：服务端输出全部分类，脚本按文章数保留前几个，点击在原地切换（scripts/pages/index.ts） -->
@@ -31,7 +34,14 @@ import "../styles/pages/moments-stack.css";
             data-joe-category-tabs
             th:attr="data-max=${theme.config.home.category_tabs_count ?: 5}"
           >
-            <button type="button" role="tab" class="item active" aria-selected="true" th:attr="data-href=@{/}">
+            <button
+              type="button"
+              role="tab"
+              class="item active"
+              aria-selected="true"
+              th:attr="data-href=@{/}"
+              th:text="${theme.config.home.list_sort == 'views' ? '最多阅读' : (theme.config.home.list_sort == 'updated' ? '最近更新' : '最新文章')}"
+            >
               最新文章
             </button>
             <th-block
@@ -63,12 +73,14 @@ import "../styles/pages/moments-stack.css";
           </div>
         </div>
         <div class="joe_index__list">
+          <!-- 排序（设置 home.list_sort）：默认沿用 Halo 首页的发布时间排序；其余按同一页码与每页条数重新查询，分页与加载更多不变 -->
           <ul
             class="joe_list"
             data-joe-post-list
             th:classappend="${theme.config.home.list_layout == 'cards' ? 'joe_list--cards' : ''}"
+            th:with="homeSort = ${theme.config.home.list_sort == 'views' ? 'stats.visit,desc' : (theme.config.home.list_sort == 'updated' ? 'status.lastModifyTime,desc' : null)}, homePosts = ${homeSort == null ? posts.items : postFinder.list({page: posts.page, size: posts.size, sort: {'spec.pinned,desc', homeSort, 'metadata.creationTimestamp,asc'}}).items}"
           >
-            <th-block th:each="post, iter : ${posts.items}">
+            <th-block th:each="post, iter : ${homePosts}">
               <PostItem reveal />
             </th-block>
           </ul>

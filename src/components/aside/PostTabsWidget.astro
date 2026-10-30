@@ -1,0 +1,41 @@
+---
+/**
+ * 侧栏「文章」三合一卡片（模块类型 post_tabs）：最新 / 热门 / 近期热门放在一张卡片里，
+ * 标题栏的标签切换显示哪一组（features/aside-tabs.ts）。没有脚本时三组依次显示。
+ */
+import Icon from "../common/Icon.astro";
+import PostListItems, { type PostListKind } from "./PostListItems.astro";
+
+const TABS: { kind: PostListKind; label: string }[] = [
+  { kind: "newest", label: "最新" },
+  { kind: "hot", label: "热门" },
+  { kind: "recent", label: "近期热门" },
+];
+---
+
+<section class="joe_aside__item newest post-tabs" data-joe-aside-tabs>
+  <div class="joe_aside__item-title">
+    <Icon name="hot" />
+    <div class="tabs" role="tablist" aria-label="侧栏文章">
+      {TABS.map((tab, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`aside-tab-${tab.kind}`}
+          aria-controls={`aside-panel-${tab.kind}`}
+          aria-selected={i === 0 ? "true" : "false"}
+          tabindex={i === 0 ? "0" : "-1"}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+  </div>
+  <div class="joe_aside__item-contain">
+    {TABS.map((tab) => (
+      <div role="tabpanel" id={`aside-panel-${tab.kind}`} aria-labelledby={`aside-tab-${tab.kind}`}>
+        <PostListItems kind={tab.kind} />
+      </div>
+    ))}
+  </div>
+</section>

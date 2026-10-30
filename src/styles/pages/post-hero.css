@@ -149,8 +149,32 @@ html:has(.joe_post_hero) {
     padding: 100px 0 84px;
   }
 
-  .joe_post_hero__meta li:nth-child(n + 4) {
-    display: none;
+  /* 窄屏不再隐藏阅读数和评论数：胶囊改成一行小字，用「·」隔开，五项都放得下 */
+  .joe_post_hero__meta {
+    gap: 2px 0;
+
+    li {
+      height: auto;
+      padding: 0;
+      font-size: 12.5px;
+      background: none;
+      box-shadow: none;
+
+      & + li::before {
+        content: "·";
+        margin: 0 7px;
+        opacity: 0.7;
+      }
+    }
+
+    .author {
+      padding-left: 0;
+
+      img {
+        width: 18px;
+        height: 18px;
+      }
+    }
   }
 
   html:has(.joe_post_hero) .page-post.joe_main_container {

@@ -1,4 +1,5 @@
 /** 文章页入口 */
+import { initPoster } from "../content/poster";
 import { initCodeBlocks } from "../content/code-block";
 import { initShortcodes } from "../content/shortcodes";
 import { initGallery } from "../content/gallery";
@@ -11,8 +12,7 @@ import {
   initCopyright,
   initLike,
   initProgressBar,
-  initShare,
-  initSeries,
+  initShare, initDonate,
   initToc,
   initWordCount,
   scrollToHash,
@@ -23,21 +23,17 @@ export default function init(): void {
   ensureHeadingIds();
   initWordCount();
   initToc();
-  initSeries();
   recordReading();
   initCommentEnhancements();
   initSelectionToolbar();
   initLike();
   initAsideOperate();
   initShare();
+  initDonate();
+  initPoster();
   initCopyright();
   initProgressBar();
   initGallery();
-  // 文章元数据可单独关闭长代码自动折叠
-  initCodeBlocks({
-    foldLong:
-      document.querySelector<HTMLElement>(".joe_detail")?.dataset
-        .foldLongCode !== "false",
-  });
+  initCodeBlocks();
   scrollToHash();
 }

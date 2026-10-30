@@ -1,79 +1,140 @@
 /* 文章左侧悬浮操作栏（点赞、评论、分享、打赏）。*/
 /* 宽屏下文章左侧有足够空间时显示，否则由正文下方的操作区替代（见 scripts/content/aside-operate.ts）。*/
 /* 内部按钮使用 <button>，重置浏览器默认样式。*/
+/* 与右侧栏一样用 sticky：初始与文章卡片顶部对齐，滚动时停在导航栏下方，跟随文章区域、到底自然停止。
+   由浏览器在合成线程处理，快速滑动时不会像脚本定位那样慢一拍、闪到头图上。
+   高度为 0 的外层占位（.joe_post 的第一个子元素），竖条本身挂在左侧外边。 */
 .aside_operations {
   display: none;
-  position: fixed;
-  top: 250px;
-  margin-left: -70px;
+  position: sticky;
+  top: 75px;
   z-index: 10;
+  height: 0;
   user-select: none;
+}
+
+.aside_operations > .rail {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 22px);
+  /* 一条竖条装下全部按钮，底色与文章卡片一致（压在头图上也不会透出杂色） */
+  padding: 6px;
+  border-radius: 24px;
+  background: var(--bg-page);
+  box-shadow: var(--shadow);
 
   > li {
     position: relative;
-    cursor: pointer;
-    width: 44px;
-    height: 44px;
-    line-height: 44px;
-    margin-bottom: 14px;
-    user-select: none;
-    text-align: center;
+    width: 36px;
+    height: 36px;
     color: var(--text-regular);
-    background: var(--bg-page);
-    box-shadow: var(--shadow);
     border-radius: 50%;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out);
+
+    & + li {
+      margin-top: 4px;
+    }
+
+    > button {
+      display: grid;
+      place-items: center;
+    }
 
     i {
       display: block;
-      font-size: 20px;
+      font-size: 18px;
+      line-height: 1;
     }
 
+    /* 计数：图标右上角的小胶囊 */
     span {
       display: none;
       position: absolute;
-      left: 30px;
-      top: -4px;
-      height: 17px;
-      line-height: 17px;
-      padding: 0 5px;
-      font-size: 12px;
+      top: -2px;
+      left: 24px;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      font-size: 10.5px;
+      font-weight: 600;
+      line-height: 16px;
       text-align: center;
       white-space: nowrap;
-      color: var(--fill-base);
-      background-color: var(--theme);
-      border-radius: 10px;
+      color: #fff;
+      background: var(--theme-solid, var(--theme));
+      border-radius: 8px;
+      box-shadow: 0 0 0 2px var(--bg-page);
+      pointer-events: none;
+      font-variant-numeric: tabular-nums;
 
       &.visible {
         display: block;
       }
     }
 
-    &:hover {
-      color: var(--theme);
+    /* 悬停提示：按钮右侧的文字（取自 aria-label） */
+    > button::after {
+      content: attr(aria-label);
+      position: absolute;
+      top: 50%;
+      left: calc(100% + 12px);
+      padding: 3px 8px;
+      font-size: 12px;
+      line-height: 18px;
+      white-space: nowrap;
+      color: var(--bg-page);
+      background: var(--text-title);
+      border-radius: 4px;
+      opacity: 0;
+      transform: translate(-4px, -50%);
+      pointer-events: none;
+      transition:
+        opacity var(--dur-fast) var(--ease-out),
+        transform var(--dur-fast) var(--ease-out);
+    }
+
+    &:hover,
+    &:focus-within {
+      color: var(--theme-text);
+      background: color-mix(in srgb, var(--theme) 12%, transparent);
+
+      > button::after {
+        opacity: 1;
+        transform: translate(0, -50%);
+      }
 
       .joe-icon-like,
-      .joe-icon-reply,
+      .joe-icon-share,
       .joe-icon-comment,
       .joe-icon-reward {
         animation: swing 1s ease;
       }
     }
+
+    /* 有弹层（分享、打赏）时不显示文字提示，避免和弹层叠在一起 */
+    &.post-operate-share:hover > button::after,
+    &.post-operate-donate:hover > button::after {
+      opacity: 0;
+    }
   }
 
   .post-operate-like {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    > button {
+      position: relative;
+    }
 
     .joe-font {
       position: absolute;
-      width: 100%;
+      inset: 0;
+      display: grid;
+      place-items: center;
       opacity: 0;
-      transform: scale(0);
+      transform: scale(0.4);
       transition:
-        transform var(--dur-base) var(--ease-out),
-        opacity var(--dur-base) var(--ease-out);
-      border-radius: 50%;
+        transform var(--dur-base) var(--ease-spring),
+        opacity var(--dur-fast) var(--ease-out);
 
       &.active {
         opacity: 1;
@@ -81,10 +142,8 @@
       }
     }
 
-    .icon-unlike {
-      &.active {
-        color: var(--theme);
-      }
+    .icon-unlike.active {
+      color: #f56c6c;
     }
   }
 
@@ -95,60 +154,34 @@
       pointer-events: none;
       opacity: 0;
       position: absolute;
-      top: -32px;
+      top: 50%;
       z-index: 1;
-      margin-left: 35px;
+      left: 100%;
+      display: flex;
+      gap: 2px;
+      margin: -19px 0 0 14px;
       padding: 4px;
-      text-align: center;
-      font-size: 0;
       background: var(--bg-raised);
       border-radius: 50px;
       transition: all var(--dur-base) var(--ease-out);
       box-shadow: var(--glass-shadow);
 
-      a {
-        position: relative;
-        display: block;
-        line-height: 1;
-        margin: 5px 0;
-      }
+      .share-action {
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-size: 16px;
+        color: var(--text-regular);
+        transition:
+          color var(--dur-fast) var(--ease-out),
+          background var(--dur-fast) var(--ease-out);
 
-      &:before {
-        position: absolute;
-        top: 44px;
-        left: -20px;
-        content: "";
-        width: 0;
-        height: 0;
-        border: 10px solid transparent;
-        border-right-color: var(--border-faint);
-      }
-    }
-
-    .qrcode_wrapper {
-      display: none;
-      position: absolute;
-      margin: -100px 0 0 42px;
-      padding: 10px;
-      background: #fff;
-      border-radius: var(--radius-inner);
-      box-shadow: var(--shadow-block);
-
-      &:before {
-        position: absolute;
-        content: "";
-        width: 0;
-        height: 0;
-        margin: 68px 0 0 -100px;
-        border: 10px solid transparent;
-        border-right-color: #e0e0e0;
-      }
-
-      p {
-        padding: 6px 0 0;
-        text-align: center;
-        font-size: 12px;
-        color: #666;
+        &:hover {
+          color: var(--theme-text);
+          background: color-mix(in srgb, var(--theme) 12%, transparent);
+        }
       }
     }
 
@@ -163,10 +196,6 @@
       }
     }
 
-    [data-joe-share-weixin]:hover .qrcode_wrapper,
-    [data-joe-share-weixin]:focus .qrcode_wrapper {
-      display: block;
-    }
   }
 
   .post-operate-donate {
@@ -179,7 +208,8 @@
       z-index: 1;
       min-width: 200px;
       min-height: 100px;
-      margin: -30px 0 0 35px;
+      left: 100%;
+      margin: -34px 0 0 14px;
       padding: 12px;
       transform: translate3d(0, 0, 0);
       background: var(--bg-muted);
@@ -214,6 +244,13 @@
           all: initial;
         }
 
+        p {
+          margin: 0 0 8px;
+          font-size: 13px;
+          line-height: 1.4;
+          color: var(--text-secondary);
+        }
+
         &:not(:last-child) {
           margin-right: 8px;
         }
@@ -231,7 +268,7 @@
   }
 }
 
-.aside_operations > li > button,
+.aside_operations .rail > li > button,
 .aside_operations .post-operate-share > button {
   appearance: none;
   display: block;
@@ -248,3 +285,5 @@
 .aside_operations.is-visible {
   display: block;
 }
+
+

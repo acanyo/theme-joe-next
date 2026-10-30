@@ -14,7 +14,7 @@
  * 若干条隐藏的记录，脚本按时间合并排序（features/console-content.ts）。
  */
 import Icon from "../common/Icon.astro";
-import { COMMENT_ENABLED, COMMENT_TEXT, el } from "../../config/expressions";
+import { COLOR_MODE, COMMENT_ENABLED, COMMENT_TEXT, el } from "../../config/expressions";
 
 /** 时间线每类最多取的条数 */
 const PER_KIND = 8;
@@ -46,7 +46,7 @@ const ISO = (expr: string) => `#dates.format(${expr}, 'yyyy-MM-dd''T''HH:mm:ssXX
           type="button"
           class="tile"
           data-console-action="mode"
-          th:if="${theme.config.general.color_mode == 'user'}"
+          th:if={`\${(${COLOR_MODE}) == 'user'}`}
           aria-pressed="false"
         >
           <span class="glyph" data-console-icon="mode"></span>

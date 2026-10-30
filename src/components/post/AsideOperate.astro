@@ -18,11 +18,8 @@ import Icon from "../common/Icon.astro";
 import "../../styles/content/aside-operate.css";
 ---
 
-<ul
-  class="aside_operations"
-  data-joe-aside-operate
-  th:with={`postUrl = ${el(POST_URL)}`}
->
+<div class="aside_operations" data-joe-aside-operate th:with={`postUrl = ${el(POST_URL)}`}>
+<ul class="rail">
   <li class="post-operate-like" th:if={el(LIKE_ENABLED)}>
     <button type="button" data-joe-like aria-label="点赞">
       <Icon name="like" class="icon-like" />
@@ -51,7 +48,7 @@ import "../../styles/content/aside-operate.css";
   </li>
   <li class="post-operate-share" th:if={el(SHARE_ENABLED)}>
     <button type="button" aria-label="分享" aria-haspopup="true">
-      <Icon name="reply" />
+      <Icon name="share" />
     </button>
     <ShareLinks />
   </li>
@@ -64,3 +61,4 @@ import "../../styles/content/aside-operate.css";
     </div>
   </li>
 </ul>
+</div>

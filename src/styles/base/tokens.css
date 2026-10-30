@@ -1,7 +1,7 @@
 /* 全局 CSS 变量。断点：500 / 768 / 992 / 1200 / 1360px（见 README「样式」）*/
 html {
   --font-default:
-    "Joe Font", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   /* --theme: #fb6c28; */
   --bg-inverse: #000;
@@ -43,6 +43,8 @@ html {
   --code-background: #e8f3ff;
   --overdue-border: #ffbb76;
   --overdue-background: #fffcef;
+  /* 文章过期提示的文字：原来的 #db7c22 在浅黄底上对比度只有 2.8:1，加深到 4.5:1 以上 */
+  --overdue-text: #a24d00;
   /* 卡片：6px 圆角、1px 细描边 + 几乎看不见的投影；悬停时描边与阴影染上主题色（参考 Heo） */
   --radius-wrap: 6px;
   --radius-inner: 6px;
@@ -104,6 +106,7 @@ html {
     --code-background: #353246;
     --overdue-border: #6f553b;
     --overdue-background: #2b2715;
+    --overdue-text: #f0a35c;
     --card-border: rgb(255 255 255 / 7%);
     --shadow:
       0 0 0 1px var(--card-border), 0 8px 18px -10px rgb(0 0 0 / 55%);

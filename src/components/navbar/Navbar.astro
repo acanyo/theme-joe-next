@@ -10,6 +10,7 @@
  * 文章页向下阅读时，中间一段由菜单换成「当前章节」，点击展开迷你目录（features/nav-chapter.ts）。
  */
 import MenuLink from "./MenuLink.astro";
+import { COLOR_MODE } from "../../config/expressions";
 import MobileDrawer from "./MobileDrawer.astro";
 import ConsolePanel from "./ConsolePanel.astro";
 import Icon from "../common/Icon.astro";
@@ -39,11 +40,12 @@ const MENU =
         <Icon name="menu" />
       </button>
 
+      <!-- Logo：Halo 站点设置里有 Logo 时显示图片，否则显示站点标题；都链接到首页 -->
       <a
-        th:if="${theme.config.navbar.logo}"
+        th:if="${not #strings.isEmpty(site.logo)}"
         class="joe_header__above-logo"
         th:title="${site.title}"
-        th:href="${#strings.isEmpty(theme.config.navbar.logo_link) ? site.url : (theme.config.navbar.logo_link == '#' ? 'javascript:;' : theme.config.navbar.logo_link)}"
+        th:href="@{/}"
       >
         <img
           th:src="${site.logo}"
@@ -54,9 +56,9 @@ const MENU =
         />
       </a>
       <a
-        th:unless="${theme.config.navbar.logo}"
+        th:if="${#strings.isEmpty(site.logo)}"
         class="joe_header__above-logo joe_header__above-logo--text"
-        th:href="${site.url}"
+        th:href="@{/}"
         th:title="${site.title}"
         th:text="${site.title}"
       ></a>
@@ -136,7 +138,7 @@ const MENU =
           type="button"
           class="joe_header__mode"
           aria-label="切换明暗模式"
-          th:if="${theme.config.general.color_mode == 'user'}"
+          th:if={`\${(${COLOR_MODE}) == 'user'}`}
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <mask id="joe-mode-mask">

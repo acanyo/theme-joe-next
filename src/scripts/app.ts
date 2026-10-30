@@ -11,7 +11,7 @@ import { getThemeConfig } from "./core/config";
 import { runPageScript } from "./core/page-scripts";
 import { initActions } from "./features/actions";
 import { initAsideWidgets } from "./features/aside-widgets";
-import { initColorMode } from "./features/color-mode";
+import { initColorMode, refreshColorMode } from "./features/color-mode";
 import { initConsole, refreshConsole } from "./features/console";
 import { initContextMenu } from "./features/context-menu";
 import { initEnhancements } from "./features/enhancements";
@@ -23,6 +23,8 @@ import { initNavigation, refreshNavigation } from "./features/navigation";
 import { initNavChapter } from "./features/nav-chapter";
 import { initReveal } from "./features/reveal";
 import { cleanExcerpts } from "./content/excerpt";
+import { hideReadBadges } from "./features/freshness";
+import { dedupeCommenters, initCommenterCards } from "./features/commenters";
 
 function initShell(): void {
   initColorMode();
@@ -35,8 +37,12 @@ function initShell(): void {
 async function initPage(): Promise<void> {
   cleanExcerpts();
   fillEmptyImages();
+  hideReadBadges();
+  dedupeCommenters();
+  initCommenterCards();
   initNavChapter();
   refreshNavigation();
+  refreshColorMode();
   refreshConsole();
   initActions();
   initLinkBehavior();

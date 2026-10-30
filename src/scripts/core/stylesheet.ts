@@ -10,6 +10,9 @@ export function loadStylesheet(href: string): Promise<void> {
   if (!task) {
     task = new Promise<void>((resolve, reject) => {
       const style = document.createElement("style");
+      // 运行时加入的样式不在服务端输出的 <head> 里，swup 切页同步 <head> 时会被当成多余的删掉；
+      // 而这里已记为「已加载」，回到该页时不会再插入一次（轮播图因此全部透明）。标记后由 core/swup.ts 保留
+      style.dataset.joeRuntime = "";
       style.textContent = `@import url(${JSON.stringify(href)}) layer(vendor);`;
       style.onload = () => resolve();
       style.onerror = () => reject(new Error(`Failed to load ${href}`));

@@ -1,5 +1,5 @@
 ---
-/** 首页「精品分类」：指定分类或自定义入口（设置 home.data_hot_category） */
+/** 首页「精选推荐」：一排图片卡片，每张可以是分类，也可以是自定义链接（设置 home.featured_items） */
 import Icon from "../common/Icon.astro";
 import { responsiveImage, SIZES } from "../../config/images";
 /** 没有封面时轮流使用主题自带的 4 张封面（按卡片位置），避免几张卡片同一张图 */
@@ -11,9 +11,9 @@ const cover = (expr: string) => `#strings.isEmpty(${expr}) ? ${FALLBACK} : ${exp
 <div class="joe_index__hot">
   <div class="joe_index__title">
     <ul class="joe_index__title-title default">
-      <li class="item active">精品分类</li>
+      <li class="item active" th:text="${theme.config.home.featured_title ?: '精选推荐'}">精选推荐</li>
     </ul>
-    <div class="joe_index__title-notice">
+    <div class="joe_index__title-notice" th:if="${theme.config.home.featured_more}">
       <a th:href="@{/categories}">
         <Icon name="category" />全部分类
       </a>

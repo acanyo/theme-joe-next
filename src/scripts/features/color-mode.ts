@@ -59,7 +59,8 @@ export function toggleColorModeAt(x: number, y: number): void {
   const root = document.documentElement;
   root.classList.add("is-mode-switching");
   const transition = document.startViewTransition(apply);
-  void transition.ready.then(() => {
+  // 另一个过渡（如切页）同时开始时浏览器会跳过这次动画，ready 会 reject：此时模式已切换，忽略即可
+  transition.ready.then(() => {
     root.animate(
       {
         clipPath: [
@@ -73,7 +74,7 @@ export function toggleColorModeAt(x: number, y: number): void {
         pseudoElement: "::view-transition-new(root)",
       },
     );
-  });
+  }, () => undefined);
   void transition.finished.finally(() =>
     root.classList.remove("is-mode-switching"),
   );
@@ -84,15 +85,30 @@ function toggleFrom(button: HTMLElement): void {
   toggleColorModeAt(box.left + box.width / 2, box.top + box.height / 2);
 }
 
+/** 给还没绑定的切换按钮加上点击事件，并同步图标 */
+function bindButtons(): void {
+  syncIcons();
+  $$<HTMLElement>(".joe_action_item.mode, .joe_header__mode").forEach((button) => {
+    if (button.dataset.joeModeBound) return;
+    button.dataset.joeModeBound = "";
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleFrom(button);
+    });
+  });
+}
+
 export function initColorMode(): void {
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   if (getThemeConfig().themeMode !== "user") return;
-  syncIcons();
-  $$<HTMLElement>(".joe_action_item.mode, .joe_header__mode").forEach(
-    (button) =>
-      button.addEventListener("click", (event) => {
-        event.stopPropagation();
-        toggleFrom(button);
-      }),
-  );
+  bindButtons();
+}
+
+/**
+ * 每次进入页面时调用（scripts/app.ts）：右下角的悬浮按钮在 swup 容器内，切页后是新的元素，
+ * 没有图标状态也没有点击事件，表现为一个空白圆圈、点了没反应。
+ */
+export function refreshColorMode(): void {
+  if (getThemeConfig().themeMode !== "user") return;
+  bindButtons();
 }

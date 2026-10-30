@@ -45,7 +45,7 @@ const AUTHOR_LINK =
     ></h1>
     <ul
       class="joe_post_hero__meta"
-      th:if="${theme.config.post.meta and #annotations.getOrDefault(post, 'enable_page_meta', 'true') == 'true'}"
+      th:if="${theme.config.post.meta}"
     >
       <li class="author">
         <!-- 作者没有头像时用博主卡片的默认头像，避免空 src（不会触发加载失败兜底） -->

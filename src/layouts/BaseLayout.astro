@@ -49,7 +49,7 @@ const {
 <!doctype html>
 <html
   th:lang="${#locale.toLanguageTag}"
-  th:attr="data-transition=${theme.config.effects.page_transition ?: 'native'}"
+  th:attr="data-transition=${theme.config.effects.swup ? 'swup' : (theme.config.effects.page_animation == 'none' ? 'none' : 'native')}, data-animation=${theme.config.effects.page_animation}"
 >
   <head>
     <Head title={title}>

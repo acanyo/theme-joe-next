@@ -3,9 +3,10 @@
  * 文章列表项。依赖循环变量 `post` 与 `iter`（th:each="post, iter : ...")。
  * 首页可开启进入视口动画（data-reveal）。
  */
-import { COMMENT_ENABLED, coverOf, el } from "../../config/expressions";
+import { COMMENT_ENABLED, COMMENT_TEXT, coverOf, el } from "../../config/expressions";
 import Icon from "../common/Icon.astro";
 import { responsiveImage, SIZES } from "../../config/images";
+import "../../styles/components/commenters.css";
 
 interface Props {
   /** 是否启用首页列表动画设置 */
@@ -49,6 +50,12 @@ const COVER = coverOf("post");
       th:datetime="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
       th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
     ></time>
+    <!-- 双列卡片模式：封面角标显示第一个分类（日期已在卡片底部），列表模式下隐藏 -->
+    <span
+      class="cover-category"
+      th:unless="${#lists.isEmpty(post.categories)}"
+      th:text="${post.categories[0].spec.displayName}"
+    ></span>
     <Icon name="image" />
   </a>
   <div class="information">
@@ -57,13 +64,30 @@ const COVER = coverOf("post");
       class="title"
       th:title="${post.spec.title}"
     >
-      <span
-        th:if="${post.spec.pinned}"
-        class="badge"
-        style="display: inline-block"
-      >
-        置顶
+      <!-- 标题前的状态图标：置顶 / 新 / 已更新，悬停显示文字 -->
+      <span th:if="${post.spec.pinned}" class="badge badge--pinned" title="置顶" aria-label="置顶" role="img">
+        <Icon name="pinned" />
       </span>
+      <!-- 新鲜度（设置 home.freshness_badge）：7 天内发布为「新」；发布超过 7 天、之后 7 天内又修改过为「已更新」。
+           访客读过后由 features/freshness.ts 去掉：「新」读过即去掉，「已更新」要在修改之后读过才去掉 -->
+      <th-block
+        th:if="${theme.config.home.freshness_badge and !post.spec.pinned}"
+        th:with="now = ${T(java.time.Instant).now()}, ageDays = ${T(java.time.Duration).between(post.spec.publishTime, now).toDays()}, editedDays = ${post.status.lastModifyTime != null ? T(java.time.Duration).between(post.status.lastModifyTime, now).toDays() : 9999}"
+      >
+        <span class="badge badge--new" th:if="${ageDays < 7}" title="新文章" aria-label="新文章" role="img">
+          <Icon name="fresh-new" />
+        </span>
+        <span
+          class="badge badge--updated"
+          th:if="${ageDays >= 7 and editedDays < 7}"
+          th:attr="data-edited=${post.status.lastModifyTime.toEpochMilli()}"
+          title="最近更新过"
+          aria-label="最近更新过"
+          role="img"
+        >
+          <Icon name="fresh-updated" />
+        </span>
+      </th-block>
       <span th:text="${post.spec.title}"></span>
     </a>
     <a
@@ -89,6 +113,28 @@ const COVER = coverOf("post");
           <span th:text="${post.stats.upvote}">0</span>
         </li>
       </ul>
+      <!-- 评论者头像（设置 home.card_commenters）：最近几位评论者叠在一起；只有有评论的文章才查询。
+           悬停头像弹出资料卡（features/commenters.ts）：昵称、站内用户 / 访客、访客留下的网址、在这篇的最近一条评论。
+           Halo 不公开登录用户的用户名，资料只能取评论里带的这些 -->
+      <span
+        class="commenters"
+        th:if={`\${theme.config.home.card_commenters and ${COMMENT_ENABLED} and post.stats.comment > 0}`}
+        th:with="cardComments = ${commentFinder.list({group: 'content.halo.run', kind: 'Post', name: post.metadata.name}, 1, 8).items}"
+        th:attr="data-count=${post.stats.comment}"
+      >
+        <img
+          th:each="comment : ${cardComments}"
+          width="22"
+          height="22"
+          loading="lazy"
+          sizes="22px"
+          tabindex="0"
+          th:src="${comment.owner.avatar}"
+          th:alt="${comment.owner.displayName}"
+          th:attr={`data-text-avatar=\${comment.owner.displayName}, data-name=\${comment.owner.displayName}, data-kind=\${comment.owner.kind}, data-site=\${comment.owner.kind == 'Email' ? comment.spec.owner.annotations?.get('website') : null}, data-text=\${${COMMENT_TEXT}}, data-time=\${comment.spec.creationTime}`}
+          data-fallback="avatar"
+        />
+      </span>
       <ul class="categories" th:unless="${#lists.isEmpty(post.categories)}">
         <li class="pcate" th:each="category : ${post.categories}">
           <svg

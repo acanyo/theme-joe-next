@@ -67,7 +67,7 @@ const COMMENTS =
     </div>
     <CommentSection subject="singlePage" kind="SinglePage" />
   </div>
-  <th-block th:if="${#annotations.getOrDefault(singlePage, 'enable_aside', 'true') == 'true' and theme.config.aside.on_page}">
+  <th-block th:if="${theme.config.aside.on_page}">
     <Aside />
   </th-block>
   <Actions slot="actions" editKind="page" />

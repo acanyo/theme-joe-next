@@ -27,16 +27,11 @@ const { title = "site.title", titleIf } = Astro.props;
   th:if={titleIf ? `\${${titleIf}}` : undefined}
   th:text={`\${${title}}`}
 ></title>
-<link
-  rel="icon"
-  th:if="${not #strings.isEmpty(site.favicon)}"
-  th:href="${site.favicon}"
-/>
-<link
-  rel="apple-touch-icon"
-  th:if="${not #strings.isEmpty(site.favicon)}"
-  th:href="${site.favicon}"
-/>
+<!-- 网站图标：Halo「系统设置 → 基本设置」的站点图标，没有设置时用站点 Logo -->
+<th-block th:with="siteIcon = ${not #strings.isEmpty(site.favicon) ? site.favicon : site.logo}">
+  <link rel="icon" th:if="${not #strings.isEmpty(siteIcon)}" th:href="${siteIcon}" />
+  <link rel="apple-touch-icon" th:if="${not #strings.isEmpty(siteIcon)}" th:href="${siteIcon}" />
+</th-block>
 <link
   rel="stylesheet"
   th:if="${theme.config.effects.cursor_skin != null and theme.config.effects.cursor_skin != 'off' and !theme.config.footer.clean_mode}"
