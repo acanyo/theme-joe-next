@@ -56,7 +56,6 @@ html {
   --text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-code: #bdbdbd;
   --shadow-block: 1px 2px 10px 0 #afafaf;
-  --box-shadow-friend: #d8d8d8;
   --box-shadow-tags: 2px 2px 3px 0px #c2c0b3;
   --background-tags: #fffaeb;
   --background-tag: #fdfdfd;
@@ -69,8 +68,6 @@ html {
     #d4d4d4,
     transparent 80%
   );
-  --background-friend: #fff;
-  --background-friend-block: #f5f5f5;
   background: var(--bg-page);
 
   &[data-mode="dark"] {
@@ -113,7 +110,6 @@ html {
     --text-shadow: none;
     --shadow-code: #191919;
     --shadow-block: 2px 4px 10px 0 #0a0a0a;
-    --box-shadow-friend: rgba(0, 0, 0, 0.2);
     --box-shadow-tags: 2px 2px 3px 0px #111;
     --background-tags: #35353e;
     --background-tag: #2f2f2f;
@@ -126,8 +122,6 @@ html {
       #151515,
       transparent 80%
     );
-    --background-friend: #383838;
-    --background-friend-block: #232323;
     background: var(--bg-page);
   }
 }

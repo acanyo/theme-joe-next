@@ -29,7 +29,7 @@ function initRandomLink(): void {
       Math.floor(Math.random() * items.length)
     ] as HTMLAnchorElement;
     const name =
-      target.querySelector(".sub-text")?.textContent?.trim() || target.href;
+      target.querySelector(".name")?.textContent?.trim() || target.href;
     notify.success(`即将跳转到：「${name}」`);
     setTimeout(() => window.open(target.href, "_blank", "noopener"), 2000);
   });

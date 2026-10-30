@@ -39,18 +39,6 @@ body {
       background: var(--bg-muted);
       border-radius: 3px;
     }
-
-    .links-group {
-      padding-left: 24px;
-
-      h5 {
-        font-size: 16px;
-      }
-
-      .joe_detail__friends {
-        padding-left: 0;
-      }
-    }
   }
 
   .page-leaving {
@@ -486,16 +474,6 @@ body::before {
 
     .joe_main {
       padding-top: 0;
-    }
-  }
-
-  .page-links {
-    .links-group {
-      padding-left: 0 !important;
-    }
-
-    .joe_detail__friends {
-      padding-left: 0;
     }
   }
 }

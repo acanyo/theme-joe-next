@@ -1,0 +1,194 @@
+/*
+ * 友链列表（components/links/LinkGroups.astro）：插件路由 /links 与「友链」页面模板共用。
+ * 卡片只用中性色，悬停时描边与名称染上主题色；不可访问的链接整体降低不透明度。
+ */
+.joe_links {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 8px 0 4px;
+}
+
+.links-group__title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-title);
+
+  /* 正文 h2 自带主题色竖条，与文字的间距交给 gap */
+  &::before {
+    margin-right: -2px;
+  }
+
+  em {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    color: var(--text-secondary);
+  }
+}
+
+/* 正文 ul / li 的列表样式在 content 层，pages 层直接覆盖 */
+.joe_detail__friends {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+}
+
+.joe_detail__friends-item {
+  list-style: none;
+  margin: 0;
+
+  & + & {
+    margin-top: 0;
+  }
+
+  .contain {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 100%;
+    padding: 12px 14px;
+    border-radius: var(--radius-wrap);
+    background: var(--bg-page);
+    box-shadow: 0 0 0 1px var(--border-lighter);
+    color: var(--text-regular);
+    text-decoration: none;
+    transition:
+      box-shadow var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      translate var(--dur-base) var(--ease-out);
+
+    &:hover {
+      translate: 0 -2px;
+      background: var(--fill-base);
+      box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme) 45%, transparent),
+        0 8px 18px -12px color-mix(in srgb, var(--theme) 50%, transparent);
+
+      .name {
+        color: var(--theme-text);
+      }
+
+      .go {
+        opacity: 1;
+        translate: 0 0;
+      }
+
+      .logo img {
+        scale: 1.06;
+      }
+    }
+
+    &.is-offline {
+      opacity: 0.6;
+    }
+  }
+
+  .logo {
+    position: relative;
+    flex: none;
+    width: 44px;
+    height: 44px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--fill-base);
+      transition: scale var(--dur-base) var(--ease-out);
+    }
+
+    .state {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--text-placeholder);
+      box-shadow: 0 0 0 2px var(--bg-page);
+    }
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .name,
+  .desc {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .name {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text-title);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .desc {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  .go {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    opacity: 0;
+    translate: -3px 3px;
+    transition:
+      opacity var(--dur-fast) var(--ease-out),
+      translate var(--dur-base) var(--ease-out);
+  }
+}
+
+/* 页面底部的自定义说明 */
+.links-article {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border-lighter);
+}
+
+@media (max-width: 500px) {
+  .joe_detail__friends {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .joe_detail__friends-item {
+    .contain {
+      flex-direction: column;
+      gap: 8px;
+      padding: 14px 10px 12px;
+      text-align: center;
+    }
+
+    .body {
+      width: 100%;
+    }
+
+    .go {
+      display: none;
+    }
+  }
+}

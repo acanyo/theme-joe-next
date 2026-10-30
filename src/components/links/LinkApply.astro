@@ -1,0 +1,132 @@
+---
+/**
+ * 申请友链：一个按钮加一个弹窗表单（<dialog>），提交走链接插件的 REST API（features/link-apply.ts）。
+ *
+ * 链接插件 2.3.0 起支持访客申请，需要在插件设置里开启「启用友链申请」与「允许访客提交」。
+ * `enabled` 为显示按钮的条件表达式：插件路由 /links 有模板变量 linkApplicationEnabled；
+ * 自定义页面拿不到这个变量，只按插件是否可用显示，未开放时点开后提示。
+ *
+ * 弹窗上方是「本站信息」，方便对方先把本站加上，点一下复制；站内相对地址的 Logo 补成完整地址。
+ */
+import Icon from "../common/Icon.astro";
+import { SITE_URL } from "../../config/expressions";
+import "../../styles/pages/link-apply.css";
+
+interface Props {
+  enabled: string;
+}
+
+const { enabled } = Astro.props;
+const SITE_DESC = "theme.config.blogger.motto ?: '行动起来，活在当下'";
+const SITE_LOGO = "site.logo ?: (theme.config.blogger.avatar ?: theme.config.blogger.fallback_avatar)";
+const FIELDS = [
+  { name: "displayName", label: "网站名称", type: "text", required: true, placeholder: "你的博客名称", max: 100 },
+  { name: "url", label: "网站地址", type: "url", required: true, placeholder: "https://", max: 500 },
+  { name: "logo", label: "Logo 地址", type: "url", placeholder: "https://（可选）", max: 500 },
+  { name: "description", label: "一句话介绍", type: "text", placeholder: "可选", max: 200 },
+  { name: "email", label: "联系邮箱", type: "email", placeholder: "审核结果会发到这里（可选）", max: 200 },
+  { name: "backlink", label: "本站友链所在页面", type: "url", placeholder: "https://（可选）", max: 500 },
+] as const;
+---
+
+<th-block th:if={`\${${enabled}}`}>
+  <div class="joe_link_apply">
+    <button type="button" class="joe_link_apply__open" data-link-apply-open>
+      <Icon name="send" />申请友链
+    </button>
+  </div>
+
+  <dialog
+    class="joe_link_apply__dialog"
+    aria-labelledby="joe-link-apply-title"
+    data-link-apply
+    th:with={`siteUrl = \${${SITE_URL}}`}
+  >
+    <form class="joe_link_apply__form" novalidate>
+      <header class="head">
+        <h2 id="joe-link-apply-title">申请友链</h2>
+        <button type="button" class="close" data-link-apply-close aria-label="关闭">
+          <Icon name="close" />
+        </button>
+      </header>
+
+      <section class="site" aria-label="本站信息">
+        <img
+          width="40"
+          height="40"
+          th:src={`\${${SITE_LOGO}}`}
+          th:alt="${site.title}"
+          data-fallback="avatar"
+        />
+        <dl>
+          <div><dt>名称</dt><dd th:text="${site.title}"></dd></div>
+          <div><dt>地址</dt><dd th:text="${siteUrl}"></dd></div>
+          <div><dt>介绍</dt><dd th:text={`\${${SITE_DESC}}`}></dd></div>
+          <div th:with={`logo = \${${SITE_LOGO}}`}>
+            <dt>Logo</dt>
+            <dd th:text="${#strings.startsWith(logo, '/') ? siteUrl + logo : logo}"></dd>
+          </div>
+        </dl>
+        <button type="button" class="copy" data-link-apply-copy>
+          <Icon name="copy" />复制
+        </button>
+      </section>
+      <p class="hint">请先在你的网站加上本站，再填写下面的信息，审核通过后会出现在友链列表里。</p>
+
+      <div class="fields">
+        {FIELDS.map((f) => (
+          <label class="field">
+            <span class="label">
+              {f.label}
+              {"required" in f && <em aria-hidden="true">*</em>}
+            </span>
+            <input
+              name={f.name}
+              type={f.type}
+              required={"required" in f}
+              maxlength={f.max}
+              placeholder={f.placeholder}
+              autocomplete={f.type === "email" ? "email" : "off"}
+            />
+          </label>
+        ))}
+        <label class="field wide">
+          <span class="label">RSS / Atom 订阅地址</span>
+          <textarea name="feedUrls" rows="2" placeholder="可选，一行一个；填了会出现在本站的朋友圈"></textarea>
+        </label>
+        <div class="field wide captcha">
+          <label class="label" for="joe-link-apply-code">验证码<em aria-hidden="true">*</em></label>
+          <div class="captcha-row">
+            <input
+              id="joe-link-apply-code"
+              name="captchaCode"
+              required
+              minlength="5"
+              maxlength="5"
+              autocomplete="off"
+              placeholder="5 位字符"
+            />
+            <button type="button" class="captcha-img" data-link-apply-captcha title="看不清，换一张">
+              <img width="120" height="36" alt="验证码，点击更换" hidden />
+              <span>获取中…</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="result" role="status" aria-live="polite" data-link-apply-result></p>
+
+      <footer class="foot">
+        <button type="button" class="btn" data-link-apply-close>取消</button>
+        <button type="submit" class="btn is-primary">提交申请</button>
+      </footer>
+    </form>
+
+    <div class="joe_link_apply__done" hidden>
+      <Icon name="send" />
+      <h2>申请已提交</h2>
+      <p>站长审核后就会加上，谢谢你的友链。</p>
+      <button type="button" class="btn is-primary" data-link-apply-close>好的</button>
+    </div>
+  </dialog>
+</th-block>

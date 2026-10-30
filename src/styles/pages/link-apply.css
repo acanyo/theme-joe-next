@@ -1,0 +1,354 @@
+/* 申请友链（components/links/LinkApply.astro）：标题下的按钮与弹窗表单，样式跟随分享海报弹窗 */
+.joe_link_apply {
+  display: flex;
+  justify-content: center;
+  margin: -4px 0 18px;
+}
+
+.joe_link_apply__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 16px;
+  font-size: 13px;
+  color: var(--theme-text);
+  background: var(--tint);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out);
+
+  &:hover {
+    background: color-mix(in srgb, var(--theme) 20%, transparent);
+  }
+
+  &:active {
+    scale: 0.96;
+  }
+}
+
+.joe_link_apply__dialog {
+  /* 主题的重置样式把 margin 清零了，<dialog> 默认的居中要补回来 */
+  margin: auto;
+  width: min(560px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  color: var(--text-regular);
+  background: var(--bg-page);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 28%);
+  overflow: auto;
+
+  &::backdrop {
+    background: rgb(0 0 0 / 50%);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+
+  &[open] {
+    animation: joe-link-apply-in 0.24s var(--ease-out);
+  }
+
+  /* 表单与「已提交」两块用 hidden 切换，不能被下面的 display 覆盖 */
+  [hidden] {
+    display: none !important;
+  }
+
+  .btn {
+    height: 34px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text-regular);
+    background: var(--fill-base);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-title);
+    }
+
+    &.is-primary {
+      color: #fff;
+      background: var(--theme);
+
+      &:hover {
+        color: #fff;
+        filter: brightness(1.06);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@keyframes joe-link-apply-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+.joe_link_apply__form {
+  padding: 18px 20px 20px;
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+
+    h2 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 650;
+      color: var(--text-title);
+    }
+  }
+
+  .close {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    font-size: 16px;
+    color: var(--text-secondary);
+    background: transparent;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-title);
+      background: var(--fill-base);
+    }
+  }
+
+  /* 本站信息 */
+  .site {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: var(--fill-base);
+
+    img {
+      flex: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    dl {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+      font-size: 12.5px;
+      line-height: 1.7;
+
+      div {
+        display: flex;
+        gap: 8px;
+      }
+
+      dt {
+        flex: none;
+        color: var(--text-secondary);
+      }
+
+      dd {
+        margin: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: var(--text-regular);
+      }
+    }
+  }
+
+  .copy {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border: 0;
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text-regular);
+    background: var(--bg-page);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--theme-text);
+    }
+  }
+
+  .hint {
+    margin: 10px 0 16px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 14px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    &.wide {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .label {
+    font-size: 13px;
+    color: var(--text-regular);
+
+    em {
+      margin-left: 2px;
+      font-style: normal;
+      color: var(--theme-text);
+    }
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--bg-page);
+    outline: none;
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+
+    &::placeholder {
+      color: var(--text-placeholder);
+    }
+
+    &:focus {
+      border-color: var(--theme);
+      box-shadow: 0 0 0 3px var(--tint);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  .captcha-row {
+    display: flex;
+    gap: 10px;
+
+    input {
+      flex: 1;
+      letter-spacing: 0.2em;
+
+      &::placeholder {
+        letter-spacing: normal;
+      }
+    }
+  }
+
+  .captcha-img {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 120px;
+    height: 38px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: var(--fill-base);
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .result {
+    min-height: 20px;
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+
+    &[data-kind="error"] {
+      color: #d03050;
+    }
+  }
+
+  .foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 6px;
+  }
+}
+
+.joe_link_apply__done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 40px 24px 28px;
+  text-align: center;
+
+  > i {
+    font-size: 34px;
+    color: var(--theme-text);
+  }
+
+  h2 {
+    margin: 6px 0 0;
+    font-size: 17px;
+    color: var(--text-title);
+  }
+
+  p {
+    margin: 0 0 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+}
+
+html[data-mode="dark"] .joe_link_apply__form .result[data-kind="error"] {
+  color: #ff7b8f;
+}
+
+@media (max-width: 500px) {
+  .joe_link_apply__form {
+    padding: 16px;
+
+    .fields {
+      grid-template-columns: 1fr;
+    }
+  }
+}

@@ -4,6 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Actions from "../components/layout/Actions.astro";
 import Aside from "../components/aside/Aside.astro";
 import LinkGroups from "../components/links/LinkGroups.astro";
+import LinkApply from "../components/links/LinkApply.astro";
 import { COMMENT_ENABLED, el } from "../config/expressions";
 import "../styles/pages/journals.css";
 ---
@@ -21,6 +22,7 @@ import "../styles/pages/journals.css";
         class="joe_detail__title txt-shadow"
         th:text="${theme.config.pages.links_title ?: '友情链接'}"
       ></h1>
+      <LinkApply enabled="linkApplicationEnabled == true" />
       <article class="joe_detail__article animated fadeIn">
         <LinkGroups groups="groups" />
         <div

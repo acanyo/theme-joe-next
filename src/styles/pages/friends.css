@@ -1,10 +1,10 @@
+/* 朋友圈（pages/page_friends.astro）：顶部按朋友筛选，下面是一列动态卡片 */
 .joe_friend_add {
   position: absolute;
   top: 14px;
   right: 14px;
-  cursor: pointer;
   font-size: 16px;
-  color: var(--text-primary);
+  color: var(--text-secondary);
 
   &:hover {
     color: var(--theme);
@@ -15,127 +15,202 @@
   }
 }
 
-.joe_friends__list {
-  padding: 10px 0 20px;
+/* 按朋友筛选：一排头像，当前项描边为主题色 */
+.joe_friends__who {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 4px 0 22px;
 
-  &.hidden {
-    visibility: hidden;
+  .who {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--border-lighter);
+    transition:
+      box-shadow var(--dur-fast) var(--ease-out),
+      translate var(--dur-base) var(--ease-out);
+
+    &:hover {
+      translate: 0 -2px;
+    }
+
+    &.active {
+      box-shadow:
+        0 0 0 2px var(--bg-page),
+        0 0 0 4px var(--theme);
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
   }
-}
 
-.joe_friend__item {
-  position: relative;
-  padding: 0 0 30px 40px;
+  .all {
+    width: auto;
+    padding: 0 14px;
+    border-radius: 18px;
+    font-size: 13px;
+    color: var(--text-regular);
+    background: var(--fill-base);
 
-  &:before {
-    position: absolute;
-    left: 12px;
-    top: 0;
-    z-index: 0;
-    content: "";
-    width: 0;
-    height: 150%;
-    border-left: 1px dashed var(--border-faint);
-  }
-
-  &:hover {
-    .joe_friend_block {
-      box-shadow: 3px 8px 15px 0 var(--box-shadow-friend);
+    &.active {
+      color: var(--theme-text);
+      background: var(--tint);
+      box-shadow: none;
     }
   }
 }
 
-.joe_friend_info {
+.joe_friends__list {
   display: flex;
-  justify-content: left;
-  background: var(--bg-page);
-  color: var(--text-regular);
-  font-size: 14px;
-  height: 34px;
-  left: -36px;
-  line-height: 34px;
-  position: relative;
-  z-index: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 0 8px;
 }
 
-.joe_friend_info_logo {
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
-  background: var(--border-lighter);
-  border: 1px solid var(--border-base);
-  padding: 3px;
-  margin: 0 10px 0 -10px;
-}
-
-.joe_friend_info_author {
-  color: var(--theme);
-  font-weight: 500;
-}
-
-.joe_friend_info_pubDate {
-  margin: 0 10px;
-}
-
-.joe_friend_block {
-  position: relative;
-  z-index: 2;
-  box-sizing: border-box;
-  padding: 10px;
-  margin-top: 10px;
-  word-break: break-word;
-  color: var(--text-primary);
-  background: var(--background-friend);
-  border-bottom: 1px solid var(--border-lighter);
-  border-radius: 0 18px 18px 18px;
-  border: 1px solid var(--border-lighter);
-  box-shadow: 1px 1px 5px 0 var(--box-shadow-friend);
+.joe_friend__item {
+  padding: 14px 16px;
+  border-radius: var(--radius-wrap);
+  box-shadow: 0 0 0 1px var(--border-lighter);
   transition: box-shadow var(--dur-fast) var(--ease-out);
-}
 
-.joe_friend_body {
-  position: relative;
-  box-sizing: content-box;
-  overflow: hidden;
-  padding: 10px 12px;
-  background: var(--background-friend-block);
-  border-radius: 0 6px 6px 6px;
-  transition: height var(--dur-fast) var(--ease-out);
-}
+  &:hover {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme) 40%, transparent);
 
-.joe_friend_content_title {
-  margin-bottom: 8px;
-  text-align: center;
+    .title {
+      color: var(--theme-text);
+    }
 
-  a {
-    color: var(--theme);
+    .more {
+      color: var(--theme-text);
+    }
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .author {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    color: var(--text-title);
+
+    img {
+      flex: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--fill-base);
+    }
+
+    .name {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    &:hover .name {
+      color: var(--theme-text);
+    }
+  }
+
+  .time {
+    flex: none;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .body {
+    display: block;
+    color: var(--text-regular);
+  }
+
+  .title {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text-title);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .summary {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    word-break: break-word;
+  }
+
+  /* 没有标题的短动态：正文就是内容本身，用正文颜色、多显示几行 */
+  &.is-note .summary {
+    color: var(--text-regular);
+    -webkit-line-clamp: 6;
+  }
+
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    max-width: 100%;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    transition: color var(--dur-fast) var(--ease-out);
+
+    span {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
 }
 
-.joe_friend_content_description {
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  overflow: hidden;
-  text-indent: 2em;
-  text-align: justify;
-}
+.joe_friends__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 48px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
 
-.joe_pagination {
-  padding: 0 0 20px 0;
-}
-
-.page-friends {
-  .joe_detail {
-    position: relative;
-    overflow-y: hidden;
+  small {
+    font-size: 12px;
+    color: var(--text-placeholder);
   }
 }
 
-/* 朋友圈（pages/page_friends.astro）：「更早的动态」按插件游标翻页 */
+/* 「更早的动态」按插件游标翻页 */
 .joe_friends__more {
   display: flex;
   justify-content: center;
   padding: 10px 0 4px;
+}
+
+@media (max-width: 500px) {
+  .joe_friend__item {
+    padding: 12px;
+  }
 }
