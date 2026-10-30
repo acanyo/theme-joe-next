@@ -194,11 +194,6 @@
 
 
 
-/* 智阅 GPT 插件的摘要框（scripts/features/summary-plugin.ts 换成主题配色）：与正文第一段隔开 */
-.joe_detail__article likcc-article-summary {
-  margin: 4px 0 1.4em;
-}
-
 /* 正文最大宽度（设置 post.reading_width，默认 760px）：一行中文约 40 字，长段落不易串行；卡片本身宽度不变 */
 .joe_detail__article {
   max-width: var(--reading-width, none);
