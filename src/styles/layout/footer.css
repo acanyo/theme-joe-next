@@ -334,8 +334,7 @@ html[data-mode="dark"] .site_driven img {
     flex-direction: column;
     justify-content: center;
     padding-top: 12px;
-    /* 手机上悬浮按钮在右下角叠放两个，底部多留一段，滚到底时不压住文字 */
-    padding-bottom: 150px;
+    padding-bottom: 20px;
     text-align: center;
 
     /* 三行：版权与 Powered by / 备案号 / 云服务商与订阅 */
