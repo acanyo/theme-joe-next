@@ -164,7 +164,7 @@ spec:
               label: 经典
               render: /themes/theme-joe-next/assets/previews/navbar-classic.svg
           render-type: image
-          size: 112
+          size: 80
           gap: 8
         - $formkit: menuSelect
           name: menu
