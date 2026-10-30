@@ -58,23 +58,8 @@ const CLOUD_PROVIDERS = [
   >
     <span class="track"><span class="fill"></span></span>
   </div>
-  <!-- 运行时间与纪念进度：进度条下方居中一行（footer.uptime / footer.anniversary），由 features/footer.ts 计时 -->
-  <div class="joe_container joe_footer__life" th:if="${theme.config.footer.uptime}">
-    <p class="site_life" th:if="${theme.config.footer.uptime}">
-      <Icon name="runtime" />已运行
-      <strong class="joe_run__day">00</strong>天
-      <strong class="joe_run__hour">00</strong>时
-      <strong class="joe_run__minute">00</strong>分
-      <strong class="joe_run__second">00</strong>秒
-      <span
-        class="site_anniversary"
-        th:if="${theme.config.footer.anniversary}"
-        th:attr="data-years=${theme.config.footer.anniversary_years ?: 10}, data-label=${theme.config.footer.anniversary_label ?: '十年之约'}"
-        hidden
-      ></span>
-    </p>
-  </div>
-  <!-- 两行对齐：第一行版权与两个备案号 / Powered by，第二行云服务商 / 订阅与访问统计；窄屏改为居中堆叠 -->
+  <!-- 两行左右对齐：第一行版权与备案 / 运行时间与纪念进度，第二行云服务商与访问统计 / 订阅与 Powered by；窄屏居中堆叠。
+       运行时间由 features/footer.ts 计时 -->
   <div class="joe_container joe_footer__bar">
     <p class="row-start">
       <span class="copyright">
@@ -102,67 +87,64 @@ const CLOUD_PROVIDERS = [
         </span>
       </th-block>
     </p>
-    <p class="row-end site_powered" th:if="${theme.config.footer.powered_by}">
-      Powered by&nbsp;<a
-        class="a-powered"
-        href="https://www.halo.run/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >Halo</a>
-      <span class="sep">·</span>
-      Theme&nbsp;<a
-        class="a-theme"
-        th:href="${theme.spec.repo}"
-        th:title="|${theme.spec.displayName} v${theme.spec.version}|"
-        target="_blank"
-        rel="noopener noreferrer"
-      >Joe Next</a>
+    <p class="row-end site_life" th:if="${theme.config.footer.uptime}">
+      <Icon name="runtime" />已运行
+      <strong class="joe_run__day">00</strong>天
+      <strong class="joe_run__hour">00</strong>时
+      <strong class="joe_run__minute">00</strong>分
+      <strong class="joe_run__second">00</strong>秒
+      <span
+        class="site_anniversary"
+        th:if="${theme.config.footer.anniversary}"
+        th:attr="data-years=${theme.config.footer.anniversary_years ?: 10}, data-label=${theme.config.footer.anniversary_label ?: '十年之约'}"
+        hidden
+      ></span>
     </p>
     <p
-      class="row-start site_driven"
-      th:if="${theme.config.footer.cloud != null and theme.config.footer.cloud != 'none'}"
+      class="row-start"
+      th:if="${(theme.config.footer.cloud != null and theme.config.footer.cloud != 'none') or theme.config.footer.busuanzi}"
     >
-      本站点由
-      <th-block th:switch="${theme.config.footer.cloud}">
-        {CLOUD_PROVIDERS.map((p) => (
+      <span class="site_driven" th:if="${theme.config.footer.cloud != null and theme.config.footer.cloud != 'none'}">
+        本站点由
+        <th-block th:switch="${theme.config.footer.cloud}">
+          {CLOUD_PROVIDERS.map((p) => (
+            <a
+              th:case={`'${p.key}'`}
+              href={p.url}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+            >
+              <img
+                class={p.key}
+                th:src={`@{/assets/images/cloud/${p.key}.svg}`}
+                alt="云服务商"
+                data-fallback="image"
+              />
+            </a>
+          ))}
           <a
-            th:case={`'${p.key}'`}
-            href={p.url}
+            th:case="'custom'"
+            th:href="${theme.config.footer.cloud_url}"
             target="_blank"
             rel="noopener noreferrer nofollow"
           >
             <img
-              class={p.key}
-              th:src={`@{/assets/images/cloud/${p.key}.svg}`}
+              class="custom"
+              th:src="${theme.config.footer.cloud_logo}"
               alt="云服务商"
               data-fallback="image"
             />
           </a>
-        ))}
-        <a
-          th:case="'custom'"
-          th:href="${theme.config.footer.cloud_url}"
-          target="_blank"
-          rel="noopener noreferrer nofollow"
-        >
-          <img
-            class="custom"
-            th:src="${theme.config.footer.cloud_logo}"
-            alt="云服务商"
-            data-fallback="image"
-          />
-        </a>
-      </th-block>
-      提供云服务
+        </th-block>
+        提供云服务
+      </span>
+      <span class="busuanzi-statistic" th:if="${theme.config.footer.busuanzi}">
+        <span>访问 <em id="busuanzi_value_site_pv">0</em></span>
+        <span>访客 <em id="busuanzi_value_site_uv">0</em></span>
+        <span>本页 <em id="busuanzi_value_page_pv">0</em></span>
+      </span>
     </p>
-    <p class="row-end extras" th:if="${theme.config.footer.rss or theme.config.footer.sitemap or theme.config.footer.busuanzi}">
-      <th-block th:if="${theme.config.footer.busuanzi}">
-        <span class="busuanzi-statistic">
-          <span><Icon name="page-views" />访问 <em id="busuanzi_value_site_pv">0</em></span>
-          <span><Icon name="visitors" />访客 <em id="busuanzi_value_site_uv">0</em></span>
-          <span><Icon name="page-visitors" />本页 <em id="busuanzi_value_page_pv">0</em></span>
-        </span>
-      </th-block>
+    <p class="row-end">
       <a
         th:if="${theme.config.footer.rss}"
         class="rss"
@@ -180,6 +162,22 @@ const CLOUD_PROVIDERS = [
       >
         站点地图
       </a>
+      <span class="site_powered" th:if="${theme.config.footer.powered_by}">
+        Powered by&nbsp;<a
+          class="a-powered"
+          href="https://www.halo.run/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Halo</a>
+        <span class="sep">·</span>
+        Theme&nbsp;<a
+          class="a-theme"
+          th:href="${theme.spec.repo}"
+          th:title="|${theme.spec.displayName} v${theme.spec.version}|"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Joe Next</a>
+      </span>
     </p>
   </div>
 </footer>

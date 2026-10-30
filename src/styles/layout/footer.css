@@ -136,7 +136,8 @@
 .joe_footer__bar {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
+  /* 左侧换成两行时，右侧与第一行对齐，而不是夹在两行中间 */
+  align-items: start;
   gap: 4px 24px;
   padding-top: 16px;
   padding-bottom: 18px;
@@ -158,10 +159,11 @@
     white-space: nowrap;
   }
 
-  /* 「Powered by Halo · Theme Joe Next」「本站点由 … 提供云服务」是一句话，内部不加大间距 */
-  > .site_powered,
-  > .site_driven {
-    gap: 0;
+  /* 一整句的内容（Powered by、本站点由…提供云服务）内部不加大间距 */
+  .site_powered,
+  .site_driven {
+    display: inline-flex;
+    align-items: center;
   }
 
   a {
@@ -183,35 +185,20 @@
 @media (min-width: 769px) {
   .joe_footer .joe_footer__nav,
   .joe_footer .joe_footer__bar,
-  .joe_footer .joe_footer__progress,
-  .joe_footer .joe_footer__life {
+  .joe_footer .joe_footer__progress {
     padding-right: 76px;
   }
 }
 
-/* 运行时间与纪念进度：进度条下方居中一行 */
-.joe_footer .joe_footer__life {
-  display: flex;
-  justify-content: center;
-  padding-top: 14px;
-  font-size: 12.5px;
-  line-height: 22px;
-  text-align: center;
-}
-
-.joe_footer__life + .joe_footer__bar {
-  padding-top: 10px;
-}
-
-/* 运行时间：数字等宽，时间跳动时不抖 */
+/* 运行时间：数字等宽，时间跳动时不抖；整条页脚只有这里的数字用主题色 */
 .site_life {
+  gap: 0 !important;
   font-variant-numeric: tabular-nums;
 
   .joe-font {
     margin-right: 4px;
-    font-size: 14px;
-    color: #5dad16;
-    vertical-align: -2px;
+    font-size: 13px;
+    opacity: 0.7;
   }
 
   /* 数字颜色见 content/runtime.css */
@@ -232,29 +219,18 @@
   }
 }
 
+/* Halo、Joe Next 只加粗，不再各用一种颜色 */
 .site_powered {
   .a-powered,
   .a-theme {
     font-weight: 600;
-  }
-
-  .a-powered {
-    color: #0064d6;
-
-    html[data-mode="dark"] & {
-      color: #4d9fff;
-    }
-  }
-
-  .a-theme {
-    color: var(--theme-text);
+    color: var(--text-regular);
   }
 }
 
-.feeds .rss .joe-font {
+.joe_footer__bar .rss .joe-font {
   margin-right: 3px;
   font-size: 13px;
-  color: #f18651;
   vertical-align: -1px;
 }
 
@@ -295,7 +271,7 @@ html[data-mode="dark"] .site_driven img {
   background-size: 100% 100%;
 }
 
-/* 不蒜子访问统计：与其他页脚文字同样轻的一行，数字等宽 */
+/* 不蒜子访问统计：跟在云服务商后面的一组纯文字，数字等宽 */
 .busuanzi-statistic {
   display: inline-flex;
   flex-wrap: wrap;
@@ -307,11 +283,6 @@ html[data-mode="dark"] .site_driven img {
     align-items: center;
     gap: 3px;
     white-space: nowrap;
-  }
-
-  .joe-font {
-    font-size: 13px;
-    opacity: 0.75;
   }
 
   em {
