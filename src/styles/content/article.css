@@ -162,42 +162,41 @@
   text-shadow: var(--text-shadow);
 }
 
+/* 过期提醒（components/post/ArticleBody.astro）：正文上方一行浅色小字，不再是醒目的提示框；与正文同宽 */
 .joe_detail__overdue {
-  padding-top: 5px;
-}
-
-.joe_detail__overdue-wrapper {
-  padding: 15px;
-  color: var(--overdue-text);
-  border: 1px solid var(--overdue-border);
+  max-width: var(--reading-width, none);
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  margin-top: 4px;
+  margin-bottom: 0;
+  padding: 8px 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  border-left: 3px solid var(--overdue-border);
+  border-radius: 0 var(--radius-inner) var(--radius-inner) 0;
   background: var(--overdue-background);
-  border-radius: var(--radius-inner);
-  animation: overdue 1.5s ease-in-out;
 
-  .title {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    font-size: 15px;
-    font-weight: 500;
-
-    .icon {
-      width: 20px;
-      height: 20px;
-      margin-right: 8px;
-    }
+  .joe-font {
+    align-self: center;
+    font-size: 14px;
+    color: var(--overdue-text);
   }
 
-  .content {
-    padding-left: 28px;
-  }
-
-  &:hover {
-    clip-path: circle(75%);
+  .extra {
+    color: var(--text-secondary);
   }
 }
 
+/* 正文最大宽度（设置 post.reading_width，默认 760px）：一行中文约 40 字，长段落不易串行；卡片本身宽度不变 */
 .joe_detail__article {
+  max-width: var(--reading-width, none);
+  margin-right: auto;
+  margin-left: auto;
   padding: 10px 0;
   font-size: calc(16px * var(--reading-scale, 1));
   line-height: 1.85;
@@ -582,8 +581,11 @@
   }
 }
 
-/* 正文末尾的操作栏（在文章卡片内）：左侧标签，右侧点赞 / 分享 / 打赏，上方一条分隔线 */
+/* 正文末尾的操作栏（在文章卡片内）：左侧标签，右侧点赞 / 分享 / 打赏，上方一条分隔线；与正文同宽 */
 .joe_detail__operate {
+  max-width: var(--reading-width, none);
+  margin-right: auto;
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1032,23 +1034,6 @@
     }
   }
 
-  .joe_detail__overdue-wrapper {
-    padding: 10px;
-
-    .title {
-      margin-bottom: 5px;
-      font-size: 14px;
-
-      .icon {
-        margin-right: 5px;
-      }
-    }
-
-    .content {
-      font-size: 13px;
-      padding-left: 0;
-    }
-  }
 
   .joe_detail__article {
     padding: 10px 0;
@@ -1176,27 +1161,6 @@
     }
   }
 
-  .joe_detail__overdue {
-    padding-top: 0;
-  }
-
-  .joe_detail__overdue-wrapper {
-    padding: 10px;
-
-    .title {
-      margin-bottom: 5px;
-      font-size: 14px;
-
-      .icon {
-        margin-right: 5px;
-      }
-    }
-
-    .content {
-      font-size: 13px;
-      padding-left: 0;
-    }
-  }
 
   .joe_detail__article {
     padding: 10px 0;
@@ -1226,10 +1190,6 @@ html[data-mode="dark"] {
   .joe_detail__article {
     img {
       filter: brightness(0.9);
-    }
-
-    .joe_detail__overdue-wrapper {
-      background: var(--fill-base);
     }
   }
 

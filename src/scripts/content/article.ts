@@ -165,7 +165,7 @@ export function initToc(): void {
   const raw = renderRawContent();
   if (raw) {
     buildRawToc(raw, $(tocSelector)!, { offset, onNavigate: () => mobile && closeOverlays() });
-    showMobileTocButton(mobile);
+    finishToc(tocSelector, mobile);
     return;
   }
   onCleanup(() => tocbot.destroy());
@@ -183,8 +183,19 @@ export function initToc(): void {
     // swup 切到没有目录的页面后回调仍会执行一次，找不到元素就报错
     onClick: () => mobile && closeOverlays(),
   });
-  if (!$(tocSelector)?.children.length) {
-    $(tocSelector)!.innerHTML = '<div class="toc-nodata">暂无目录</div>';
+  finishToc(tocSelector, mobile);
+}
+
+/**
+ * 文章没有小标题时：侧栏不留一张「暂无目录」的空卡片，手机上也不显示目录按钮。
+ * 有目录时显示手机上的目录按钮。
+ */
+function finishToc(tocSelector: string, mobile: boolean): void {
+  const toc = $(tocSelector);
+  const empty = !toc?.querySelector("a");
+  if (empty) {
+    $(".toc-container")?.setAttribute("hidden", "");
+    return;
   }
   showMobileTocButton(mobile);
 }

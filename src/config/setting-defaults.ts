@@ -189,6 +189,7 @@ export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "post.image_align": "center",
   "post.image_max_width": "100%",
   "post.outdated_days": 30,
+  "post.reading_width": 760,
   "post.related_count": 5,
   "post.toc_depth": 0
 };

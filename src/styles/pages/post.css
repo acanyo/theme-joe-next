@@ -291,6 +291,11 @@
   transition: top var(--dur-base) var(--ease-out);
 }
 
+/* 文章没有小标题时由 scripts/content/article.ts 加 hidden，整张目录卡片不显示 */
+.toc-container[hidden] {
+  display: none;
+}
+
 .toc-container {
   min-height: 90px;
   margin-bottom: 15px;

@@ -2060,7 +2060,7 @@ spec:
           id: outdated_notice
           key: outdated_notice
           label: 过期提醒
-          help: 文章长时间未更新时在顶部提示
+          help: 文章超过设定天数未更新时，在正文上方显示一行浅色提示；单篇文章可用元数据 enable_passage_tips 关闭
           value: false
         - $formkit: number
           if: $get(outdated_notice).value === true
@@ -2089,9 +2089,9 @@ spec:
           name: outdated_text
           id: outdated_text
           key: outdated_text
-          label: 提醒文字
+          label: 附加文字
           value: ""
-          help: 留空使用默认文字
+          help: 附在过期提示后面，例如「部分素材来自网络，如有侵权请联系删除」；填写后所有文章都会显示这一行
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
@@ -2129,6 +2129,15 @@ spec:
           label: 图片最大宽度
           value: 100%
           help: 需带单位，默认 100%；单篇文章可用元数据 img_max_width 覆盖
+        - $formkit: number
+          name: reading_width
+          id: reading_width
+          key: reading_width
+          label: 正文最大宽度
+          value: 760
+          help: 单位 px。正文文字、图片、代码块在文章卡片里居中，一行不会太长；填 0 不限制，铺满卡片
+          min: 0
+          max: 2000
         - $formkit: switch
           name: indent
           id: indent

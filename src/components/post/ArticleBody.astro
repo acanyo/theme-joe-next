@@ -4,7 +4,6 @@
  * `subject` 为当前内容变量名：文章页为 "post"，独立页面为 "singlePage"。
  */
 import { COMMENT_ENABLED, el } from "../../config/expressions";
-import { POST_ICONS } from "../../data/post-icons";
 import PostAds from "./PostAds.astro";
 import Icon from "../common/Icon.astro";
 
@@ -29,6 +28,7 @@ const ARTICLE_CLASS = [
 
 <div
   class="joe_detail"
+  th:style="|--reading-width: ${theme.config.post.reading_width == 0 ? 'none' : (theme.config.post.reading_width ?: 760) + 'px'}|"
   th:attr={`data-cid=\${${s}.metadata.name}, data-kind=${isPost ? "Post" : "SinglePage"}, data-likes=\${${s}.stats.upvote}, data-toc-depth=\${#annotations.getOrDefault(${s}, 'toc_depth', '')}, data-fold-long-code=\${#annotations.getOrDefault(${s}, 'enable_fold_long_code', 'true')}`}
   th:with={`author = \${contributorFinder.getContributor(${s}.spec.owner)}`}
 >
@@ -114,31 +114,31 @@ const ARTICLE_CLASS = [
     </div>
     </th-block>
 
-    <div
-      class="joe_detail__overdue"
+    <!-- 过期提醒（设置 post.outdated_notice）：文章超过设定天数未更新时，正文上方一行浅色提示；
+         填了提醒文字时附在后面。没过期且没填文字时不显示 -->
+    <th-block
       th:if={`\${theme.config.post.outdated_notice and ${ann("enable_passage_tips", "true")} == 'true'}`}
-      th:with={`staleDays = \${(#dates.createNow().getTime() - ${s}.status.lastModifyTime.toEpochMilli()) / 86400000}`}
+      th:with={`staleDays = \${(#dates.createNow().getTime() - ${s}.status.lastModifyTime.toEpochMilli()) / 86400000}, isStale = \${staleDays >= #conversions.convert(theme.config.post.outdated_days ?: 30, 'java.lang.Integer')}`}
     >
-      <div class="joe_detail__overdue-wrapper">
-        <div class="title">
-          <Fragment set:html={POST_ICONS.tip} />
-          <span class="text">温馨提示：</span>
-        </div>
-        <div class="content">
-          <th-block th:if="${staleDays >= #conversions.convert(theme.config.post.outdated_days ?: 30, 'java.lang.Integer')}">
-            <th-block
-              th:if="${theme.config.post.outdated_format}"
-              th:text={`|本文最后更新于 \${#dates.format(${s}.status.lastModifyTime, 'yyyy-MM-dd')}，若内容或图片失效，请留言反馈。|`}
-            ></th-block>
-            <th-block
-              th:unless="${theme.config.post.outdated_format}"
-              th:text="|本文最后更新于 ${staleDays} 天前，若内容或图片失效，请留言反馈。|"
-            ></th-block>
-          </th-block>
-          <span th:text="${theme.config.post.outdated_text ?: '部分素材来自网络，若不小心影响到您的利益，请联系我们删除。'}"></span>
-        </div>
-      </div>
-    </div>
+      <p
+        class="joe_detail__overdue"
+        th:if="${isStale or not #strings.isEmpty(theme.config.post.outdated_text)}"
+        role="note"
+      >
+        <Icon name="hourglass" />
+        <th-block th:if="${isStale}">
+          <span
+            th:if="${theme.config.post.outdated_format}"
+            th:text={`|本文最后更新于 \${#dates.format(${s}.status.lastModifyTime, 'yyyy-MM-dd')}，部分内容可能已过时|`}
+          ></span>
+          <span
+            th:unless="${theme.config.post.outdated_format}"
+            th:text="|本文最后更新于 ${staleDays} 天前，部分内容可能已过时|"
+          ></span>
+        </th-block>
+        <span class="extra" th:unless="${#strings.isEmpty(theme.config.post.outdated_text)}" th:text="${theme.config.post.outdated_text}"></span>
+      </p>
+    </th-block>
 
     {isPost && <PostAds position="top" />}
 

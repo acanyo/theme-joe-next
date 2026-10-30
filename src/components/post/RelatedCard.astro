@@ -1,0 +1,21 @@
+---
+/** 正文下方相关文章的一张卡片（components/post/RelatedPosts.astro）；模板变量 item、cover 由外层 li 提供 */
+import { responsiveImage } from "../../config/images";
+---
+
+<a th:href="@{${item.status.permalink}}" th:title="${item.spec.title}">
+  <span class="cover">
+    <img
+      th:if="${not #strings.isEmpty(cover)}"
+      alt=""
+      loading="lazy"
+      {...responsiveImage("cover", "(max-width: 768px) 45vw, 220px", ["s", "m"])}
+      data-fallback="thumbnail"
+    />
+  </span>
+  <span class="title" th:text="${item.spec.title}"></span>
+  <time
+    th:datetime="${#dates.format(item.spec.publishTime, 'yyyy-MM-dd')}"
+    th:text="${#dates.format(item.spec.publishTime, 'yyyy-MM-dd')}"
+  ></time>
+</a>
