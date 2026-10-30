@@ -1,0 +1,102 @@
+---
+/**
+ * 朋友圈（自定义页面模板 page_friends.html）：友链博客最近的 RSS 文章，按发布时间倒序。
+ * 数据来自链接管理插件的 linkFeedFinder；需要在插件设置的「RSS 订阅」里开启「公开 RSS 订阅动态」，
+ * 否则列表为空。用法：后台新建一个页面（例如别名 friends），模板选「朋友圈」。
+ * 下一页用插件给的游标（beforePublishedAt / beforeId）放在地址参数里。
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Aside from "../components/aside/Aside.astro";
+import Icon from "../components/common/Icon.astro";
+import "../styles/pages/friends.css";
+
+const PAGE_SIZE = 20;
+const QUERY = `linkFeedFinder.list({limit: ${PAGE_SIZE}, beforePublishedAt: #strings.isEmpty(param.before) ? null : param.before[0], beforeId: #strings.isEmpty(param.beforeId) ? null : param.beforeId[0]})`;
+---
+
+<BaseLayout
+  title="(theme.config.pages.feed_title ?: '朋友圈') + ' - ' + site.title"
+  pageClass="page-friends"
+>
+  <div class="joe_main">
+    <div class="joe_detail" th:with={`feeds = \${pluginFinder.available('PluginLinks') ? ${QUERY} : null}`}>
+      <h1
+        class="joe_detail__title txt-shadow"
+        th:text="${theme.config.pages.feed_title ?: '朋友圈'}"
+      ></h1>
+      <a
+        class="joe_friend_add"
+        th:if="${theme.config.pages.feed_subscribe}"
+        sec:authorize="isAuthenticated()"
+        th:href="@{/console/links}"
+        target="_blank"
+        rel="nofollow"
+        aria-label="管理友链订阅"
+      >
+        <Icon name="edit" />
+      </a>
+      <ul class="joe_friends__list" th:if="${feeds != null}">
+        <li
+          class="joe_friend__item"
+          th:each="item : ${feeds.items}"
+          th:classappend="${theme.config.effects.list_animation ? 'joe-reveal' : ''}"
+          th:attr="data-reveal=${theme.config.effects.list_animation_name}"
+        >
+          <p class="joe_friend_info">
+            <img
+              class="joe_friend_info_logo"
+              loading="lazy"
+              th:src="${item.authorLogo}"
+              sizes="40px"
+              th:alt="${item.author}"
+              th:attr="data-text-avatar=${item.author}"
+              data-fallback="link"
+            />
+            <a
+              class="joe_friend_info_author"
+              th:text="${item.author}"
+              th:href="${item.authorUrl}"
+              target="_blank"
+              rel="noopener noreferrer"
+            ></a>
+            <time
+              class="joe_friend_info_pubDate"
+              th:if="${item.publishedAt != null}"
+              th:datetime="${item.publishedAt}"
+              th:text="${#temporals.format(item.publishedAt, 'yyyy-MM-dd')}"
+            ></time>
+          </p>
+          <div class="joe_friend_block">
+            <div class="joe_friend_body">
+              <h2 class="joe_friend_content_title">
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  th:href="${item.url}"
+                  th:text="${item.title}"
+                ></a>
+              </h2>
+              <div
+                class="joe_friend_content_description"
+                th:text="${item.summary}"
+              ></div>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <p class="joe_friends__empty" th:if="${feeds == null or #lists.isEmpty(feeds.items)}">
+        暂无订阅内容
+      </p>
+      <!-- 插件按游标分页：只有「更早」一个方向 -->
+      <nav class="joe_friends__more" th:if="${feeds != null and feeds.hasNext}" aria-label="分页">
+        <a
+          class="joe_load"
+          th:href="@{${singlePage.status.permalink}(before=${feeds.nextBeforePublishedAt}, beforeId=${feeds.nextBeforeId})}"
+        >更早的动态</a>
+      </nav>
+    </div>
+  </div>
+  <th-block th:if="${theme.config.aside.on_friends}">
+    <Aside />
+  </th-block>
+</BaseLayout>

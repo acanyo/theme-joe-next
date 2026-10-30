@@ -132,3 +132,10 @@
     overflow-y: hidden;
   }
 }
+
+/* 朋友圈（pages/page_friends.astro）：「更早的动态」按插件游标翻页 */
+.joe_friends__more {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0 4px;
+}

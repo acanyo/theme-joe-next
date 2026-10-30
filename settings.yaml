@@ -2903,19 +2903,19 @@ spec:
             - $el: div
               attrs:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
-              children: 需要朋友圈插件
+              children: 后台新建页面并选择「朋友圈」模板；数据来自链接插件的 RSS 订阅
         - $formkit: text
           name: feed_title
           id: feed_title
           key: feed_title
           label: 朋友圈标题
           value: 朋友圈
-          help: 需要朋友圈插件
         - $formkit: switch
           name: feed_subscribe
           id: feed_subscribe
           key: feed_subscribe
-          label: 朋友圈「添加订阅」按钮
+          label: 朋友圈「管理订阅」按钮
+          help: 登录后在朋友圈页右上角显示，跳到后台的链接管理
           value: false
         - $el: div
           attrs:
