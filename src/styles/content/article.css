@@ -894,80 +894,6 @@
   }
 }
 
-.joe_detail__friends {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin-bottom: 15px;
-}
-
-/* 正文 ul li 的列表样式写在前面但权重更高，这里需要 !important 覆盖 */
-.joe_detail__friends-item {
-  list-style: none !important;
-  line-height: 1.5 !important;
-
-  .contain {
-    display: block;
-    overflow: hidden;
-    padding: 15px;
-    color: #fff;
-    word-break: break-word;
-    transform: translate3d(0, 0, 0) scale(1);
-    transform-origin: bottom center;
-    transition: transform var(--dur-base) var(--ease-out);
-    border-radius: var(--radius-wrap);
-
-    &:hover {
-      transform: translate3d(0, -2px, 0) scale(1.01);
-      /* box-shadow: 0 34px 20px -24px rgba(136, 161, 206, 0.3);*/
-    }
-
-    .title {
-      position: relative;
-      font-weight: bold;
-
-      &::after {
-        content: "";
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background: #fff;
-      }
-    }
-
-    .content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 15px;
-
-      .desc {
-        flex: 1;
-        margin-right: 10px;
-        word-break: break-all;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        /*! autoprefixer: ignore next */
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .avatar {
-        cursor: pointer;
-        width: 40px;
-        height: 40px;
-        min-width: 40px;
-        min-height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-    }
-  }
-}
-
 .joe_detail {
   .joe_comment_box {
     padding-top: 20px;
@@ -979,12 +905,6 @@
 }
 
 /* 响应式 */
-@media (max-width: 1200px) {
-  .joe_detail__friends {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (max-width: 992px) {
   .joe_detail__article {
     img {
@@ -994,10 +914,6 @@
 }
 
 @media (max-width: 768px) {
-  .joe_detail__friends {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
   .joe_detail__title {
     font-size: 18px;
   }
@@ -1113,10 +1029,6 @@
     border-radius: 0;
   }
 
-  .joe_detail__friends {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
   .joe_detail__title {
     padding-top: 30px;
     font-size: 18px;
@@ -1190,19 +1102,6 @@ html[data-mode="dark"] {
     img {
       filter: brightness(0.9);
     }
-  }
-
-  .joe_detail__friends {
-    filter: brightness(0.8);
-  }
-}
-
-/* 友链页正文 */
-.page-links .joe_detail__article {
-  padding: 10px 0;
-
-  h3 {
-    margin: 20px 0;
   }
 }
 

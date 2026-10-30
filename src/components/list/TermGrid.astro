@@ -4,7 +4,6 @@
  * 注意：Thymeleaf 会把表达式中的 `__x__` 当作预处理语法，因此 BEM 类名只能写在静态 class 中。
  */
 import { responsiveImage, SIZES } from "../../config/images";
-import { coverOf } from "../../config/expressions";
 interface Props {
   kind: "tags" | "categories";
 }
@@ -21,12 +20,16 @@ const CONFIG = {
 }[kind];
 const cfg = (key: string) => `theme.config.pages.${CONFIG.group}_${key}`;
 const v = CONFIG.item;
-const COVER = coverOf(v);
 const SHOW_NUM = `\${${cfg("count")}}`;
 const NUM_TEXT = `|\${${v}.status.visiblePostCount ?: 0}篇|`;
 const NAME = `\${${v}.spec.displayName}`;
 const HREF = `@{\${${v}.status.permalink}}`;
-const EACH = `${v} : \${termList}`;
+const EACH = `${v}, iter : \${termList}`;
+/**
+ * 分类 / 标签自己没有封面时，轮流使用主题自带的 4 张封面（与首页精选推荐相同）。
+ * 不用「默认缩略图」设置：那是给文章用的一张图，会让一排卡片全是同一张。
+ */
+const FALLBACK = "#theme.assets('/images/hot_cover' + (iter.index % 4 + 1) + '.jpg')";
 ---
 
 <div class="joe_index" th:with={`termList = \${${CONFIG.items}}`}>
@@ -49,7 +52,7 @@ const EACH = `${v} : \${termList}`;
         <a class="link" th:href={HREF} th:title={NAME}>
           <figure
             class="inner"
-            th:with={`cover = \${#strings.isEmpty(${COVER}) ? #theme.assets('/images/default_thumbnail.png') : ${COVER}}`}
+            th:with={`cover = \${#strings.isEmpty(${v}.spec.cover) ? ${FALLBACK} : ${v}.spec.cover}`}
           >
             <em class="post-nums" th:if={SHOW_NUM} th:text={NUM_TEXT}></em>
             <img

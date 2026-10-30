@@ -27,3 +27,6 @@ spec:
       - name: 友链
         description: 友情链接页面（需要链接插件）
         file: page_links.html
+      - name: 朋友圈
+        description: 友链博客的最新文章（需要链接插件，并在插件里开启「公开 RSS 订阅动态」）
+        file: page_friends.html

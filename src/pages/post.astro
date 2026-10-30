@@ -23,6 +23,15 @@ import "../styles/content/poster.css";
   title="post.spec.title + ' - ' + site.title"
   pageClass="page-post"
 >
+  <!-- 沉浸头图是 CSS 背景图，浏览器要等样式解析完才发现它；提前预加载，头图（最大内容元素）能早一两百毫秒出现 -->
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    fetchpriority="high"
+    th:if="${(theme.config.post.header_style ?: 'immersive') == 'immersive' and not #strings.isEmpty(post.spec.cover)}"
+    th:href="${thumbnail.gen(post.spec.cover, 'l')}"
+  />
   <PostHero slot="before" />
   <Breadcrumb slot="before" />
 

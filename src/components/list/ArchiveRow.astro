@@ -1,0 +1,11 @@
+---
+/** 归档时间轴里的一行（变量 post）：左边月-日，右边标题 */
+---
+
+<a class="row" th:title="${post.spec.title}" th:href="@{${post.status.permalink}}">
+  <time
+    th:datetime="${post.spec.publishTime}"
+    th:text="${#dates.format(post.spec.publishTime, 'MM-dd')}"
+  ></time>
+  <span th:text="${post.spec.title}"></span>
+</a>

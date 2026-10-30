@@ -1,0 +1,156 @@
+---
+/**
+ * 朋友圈（自定义页面模板 page_friends.html）：友链博客最近的 RSS 文章，按发布时间倒序。
+ * 数据来自链接管理插件的 linkFeedFinder；需要在插件设置的「RSS 订阅」里开启「公开 RSS 订阅动态」，
+ * 否则列表为空。用法：后台新建一个页面（例如别名 friends），模板选「朋友圈」。
+ *
+ * - 顶部一排头像：有订阅内容的朋友，点一下只看这个人（地址参数 link）。
+ * - 下一页用插件给的游标（beforePublishedAt / beforeId）放在地址参数里，翻页时保留 link。
+ * - 瞬间一类的订阅没有真正的标题（例如「xxx published on 2026-10-23 17:33:49」），这类条目不显示标题，只显示正文。
+ * - 发布时间由 pages/friends.ts 换成相对时间。
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Aside from "../components/aside/Aside.astro";
+import Icon from "../components/common/Icon.astro";
+import "../styles/pages/friends.css";
+
+const PAGE_SIZE = 20;
+const PARAM = (name: string) => `(#strings.isEmpty(param.${name}) ? null : param.${name}[0])`;
+const QUERY = `linkFeedFinder.list({limit: ${PAGE_SIZE}, linkName: ${PARAM("link")}, beforePublishedAt: ${PARAM("before")}, beforeId: ${PARAM("beforeId")}})`;
+/** 没有真正标题的条目：标题为空、或是瞬间订阅自动生成的「… published on …」 */
+const NO_TITLE = "#strings.isEmpty(item.title) or #strings.contains(item.title, ' published on ')";
+---
+
+<BaseLayout
+  pageScript="friends"
+  title="(theme.config.pages.feed_title ?: '朋友圈') + ' - ' + site.title"
+  pageClass="page-friends"
+>
+  <div class="joe_main">
+    <div
+      class="joe_detail"
+      th:with={`enabled = \${pluginFinder.available('PluginLinks')}, currentLink = \${${PARAM("link")}}`}
+    >
+      <h1
+        class="joe_detail__title txt-shadow"
+        th:text="${theme.config.pages.feed_title ?: '朋友圈'}"
+      ></h1>
+      <a
+        class="joe_friend_add"
+        th:if="${theme.config.pages.feed_subscribe}"
+        sec:authorize="isAuthenticated()"
+        th:href="@{/console/links}"
+        target="_blank"
+        rel="nofollow"
+        aria-label="管理友链订阅"
+        title="管理订阅"
+      >
+        <Icon name="edit" />
+      </a>
+
+      <th-block th:if="${enabled}" th:with={`feeds = \${${QUERY}}, feedGroups = \${linkFeedFinder.groupBy(1)}`}>
+        <!-- 按朋友筛选 -->
+        <nav class="joe_friends__who" aria-label="按朋友筛选" th:unless="${#lists.isEmpty(feedGroups)}">
+          <a
+            class="who all"
+            th:href="@{${singlePage.status.permalink}}"
+            th:classappend="${currentLink == null ? 'active' : ''}"
+            th:attr="aria-current=${currentLink == null ? 'page' : null}"
+          >全部</a>
+          <th-block th:each="group : ${feedGroups}">
+            <a
+              class="who"
+              th:each="link : ${group.links}"
+              th:unless="${#lists.isEmpty(link.feeds)}"
+              th:href="@{${singlePage.status.permalink}(link=${link.metadata.name})}"
+              th:title="${link.spec.displayName}"
+              th:classappend="${currentLink == link.metadata.name ? 'active' : ''}"
+              th:attr="aria-current=${currentLink == link.metadata.name ? 'page' : null}"
+            >
+              <img
+                width="32"
+                height="32"
+                loading="lazy"
+                th:src="${link.spec.logo ?: theme.config.pages.links_fallback_logo}"
+                th:alt="${link.spec.displayName}"
+                th:attr="data-text-avatar=${link.spec.displayName}"
+                data-fallback="link"
+              />
+            </a>
+          </th-block>
+        </nav>
+
+        <ul class="joe_friends__list" th:unless="${#lists.isEmpty(feeds.items)}">
+          <li
+            class="joe_friend__item"
+            th:each="item : ${feeds.items}"
+            th:with={`noTitle = \${${NO_TITLE}}`}
+            th:classappend="|${theme.config.effects.list_animation ? 'joe-reveal' : ''} ${noTitle ? 'is-note' : ''}|"
+            th:attr="data-reveal=${theme.config.effects.list_animation_name}"
+          >
+            <header class="head">
+              <a
+                class="author"
+                th:href="@{${singlePage.status.permalink}(link=${item.linkName})}"
+                th:title="|只看 ${item.author}|"
+              >
+                <img
+                  width="36"
+                  height="36"
+                  loading="lazy"
+                  th:src="${item.authorLogo ?: theme.config.pages.links_fallback_logo}"
+                  th:alt="${item.author}"
+                  th:attr="data-text-avatar=${item.author}"
+                  data-fallback="link"
+                />
+                <span class="name" th:text="${item.author}"></span>
+              </a>
+              <time
+                class="time"
+                th:if="${item.publishedAt != null}"
+                th:datetime="${item.publishedAt}"
+                th:title="${#temporals.format(item.publishedAt, 'yyyy-MM-dd HH:mm')}"
+                th:text="${#temporals.format(item.publishedAt, 'yyyy-MM-dd')}"
+              ></time>
+            </header>
+            <a class="body" th:href="${item.url}" target="_blank" rel="noopener noreferrer">
+              <h2 class="title" th:unless="${noTitle}" th:text="${item.title}"></h2>
+              <p class="summary" th:unless="${#strings.isEmpty(item.summary)}" th:text="${item.summary}"></p>
+              <span class="more">
+                <span th:text="${#strings.isEmpty(item.authorUrl) ? '阅读原文' : item.authorUrl.replaceAll('^https?://|/$', '')}">阅读原文</span>
+                <Icon name="external" />
+              </span>
+            </a>
+          </li>
+        </ul>
+
+        <p class="joe_friends__empty" th:if="${#lists.isEmpty(feeds.items)}">
+          <span th:text="${currentLink == null ? '还没有订阅内容' : '这位朋友最近没有更新'}"></span>
+          <small th:if="${currentLink == null}">在链接插件里给友链填上 RSS 地址，并开启「公开 RSS 订阅动态」</small>
+        </p>
+
+        <!-- 插件按游标分页：只有「更早」一个方向 -->
+        <nav class="joe_friends__more" th:if="${feeds.hasNext}" aria-label="分页">
+          <!-- Thymeleaf 会把值为 null 的参数输出成空的 link=，所以分两种写法 -->
+          <a
+            class="joe_load"
+            th:if="${currentLink == null}"
+            th:href="@{${singlePage.status.permalink}(before=${feeds.nextBeforePublishedAt}, beforeId=${feeds.nextBeforeId})}"
+          >更早的动态</a>
+          <a
+            class="joe_load"
+            th:unless="${currentLink == null}"
+            th:href="@{${singlePage.status.permalink}(link=${currentLink}, before=${feeds.nextBeforePublishedAt}, beforeId=${feeds.nextBeforeId})}"
+          >更早的动态</a>
+        </nav>
+      </th-block>
+
+      <p class="joe_friends__empty" th:unless="${enabled}">
+        <span>朋友圈需要链接插件</span>
+      </p>
+    </div>
+  </div>
+  <th-block th:if="${theme.config.aside.on_friends}">
+    <Aside />
+  </th-block>
+</BaseLayout>

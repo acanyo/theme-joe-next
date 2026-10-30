@@ -4,6 +4,7 @@ import Aside from "../components/aside/Aside.astro";
 import Pagination from "../components/list/Pagination.astro";
 import "../styles/pages/archives.css";
 import Icon from "../components/common/Icon.astro";
+import ArchiveRow from "../components/list/ArchiveRow.astro";
 
 const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
 ---
@@ -17,7 +18,10 @@ const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
 >
   <div class="joe_main">
     <div class="joe_index joe_archives__filing">
-      <div class="title" th:text={`\${${TITLE}}`}></div>
+      <div class="title">
+        <span th:text={`\${${TITLE}}`}></span>
+        <span class="total">共 <em th:text="${siteStatsFinder.getStats().post}">0</em> 篇</span>
+      </div>
       <div class="content">
         <div
           class="joe_archives__category animated fadeIn"
@@ -84,16 +88,13 @@ const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
                   <li class="item" th:each="month : ${archive.months}">
                     <div class="wrapper">
                       <div class="panel in">
-                        <span th:text="|${archive.year} 年 ${month.month} 月|"></span>
+                        <span class="when" th:text="|${archive.year} 年 ${month.month} 月|"></span>
+                        <em class="num" th:text="|${#lists.size(month.posts)} 篇|"></em>
                         <Icon name="chevron-down" />
                       </div>
                       <ol class="panel-body">
                         <li th:each="post : ${month.posts}">
-                          <a
-                            th:title="${post.spec.title}"
-                            th:href="@{${post.status.permalink}}"
-                            th:text="|${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}：${post.spec.title}|"
-                          ></a>
+                          <ArchiveRow />
                         </li>
                       </ol>
                     </div>
@@ -102,17 +103,14 @@ const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
                 <li class="item" th:unless="${byMonth}">
                   <div class="wrapper">
                     <div class="panel in">
-                      <span th:text="|${archive.year} 年|"></span>
+                      <span class="when" th:text="|${archive.year} 年|"></span>
+                      <em class="num" th:text="|${#aggregates.sum(archive.months.![#lists.size(posts)])} 篇|"></em>
                       <Icon name="chevron-down" />
                     </div>
                     <ol class="panel-body">
                       <th-block th:each="month : ${archive.months}">
                         <li th:each="post : ${month.posts}">
-                          <a
-                            th:title="${post.spec.title}"
-                            th:href="@{${post.status.permalink}}"
-                            th:text="|${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}：${post.spec.title}|"
-                          ></a>
+                          <ArchiveRow />
                         </li>
                       </th-block>
                     </ol>

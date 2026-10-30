@@ -164,7 +164,7 @@ spec:
               label: 经典
               render: /themes/theme-joe-next/assets/previews/navbar-classic.svg
           render-type: image
-          size: 112
+          size: 80
           gap: 8
         - $formkit: menuSelect
           name: menu
@@ -2003,6 +2003,12 @@ spec:
           id: on_friends
           key: on_friends
           label: 朋友圈页
+        - $formkit: switch
+          value: true
+          name: on_equipments
+          id: on_equipments
+          key: on_equipments
+          label: 装备页
     - group: post
       label: 文章
       formSchema:
@@ -2903,19 +2909,19 @@ spec:
             - $el: div
               attrs:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
-              children: 需要朋友圈插件
+              children: 后台新建页面并选择「朋友圈」模板；数据来自链接插件的 RSS 订阅
         - $formkit: text
           name: feed_title
           id: feed_title
           key: feed_title
           label: 朋友圈标题
           value: 朋友圈
-          help: 需要朋友圈插件
         - $formkit: switch
           name: feed_subscribe
           id: feed_subscribe
           key: feed_subscribe
-          label: 朋友圈「添加订阅」按钮
+          label: 朋友圈「管理订阅」按钮
+          help: 登录后在朋友圈页右上角显示，跳到后台的链接管理
           value: false
         - $el: div
           attrs:
@@ -2990,7 +2996,7 @@ spec:
             - $el: div
               attrs:
                 style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
-              children: 版权、运行时间、服务商与统计
+              children: 版权、运行时间与站点数据、服务商
         - $formkit: switch
           name: enabled
           id: enabled
@@ -3090,7 +3096,7 @@ spec:
           id: uptime
           key: uptime
           label: 运行时间
-          help: 页脚左侧大字显示网站已运行的天数，并显示文章数等站点数据
+          help: 页脚左侧大字显示网站已运行的天数，并显示文章数、阅读数、评论数
           value: false
         - $formkit: text
           if: $get(uptime).value == true
@@ -3185,12 +3191,6 @@ spec:
           key: sitemap
           label: 站点地图链接
           value: false
-        - $formkit: switch
-          if: $get(enabled).value == true
-          name: busuanzi
-          id: busuanzi
-          key: busuanzi
-          label: 访问统计（不蒜子）
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"

@@ -5,6 +5,7 @@ import Actions from "../components/layout/Actions.astro";
 import Aside from "../components/aside/Aside.astro";
 import CommentSection from "../components/post/CommentSection.astro";
 import LinkGroups from "../components/links/LinkGroups.astro";
+import LinkApply from "../components/links/LinkApply.astro";
 import "../styles/pages/journals.css";
 ---
 
@@ -19,6 +20,7 @@ import "../styles/pages/journals.css";
         class="joe_detail__title txt-shadow"
         th:text="${singlePage.spec.title}"
       ></h1>
+      <LinkApply enabled="pluginFinder.available('PluginLinks')" />
       <article class="joe_detail__article animated fadeIn">
         <th-block th:if="${pluginFinder.available('PluginLinks')}">
           <LinkGroups groups="linkFinder.groupBy()" />

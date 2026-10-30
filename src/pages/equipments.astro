@@ -1,0 +1,89 @@
+---
+/**
+ * 装备页：装备管理插件（plugin-equipment）提供的 /equipments 路由，模板变量：
+ * - groups：所有分组，每个分组带 equipments（该组的全部装备，按插件里的排序）
+ * - title：插件设置里的页面标题（默认「装备」）
+ *
+ * 不用插件给的分页列表 equipments：按分组整页展示更直观，分组导航跳到页内锚点。
+ * 装备卡片：封面（按比例完整显示，不裁切）、名称、规格、简介；填了链接的整张卡片可点。
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Aside from "../components/aside/Aside.astro";
+import Icon from "../components/common/Icon.astro";
+import { responsiveImage, SIZES } from "../config/images";
+import "../styles/pages/equipments.css";
+
+/** 选择表达式 .?[] 里的根对象就是每个分组 */
+const NOT_EMPTY = "not #lists.isEmpty(equipments)";
+---
+
+<BaseLayout
+  title="(title ?: '装备') + ' - ' + site.title"
+  pageClass="page-equipments"
+>
+  <div class="joe_main">
+    <div class="joe_detail" th:with={`shown = \${groups.?[${NOT_EMPTY}]}`}>
+      <h1 class="joe_detail__title txt-shadow" th:text="${title ?: '装备'}"></h1>
+      <p class="joe_equip__count" th:unless="${#lists.isEmpty(shown)}">
+        共 <em th:text="${#aggregates.sum(shown.![#lists.size(equipments)])}">0</em> 件装备
+      </p>
+
+      <nav class="joe_equip__nav" aria-label="装备分组" th:if="${#lists.size(shown) > 1}">
+        <a
+          th:each="group : ${shown}"
+          th:href="|#equip-${group.metadata.name}|"
+          th:text="${group.spec.displayName}"
+        ></a>
+      </nav>
+
+      <section
+        class="joe_equip__group"
+        th:each="group : ${shown}"
+        th:id="|equip-${group.metadata.name}|"
+      >
+        <header class="head">
+          <h2 th:text="${group.spec.displayName}"></h2>
+          <p th:unless="${#strings.isEmpty(group.spec.description)}" th:text="${group.spec.description}"></p>
+        </header>
+        <ul class="joe_equip__list">
+          <li
+            class="joe_equip__item"
+            th:each="item : ${group.equipments}"
+            th:classappend="${theme.config.effects.list_animation ? 'joe-reveal' : ''}"
+            th:attr="data-reveal=${theme.config.effects.list_animation_name}"
+          >
+            <!-- 没填链接时不输出 href：<a> 不可点、不进 Tab 顺序 -->
+            <a
+              class="card"
+              th:with="hasUrl = ${not #strings.isEmpty(item.spec.url)}"
+              th:classappend="${hasUrl ? 'is-link' : ''}"
+              th:attr="href=${hasUrl ? item.spec.url : null}, target=${hasUrl ? '_blank' : null}, rel=${hasUrl ? 'noopener noreferrer' : null}, title=${hasUrl ? '查看 ' + item.spec.displayName : null}"
+            >
+              <span class="cover">
+                <img
+                  loading="lazy"
+                  {...responsiveImage("item.spec.cover", SIZES.card, ["s", "m"])}
+                  th:alt="${item.spec.displayName}"
+                  data-fallback="thumbnail"
+                />
+              </span>
+              <span class="body">
+                <span class="name" th:text="${item.spec.displayName}"></span>
+                <span class="spec" th:unless="${#strings.isEmpty(item.spec.specification)}" th:text="${item.spec.specification}"></span>
+                <span class="desc" th:unless="${#strings.isEmpty(item.spec.description)}" th:text="${item.spec.description}"></span>
+              </span>
+              <th-block th:if="${hasUrl}"><Icon name="external" class="go" /></th-block>
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <p class="joe_equip__empty" th:if="${#lists.isEmpty(shown)}">
+        还没有添加装备，到后台「装备」里添加吧
+      </p>
+    </div>
+  </div>
+  <th-block th:if="${theme.config.aside.on_equipments}">
+    <Aside />
+  </th-block>
+</BaseLayout>

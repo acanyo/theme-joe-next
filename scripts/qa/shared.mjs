@@ -11,7 +11,7 @@ export const BASE = (process.env.HALO_URL ?? "http://127.0.0.1:8091").replace(/\
 /** 覆盖主要模板的路由（不存在的路由会得到 404 页，同样参与比较） */
 export const ROUTES = (
   process.env.ROUTES ??
-  "/,/archives,/categories,/tags,/moments,/photos,/links,/about,/page/2,/not-found-xyz"
+  "/,/archives,/categories,/tags,/moments,/photos,/links,/equipments,/about,/page/2,/not-found-xyz"
 ).split(",");
 
 export const MODES = ["light", "dark"];

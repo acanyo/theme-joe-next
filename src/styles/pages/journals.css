@@ -441,23 +441,36 @@
   }
 }
 
+/* 点赞 / 评论：迁移时换成了 <button>，去掉浏览器默认的灰底和边框，只留图标和数字 */
 .joe_journal_operate_item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   margin-right: 8px;
+  padding: 2px 4px;
+  border: 0;
+  border-radius: var(--radius-inner);
   font-size: 0;
+  font: inherit;
   user-select: none;
-  color: var(--text-regular);
-  transition: color var(--dur-fast) var(--ease-out);
+  color: var(--text-secondary);
+  background: none;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
 
-  i {
-    display: inline-block;
-    cursor: pointer;
-    margin-right: 4px;
-    vertical-align: sup;
-    transition: all var(--dur-fast) var(--ease-out);
+  &:hover {
+    color: var(--theme-text);
+    background: var(--fill-base);
+  }
+
+  .joe-font {
+    font-size: 16px;
   }
 
   em {
-    font-size: 14px;
+    font-size: 13px;
     font-style: normal;
     font-family: var(--font-default);
   }

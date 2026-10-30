@@ -1,5 +1,11 @@
 ---
+/**
+ * 404 页：插图、说明，下面给出可以继续去的地方：回首页、搜索（装了搜索插件时）、最近的几篇文章。
+ */
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import Icon from "../../components/common/Icon.astro";
+
+const RECENT = "postFinder.list({page: 1, size: 5, sort: {'spec.publishTime,desc'}}).items";
 ---
 
 <BaseLayout title="'页面未找到 - ' + site.title" pageClass="page-404">
@@ -13,9 +19,31 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       />
       <h1>抱歉，您访问的页面不存在</h1>
       <p>可能已被删除、更名或暂时不可用。</p>
-      <a class="joe_page_404__home" th:href="@{/}">
-        返回首页
-      </a>
+      <div class="actions">
+        <a class="joe_page_404__home" th:href="@{/}">返回首页</a>
+        <button
+          type="button"
+          class="joe_page_404__search"
+          data-joe-search
+          th:if="${pluginFinder.available('PluginSearchWidget')}"
+        >
+          <Icon name="search" />搜索文章
+        </button>
+      </div>
+      <!-- th:unless 先于 th:with 执行，变量放在外层 -->
+      <th-block th:with={`recent = \${${RECENT}}`}>
+      <section class="recent" th:unless="${#lists.isEmpty(recent)}">
+        <h2>最近更新</h2>
+        <ul>
+          <li th:each="post : ${recent}">
+            <a th:href="@{${post.status.permalink}}" th:title="${post.spec.title}">
+              <span th:text="${post.spec.title}"></span>
+              <time th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"></time>
+            </a>
+          </li>
+        </ul>
+      </section>
+      </th-block>
     </div>
   </div>
 </BaseLayout>

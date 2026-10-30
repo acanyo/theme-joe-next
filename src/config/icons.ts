@@ -37,6 +37,7 @@ export const ICONS = {
   // 文章与列表
   toc: "lucide:list-tree",
   link: "lucide:link",
+  external: "lucide:arrow-up-right",
   share: "lucide:share-2",
   pinned: "lucide:pin",
   "fresh-new": "lucide:sparkles",

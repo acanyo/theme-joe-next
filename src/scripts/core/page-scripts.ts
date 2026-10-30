@@ -13,6 +13,7 @@ const PAGES: Record<string, () => Promise<{ default: PageInit }>> = {
   moments: () => import("../pages/moments"),
   photos: () => import("../pages/photos"),
   links: () => import("../pages/links"),
+  friends: () => import("../pages/friends"),
   leaving: () => import("../pages/leaving"),
 };
 
