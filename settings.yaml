@@ -392,6 +392,13 @@ spec:
           label: 「随便看看」按钮
           value: true
           help: 右下角的骰子按钮与右键菜单，随机打开一篇文章
+        - $formkit: switch
+          name: shortcuts
+          id: shortcuts
+          key: shortcuts
+          label: 键盘快捷键
+          value: true
+          help: j / k 上一篇下一篇、t 回到顶部、/ 搜索、r 随便看看、d 切换明暗；按 ? 查看全部
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"

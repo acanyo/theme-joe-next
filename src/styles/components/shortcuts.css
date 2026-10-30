@@ -1,0 +1,111 @@
+/* 键盘快捷键说明（scripts/features/shortcuts.ts）：按 ? 打开的小弹窗 */
+.joe_shortcuts {
+  /* 主题的重置样式把 margin 清零了，<dialog> 默认的居中要补回来 */
+  margin: auto;
+  width: min(360px, calc(100vw - 32px));
+  padding: 16px 18px 14px;
+  border: 0;
+  border-radius: 14px;
+  color: var(--text-regular);
+  background: var(--bg-page);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 28%);
+
+  &::backdrop {
+    background: rgb(0 0 0 / 40%);
+  }
+
+  &[open] {
+    animation: joe-shortcuts-in 0.2s var(--ease-out);
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+
+    h2 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 650;
+      color: var(--text-title);
+    }
+  }
+
+  .close {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    font-size: 15px;
+    color: var(--text-secondary);
+    background: transparent;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-title);
+      background: var(--fill-base);
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 0;
+    list-style: none;
+    font-size: 14px;
+    border-bottom: 1px dashed var(--border-lighter);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  .keys {
+    display: flex;
+    flex: none;
+    gap: 4px;
+  }
+
+  kbd {
+    display: inline-grid;
+    place-items: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 6px;
+    border-radius: 6px;
+    font: 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--text-regular);
+    background: var(--fill-base);
+    box-shadow: inset 0 -1px 0 var(--border-base);
+  }
+
+  .foot {
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: var(--text-secondary);
+
+    kbd {
+      min-width: 18px;
+      height: 18px;
+      font-size: 11px;
+    }
+  }
+}
+
+@keyframes joe-shortcuts-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
