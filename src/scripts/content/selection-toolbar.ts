@@ -2,8 +2,7 @@
  * 选中文字工具条：在文章正文里选中一段文字后，选区上方出现一个小工具条。
  *
  * - 复制：复制选中的文字（附带版权信息的逻辑仍由 content/article.ts 的 copy 事件处理）
- * - 引用评论：把选中的文字作为引用块放进评论框（评论组件的编辑器在 Shadow DOM 中，
- *   通过派发 paste 事件写入，编辑器会转成 <blockquote>），并滚动到评论区
+ * - 引用评论：把选中的文字作为引用块接到评论框末尾（评论组件的编辑器在 Shadow DOM 中），并滚动到评论区
  * - 分享：支持 Web Share 的设备调用系统分享，其余复制「文字 + 文章链接」
  *
  * 禁止复制的文章（.uncopy）、选区很短（< 4 字）或跨出正文时不显示。
@@ -31,15 +30,42 @@ function findEditor(root: ParentNode | null): HTMLElement | null {
   return null;
 }
 
+/** 编辑器所在 Shadow DOM 的选区（Chrome 支持 shadowRoot.getSelection，其他浏览器用 document 的） */
+function selectionOf(editor: HTMLElement): Selection | null {
+  const root = editor.getRootNode() as ShadowRoot & { getSelection?: () => Selection | null };
+  return root.getSelection?.() ?? document.getSelection();
+}
+
+/** 把光标放到 node 的末尾 */
+function caretToEnd(sel: Selection, node: Node): void {
+  const range = document.createRange();
+  range.selectNodeContents(node);
+  range.collapse(false);
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
 function quoteToComment(text: string): boolean {
   const editor = findEditor($(".joe_comment"));
   if (!editor) return false;
   const quote = text.length > MAX_QUOTE ? `${text.slice(0, MAX_QUOTE)}…` : text;
+  const html = `<blockquote><p>${escapeHtml(quote).replace(/\n+/g, "</p><p>")}</p></blockquote><p><br></p>`;
   editor.focus();
-  const data = new DataTransfer();
-  data.setData("text/html", `<blockquote><p>${escapeHtml(quote).replace(/\n+/g, "</p><p>")}</p></blockquote><p></p>`);
-  data.setData("text/plain", `> ${quote}\n\n`);
-  editor.dispatchEvent(new ClipboardEvent("paste", { clipboardData: data, bubbles: true, cancelable: true }));
+  const sel = selectionOf(editor);
+  // 引用接在已写内容的后面
+  if (sel) caretToEnd(sel, editor);
+  // CommentNext 的编辑器只在浏览器原生粘贴时写入内容，模拟的 paste 事件不起作用；它自己插入内容用的就是
+  // execCommand("insertHTML")，这里同样做，编辑器会照常同步。其他评论组件（CommentWidget）不支持时退回 paste 事件。
+  const inserted = document.execCommand("insertHTML", false, html);
+  if (!inserted) {
+    const data = new DataTransfer();
+    data.setData("text/html", html);
+    data.setData("text/plain", `> ${quote}\n\n`);
+    editor.dispatchEvent(new ClipboardEvent("paste", { clipboardData: data, bubbles: true, cancelable: true }));
+  }
+  // 光标放进引用后面的空行，接着打字就是评论内容而不是写进引用里
+  const tail = editor.lastElementChild;
+  if (sel && tail && tail.tagName === "P") caretToEnd(sel, tail);
   editor.scrollIntoView({ block: "center", behavior: "smooth" });
   return true;
 }
@@ -119,7 +145,8 @@ export function initSelectionToolbar(): void {
       if (navigator.share) await navigator.share({ title, text: `「${text}」`, url }).catch(() => undefined);
       else await copyText(`「${text}」\n—— ${title} ${url}`, "已复制文字和文章链接");
     }
-    document.getSelection()?.removeAllRanges();
+    // 引用评论时光标已经放进评论框，这里再清选区会把它也清掉
+    if (action !== "quote") document.getSelection()?.removeAllRanges();
     hide();
   });
 
