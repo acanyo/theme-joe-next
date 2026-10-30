@@ -353,9 +353,32 @@
 .joe_archive__title {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   height: 45px;
   color: var(--text-primary);
   line-height: 45px;
+  border-bottom: 1px solid var(--border-lighter);
+}
+
+.joe_archive__title-total {
+  flex: none;
+  font-size: 13px;
+  color: var(--text-secondary);
+
+  em {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--text-regular);
+  }
+}
+
+.joe_archive__desc {
+  margin: 0;
+  padding: 10px 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
   border-bottom: 1px solid var(--border-lighter);
 }
 

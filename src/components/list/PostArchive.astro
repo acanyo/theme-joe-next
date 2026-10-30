@@ -1,5 +1,5 @@
 ---
-/** 分类 / 标签 / 作者归档：标题 + 文章列表 + 分页 */
+/** 分类 / 标签 / 作者归档：标题（名称、文章数、可选的描述）+ 文章列表 + 分页 */
 import PostItem from "./PostItem.astro";
 import Pagination from "./Pagination.astro";
 import Icon from "../common/Icon.astro";
@@ -7,9 +7,11 @@ import Icon from "../common/Icon.astro";
 interface Props {
   /** 标题中的名称 SpEL 表达式 */
   name: string;
+  /** 描述的 SpEL 表达式（分类、标签的描述，作者的简介），为空时不显示 */
+  description?: string;
 }
 
-const { name } = Astro.props;
+const { name, description } = Astro.props;
 ---
 
 <div class="joe_main">
@@ -21,7 +23,15 @@ const { name } = Astro.props;
         <span class="muted ellipsis" th:text={`\${${name}}`}></span>
         <span>相关的文章</span>
       </div>
+      <span class="joe_archive__title-total">共 <em th:text="${posts.total}">0</em> 篇</span>
     </div>
+    {description && (
+      <p
+        class="joe_archive__desc"
+        th:unless={`\${#strings.isEmpty(${description})}`}
+        th:text={`\${${description}}`}
+      ></p>
+    )}
     <ul class="joe_archive__list joe_list">
       <th-block th:each="post, iter : ${posts.items}">
         <PostItem />

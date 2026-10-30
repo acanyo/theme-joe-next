@@ -5,10 +5,12 @@
   line-height: 40px;
   color: var(--text-primary);
   border-bottom: 1px solid var(--border-lighter);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 
   i {
-    margin-right: 3px;
-    vertical-align: bottom;
+    color: var(--text-secondary);
   }
 
   em {
@@ -28,9 +30,21 @@
     font-weight: bold;
     padding: 0 12px;
     /* border-bottom: 1px solid var(--border-lighter);*/
-    color: var(--theme);
+    color: var(--text-title);
     justify-content: space-between;
     user-select: none;
+
+    .total {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-secondary);
+
+      em {
+        font-style: normal;
+        font-weight: 600;
+        color: var(--text-regular);
+      }
+    }
   }
 
   .content {
@@ -45,54 +59,43 @@
     overflow: auto;
     max-height: 400px;
 
-    .item {
-      float: left;
-      border-radius: 3px;
-      margin-right: 10px;
-      margin-bottom: 10px;
-      font-size: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .item a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 14px;
+      font-size: 13px;
       color: var(--text-regular);
-      background: var(--fill-accent);
-      border: 1px solid var(--border-light);
-      /* transition: background var(--dur-fast) var(--ease-out);*/
+      background: var(--fill-base);
+      transition:
+        color var(--dur-fast) var(--ease-out),
+        background-color var(--dur-fast) var(--ease-out);
 
-      a {
-        display: block;
-        padding: 0 6px;
-        height: 24px;
-        line-height: 24px;
-        font-size: 0;
-        color: var(--text-regular);
+      span {
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-        span {
-          display: inline-block;
-          max-width: 120px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          font-size: 14px;
-        }
-
-        em {
-          display: inline-block;
-          padding-left: 5px;
-          vertical-align: top;
-          font-size: 14px;
-          font-style: normal;
-          color: var(--theme);
-        }
+      em {
+        font-size: 12px;
+        font-style: normal;
+        color: var(--text-secondary);
       }
 
       &:hover {
-        background: var(--theme);
-        border-color: var(--theme);
+        color: var(--theme-text);
+        background: var(--tint);
 
-        a {
-          color: var(--fill-base);
-
-          em {
-            color: var(--fill-base);
-          }
+        em {
+          color: inherit;
         }
       }
     }
@@ -182,18 +185,34 @@
           display: flex;
           align-items: center;
           justify-content: space-between;
-          color: var(--theme);
+          gap: 8px;
+          color: var(--text-title);
           font-weight: 600;
           cursor: pointer;
-          background: color-mix(in srgb, var(--theme) 7%, var(--bg-page));
+          background: var(--fill-base);
           padding: 10px 12px;
           height: 40px;
           border-radius: var(--radius-inner);
 
+          .when {
+            flex: 1;
+          }
+
+          .num {
+            font-size: 12px;
+            font-weight: 400;
+            font-style: normal;
+            color: var(--text-secondary);
+          }
+
           .joe-font {
-            fill: var(--text-secondary);
+            color: var(--text-secondary);
             transform: rotate(0deg);
             transition: transform var(--dur-base) var(--ease-out);
+          }
+
+          &:hover .when {
+            color: var(--theme-text);
           }
 
           &.in {
@@ -214,7 +233,7 @@
             left: -8px;
             width: 0;
             height: 0;
-            border-right: 8px solid color-mix(in srgb, var(--theme) 7%, var(--bg-page));
+            border-right: 8px solid var(--fill-base);
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
           }
@@ -222,27 +241,37 @@
 
         .panel-body {
           opacity: 0;
-          padding: 15px 15px 0 15px;
+          padding: 6px 0 0;
           transition: opacity var(--dur-base) var(--ease-out);
 
-          li {
-            margin-bottom: 15px;
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+          .row {
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+            padding: 8px 12px;
+            border-radius: var(--radius-inner);
             color: var(--text-regular);
+            transition:
+              color var(--dur-fast) var(--ease-out),
+              background-color var(--dur-fast) var(--ease-out);
 
-            &:last-child {
-              margin-bottom: 0;
+            time {
+              flex: none;
+              font-size: 13px;
+              font-variant-numeric: tabular-nums;
+              color: var(--text-secondary);
             }
 
-            a {
-              color: var(--text-regular);
+            span {
+              min-width: 0;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
 
-              &:hover {
-                color: var(--theme);
-              }
+            &:hover {
+              color: var(--theme-text);
+              background: var(--fill-base);
             }
           }
         }
