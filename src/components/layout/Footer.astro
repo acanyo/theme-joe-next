@@ -1,7 +1,7 @@
 ---
 /**
  * 页脚，两层：
- * - 展示层：左侧「已运行 N 天」大字、建站纪念进度（footer.anniversary）、站点数据一行（文章数、访问统计）；
+ * - 展示层：左侧「已运行 N 天」大字、建站纪念进度（footer.anniversary）、站点数据一行（文章数、阅读数、评论数，来自 Halo 自带统计）；
  *   右侧页脚导航的链接分组与社交图标（footer.nav）。两侧都没开时整层不输出。
  * - 底栏：左侧版权与 Powered by，右侧备案号与云服务商、订阅链接；窄屏三行居中。
  * 运行天数与纪念进度由 features/footer.ts 计算填入。
@@ -47,8 +47,8 @@ const HAS_CLOUD = "theme.config.footer.cloud != null and theme.config.footer.clo
       </div>
       <p class="stats" th:with="stats = ${siteStatsFinder.getStats()}">
         <span><em th:text="${stats.post}">0</em> 篇文章</span>
-        <span th:if="${theme.config.footer.busuanzi}"><em id="busuanzi_value_site_pv">0</em> 次访问</span>
-        <span th:if="${theme.config.footer.busuanzi}"><em id="busuanzi_value_site_uv">0</em> 位访客</span>
+        <span><em th:text="${#numbers.formatInteger(stats.visit, 1, 'COMMA')}">0</em> 次阅读</span>
+        <span><em th:text="${stats.comment}">0</em> 条评论</span>
       </p>
     </section>
 
@@ -175,5 +175,3 @@ const HAS_CLOUD = "theme.config.footer.cloud != null and theme.config.footer.clo
     </p>
   </div>
 </footer>
-<!-- 不蒜子统计只填页脚的数字：页脚接近视口时再加载（features/footer.ts），不和首屏图片抢带宽 -->
-<template th:if="${theme.config.footer.busuanzi}" data-joe-busuanzi="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></template>

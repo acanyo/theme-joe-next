@@ -39,7 +39,6 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
   "effects.swup": true,
   "effects.swup_preload": true,
   "footer.anniversary": false,
-  "footer.busuanzi": false,
   "footer.clean_mode": false,
   "footer.console_banner": false,
   "footer.console_timing": false,
