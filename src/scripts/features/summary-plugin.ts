@@ -3,7 +3,8 @@
  *
  * 插件在正文开头插入 <likcc-article-summary>，内容渲染在开放的 Shadow DOM 里，主题样式表进不去；
  * 它的配色变量又定义在内部元素上，从外面设置会被覆盖。这里在摘要框出现时往它的 shadowRoot
- * 追加一张样式表（adoptedStyleSheets），用主题的颜色和卡片变量重写简洁 / 行内两种样式。
+ * 追加一张样式表（adoptedStyleSheets），把简洁 / 行内两种样式改成低调的样式：
+ * 浅灰底、左侧灰色细竖线、灰色小标题，去掉星光图标和主题色强调，看起来像正文里的一段注释。
  * 主题变量（--theme、--bg-page 等）会继承进 Shadow DOM，明暗切换时自动跟着变。
  * 外层间距写在 styles/content/article.css。
  */
@@ -13,48 +14,49 @@ const TAG = "likcc-article-summary";
 /** 选择器重复一次类名提高权重，压过插件自己的 .likcc-summaraidGPT-fixed / --dark */
 const CSS = `
 .likcc-summaraidGPT-fixed.likcc-summaraidGPT-fixed {
-  --likcc-summaraid-fixed-accent: var(--theme-text, #4a90e2);
-  --likcc-summaraid-fixed-accent-soft: color-mix(in srgb, var(--theme, #4a90e2) 12%, transparent);
-  --likcc-summaraid-fixed-accent-faint: color-mix(in srgb, var(--theme, #4a90e2) 5%, transparent);
-  --likcc-summaraid-fixed-line: color-mix(in srgb, var(--theme, #4a90e2) 20%, transparent);
+  --likcc-summaraid-fixed-accent: var(--text-secondary, #8a8f99);
+  --likcc-summaraid-fixed-line: transparent;
   --likcc-summaraid-fixed-text: var(--text-regular, #474c54);
   --likcc-summaraid-fixed-muted: var(--text-secondary, #8a8f99);
-  --likcc-summaraid-fixed-surface: color-mix(in srgb, var(--theme, #4a90e2) 6%, var(--bg-page, #fff));
+  --likcc-summaraid-fixed-surface: var(--fill-base, #f5f7fa);
   margin: 0;
 }
 
-.likcc-summaraidGPT-fixed.likcc-summaraidGPT-fixed .likcc-summaraidGPT-simple-shell {
-  padding: 14px 16px 15px;
-  border-radius: var(--radius-wrap, 6px);
-  border-color: var(--likcc-summaraid-fixed-line);
+/* 浅灰底、左侧一条灰色细竖线；比正文引用块（主题色竖线）更安静，不用渐变、发光和图标 */
+.likcc-summaraidGPT-fixed.likcc-summaraidGPT-fixed :is(.likcc-summaraidGPT-simple-shell, .likcc-summaraidGPT-inline-shell) {
+  padding: 12px 16px;
+  border: 0;
+  border-left: 3px solid var(--border-light, #dcdfe6);
+  border-radius: 0 var(--radius-inner, 6px) var(--radius-inner, 6px) 0;
+  background: var(--likcc-summaraid-fixed-surface);
   box-shadow: none;
 }
 
-.likcc-summaraidGPT-fixed.likcc-summaraidGPT-fixed .likcc-summaraidGPT-simple-header {
-  gap: 6px;
-  margin-bottom: 8px;
+.likcc-summaraidGPT-fixed.likcc-summaraidGPT-fixed :is(.likcc-summaraidGPT-simple-icon, .likcc-summaraidGPT-inline-icon) {
+  display: none;
+}
+
+.likcc-summaraidGPT-fixed.likcc-summaraidGPT-fixed :is(.likcc-summaraidGPT-simple-header, .likcc-summaraidGPT-inline-header) {
+  gap: 0;
+  margin-bottom: 4px;
 }
 
 .likcc-summaraidGPT-fixed.likcc-summaraidGPT-fixed :is(.likcc-summaraidGPT-simple-title, .likcc-summaraidGPT-inline-title) {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0;
   text-transform: none;
-}
-
-.likcc-summaraidGPT-fixed.likcc-summaraidGPT-fixed :is(.likcc-summaraidGPT-simple-icon, .likcc-summaraidGPT-inline-icon) {
-  width: 15px;
-  height: 15px;
+  color: var(--text-secondary, #8a8f99);
 }
 
 .likcc-summaraidGPT-fixed.likcc-summaraidGPT-fixed :is(.likcc-summaraidGPT-simple-content, .likcc-summaraidGPT-inline-content) {
-  font-size: 14.5px;
+  font-size: 15px;
   line-height: 1.8;
   color: var(--likcc-summaraid-fixed-text);
 }
 
 .likcc-summaraidGPT-fixed.likcc-summaraidGPT-fixed .likcc-summaraidGPT-cursor {
-  background: var(--theme, #4a90e2);
+  background: var(--text-secondary, #8a8f99);
 }
 `;
 
