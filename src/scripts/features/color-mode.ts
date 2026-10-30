@@ -59,7 +59,8 @@ export function toggleColorModeAt(x: number, y: number): void {
   const root = document.documentElement;
   root.classList.add("is-mode-switching");
   const transition = document.startViewTransition(apply);
-  void transition.ready.then(() => {
+  // 另一个过渡（如切页）同时开始时浏览器会跳过这次动画，ready 会 reject：此时模式已切换，忽略即可
+  transition.ready.then(() => {
     root.animate(
       {
         clipPath: [
@@ -73,7 +74,7 @@ export function toggleColorModeAt(x: number, y: number): void {
         pseudoElement: "::view-transition-new(root)",
       },
     );
-  });
+  }, () => undefined);
   void transition.finished.finally(() =>
     root.classList.remove("is-mode-switching"),
   );

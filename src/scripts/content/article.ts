@@ -193,7 +193,7 @@ function showMobileTocButton(mobile: boolean): void {
   if (!mobile) return;
   const button = $(".joe_action .toc");
   if (!button) return;
-  button.style.display = "flex";
+  button.style.display = "grid";
   button.addEventListener("click", () => openTocDrawer());
 }
 
