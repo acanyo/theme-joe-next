@@ -1,122 +1,112 @@
-/*
- * 右下角悬浮操作按钮（components/layout/Actions.astro）：
- * 一条半透明玻璃竖条装下全部按钮，图标是灰色线条，悬停时变主题色。
- * 返回顶部滚动后才出现；只有一个按钮时也保持同样的圆角外观。
- */
 .joe_action {
+  pointer-events: none;
   position: fixed;
-  right: 24px;
-  bottom: 32px;
+  bottom: 90px;
+  right: 30px;
   z-index: 90;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 4px;
-  border-radius: 22px;
-  background: var(--glass-bg);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
-
-  /* 一个按钮都没有时（返回顶部还没出现、其他都关了）不显示空壳 */
-  &:not(:has(> .joe_action_item:not([hidden], .back2top:not(.active)))) {
-    display: none;
-  }
 }
 
 .joe_action_item {
   position: relative;
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-lighter);
   border-radius: 50%;
-  font-size: 18px;
-  color: var(--text-regular);
-  background: none;
   cursor: pointer;
+  box-shadow: var(--shadow);
   transition:
-    color var(--dur-fast) var(--ease-out),
-    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
     scale var(--dur-base) var(--ease-spring);
-
-  &:hover,
-  &:focus-visible {
-    color: var(--theme-text);
-    background: color-mix(in srgb, var(--theme) 12%, transparent);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--theme);
-    outline-offset: 1px;
-  }
 
   &:active {
     scale: 0.9;
   }
 
-  > a {
-    display: grid;
-    place-items: center;
-    width: 100%;
-    height: 100%;
-    color: inherit;
+  &:hover {
+    border-color: color-mix(in srgb, var(--theme) 45%, transparent);
+  }
+
+  svg {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    fill: var(--theme);
   }
 
   &.toc {
     display: none;
+    pointer-events: auto;
+    margin-bottom: 15px;
+    text-align: center;
+    line-height: 40px;
+
+    i {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--theme);
+    }
   }
-
-  /* 明暗切换：太阳 / 月亮叠在一起，当前模式的那个显示 */
-  &.mode .joe-font {
-    position: absolute;
-    opacity: 0;
-    transform: rotate(-60deg) scale(0.4);
-    transition:
-      transform var(--dur-slow) var(--ease-spring),
-      opacity var(--dur-base) var(--ease-out);
-
-    &.active {
+  &.edit,
+  &.random {
+    pointer-events: auto;
+    margin-bottom: 15px;
+    a {
+      display: block;
+      width: 25px;
+      height: 25px;
+    }
+    svg {
+      transform: scale(1);
       opacity: 1;
-      transform: none;
+      transition:
+        transform 0.85s var(--ease-out),
+        opacity 0.85s var(--ease-out),
+        scale 0.85s var(--ease-out);
     }
   }
 
-  /* 返回顶部：滚动后才出现，出现时高度展开，竖条跟着变长 */
+  &.mode {
+    pointer-events: auto;
+    margin-bottom: 15px;
+
+    svg {
+      transform: scale(0);
+      opacity: 0;
+      transition:
+        transform 0.85s var(--ease-out),
+        opacity 0.85s var(--ease-out);
+
+      &.active {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  }
+
   &.back2top {
-    height: 0;
-    opacity: 0;
     pointer-events: none;
+    visibility: hidden;
+    transform: scale(0);
     transition:
-      height var(--dur-base) var(--ease-out),
-      opacity var(--dur-base) var(--ease-out),
-      color var(--dur-fast) var(--ease-out),
-      background var(--dur-fast) var(--ease-out);
+      visibility var(--dur-slow),
+      transform var(--dur-slow) var(--ease-spring);
 
     &.active {
-      height: 36px;
-      opacity: 1;
       pointer-events: auto;
+      visibility: visible;
+      transform: scale(1);
     }
   }
 }
 
-/* 竖条只剩返回顶部且它还没出现时，去掉多余的间距 */
-.joe_action:has(> .back2top:not(.active)) {
-  gap: 0;
-}
-
+/* 响应式 */
 @media (max-width: 500px) {
   .joe_action {
-    right: 14px;
-    bottom: 20px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .joe_action_item.mode .joe-font {
-    transform: none;
+    bottom: 40px;
+    right: 20px;
   }
 }

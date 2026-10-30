@@ -32,8 +32,6 @@ export const ICONS = {
   "menu-item": "lucide:hash",
   console: "lucide:layout-dashboard",
   sun: "lucide:sun",
-  "arrow-up": "lucide:arrow-up",
-  shuffle: "lucide:shuffle",
   moon: "lucide:moon",
   close: "lucide:x",
   // 文章与列表
