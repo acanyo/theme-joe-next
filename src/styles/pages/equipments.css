@@ -1,0 +1,216 @@
+/*
+ * 装备页（pages/equipments.astro）：分组标题 + 卡片网格。
+ * 卡片只用中性色，封面放在浅灰底上按比例完整显示（产品图多为白底或透明底）；
+ * 有链接的卡片悬停时上浮、描边染上主题色。
+ */
+.joe_equip__count {
+  margin: -6px 0 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+
+  em {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--text-regular);
+  }
+}
+
+/* 分组导航：页内锚点 */
+.joe_equip__nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  a {
+    padding: 4px 14px;
+    border-radius: 16px;
+    font-size: 13px;
+    color: var(--text-regular);
+    background: var(--fill-base);
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
+
+    &:hover {
+      color: var(--theme-text);
+      background: var(--tint);
+    }
+  }
+}
+
+.joe_equip__group {
+  padding-top: 24px;
+  scroll-margin-top: 70px;
+
+  .head {
+    margin-bottom: 14px;
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      font-size: 17px;
+      font-weight: 650;
+      color: var(--text-title);
+
+      &::before {
+        content: "";
+        width: 4px;
+        height: 0.95em;
+        border-radius: 2px;
+        background: var(--theme);
+      }
+    }
+
+    p {
+      margin: 6px 0 0 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+  }
+}
+
+.joe_equip__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+}
+
+.joe_equip__item {
+  list-style: none;
+  margin: 0;
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-wrap);
+    background: var(--bg-page);
+    box-shadow: 0 0 0 1px var(--border-lighter);
+    color: var(--text-regular);
+    transition:
+      box-shadow var(--dur-fast) var(--ease-out),
+      translate var(--dur-base) var(--ease-out);
+
+    &.is-link:hover {
+      translate: 0 -3px;
+      box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme) 45%, transparent),
+        0 10px 22px -14px color-mix(in srgb, var(--theme) 55%, transparent);
+
+      .name {
+        color: var(--theme-text);
+      }
+
+      .cover img {
+        scale: 1.04;
+      }
+
+      .go {
+        opacity: 1;
+        translate: 0 0;
+      }
+    }
+  }
+
+  .cover {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    padding: 14px;
+    background: var(--fill-base);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: scale var(--dur-slow) var(--ease-out);
+    }
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px 14px;
+  }
+
+  .name {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text-title);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .spec {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .desc {
+    display: -webkit-box;
+    margin-top: 4px;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-regular);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .go {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 14px;
+    color: var(--text-regular);
+    background: var(--bg-page);
+    opacity: 0;
+    translate: -3px 3px;
+    transition:
+      opacity var(--dur-fast) var(--ease-out),
+      translate var(--dur-base) var(--ease-out);
+  }
+}
+
+.joe_equip__empty {
+  padding: 48px 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 500px) {
+  .joe_equip__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .joe_equip__item {
+    .cover {
+      padding: 10px;
+    }
+
+    .body {
+      padding: 10px 10px 12px;
+    }
+
+    .name {
+      font-size: 14px;
+    }
+  }
+}

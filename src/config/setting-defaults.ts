@@ -5,6 +5,7 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
   "aside.enabled": true,
   "aside.on_archives": true,
   "aside.on_categories": true,
+  "aside.on_equipments": true,
   "aside.on_friends": true,
   "aside.on_links": true,
   "aside.on_moments": true,

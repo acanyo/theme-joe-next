@@ -2003,6 +2003,12 @@ spec:
           id: on_friends
           key: on_friends
           label: 朋友圈页
+        - $formkit: switch
+          value: true
+          name: on_equipments
+          id: on_equipments
+          key: on_equipments
+          label: 装备页
     - group: post
       label: 文章
       formSchema:
