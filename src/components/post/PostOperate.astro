@@ -27,7 +27,7 @@ import {
   <div class="joe_detail__operate-actions">
     <div
       class="joe_detail__agree"
-      th:if="${theme.config.post.like and #annotations.getOrDefault(post, 'enable_like', 'true') == 'true'}"
+      th:if="${theme.config.post.like}"
     >
       <button type="button" class="agree" data-joe-like aria-label="点赞">
         <span class="icon">

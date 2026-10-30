@@ -192,76 +192,7 @@
   }
 }
 
-/* AI 摘要卡片（components/post/AiSummary.astro）：与正文同宽，主题色浅底；打字时末尾一个闪烁的光标 */
-.joe_ai_summary {
-  max-width: var(--reading-width, none);
-  margin: 12px auto 4px;
-  padding: 14px 16px;
-  border-radius: var(--radius-wrap);
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--theme) 9%, transparent), color-mix(in srgb, var(--theme) 3%, transparent)),
-    var(--bg-page);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme) 18%, transparent);
-  cursor: default;
 
-  .head {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-
-  .badge {
-    display: grid;
-    place-items: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 7px;
-    font-size: 14px;
-    color: #fff;
-    background: linear-gradient(135deg, var(--theme-solid), color-mix(in srgb, var(--theme-solid) 60%, #7c3aed));
-  }
-
-  .title {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-title);
-  }
-
-  .text {
-    margin: 0;
-    font-size: 14.5px;
-    line-height: 1.8;
-    color: var(--text-regular);
-  }
-
-  .note {
-    margin: 8px 0 0;
-    font-size: 12px;
-    color: var(--text-secondary);
-  }
-
-  &.is-typing {
-    cursor: pointer;
-
-    .text::after {
-      content: "";
-      display: inline-block;
-      width: 2px;
-      height: 1em;
-      margin-left: 2px;
-      vertical-align: -0.15em;
-      background: var(--theme);
-      animation: joe-ai-caret 0.9s steps(1) infinite;
-    }
-  }
-}
-
-@keyframes joe-ai-caret {
-  50% {
-    opacity: 0;
-  }
-}
 
 /* 正文最大宽度（设置 post.reading_width，默认 760px）：一行中文约 40 字，长段落不易串行；卡片本身宽度不变 */
 .joe_detail__article {

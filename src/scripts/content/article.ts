@@ -2,7 +2,6 @@
  * 文章页交互：点赞、分享、复制版权、阅读进度、目录、字数统计、评论定位。
  */
 import tocbot from "tocbot";
-import { buildRawToc, renderRawContent } from "./raw-content";
 import { readingStats } from "./reading-stats";
 import { $, $$, headerOffset } from "../core/dom";
 import { getThemeConfig } from "../core/config";
@@ -141,8 +140,7 @@ export function initWordCount(): void {
   const targets = $$("[data-joe-word-count]");
   const content = $("#post-inner");
   if (!targets.length || !content) return;
-  const root = renderRawContent() ?? content;
-  const clone = root.cloneNode(true) as ParentNode & Node;
+  const clone = content.cloneNode(true) as ParentNode & Node;
   clone.querySelectorAll?.("pre, script, style").forEach((el) => el.remove());
   const { words, minutes } = readingStats(clone.textContent ?? "");
   const label = `${words.toLocaleString("zh-CN")} 字 · 约 ${minutes} 分钟`;
@@ -162,12 +160,6 @@ export function initToc(): void {
   const tocSelector = mobile ? "#js-toc-mobile" : "#js-toc";
   if (!$(tocSelector)) return;
   const offset = headerOffset();
-  const raw = renderRawContent();
-  if (raw) {
-    buildRawToc(raw, $(tocSelector)!, { offset, onNavigate: () => mobile && closeOverlays() });
-    finishToc(tocSelector, mobile);
-    return;
-  }
   onCleanup(() => tocbot.destroy());
   tocbot.init({
     tocSelector,
@@ -208,10 +200,9 @@ function showMobileTocButton(mobile: boolean): void {
   button.addEventListener("click", () => openTocDrawer());
 }
 
-/** 目录展开层级：文章元数据 toc_depth 优先，其次主题设置 */
+/** 目录展开层级（设置 post.toc_depth） */
 function tocDepth(): number {
-  const own = Number.parseInt($(".joe_detail")?.dataset.tocDepth ?? "", 10);
-  return Number.isFinite(own) ? own : getThemeConfig().post.tocDepth;
+  return getThemeConfig().post.tocDepth;
 }
 
 /** Halo 文章标题未设置 id 时补齐，保证目录锚点可用 */
@@ -231,19 +222,4 @@ export function scrollToHash(): void {
     window.scrollTo({
       top: target.getBoundingClientRect().top + window.scrollY - headerOffset(),
     });
-}
-
-/** 文章系列：「展开全部」按钮 */
-export function initSeries(): void {
-  const button = $<HTMLButtonElement>("[data-joe-series-more]");
-  const list = $(".joe_series__list");
-  if (!button || !list) return;
-  if (!list.querySelector(".is-far")) {
-    button.remove();
-    return;
-  }
-  button.addEventListener("click", () => {
-    list.classList.add("is-expanded");
-    button.remove();
-  });
 }

@@ -17,7 +17,7 @@ const RELATED = `#lists.isEmpty(post.categories) ? postFinder.listByTag(1, ${REL
   <div class="joe_aside_post">
     <div
       class="toc-container"
-      th:if="${theme.config.post.toc and #annotations.getOrDefault(post, 'enable_toc', 'true') == 'true'}"
+      th:if="${theme.config.post.toc}"
     >
       <h3 class="toc-header">
         <Icon name="toc" />文章目录

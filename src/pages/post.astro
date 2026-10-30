@@ -10,7 +10,6 @@ import PostAside from "../components/post/PostAside.astro";
 import PostCopyright from "../components/post/PostCopyright.astro";
 import PostHero from "../components/post/PostHero.astro";
 import PostOperate from "../components/post/PostOperate.astro";
-import PostSeries from "../components/post/PostSeries.astro";
 import PostNav from "../components/post/PostNav.astro";
 import RelatedPosts from "../components/post/RelatedPosts.astro";
 import "../styles/pages/post.css";
@@ -32,7 +31,6 @@ import "../styles/content/poster.css";
     <ArticleBody subject="post">
       <PostOperate slot="footer" />
     </ArticleBody>
-    <PostSeries />
     <PostCopyright />
     <PostAds position="bottom" />
 
@@ -42,7 +40,7 @@ import "../styles/content/poster.css";
     <CommentSection subject="post" kind="Post" />
   </div>
 
-  <th-block th:if="${theme.config.aside.on_post and #annotations.getOrDefault(post, 'enable_aside', 'true') == 'true'}">
+  <th-block th:if="${theme.config.aside.on_post}">
     <PostAside />
   </th-block>
 

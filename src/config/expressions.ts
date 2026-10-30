@@ -24,11 +24,9 @@ export const SITE_URL =
 export const POST_URL = `(${SITE_URL}) + post.status.permalink`;
 
 /** 文章页操作项开关：全局设置 + 文章元数据 */
-const postSwitch = (setting: string, annotation: string) =>
-  `theme.config.${setting} and #annotations.getOrDefault(post, '${annotation}', 'true') == 'true'`;
-export const LIKE_ENABLED = postSwitch("post.like", "enable_like");
-export const SHARE_ENABLED = postSwitch("share.enabled", "enable_share");
-export const DONATE_ENABLED = postSwitch("share.donate", "enable_donate");
+export const LIKE_ENABLED = "theme.config.post.like";
+export const SHARE_ENABLED = "theme.config.share.enabled";
+export const DONATE_ENABLED = "theme.config.share.donate";
 
 /** 包裹为 `${...}` */
 export const el = (expr: string): string => `\${${expr}}`;

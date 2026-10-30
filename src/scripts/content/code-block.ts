@@ -107,6 +107,7 @@ function foldLongCode(pres: HTMLElement[], allowed: boolean): void {
   }
 }
 
+/** foldLong: 是否自动折叠长代码（瞬间页传 false，那里的代码本来就短） */
 export function initCodeBlocks(options: { foldLong?: boolean } = {}): void {
   const pres = $$<HTMLElement>(CODE_SELECTOR).filter(
     (pre) => pre.querySelector("code") && !pre.closest(PLUGIN_OWNED),

@@ -1961,7 +1961,6 @@ spec:
           id: on_page
           key: on_page
           label: 自定义页面
-          help: 单个页面可用元数据 enable_aside 关闭
         - $formkit: switch
           value: true
           name: on_tags
@@ -2056,33 +2055,11 @@ spec:
           help: 顶部的作者、日期、阅读量、字数等
           value: false
         - $formkit: switch
-          name: ai_summary
-          id: ai_summary
-          key: ai_summary
-          label: AI 摘要卡片
-          value: true
-          help: 文章元数据里有「AI 摘要」（ai_summary）时，在正文上方显示摘要卡片，带打字效果；没有时不显示
-        - $formkit: text
-          if: $get(ai_summary).value === true
-          name: ai_summary_title
-          id: ai_summary_title
-          key: ai_summary_title
-          label: 卡片标题
-          value: AI 摘要
-        - $formkit: text
-          if: $get(ai_summary).value === true
-          name: ai_summary_note
-          id: ai_summary_note
-          key: ai_summary_note
-          label: 卡片底部说明
-          value: 摘要由 AI 生成，仅供参考
-          help: 留空不显示
-        - $formkit: switch
           name: outdated_notice
           id: outdated_notice
           key: outdated_notice
           label: 过期提醒
-          help: 文章超过设定天数未更新时，在正文上方显示一行浅色提示；单篇文章可用元数据 enable_passage_tips 关闭
+          help: 文章超过设定天数未更新时，在正文上方显示一行浅色提示
           value: false
         - $formkit: number
           if: $get(outdated_notice).value === true
@@ -2136,7 +2113,6 @@ spec:
           key: image_align
           label: 图片对齐
           value: center
-          help: 单篇文章可用元数据 img_align 覆盖
           options:
             - value: left
               label: 左对齐
@@ -2150,7 +2126,7 @@ spec:
           key: image_max_width
           label: 图片最大宽度
           value: 100%
-          help: 需带单位，默认 100%；单篇文章可用元数据 img_max_width 覆盖
+          help: 需带单位，默认 100%
         - $formkit: number
           name: reading_width
           id: reading_width
@@ -2165,7 +2141,6 @@ spec:
           id: indent
           key: indent
           label: 段落首行缩进
-          help: 单篇文章可用元数据 enable_indent 覆盖
           value: false
         - $formkit: switch
           name: copyable
@@ -2194,7 +2169,6 @@ spec:
           id: toc
           key: toc
           label: 文章目录
-          help: 单篇文章可用元数据 enable_toc 关闭
           value: true
         - $formkit: switch
           name: toc_mobile
@@ -2500,7 +2474,6 @@ spec:
           key: enabled
           label: 分享
           value: true
-          help: 单篇文章可用元数据 enable_share 关闭
         - $formkit: switch
           name: link
           id: link
@@ -2544,7 +2517,6 @@ spec:
           key: donate
           label: 打赏
           value: false
-          help: 单篇文章可用元数据 enable_donate 关闭
         - $formkit: attachment
           if: $get(donate).value === true
           name: donate_alipay
