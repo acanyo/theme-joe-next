@@ -981,6 +981,13 @@ spec:
           value: true
           help: 访客上次有文章读到一半时，在文章列表上方提示「上次读到《…》45%」，点击回到上次的位置；阅读记录只保存在访客的浏览器里
         - $formkit: switch
+          name: on_this_day
+          id: on_this_day
+          key: on_this_day
+          label: 那年今日
+          value: true
+          help: 往年的今天写过文章时，在文章列表上方列出来；没有时不显示
+        - $formkit: switch
           name: freshness_badge
           id: freshness_badge
           key: freshness_badge
@@ -2236,6 +2243,13 @@ spec:
           label: 正文下方的相关文章卡片
           value: true
           help: 在上一篇 / 下一篇下方显示最多 4 篇带封面的相关文章；手机上侧栏隐藏时也能看到
+        - $formkit: switch
+          name: on_this_day
+          id: on_this_day
+          key: on_this_day
+          label: 那年今日
+          value: true
+          help: 往年的今天写过文章时，在相关文章下方列出来；没有时不显示
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
