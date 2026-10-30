@@ -7,6 +7,11 @@ spec:
     group: content.halo.run
     kind: Post
   formSchema:
+    - $formkit: "textarea"
+      name: "ai_summary"
+      label: "AI 摘要"
+      value: ""
+      help: "显示在正文上方的摘要卡片，留空不显示。可以手写，也可以由 AI 插件自动填入这个字段（元数据 ai_summary）"
     - $formkit: "tagSelect"
       name: "series"
       label: "所属系列"
@@ -26,7 +31,7 @@ spec:
       offValue: "false"
     - $formkit: "switch"
       name: "enable_passage_tips"
-      label: "是否展示温馨提示"
+      label: "是否展示过期提醒"
       value: "true"
       onValue: "true"
       offValue: "false"

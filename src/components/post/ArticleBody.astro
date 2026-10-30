@@ -5,6 +5,7 @@
  */
 import { COMMENT_ENABLED, el } from "../../config/expressions";
 import PostAds from "./PostAds.astro";
+import AiSummary from "./AiSummary.astro";
 import Icon from "../common/Icon.astro";
 
 interface Props {
@@ -140,6 +141,7 @@ const ARTICLE_CLASS = [
       </p>
     </th-block>
 
+    {isPost && <AiSummary />}
     {isPost && <PostAds position="top" />}
 
     <article

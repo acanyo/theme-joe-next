@@ -1,0 +1,28 @@
+---
+/**
+ * AI 摘要卡片（设置 post.ai_summary，内容来自文章元数据 ai_summary）：正文上方一张浅色卡片。
+ * 元数据为空时不输出。摘要可以手写，也可以由 AI 插件写入这个元数据。
+ * 打字效果由 scripts/content/ai-summary.ts 完成；没有脚本或开启「减少动态效果」时直接显示全文。
+ */
+import Icon from "../common/Icon.astro";
+---
+
+<th-block th:with="aiSummary = ${#strings.trim(#annotations.getOrDefault(post, 'ai_summary', ''))}">
+  <section
+    class="joe_ai_summary"
+    th:if="${theme.config.post.ai_summary and not #strings.isEmpty(aiSummary)}"
+    th:aria-label="${theme.config.post.ai_summary_title ?: 'AI 摘要'}"
+    data-joe-ai-summary
+  >
+    <header class="head">
+      <span class="badge"><Icon name="fresh-new" /></span>
+      <span class="title" th:text="${theme.config.post.ai_summary_title ?: 'AI 摘要'}">AI 摘要</span>
+    </header>
+    <p class="text" th:text="${aiSummary}"></p>
+    <p
+      class="note"
+      th:unless="${#strings.isEmpty(theme.config.post.ai_summary_note)}"
+      th:text="${theme.config.post.ai_summary_note}"
+    ></p>
+  </section>
+</th-block>

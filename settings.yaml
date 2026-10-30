@@ -2056,6 +2056,28 @@ spec:
           help: 顶部的作者、日期、阅读量、字数等
           value: false
         - $formkit: switch
+          name: ai_summary
+          id: ai_summary
+          key: ai_summary
+          label: AI 摘要卡片
+          value: true
+          help: 文章元数据里有「AI 摘要」（ai_summary）时，在正文上方显示摘要卡片，带打字效果；没有时不显示
+        - $formkit: text
+          if: $get(ai_summary).value === true
+          name: ai_summary_title
+          id: ai_summary_title
+          key: ai_summary_title
+          label: 卡片标题
+          value: AI 摘要
+        - $formkit: text
+          if: $get(ai_summary).value === true
+          name: ai_summary_note
+          id: ai_summary_note
+          key: ai_summary_note
+          label: 卡片底部说明
+          value: 摘要由 AI 生成，仅供参考
+          help: 留空不显示
+        - $formkit: switch
           name: outdated_notice
           id: outdated_notice
           key: outdated_notice
