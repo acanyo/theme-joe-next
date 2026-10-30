@@ -3,7 +3,7 @@
  * 页脚，两层：
  * - 展示层：左侧「已运行 N 天」大字、建站纪念进度（footer.anniversary）、站点数据一行（文章数、访问统计）；
  *   右侧页脚导航的链接分组与社交图标（footer.nav）。两侧都没开时整层不输出。
- * - 底栏：左侧版权与 Powered by，右侧云服务商、备案号、订阅链接。
+ * - 底栏：左侧版权与 Powered by，右侧备案号与云服务商、订阅链接；窄屏三行居中。
  * 运行天数与纪念进度由 features/footer.ts 计算填入。
  */
 import Icon from "../common/Icon.astro";
@@ -98,76 +98,80 @@ const HAS_CLOUD = "theme.config.footer.cloud != null and theme.config.footer.clo
       </span>
     </p>
     <p class="end">
-      <span class="site_driven" th:if={`\${${HAS_CLOUD}}`}>
-        <th-block th:switch="${theme.config.footer.cloud}">
-          {CLOUD_PROVIDERS.map((p) => (
+      <span class="filing" th:if="${(theme.config.footer.icp and not #strings.isEmpty(theme.config.footer.filing?.icp)) or (theme.config.footer.police and not #strings.isEmpty(theme.config.footer.filing?.police))}">
+        <a
+          class="icp"
+          th:if="${theme.config.footer.icp and not #strings.isEmpty(theme.config.footer.filing?.icp)}"
+          th:href="${theme.config.footer.filing.icp_link ?: 'https://beian.miit.gov.cn/'}"
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          th:text="${theme.config.footer.filing.icp}"
+        ></a>
+        <span
+          class="site_police"
+          th:if="${theme.config.footer.police and not #strings.isEmpty(theme.config.footer.filing?.police)}"
+        >
+          <a
+            th:href="${theme.config.footer.filing.police_link ?: 'https://beian.mps.gov.cn/#/query/webSearch'}"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            th:text="${theme.config.footer.filing.police}"
+          ></a>
+        </span>
+      </span>
+      <span class="links">
+        <span class="site_driven" th:if={`\${${HAS_CLOUD}}`}>
+          <th-block th:switch="${theme.config.footer.cloud}">
+            {CLOUD_PROVIDERS.map((p) => (
+              <a
+                th:case={`'${p.key}'`}
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                title="云服务商"
+              >
+                <img
+                  class={p.key}
+                  th:src={`@{/assets/images/cloud/${p.key}.svg}`}
+                  alt="云服务商"
+                  data-fallback="image"
+                />
+              </a>
+            ))}
             <a
-              th:case={`'${p.key}'`}
-              href={p.url}
+              th:case="'custom'"
+              th:href="${theme.config.footer.cloud_url}"
               target="_blank"
               rel="noopener noreferrer nofollow"
               title="云服务商"
             >
               <img
-                class={p.key}
-                th:src={`@{/assets/images/cloud/${p.key}.svg}`}
+                class="custom"
+                th:src="${theme.config.footer.cloud_logo}"
                 alt="云服务商"
                 data-fallback="image"
               />
             </a>
-          ))}
-          <a
-            th:case="'custom'"
-            th:href="${theme.config.footer.cloud_url}"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            title="云服务商"
-          >
-            <img
-              class="custom"
-              th:src="${theme.config.footer.cloud_logo}"
-              alt="云服务商"
-              data-fallback="image"
-            />
-          </a>
-        </th-block>
-      </span>
-      <a
-        class="icp"
-        th:if="${theme.config.footer.icp and not #strings.isEmpty(theme.config.footer.filing?.icp)}"
-        th:href="${theme.config.footer.filing.icp_link ?: 'https://beian.miit.gov.cn/'}"
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-        th:text="${theme.config.footer.filing.icp}"
-      ></a>
-      <span
-        class="site_police"
-        th:if="${theme.config.footer.police and not #strings.isEmpty(theme.config.footer.filing?.police)}"
-      >
+          </th-block>
+        </span>
         <a
-          th:href="${theme.config.footer.filing.police_link ?: 'https://beian.mps.gov.cn/#/query/webSearch'}"
+          th:if="${theme.config.footer.rss}"
+          class="rss"
+          th:href="@{/rss.xml}"
           target="_blank"
-          rel="noopener noreferrer nofollow"
-          th:text="${theme.config.footer.filing.police}"
-        ></a>
+          rel="noopener noreferrer"
+        >
+          <Icon name="rss" />RSS
+        </a>
+        <a
+          th:if="${theme.config.footer.sitemap}"
+          th:href="@{/sitemap.xml}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          站点地图
+        </a>
       </span>
-      <a
-        th:if="${theme.config.footer.rss}"
-        class="rss"
-        th:href="@{/rss.xml}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Icon name="rss" />RSS
-      </a>
-      <a
-        th:if="${theme.config.footer.sitemap}"
-        th:href="@{/sitemap.xml}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        站点地图
-      </a>
     </p>
   </div>
 </footer>

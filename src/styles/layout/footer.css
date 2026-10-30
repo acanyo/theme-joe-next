@@ -197,7 +197,9 @@
   line-height: 22px;
 
   .start,
-  .end {
+  .end,
+  .filing,
+  .links {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -336,9 +338,19 @@ html[data-mode="dark"] .site_driven img {
     padding-bottom: 150px;
     text-align: center;
 
+    /* 三行：版权与 Powered by / 备案号 / 云服务商与订阅 */
+    gap: 4px;
+
     .start,
-    .end {
+    .end,
+    .filing,
+    .links {
       justify-content: center;
+    }
+
+    .end {
+      flex-direction: column;
+      gap: 4px;
     }
   }
 }

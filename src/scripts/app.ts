@@ -11,7 +11,7 @@ import { getThemeConfig } from "./core/config";
 import { runPageScript } from "./core/page-scripts";
 import { initActions } from "./features/actions";
 import { initAsideWidgets } from "./features/aside-widgets";
-import { initColorMode } from "./features/color-mode";
+import { initColorMode, refreshColorMode } from "./features/color-mode";
 import { initConsole, refreshConsole } from "./features/console";
 import { initContextMenu } from "./features/context-menu";
 import { initEnhancements } from "./features/enhancements";
@@ -42,6 +42,7 @@ async function initPage(): Promise<void> {
   initCommenterCards();
   initNavChapter();
   refreshNavigation();
+  refreshColorMode();
   refreshConsole();
   initActions();
   initLinkBehavior();
