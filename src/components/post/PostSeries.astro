@@ -1,0 +1,59 @@
+---
+/**
+ * 文章系列（设置 post.series_tags）：设置里选中的标签当作系列。
+ * 当前文章带有其中某个标签时，在正文上方显示「系列：xxx · 第 n / 共 N 篇」，展开是整个系列的目录，
+ * 按发布时间从早到晚排列，当前这篇高亮。一篇文章属于多个系列时只显示第一个。
+ *
+ * 用 <details>：默认收起，不占正文位置；不需要脚本。
+ */
+import Icon from "../common/Icon.astro";
+import "../../styles/content/post-series.css";
+
+/** 一个系列最多列出多少篇 */
+const MAX = 100;
+/** 当前文章的标签里，第一个被设为系列的 */
+const SERIES_TAG = "post.tags.?[#vars.seriesTags.contains(metadata.name)]";
+---
+
+<th-block
+  th:if="${not #lists.isEmpty(theme.config.post.series_tags) and not #lists.isEmpty(post.tags)}"
+  th:with={`seriesTags = \${theme.config.post.series_tags}, seriesHits = \${${SERIES_TAG}}`}
+>
+  <th-block th:unless="${#lists.isEmpty(seriesHits)}" th:with="series = ${seriesHits[0]}">
+    <th-block
+      th:with={`seriesPosts = \${postFinder.list({page: 1, size: ${MAX}, tagName: series.metadata.name, sort: {'spec.publishTime,asc'}}).items}`}
+    >
+      <details
+        class="joe_post_series"
+        th:if="${seriesPosts.size() > 1}"
+        th:with="current = ${seriesPosts.![metadata.name].indexOf(post.metadata.name) + 1}"
+      >
+        <summary>
+          <Icon name="toc" />
+          <span class="label">系列</span>
+          <span class="name" th:text="${series.spec.displayName}"></span>
+          <span class="pos" th:text="|第 ${current} / ${seriesPosts.size()} 篇|"></span>
+          <Icon name="chevron-down" class="arrow" />
+        </summary>
+        <ol>
+          <li th:each="item, iter : ${seriesPosts}" th:classappend="${item.metadata.name == post.metadata.name ? 'is-current' : ''}">
+            <span class="num" th:text="${iter.count}"></span>
+            <span
+              class="title"
+              th:if="${item.metadata.name == post.metadata.name}"
+              aria-current="page"
+              th:text="${item.spec.title}"
+            ></span>
+            <a
+              class="title"
+              th:unless="${item.metadata.name == post.metadata.name}"
+              th:href="@{${item.status.permalink}}"
+              th:text="${item.spec.title}"
+            ></a>
+          </li>
+        </ol>
+        <a class="all" th:href="@{${series.status.permalink}}">查看这个系列的全部文章<Icon name="chevron-right" /></a>
+      </details>
+    </th-block>
+  </th-block>
+</th-block>

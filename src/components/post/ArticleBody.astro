@@ -4,6 +4,7 @@
  * `subject` 为当前内容变量名：文章页为 "post"，独立页面为 "singlePage"。
  */
 import { COMMENT_ENABLED, el } from "../../config/expressions";
+import PostSeries from "./PostSeries.astro";
 import PostAds from "./PostAds.astro";
 import Icon from "../common/Icon.astro";
 
@@ -132,6 +133,7 @@ const ARTICLE_CLASS = [
     </th-block>
 
     {isPost && <PostAds position="top" />}
+    {isPost && <PostSeries />}
 
     <article
       class={`joe_detail__article animated fadeIn`}

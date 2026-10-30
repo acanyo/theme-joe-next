@@ -2250,6 +2250,14 @@ spec:
           label: 那年今日
           value: true
           help: 往年的今天写过文章时，在相关文章下方列出来；没有时不显示
+        - $formkit: tagSelect
+          name: series_tags
+          id: series_tags
+          key: series_tags
+          label: 文章系列（用标签）
+          multiple: true
+          value: []
+          help: 选中的标签当作「系列」：带这些标签的文章，正文上方显示系列目录（第几篇 / 共几篇），按发布时间排序
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
