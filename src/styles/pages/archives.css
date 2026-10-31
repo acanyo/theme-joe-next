@@ -34,6 +34,26 @@
     justify-content: space-between;
     user-select: none;
 
+    .period {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+
+      a {
+        font-weight: 400;
+        color: var(--text-secondary);
+
+        &:hover {
+          color: var(--theme-text);
+        }
+      }
+
+      i {
+        font-size: 14px;
+        color: var(--text-placeholder);
+      }
+    }
+
     .total {
       font-size: 13px;
       font-weight: 400;
@@ -310,6 +330,100 @@
           }
         }
       }
+    }
+  }
+}
+
+/* 发文热力图（components/list/ArchiveHeatmap.astro）：一年一行、一月一格，颜色为主题色的五档深浅 */
+.joe_heatmap {
+  margin-bottom: 20px;
+
+  .summary {
+    margin: 0 0 10px;
+    font-size: 13px;
+    color: var(--text-secondary);
+
+    em {
+      font-style: normal;
+      font-weight: 600;
+      color: var(--text-regular);
+    }
+  }
+
+  .grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-x: auto;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 44px repeat(12, minmax(14px, 1fr));
+    gap: 4px;
+    align-items: center;
+  }
+
+  .year,
+  .m {
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+  }
+
+  .m {
+    text-align: center;
+  }
+
+  .cell {
+    display: block;
+    height: 16px;
+    border-radius: 3px;
+  }
+
+  a.cell {
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+
+    &:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 0 2px var(--bg-page), 0 0 0 3px var(--theme);
+    }
+  }
+
+  .lv-0 {
+    background: var(--fill-base);
+  }
+
+  .lv-1 {
+    background: color-mix(in srgb, var(--theme) 25%, var(--bg-page));
+  }
+
+  .lv-2 {
+    background: color-mix(in srgb, var(--theme) 50%, var(--bg-page));
+  }
+
+  .lv-3 {
+    background: color-mix(in srgb, var(--theme) 75%, var(--bg-page));
+  }
+
+  .lv-4 {
+    background: var(--theme);
+  }
+
+  .legend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    margin: 8px 0 0;
+    font-size: 11px;
+    color: var(--text-secondary);
+
+    .cell {
+      width: 12px;
+      height: 12px;
     }
   }
 }

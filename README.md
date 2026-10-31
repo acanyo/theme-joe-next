@@ -54,7 +54,7 @@ src/
 │   ├── app.ts          全站脚本入口
 │   ├── pages/          页面专属脚本入口
 │   ├── features/       独立功能模块（明暗模式、导航、点赞、轮播…）
-│   ├── content/        正文处理（代码块、目录、灯箱、短代码）
+│   ├── content/        正文处理（代码块、目录、灯箱）
 │   ├── core/           基础工具（DOM、配置、存储、提示）
 │   └── effects/        鼠标/背景特效（按需加载）
 ├── styles/             原生 CSS（嵌套语法），按 base / components / layout / content / pages 拆分，目录即级联层
@@ -82,7 +82,7 @@ integrations/           Astro 构建后处理（Thymeleaf 标签还原、CSS 级
 
 **级联层。** `src/styles` 的每个文件在构建时按目录放入 CSS 级联层（`integrations/css-layers.ts`），顺序为 `reset → tokens → vendor → base → components → layout → content → pages`。后面的层总是覆盖前面的层，与选择器权重无关，所以不需要用 `html` / `#Joe` 前缀或 `!important` 抬高优先级；跨文件的覆盖应写在更靠后的层里。不分层的样式优先于主题：主题设置生成的动态样式、插件样式，以及在 Halo「代码注入」里写的自定义 CSS，都能直接覆盖主题。按需加载的 Swiper / PhotoSwipe 样式放在 vendor 层。
 
-**按需加载。** Swiper、PhotoSwipe、vConsole、hls.js、鼠标/背景特效均在用到时才下载，样式通过 `loadStylesheet()` 插入，不会进入首屏 CSS。
+**按需加载。** Swiper、PhotoSwipe、vConsole、鼠标/背景特效均在用到时才下载，样式通过 `loadStylesheet()` 插入，不会进入首屏 CSS。
 
 ## 插件集成
 
@@ -101,7 +101,7 @@ integrations/           Astro 构建后处理（Thymeleaf 标签还原、CSS 级
 - **技术栈：** jQuery、Isotope、fancybox、Draggabilly、WOW.js、NProgress、Qmsg、ClipboardJS、lazysizes、Vue 2 均由原生 API 或 npm 包替代，第三方库通过 pnpm 管理并锁定版本。
 - **图标：** iconfont 图标字体与 Font Awesome 改为 [Iconify](https://iconify.design/) 图标（lucide、Remix Icon、Simple Icons），构建时内联为 SVG（`src/config/icons.ts`），不加载图标字体也不请求 CDN；菜单项图标使用 Halo 的 Iconify 图标选择器。
 - **评论：** 只使用 Halo 评论扩展点（评论组件插件），不再内置 Waline。
-- **已移除：** 天气组件、百度收录检测、PDF 短代码、内置 Prism 代码高亮（改由 shiki 插件负责）、APlayer 音乐播放器（侧栏歌单组件；音频短代码改用原生 `<audio>`，网易云短代码显示为链接），以及 Joe3 中未被引用的库和模板（halo-comment、KaTeX、jquery-ui 等）。视频短代码改用原生 `<video>` + hls.js，不再使用 DPlayer 的 iframe 页面。
+- **已移除：** 天气组件、百度收录检测、内置 Prism 代码高亮（改由 shiki 插件负责）、APlayer 音乐播放器（侧栏歌单组件）、Joe 编辑器的正文短代码（`<joe-tabs>`、`<joe-alert>`、卡片、折叠、时间线、音视频、B 站视频等，旧文章里的这些标签按普通文字显示），以及 Joe3 中未被引用的库和模板（halo-comment、KaTeX、jquery-ui 等）。
 - **设置项：** 重新整理为 12 个分组，统一键名与说明文字，**与 Joe3 及 Joe Next 0.1 之前的配置不兼容**，升级后需要在后台重新设置。已删除不再生效的设置（预载图、外部资源地址、旧版自定义 CSS/JS、Waline 等）。
 - **修复：** 分类/标签/作者页分页地址、年度时间轴重复、作者页标题、`page_links` 在未安装链接插件时报错等 Joe3 遗留问题。
 

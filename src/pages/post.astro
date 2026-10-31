@@ -12,6 +12,7 @@ import PostHero from "../components/post/PostHero.astro";
 import PostOperate from "../components/post/PostOperate.astro";
 import PostNav from "../components/post/PostNav.astro";
 import RelatedPosts from "../components/post/RelatedPosts.astro";
+import OnThisDay from "../components/post/OnThisDay.astro";
 import "../styles/pages/post.css";
 import "../styles/pages/post-hero.css";
 import "../styles/content/poster.css";
@@ -45,6 +46,10 @@ import "../styles/content/poster.css";
 
     <PostNav />
     <RelatedPosts />
+    <!-- 那年今日（设置 post.on_this_day）：往年今天写的文章，没有时不显示 -->
+    <th-block th:if="${theme.config.post.on_this_day}" th:with="today = ${#dates.createNow()}">
+      <OnThisDay />
+    </th-block>
 
     <CommentSection subject="post" kind="Post" />
   </div>

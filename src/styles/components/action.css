@@ -37,6 +37,25 @@
     fill: var(--theme);
   }
 
+  &.random-post {
+    pointer-events: auto;
+    margin-bottom: 15px;
+
+    i {
+      font-size: 21px;
+      color: var(--theme);
+      transition: rotate var(--dur-slow) var(--ease-spring);
+    }
+
+    &:hover i {
+      rotate: 90deg;
+    }
+
+    &.is-rolling i {
+      animation: joe-dice-roll 0.6s var(--ease-out);
+    }
+  }
+
   &.toc {
     display: none;
     pointer-events: auto;
@@ -108,5 +127,11 @@
   .joe_action {
     bottom: 40px;
     right: 20px;
+  }
+}
+
+@keyframes joe-dice-roll {
+  to {
+    rotate: 450deg;
   }
 }

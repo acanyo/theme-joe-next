@@ -23,6 +23,8 @@ export const SERVER_CONFIG_FIELDS = {
   cursorEffect: "theme.config.effects.cursor_effect",
   backdrop: "theme.config.effects.backdrop",
   enableContextMenu: "theme.config.effects.context_menu",
+  enableRandomPost: "theme.config.effects.random_post",
+  enableShortcuts: "theme.config.effects.shortcuts",
   enableOffscreenTip: "theme.config.effects.offscreen_title",
   offscreenTitleLeave: "theme.config.effects.offscreen_title_leave",
   offscreenTitleBack: "theme.config.effects.offscreen_title_back",
@@ -106,6 +108,8 @@ export interface ThemeConfig {
   cursorEffect: string;
   backdrop: string;
   enableContextMenu: boolean;
+  enableRandomPost: boolean;
+  enableShortcuts: boolean;
   enableOffscreenTip: boolean;
   offscreenTitleLeave: string;
   offscreenTitleBack: string;
@@ -243,6 +247,8 @@ export function normalizeThemeConfig(
     cursorEffect: toStr(raw.cursorEffect, "off"),
     backdrop: toStr(raw.backdrop, "off"),
     enableContextMenu: toBool(raw.enableContextMenu),
+    enableRandomPost: toBool(raw.enableRandomPost),
+    enableShortcuts: toBool(raw.enableShortcuts),
     enableOffscreenTip: toBool(raw.enableOffscreenTip),
     offscreenTitleLeave: toStr(raw.offscreenTitleLeave),
     offscreenTitleBack: toStr(raw.offscreenTitleBack),

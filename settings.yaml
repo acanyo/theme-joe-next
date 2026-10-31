@@ -385,6 +385,20 @@ spec:
           label: 平滑滚动到顶部
           value: false
           if: $get(back_to_top).value === true
+        - $formkit: switch
+          name: random_post
+          id: random_post
+          key: random_post
+          label: 「随便看看」按钮
+          value: true
+          help: 右下角的骰子按钮与右键菜单，随机打开一篇文章
+        - $formkit: switch
+          name: shortcuts
+          id: shortcuts
+          key: shortcuts
+          label: 键盘快捷键
+          value: true
+          help: j / k 上一篇下一篇、t 回到顶部、/ 搜索、r 随便看看、d 切换明暗；按 ? 查看全部
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
@@ -973,6 +987,13 @@ spec:
           label: 继续阅读提示
           value: true
           help: 访客上次有文章读到一半时，在文章列表上方提示「上次读到《…》45%」，点击回到上次的位置；阅读记录只保存在访客的浏览器里
+        - $formkit: switch
+          name: on_this_day
+          id: on_this_day
+          key: on_this_day
+          label: 那年今日
+          value: true
+          help: 往年的今天写过文章时，在文章列表上方列出来；没有时不显示
         - $formkit: switch
           name: freshness_badge
           id: freshness_badge
@@ -2229,6 +2250,21 @@ spec:
           label: 正文下方的相关文章卡片
           value: true
           help: 在上一篇 / 下一篇下方显示最多 4 篇带封面的相关文章；手机上侧栏隐藏时也能看到
+        - $formkit: switch
+          name: on_this_day
+          id: on_this_day
+          key: on_this_day
+          label: 那年今日
+          value: true
+          help: 往年的今天写过文章时，在相关文章下方列出来；没有时不显示
+        - $formkit: tagSelect
+          name: series_tags
+          id: series_tags
+          key: series_tags
+          label: 文章系列（用标签）
+          multiple: true
+          value: []
+          help: 选中的标签当作「系列」：带这些标签的文章，正文上方显示系列目录（第几篇 / 共几篇），按发布时间排序
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
@@ -2758,6 +2794,13 @@ spec:
           key: archives_categories
           label: 归档页显示分类
           value: false
+        - $formkit: switch
+          name: archives_heatmap
+          id: archives_heatmap
+          key: archives_heatmap
+          label: 归档页发文热力图
+          value: true
+          help: 每年一行、每月一格，颜色越深当月写得越多，点一格进入当月归档
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"

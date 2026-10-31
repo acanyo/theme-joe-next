@@ -1,0 +1,42 @@
+---
+/**
+ * 那年今日：往年同月同日发布的文章（变量 today 由外层给出，服务器时区的今天）。
+ * 往前查 YEARS 年；每年用 postFinder.archives(1, 100, 年, 月) 按归档标签取当月文章，
+ * 再按发布日期筛出同一天的。一篇都没有时整块隐藏（样式里 :not(:has(li))）。
+ *
+ * 归档年月日与 #dates.day 都按服务器时区计算，和 Halo 自己的归档页一致。
+ */
+import Icon from "../common/Icon.astro";
+import "../../styles/content/on-this-day.css";
+
+/** 往前查几年 */
+const YEARS = 10;
+---
+
+<section
+  class="joe_on_this_day"
+  aria-label="那年今日"
+  th:with="todayYear = ${#dates.year(today)}, todayMonth = ${#dates.format(today, 'MM')}, todayDay = ${#dates.day(today)}"
+>
+  <h2 class="head">
+    <Icon name="calendar" />
+    <span>那年今日</span>
+    <em th:text="${#dates.format(today, 'M 月 d 日')}"></em>
+  </h2>
+  <ul>
+    <th-block th:each={`ago : \${#numbers.sequence(1, ${YEARS})}`}>
+      <th-block th:with="archive = ${postFinder.archives(1, 100, '' + (todayYear - ago), todayMonth)}">
+        <th-block th:each="year : ${archive.items}">
+          <th-block th:each="month : ${year.months}">
+            <li th:each="item : ${month.posts}" th:if="${#dates.day(item.spec.publishTime) == todayDay}">
+              <a th:href="@{${item.status.permalink}}" th:title="${item.spec.title}">
+                <span class="ago" th:text="|${ago} 年前|"></span>
+                <span class="title" th:text="${item.spec.title}"></span>
+              </a>
+            </li>
+          </th-block>
+        </th-block>
+      </th-block>
+    </th-block>
+  </ul>
+</section>

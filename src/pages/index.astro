@@ -6,6 +6,7 @@ import Pagination from "../components/list/Pagination.astro";
 import Banner from "../components/home/Banner.astro";
 import HotCategories from "../components/home/HotCategories.astro";
 import MomentsStack from "../components/home/MomentsStack.astro";
+import OnThisDay from "../components/post/OnThisDay.astro";
 import "../styles/pages/index.css";
 import Icon from "../components/common/Icon.astro";
 import "../styles/pages/moments-stack.css";
@@ -24,6 +25,10 @@ import "../styles/pages/moments-stack.css";
       <MomentsStack />
       <!-- 继续阅读（设置 home.resume_bar）：老访客上次读到一半的文章，由 features/resume-bar.ts 填入 -->
       <div class="joe_resume_bar" th:if="${theme.config.home.resume_bar}" data-joe-resume-bar hidden></div>
+      <!-- 那年今日（设置 home.on_this_day）：往年今天写的文章，没有时不显示 -->
+      <th-block th:if="${theme.config.home.on_this_day}" th:with="today = ${#dates.createNow()}">
+        <OnThisDay />
+      </th-block>
       <div class="joe_index__article">
         <div class="joe_index__title">
           <!-- 分类标签页（设置 home.category_tabs）：服务端输出全部分类，脚本按文章数保留前几个，点击在原地切换（scripts/pages/index.ts） -->

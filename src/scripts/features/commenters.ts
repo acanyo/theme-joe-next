@@ -9,7 +9,7 @@
  */
 import { $$ } from "../core/dom";
 import { listen, onCleanup } from "../core/lifecycle";
-import { escapeHtml } from "../content/shortcode-parse";
+import { escapeHtml } from "../core/html";
 import { relativeTime } from "./console-content";
 
 const MAX = 4;

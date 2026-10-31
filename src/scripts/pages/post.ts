@@ -1,7 +1,6 @@
 /** 文章页入口 */
 import { initPoster } from "../content/poster";
 import { initCodeBlocks } from "../content/code-block";
-import { initShortcodes } from "../content/shortcodes";
 import { initGallery } from "../content/gallery";
 import { initAsideOperate } from "../content/aside-operate";
 import { recordReading } from "../features/visitor";
@@ -19,7 +18,6 @@ import {
 } from "../content/article";
 
 export default function init(): void {
-  initShortcodes();
   ensureHeadingIds();
   initWordCount();
   initToc();

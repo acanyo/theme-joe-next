@@ -1,0 +1,86 @@
+/* 那年今日（components/post/OnThisDay.astro）：文章页正文后、首页文章列表上方的一小块列表 */
+.joe_on_this_day {
+  margin-bottom: 15px;
+  padding: 12px 14px;
+  border-radius: var(--radius-wrap);
+  background: var(--fill-base);
+
+  /* 往年这一天没有文章时整块不显示 */
+  &:not(:has(li)) {
+    display: none;
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-title);
+
+    /* 正文 h2 的主题色竖条不需要 */
+    &::before {
+      display: none;
+    }
+
+    i {
+      color: var(--text-secondary);
+    }
+
+    em {
+      margin-left: auto;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+    margin: 0;
+
+    & + li {
+      margin-top: 0;
+    }
+  }
+
+  a {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 5px 0;
+    font-size: 14px;
+    color: var(--text-regular);
+
+    &:hover .title {
+      color: var(--theme-text);
+    }
+  }
+
+  .ago {
+    flex: none;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+  }
+
+  .title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+}
+
+/* 首页：和上方的瞬间卡片、继续阅读条一样左右留出 15px */
+.joe_index > .joe_on_this_day {
+  margin: 15px 15px 0;
+}

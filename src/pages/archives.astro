@@ -5,8 +5,15 @@ import Pagination from "../components/list/Pagination.astro";
 import "../styles/pages/archives.css";
 import Icon from "../components/common/Icon.astro";
 import ArchiveRow from "../components/list/ArchiveRow.astro";
+import ArchiveHeatmap from "../components/list/ArchiveHeatmap.astro";
 
 const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
+/**
+ * 年 / 月归档（/archives/2025、/archives/2025/10）：Halo 只把筛选后的 archives 交给模板，不给年月本身；
+ * 年月从 archives.prevUrl 里取（第 1 页时它就是当前路径，翻页后去掉 /page/n 也一样）。
+ * 时间轴样式不分页，按这里取到的年月重新查询，否则会一直显示全部文章。
+ */
+const PERIOD_PATH = "archives.prevUrl?.replaceAll('/page/\\d+$', '')?.replaceAll('^.*?/(\\d{4})(/(\\d{2}))?$', '$1-$3')";
 ---
 
 <BaseLayout
@@ -17,12 +24,23 @@ const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
   pageClass="page-archives"
 >
   <div class="joe_main">
-    <div class="joe_index joe_archives__filing">
+    <div
+      class="joe_index joe_archives__filing"
+      th:with={`period = \${${PERIOD_PATH}}, periodYear = \${period != null and period.matches('\\d{4}-(\\d{2})?') ? period.substring(0, 4) : null}, periodMonth = \${periodYear != null and period.length() == 7 ? period.substring(5) : null}`}
+    >
       <div class="title">
-        <span th:text={`\${${TITLE}}`}></span>
-        <span class="total">共 <em th:text="${siteStatsFinder.getStats().post}">0</em> 篇</span>
+        <span th:if="${periodYear == null}" th:text={`\${${TITLE}}`}></span>
+        <span th:unless="${periodYear == null}" class="period">
+          <a th:href="@{/archives}" th:text={`\${${TITLE}}`}></a>
+          <Icon name="chevron-right" />
+          <span th:text="${periodMonth == null ? periodYear + ' 年' : periodYear + ' 年 ' + #conversions.convert(periodMonth, 'java.lang.Integer') + ' 月'}"></span>
+        </span>
+        <span class="total">共 <em th:text="${periodYear == null ? siteStatsFinder.getStats().post : archives.total}">0</em> 篇</span>
       </div>
       <div class="content">
+        <th-block th:if="${theme.config.pages.archives_heatmap}" th:with="heatArchives = ${postFinder.archives(1, 9999).items}">
+          <ArchiveHeatmap />
+        </th-block>
         <div
           class="joe_archives__category animated fadeIn"
           th:if="${theme.config.pages.archives_categories}"
@@ -81,7 +99,7 @@ const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
             </div>
             <ul
               class="joe_archives-timelist"
-              th:with="allArchives = ${postFinder.archives(1, 9999)}"
+              th:with="allArchives = ${periodYear == null ? postFinder.archives(1, 9999) : postFinder.archives(1, 9999, periodYear, periodMonth)}"
             >
               <th-block th:each="archive : ${allArchives.items}">
                 <th-block th:if="${byMonth}">

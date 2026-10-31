@@ -22,6 +22,7 @@ import { finishLoadingBar, startLoadingBar } from "./features/loading-bar";
 import { initNavigation, refreshNavigation } from "./features/navigation";
 import { initNavChapter } from "./features/nav-chapter";
 import { initReveal } from "./features/reveal";
+import { initShortcuts } from "./features/shortcuts";
 import { cleanExcerpts } from "./content/excerpt";
 import { hideReadBadges } from "./features/freshness";
 import { dedupeCommenters, initCommenterCards } from "./features/commenters";
@@ -32,6 +33,7 @@ function initShell(): void {
   initFooter();
   initContextMenu();
   initConsole();
+  initShortcuts();
 }
 
 async function initPage(): Promise<void> {

@@ -20,6 +20,6 @@
 @import "./components/comment.css";
 @import "./components/ads.css";
 @import "./components/social.css";
+@import "./components/shortcuts.css";
 @import "./content/article.css";
-@import "./content/shortcodes.css";
 @import "./content/hyperlink-card.css";

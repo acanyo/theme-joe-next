@@ -5,7 +5,7 @@
  * - 链接：新窗口打开、复制链接地址
  * - 图片：新窗口打开图片、复制图片地址
  * - 选中文字：复制、站内搜索（需要搜索插件）
- * - 任意位置：后退、刷新、回到顶部、切换明暗（「访客切换」模式时）
+ * - 任意位置：后退、刷新、回到顶部、随便看看（设置开启时）、切换明暗（「访客切换」模式时）
  *
  * 以下情况保留浏览器原生菜单：按住 Ctrl / ⌘ / Shift 右键、在输入框 / 可编辑区域内、移动端。
  * 菜单可用方向键 / Enter 操作，Esc、点击外部、滚动或窗口失焦时关闭。
@@ -14,6 +14,7 @@ import { isMobile } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { notify } from "../core/toast";
 import { currentMode, toggleColorModeAt } from "./color-mode";
+import { openRandomPost } from "./random-post";
 
 interface MenuItem {
   label: string;
@@ -30,6 +31,7 @@ const ICONS = {
   reload: '<path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/>',
   top: '<path d="M12 20V6M5 11l7-7 7 7M5 4h14"/>',
   mode: '<path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/>',
+  dice: '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1"/><circle cx="15.5" cy="15.5" r="1"/><circle cx="12" cy="12" r="1"/>',
 };
 
 const svg = (path: string) =>
@@ -80,6 +82,8 @@ function buildItems(target: Element, x: number, y: number): MenuItem[][] {
   ];
   if (window.scrollY > 200)
     page.push({ label: "回到顶部", icon: ICONS.top, run: () => window.scrollTo({ top: 0, behavior: "smooth" }) });
+  if (getThemeConfig().enableRandomPost)
+    page.push({ label: "随便看看", icon: ICONS.dice, run: () => void openRandomPost() });
   if (getThemeConfig().themeMode === "user")
     page.push({
       label: currentMode() === "dark" ? "切换到浅色" : "切换到暗黑",

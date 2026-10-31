@@ -12,13 +12,6 @@ describe("cleanExcerpt", () => {
     );
   });
 
-  it("removes Joe shortcode markers but keeps their text", () => {
-    assert.equal(
-      cleanExcerpt('短代码测试 注意事项 {tabs-pane label="第一页"}内容一{/tabs-pane}{tabs-pane label="第二页"}内容'),
-      "短代码测试 注意事项 内容一 内容",
-    );
-  });
-
   it("keeps ordinary prose untouched", () => {
     const text = "如果你看到了这一篇文章，那么证明你已经安装成功了，感谢使用 Halo 进行创作。";
     assert.equal(cleanExcerpt(text), text);

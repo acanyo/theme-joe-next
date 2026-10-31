@@ -5,7 +5,7 @@
  * 点关闭后这篇不再提示，直到读到新的位置（按文章地址 + 最后阅读时间记住）。
  */
 import { $ } from "../core/dom";
-import { escapeHtml } from "../content/shortcode-parse";
+import { escapeHtml } from "../core/html";
 import { iconHtml } from "../core/icons";
 import { readHistory } from "./visitor";
 import { relativeTime } from "./console-content";

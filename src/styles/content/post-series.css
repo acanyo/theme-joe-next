@@ -1,0 +1,121 @@
+/* 文章系列（components/post/PostSeries.astro）：正文上方的可展开目录 */
+.joe_post_series {
+  margin: 0 0 18px;
+  border-radius: var(--radius-wrap);
+  background: var(--fill-base);
+
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--text-regular);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    > i:first-child {
+      color: var(--text-secondary);
+    }
+
+    .label {
+      color: var(--text-secondary);
+    }
+
+    .name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 600;
+      color: var(--text-title);
+    }
+
+    .pos {
+      flex: none;
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .arrow {
+      flex: none;
+      color: var(--text-secondary);
+      transition: rotate var(--dur-base) var(--ease-out);
+    }
+
+    &:hover .name {
+      color: var(--theme-text);
+    }
+  }
+
+  &[open] summary .arrow {
+    rotate: 180deg;
+  }
+
+  ol {
+    margin: 0;
+    padding: 0 14px 4px;
+    border-top: 1px dashed var(--border-lighter);
+  }
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0;
+    padding: 6px 0;
+    list-style: none;
+    font-size: 14px;
+
+    & + li {
+      margin-top: 0;
+    }
+  }
+
+  .num {
+    flex: none;
+    min-width: 1.6em;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+  }
+
+  .title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text-regular);
+  }
+
+  a.title:hover {
+    color: var(--theme-text);
+  }
+
+  .is-current {
+    .num,
+    .title {
+      font-weight: 600;
+      color: var(--theme-text);
+    }
+  }
+
+  .all {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin: 0 14px 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+
+    &:hover {
+      color: var(--theme-text);
+    }
+  }
+}

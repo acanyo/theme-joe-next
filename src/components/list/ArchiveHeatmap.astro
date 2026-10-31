@@ -1,0 +1,50 @@
+---
+/**
+ * 归档页的发文热力图（设置 pages.archives_heatmap）：每年一行、每月一格，颜色越深当月写得越多，
+ * 点一格进入 Halo 的月归档（/archives/年/月）。上方一行小字：从哪年写起、跨了几个年头。
+ * 变量 heatArchives 由外层给出（postFinder.archives 的全部结果，年份从新到旧）。
+ */
+const MONTHS = "#numbers.sequence(1, 12)";
+/** 两位月份文本，与 Halo 归档的 month 字段一致 */
+const MM = "(m < 10 ? '0' + m : '' + m)";
+/** 某年某月的篇数 */
+const COUNT = `#lists.isEmpty(year.months.?[month == #vars.mm]) ? 0 : #lists.size(year.months.?[month == #vars.mm][0].posts)`;
+const LEVEL = "count == 0 ? 0 : (count == 1 ? 1 : (count <= 3 ? 2 : (count <= 6 ? 3 : 4)))";
+---
+
+<section
+  class="joe_heatmap"
+  aria-label="发文热力图"
+  th:unless="${#lists.isEmpty(heatArchives)}"
+  th:with="firstYear = ${heatArchives[heatArchives.size() - 1].year}, lastYear = ${heatArchives[0].year}"
+>
+  <p class="summary" th:with="spanYears = ${#conversions.convert(lastYear, 'java.lang.Integer') - #conversions.convert(firstYear, 'java.lang.Integer') + 1}">
+    从 <em th:text="${firstYear}"></em> 年写到现在<span th:text="${spanYears == 1 ? '，今年是第一年' : '，跨了 '}"></span><em th:if="${spanYears > 1}" th:text="${spanYears}"></em><span th:if="${spanYears > 1}"> 个年头</span>
+  </p>
+  <div class="grid" role="table" aria-label="每月发文数">
+    <div class="row head" role="row">
+      <span class="year" role="columnheader"></span>
+      <span class="m" role="columnheader" th:each={`m : \${${MONTHS}}`} th:text="${m}"></span>
+    </div>
+    <div class="row" role="row" th:each="year : ${heatArchives}">
+      <span class="year" role="rowheader" th:text="${year.year}"></span>
+      <th-block th:each={`m : \${${MONTHS}}`} th:with={`mm = \${${MM}}`}>
+        <th-block th:with={`count = \${${COUNT}}`}>
+          <a
+            class="cell"
+            role="cell"
+            th:if="${count > 0}"
+            th:href="@{/archives/{y}/{mm}(y=${year.year}, mm=${mm})}"
+            th:classappend={`|lv-\${${LEVEL}}|`}
+            th:title="|${year.year} 年 ${m} 月：${count} 篇|"
+            th:attr="aria-label=|${year.year} 年 ${m} 月 ${count} 篇|"
+          ></a>
+          <span class="cell lv-0" role="cell" th:unless="${count > 0}" th:title="|${year.year} 年 ${m} 月：没有文章|"></span>
+        </th-block>
+      </th-block>
+    </div>
+  </div>
+  <p class="legend" aria-hidden="true">
+    少<span class="cell lv-0"></span><span class="cell lv-1"></span><span class="cell lv-2"></span><span class="cell lv-3"></span><span class="cell lv-4"></span>多
+  </p>
+</section>
