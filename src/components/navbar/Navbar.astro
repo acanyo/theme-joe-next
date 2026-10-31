@@ -13,6 +13,7 @@ import MenuLink from "./MenuLink.astro";
 import { COLOR_MODE } from "../../config/expressions";
 import MobileDrawer from "./MobileDrawer.astro";
 import ConsolePanel from "./ConsolePanel.astro";
+import MusicPlayer from "./MusicPlayer.astro";
 import Icon from "../common/Icon.astro";
 
 const MENU =
@@ -158,6 +159,7 @@ const MENU =
             </g>
           </svg>
         </button>
+        <MusicPlayer />
         <button
           type="button"
           class="joe_header__console"
@@ -196,6 +198,19 @@ const MENU =
         </div>
       </div>
 
+      <!-- 手机端：右侧按钮组隐藏时，音乐按钮单独放在搜索图标旁边（与上面的按钮控制同一个播放器） -->
+      <button
+        type="button"
+        class="joe_header__music joe_header__music--mobile"
+        th:if="${theme.config.navbar.music}"
+        aria-label="音乐播放器"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        data-joe-music-toggle
+      >
+        <Icon name="music" />
+        <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      </button>
       <button
         type="button"
         class="joe_header__above-searchicon"
