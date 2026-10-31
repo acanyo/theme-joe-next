@@ -189,6 +189,10 @@
       display: block;
       width: 100%;
       height: auto;
+      /* 图库插件不记录图片尺寸，加载前给一个占位高度：
+         否则懒加载的图片高度为 0，多列布局把它们挤在一起，要等滚动触发加载才铺开 */
+      min-height: 160px;
+      background: var(--fill-base);
       transition: transform var(--dur-base) var(--ease-out);
     }
 
