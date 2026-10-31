@@ -45,7 +45,7 @@ const HAS_CLOUD = "theme.config.footer.cloud != null and theme.config.footer.clo
         <span class="track" aria-hidden="true"><span class="fill"></span></span>
         <p class="hint"></p>
       </div>
-      <p class="stats" th:with="stats = ${siteStatsFinder.getStats()}">
+      <p class="stats" th:with="stats = ${siteStats}">
         <span><em th:text="${stats.post}">0</em> 篇文章</span>
         <span><em th:text="${#numbers.formatInteger(stats.visit, 1, 'COMMA')}">0</em> 次阅读</span>
         <span><em th:text="${stats.comment}">0</em> 条评论</span>

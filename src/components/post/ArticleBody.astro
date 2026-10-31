@@ -29,7 +29,7 @@ const ARTICLE_CLASS = [
   class="joe_detail"
   th:style="|--reading-width: ${theme.config.post.reading_width == 0 ? 'none' : (theme.config.post.reading_width ?: 760) + 'px'}|"
   th:attr={`data-cid=\${${s}.metadata.name}, data-kind=${isPost ? "Post" : "SinglePage"}, data-likes=\${${s}.stats.upvote}`}
-  th:with={`author = \${contributorFinder.getContributor(${s}.spec.owner)}`}
+  th:with={`author = \${${s}.owner}`}
 >
   {isPost && (
     <div

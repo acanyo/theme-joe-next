@@ -17,7 +17,7 @@ const AUTHOR_LINK =
   class="joe_post_hero"
   th:if="${(theme.config.post.header_style ?: 'immersive') == 'immersive'}"
   th:classappend={`\${#strings.isEmpty(${COVER}) ? 'is-plain' : 'has-cover'}`}
-  th:with="author = ${contributorFinder.getContributor(post.spec.owner)}"
+  th:with="author = ${post.owner}"
 >
   <div
     class="joe_post_hero__bg"

@@ -19,11 +19,12 @@ interface Props {
 
 const { type } = Astro.props;
 
-/** 评论所属内容的访问地址 */
+/**
+ * 评论的访问地址：评论列表已经带上 comment.permalink（文章、页面里这条评论的位置），不用再查一次文章；
+ * 瞬间、友链等插件的评论没有时退回对应页面。
+ */
 const SUBJECT_LINK =
-  "comment.spec.subjectRef.kind == 'Post' ? postFinder.getByName(comment.spec.subjectRef.name)?.status?.permalink" +
-  " : (comment.spec.subjectRef.kind == 'SinglePage' ? singlePageFinder.getByName(comment.spec.subjectRef.name)?.status?.permalink" +
-  " : (comment.spec.subjectRef.kind == 'Moment' ? '/moments' : '/links'))";
+  "comment.permalink ?: (comment.spec.subjectRef.kind == 'Moment' ? '/moments' : '/links')";
 ---
 
 {type === "notice" && (

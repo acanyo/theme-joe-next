@@ -19,6 +19,7 @@ import Actions from "../components/layout/Actions.astro";
 import BigBanner from "../components/home/BigBanner.astro";
 import "../styles/pages/big-banner.css";
 import type { PageScript } from "../scripts/core/page-scripts";
+import { SHARED_STATS } from "../config/expressions";
 
 interface Props {
   /** 页面标题 SpEL 表达式（不含 `${}`） */
@@ -73,7 +74,7 @@ const {
     </Head>
   </head>
   <body>
-    <div id="Joe">
+    <div id="Joe" th:with={SHARED_STATS}>
       <Navbar />
       <div
         id="swup"

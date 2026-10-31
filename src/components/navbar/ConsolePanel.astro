@@ -18,19 +18,26 @@ import { COLOR_MODE, COMMENT_ENABLED, COMMENT_TEXT, el } from "../../config/expr
 
 /** 时间线每类最多取的条数 */
 const PER_KIND = 8;
-/** 「我的评论」在最近多少条公开评论中查找 */
-const POOL = 100;
+/** 「我的评论」在最近多少条公开评论中查找（评论只查一次，时间线取其中前 PER_KIND 条） */
+const POOL = 50;
 const MOMENT_TEXT =
   "#strings.abbreviate(#strings.trim((moment.spec.content.html ?: '')" +
   ".replaceAll('<[^>]+>', ' ').replaceAll('&nbsp;', ' ').replaceAll('\\s+', ' ')), 60)";
-const SUBJECT =
-  "comment.spec.subjectRef.kind == 'Post' ? postFinder.getByName(comment.spec.subjectRef.name) : (comment.spec.subjectRef.kind == 'SinglePage' ? singlePageFinder.getByName(comment.spec.subjectRef.name) : null)";
+/**
+ * 评论所属文章 / 页面的标题。评论的链接直接用 comment.permalink（评论列表已经带上，不用再查）；
+ * 标题需要查一次文章，只给时间线显示的前 PER_KIND 条查。
+ */
+const SUBJECT_TITLE =
+  "comment.spec.subjectRef.kind == 'Post' ? postFinder.getByName(comment.spec.subjectRef.name)?.spec?.title : (comment.spec.subjectRef.kind == 'SinglePage' ? singlePageFinder.getByName(comment.spec.subjectRef.name)?.spec?.title : null)";
 const ISO = (expr: string) => `#dates.format(${expr}, 'yyyy-MM-dd''T''HH:mm:ssXXX')`;
 ---
 
 <template id="joe-console-template" th:if="${theme.config.navbar.console}">
   <div class="joe_cc" role="dialog" aria-modal="true" aria-label="控制中心" hidden>
-    <div class="joe_cc__sheet">
+    <div
+      class="joe_cc__sheet"
+      th:with={`ccComments = \${(${COMMENT_ENABLED}) ? commentFinder.list(null, 1, ${POOL}).items : {}}`}
+    >
       <!-- 登录用户：昵称供「我的足迹」识别评论 -->
       <span
         hidden
@@ -105,12 +112,11 @@ const ISO = (expr: string) => `#dates.format(${expr}, 'yyyy-MM-dd''T''HH:mm:ssXX
               data-kind="post"
               th:attr={`data-time=\${${ISO("item.spec.publishTime")}}, data-href=@{\${item.status.permalink}}, data-title=\${item.spec.title}`}
             ></li>
-            <th-block th:if={el(COMMENT_ENABLED)}>
+            <th-block th:each="comment, it : ${ccComments}" th:if={`\${it.index < ${PER_KIND}}`}>
               <li
-                th:each={`comment : \${commentFinder.list(null, 1, ${PER_KIND}).items}`}
-                th:with={`subject = \${${SUBJECT}}`}
+                th:with={`subjectTitle = \${${SUBJECT_TITLE}}`}
                 data-kind="comment"
-                th:attr={`data-time=\${${ISO("comment.metadata.creationTimestamp")}}, data-who=\${comment.owner.displayName}, data-href=\${subject != null ? subject.status.permalink : null}, data-title=\${subject?.spec?.title}`}
+                th:attr={`data-time=\${${ISO("comment.metadata.creationTimestamp")}}, data-who=\${comment.owner.displayName}, data-href=\${comment.permalink}, data-title=\${subjectTitle}`}
                 th:text={el(COMMENT_TEXT)}
               ></li>
             </th-block>
@@ -137,11 +143,11 @@ const ISO = (expr: string) => `#dates.format(${expr}, 'yyyy-MM-dd''T''HH:mm:ssXX
           <p class="joe_cc__empty" data-console-history-empty hidden>看过的文章会出现在这里</p>
 
           <!-- 「我的评论」候选：最近的公开评论（含邮箱哈希） -->
-          <ul hidden data-console-pool th:if={el(COMMENT_ENABLED)}>
+          <!-- 不查所属文章：「我的评论」显示评论内容并链接到这条评论（comment.permalink），不显示文章标题 -->
+          <ul hidden data-console-pool th:unless="${#lists.isEmpty(ccComments)}">
             <li
-              th:each={`comment : \${commentFinder.list(null, 1, ${POOL}).items}`}
-              th:with={`subject = \${${SUBJECT}}`}
-              th:attr={`data-email-hash=\${comment.spec.owner.annotations?.get('email-hash')}, data-owner=\${comment.owner.displayName}, data-owner-kind=\${comment.owner.kind}, data-time=\${${ISO("comment.metadata.creationTimestamp")}}, data-href=\${subject != null ? subject.status.permalink : null}, data-title=\${subject?.spec?.title}`}
+              th:each="comment : ${ccComments}"
+              th:attr={`data-email-hash=\${comment.spec.owner.annotations?.get('email-hash')}, data-owner=\${comment.owner.displayName}, data-owner-kind=\${comment.owner.kind}, data-time=\${${ISO("comment.metadata.creationTimestamp")}}, data-href=\${comment.permalink}`}
               th:text={el(COMMENT_TEXT)}
             ></li>
           </ul>

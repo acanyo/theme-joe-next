@@ -28,6 +28,8 @@ const PERIOD_PATH = "archives.prevUrl?.replaceAll('/page/\\d+$', '')?.replaceAll
       class="joe_index joe_archives__filing"
       th:with={`period = \${${PERIOD_PATH}}, periodYear = \${period != null and period.matches('\\d{4}-(\\d{2})?') ? period.substring(0, 4) : null}, periodMonth = \${periodYear != null and period.length() == 7 ? period.substring(5) : null}`}
     >
+      <!-- 全站归档只查一次：热力图和时间轴共用（年 / 月归档页的时间轴另查当期） -->
+      <th-block th:with="siteArchives = ${postFinder.archives(1, 9999)}">
       <div class="title">
         <h1 class="name">
           <span th:if="${periodYear == null}" th:text={`\${${TITLE}}`}></span>
@@ -37,10 +39,10 @@ const PERIOD_PATH = "archives.prevUrl?.replaceAll('/page/\\d+$', '')?.replaceAll
             <span th:text="${periodMonth == null ? periodYear + ' 年' : periodYear + ' 年 ' + #conversions.convert(periodMonth, 'java.lang.Integer') + ' 月'}"></span>
           </span>
         </h1>
-        <span class="total">共 <em th:text="${periodYear == null ? siteStatsFinder.getStats().post : archives.total}">0</em> 篇</span>
+        <span class="total">共 <em th:text="${periodYear == null ? siteStats.post : archives.total}">0</em> 篇</span>
       </div>
       <div class="content">
-        <th-block th:if="${theme.config.pages.archives_heatmap}" th:with="heatArchives = ${postFinder.archives(1, 9999).items}">
+        <th-block th:if="${theme.config.pages.archives_heatmap}" th:with="heatArchives = ${siteArchives.items}">
           <ArchiveHeatmap />
         </th-block>
         <div
@@ -101,7 +103,7 @@ const PERIOD_PATH = "archives.prevUrl?.replaceAll('/page/\\d+$', '')?.replaceAll
             </div>
             <ul
               class="joe_archives-timelist"
-              th:with="allArchives = ${periodYear == null ? postFinder.archives(1, 9999) : postFinder.archives(1, 9999, periodYear, periodMonth)}"
+              th:with="allArchives = ${periodYear == null ? siteArchives : postFinder.archives(1, 9999, periodYear, periodMonth)}"
             >
               <th-block th:each="archive : ${allArchives.items}">
                 <th-block th:if="${byMonth}">
@@ -141,6 +143,7 @@ const PERIOD_PATH = "archives.prevUrl?.replaceAll('/page/\\d+$', '')?.replaceAll
           </th-block>
         </div>
       </div>
+      </th-block>
     </div>
   </div>
   <th-block th:if="${theme.config.aside.on_archives}">

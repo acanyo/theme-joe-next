@@ -1,8 +1,8 @@
 ---
 /**
  * 那年今日：往年同月同日发布的文章（变量 today 由外层给出，服务器时区的今天）。
- * 往前查 YEARS 年；每年用 postFinder.archives(1, 100, 年, 月) 按归档标签取当月文章，
- * 再按发布日期筛出同一天的。一篇都没有时整块隐藏（样式里 :not(:has(li))）。
+ * 用一次 postFinder.archives(1, MAX, null, 月) 按归档标签取所有年份里这个月的文章，
+ * 再挑出往前 YEARS 年内同一天发布的。一篇都没有时整块隐藏（样式里 :not(:has(li))）。
  *
  * 归档年月日与 #dates.day 都按服务器时区计算，和 Halo 自己的归档页一致。
  */
@@ -11,6 +11,8 @@ import "../../styles/content/on-this-day.css";
 
 /** 往前查几年 */
 const YEARS = 10;
+/** 「这个月」的文章最多取多少篇（所有年份合计；写得再多，同一个月也很少超过这个数） */
+const MAX = 300;
 ---
 
 <section
@@ -23,18 +25,17 @@ const YEARS = 10;
     <span>那年今日</span>
     <em th:text="${#dates.format(today, 'M 月 d 日')}"></em>
   </h2>
-  <ul>
-    <th-block th:each={`ago : \${#numbers.sequence(1, ${YEARS})}`}>
-      <th-block th:with="archive = ${postFinder.archives(1, 100, '' + (todayYear - ago), todayMonth)}">
-        <th-block th:each="year : ${archive.items}">
-          <th-block th:each="month : ${year.months}">
-            <li th:each="item : ${month.posts}" th:if="${#dates.day(item.spec.publishTime) == todayDay}">
-              <a th:href="@{${item.status.permalink}}" th:title="${item.spec.title}">
-                <span class="ago" th:text="|${ago} 年前|"></span>
-                <span class="title" th:text="${item.spec.title}"></span>
-              </a>
-            </li>
-          </th-block>
+  <!-- 一次查询：所有年份里这个月的文章（只按月筛，年份不限），再挑出往年同一天的 -->
+  <ul th:with={`monthArchive = \${postFinder.archives(1, ${MAX}, null, todayMonth)}`}>
+    <th-block th:each="year : ${monthArchive.items}" th:with="ago = ${todayYear - #conversions.convert(year.year, 'java.lang.Integer')}">
+      <th-block th:if={`\${ago >= 1 and ago <= ${YEARS}}`}>
+        <th-block th:each="month : ${year.months}">
+          <li th:each="item : ${month.posts}" th:if="${#dates.day(item.spec.publishTime) == todayDay}">
+            <a th:href="@{${item.status.permalink}}" th:title="${item.spec.title}">
+              <span class="ago" th:text="|${ago} 年前|"></span>
+              <span class="title" th:text="${item.spec.title}"></span>
+            </a>
+          </li>
         </th-block>
       </th-block>
     </th-block>
