@@ -12,7 +12,7 @@ import { listen, onCleanup } from "../core/lifecycle";
 import { copyText } from "../core/clipboard";
 import { iconHtml } from "../core/icons";
 import { toast } from "../core/toast";
-import { escapeHtml } from "./shortcode-parse";
+import { escapeHtml } from "../core/html";
 
 const MIN = 4;
 const MAX_QUOTE = 300;

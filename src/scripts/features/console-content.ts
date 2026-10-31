@@ -6,7 +6,7 @@
  * - 我的足迹：继续阅读（读到一半的文章）、我的评论（邮箱哈希比对）、最近看过
  */
 import { $, $$ } from "../core/dom";
-import { escapeHtml } from "../content/shortcode-parse";
+import { escapeHtml } from "../core/html";
 import { commentIdentity, readHistory } from "./visitor";
 
 /** 「3 天前」「刚刚」；超过 30 天显示日期 */
