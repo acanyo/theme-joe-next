@@ -16,7 +16,7 @@ const TITLE = "theme.config.pages.archives_title ?: '文章归档'";
 const PERIOD_PATH = "archives.prevUrl?.replaceAll('/page/\\d+$', '')?.replaceAll('^.*?/(\\d{4})(/(\\d{2}))?$', '$1-$3')";
 ---
 
-<BaseLayout
+<BaseLayout seo="archives"
   pageScript="archives"
   bigBanner="normal"
   heading="(theme.config.pages.archives_title ?: '文章归档')"

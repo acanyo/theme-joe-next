@@ -113,6 +113,9 @@ export const BOOLEAN_DEFAULTS: Readonly<Record<string, boolean>> = {
   "post.title_shadow": false,
   "post.toc": true,
   "post.toc_mobile": true,
+  "seo.feed_discovery": true,
+  "seo.metadata": true,
+  "seo.structured_data": true,
   "share.donate": false,
   "share.enabled": true,
   "share.link": true,
@@ -200,7 +203,8 @@ export const VALUE_DEFAULTS: Readonly<Record<string, string | number>> = {
   "post.outdated_days": 30,
   "post.reading_width": 760,
   "post.related_count": 5,
-  "post.toc_depth": 0
+  "post.toc_depth": 0,
+  "seo.ai_crawl": "allow"
 };
 
 /** 列表类设置项（重复器）的默认内容，模板中以 SpEL 内联列表写出 */

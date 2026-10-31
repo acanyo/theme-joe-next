@@ -73,6 +73,7 @@ const ARTICLE_CLASS = [
           <div class="author">
             <a
               class="link"
+              rel="author"
               th:href="${#strings.isEmpty(theme.config.post.author_link) ? author?.permalink : theme.config.post.author_link}"
               th:text="${author?.displayName}"
             ></a>
@@ -80,6 +81,7 @@ const ARTICLE_CLASS = [
           <div class="item">
             <time
               class="text"
+              th:datetime={`\${${s}.spec.publishTime}`}
               th:text={`\${#dates.format(${s}.spec.publishTime, 'yyyy-MM-dd')}`}
             ></time>
             <span class="line">/</span>
@@ -101,6 +103,8 @@ const ARTICLE_CLASS = [
       </div>
       <time
         class="joe_detail__count-created"
+        th:datetime={`\${${s}.status.lastModifyTime}`}
+        th:title={`|最后更新 \${#dates.format(${s}.status.lastModifyTime, 'yyyy-MM-dd HH:mm')}|`}
         th:text={`\${#dates.format(${s}.status.lastModifyTime, 'MM/dd')}`}
       ></time>
     </div>

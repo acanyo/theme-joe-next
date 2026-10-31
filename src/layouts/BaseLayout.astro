@@ -11,6 +11,8 @@
  * 无刷新切页（swup）时只替换 #swup 内的内容；导航与页脚常驻，切页后由脚本同步状态。
  */
 import Head from "../components/head/Head.astro";
+import Seo from "../components/head/Seo.astro";
+import type { SeoPage } from "../config/seo";
 import Navbar from "../components/navbar/Navbar.astro";
 import Footer from "../components/layout/Footer.astro";
 import Actions from "../components/layout/Actions.astro";
@@ -33,6 +35,8 @@ interface Props {
   pageScript?: PageScript;
   /** 是否在阅读条导航底边显示阅读进度（文章页，受设置 post.progress 控制） */
   readingProgress?: boolean;
+  /** SEO / GEO 的页面类型（config/seo.ts），决定 canonical、分享卡片与结构化数据；不填不输出 */
+  seo?: SeoPage;
 }
 
 const {
@@ -43,6 +47,7 @@ const {
   heading,
   pageScript,
   readingProgress = false,
+  seo = "none",
 } = Astro.props;
 ---
 
@@ -63,6 +68,7 @@ const {
           th:href="${theme.config.home.hero_image}"
         />
       )}
+      <Seo page={seo} />
       <slot name="head" />
     </Head>
   </head>

@@ -84,6 +84,19 @@ integrations/           Astro 构建后处理（Thymeleaf 标签还原、CSS 级
 
 **按需加载。** Swiper、PhotoSwipe、vConsole、鼠标/背景特效均在用到时才下载，样式通过 `loadStylesheet()` 插入，不会进入首屏 CSS。
 
+## SEO 与 GEO
+
+`src/components/head/Seo.astro` 是一个公共模块，放在 `BaseLayout` 的 `<head>` 里。页面在 `BaseLayout` 上声明 `seo="post"` 这样的类型；每种类型的标题、摘要、图片、地址和分页取哪些模板变量，集中写在 `src/config/seo.ts`。新增页面时声明类型即可，`pnpm test` 会检查每个页面都声明了类型。
+
+| 设置（分组「SEO」） | 输出                                                                                                        |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- |
+| 页面元数据          | canonical（分页列表第 2 页起指向当前页）、Open Graph、Twitter Card；文章另有 `article:*`                   |
+| 结构化数据          | JSON-LD `@graph`：WebSite、博主 Person，本页的 BlogPosting / WebPage / CollectionPage / ProfilePage / ImageGallery / SocialMediaPosting，文章页加 BreadcrumbList |
+| 订阅地址发现        | `<link rel="alternate">`：全站 RSS，分类 / 标签 / 作者 / 瞬间页再加各自的订阅（需要 RSS 插件）             |
+| AI 训练抓取         | 选「不允许」时输出 `robots: noai, noimageai`，不影响搜索收录                                                 |
+
+description、keywords、robots（屏蔽搜索引擎）、robots.txt、站点地图由 Halo 和插件提供，主题不重复。装了 SEO 插件时，关掉插件也提供的那一项。地址用 Halo「外部访问地址」拼成绝对地址，正式站点要填对。
+
 ## 插件集成
 
 | 功能                        | 插件                           | 未安装时               |
@@ -93,7 +106,9 @@ integrations/           Astro 构建后处理（Thymeleaf 标签还原、CSS 级
 | 瞬间 `/moments`             | 瞬间 `PluginMoments`           | 路由不存在             |
 | 图库 `/photos`              | 图库 `PluginPhotos`            | 路由不存在             |
 | 友链 `/links`、友链页面模板 | 链接 `PluginLinks`             | 友链页面模板只显示正文 |
-| 朋友圈 `/friends`           | 朋友圈 `plugin-friends`        | 路由不存在             |
+| 朋友圈页面模板              | 链接 `PluginLinks`（RSS 订阅） | 显示「需要链接插件」   |
+| 装备 `/equipments`          | 装备管理 `plugin-equipment`    | 路由不存在             |
+| 订阅地址发现（SEO）         | RSS `PluginFeed`               | 不声明订阅地址         |
 | 代码高亮                    | 代码高亮 `shiki`               | 代码块无语法高亮       |
 
 ## 相对 Joe3 的变化

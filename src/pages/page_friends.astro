@@ -21,7 +21,7 @@ const QUERY = `linkFeedFinder.list({limit: ${PAGE_SIZE}, linkName: ${PARAM("link
 const NO_TITLE = "#strings.isEmpty(item.title) or #strings.contains(item.title, ' published on ')";
 ---
 
-<BaseLayout
+<BaseLayout seo="page"
   pageScript="friends"
   title="(theme.config.pages.feed_title ?: '朋友圈') + ' - ' + site.title"
   pageClass="page-friends"
