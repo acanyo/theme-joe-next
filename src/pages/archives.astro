@@ -29,12 +29,14 @@ const PERIOD_PATH = "archives.prevUrl?.replaceAll('/page/\\d+$', '')?.replaceAll
       th:with={`period = \${${PERIOD_PATH}}, periodYear = \${period != null and period.matches('\\d{4}-(\\d{2})?') ? period.substring(0, 4) : null}, periodMonth = \${periodYear != null and period.length() == 7 ? period.substring(5) : null}`}
     >
       <div class="title">
-        <span th:if="${periodYear == null}" th:text={`\${${TITLE}}`}></span>
-        <span th:unless="${periodYear == null}" class="period">
-          <a th:href="@{/archives}" th:text={`\${${TITLE}}`}></a>
-          <Icon name="chevron-right" />
-          <span th:text="${periodMonth == null ? periodYear + ' 年' : periodYear + ' 年 ' + #conversions.convert(periodMonth, 'java.lang.Integer') + ' 月'}"></span>
-        </span>
+        <h1 class="name">
+          <span th:if="${periodYear == null}" th:text={`\${${TITLE}}`}></span>
+          <span th:unless="${periodYear == null}" class="period">
+            <a th:href="@{/archives}" th:text={`\${${TITLE}}`}></a>
+            <Icon name="chevron-right" />
+            <span th:text="${periodMonth == null ? periodYear + ' 年' : periodYear + ' 年 ' + #conversions.convert(periodMonth, 'java.lang.Integer') + ' 月'}"></span>
+          </span>
+        </h1>
         <span class="total">共 <em th:text="${periodYear == null ? siteStatsFinder.getStats().post : archives.total}">0</em> 篇</span>
       </div>
       <div class="content">

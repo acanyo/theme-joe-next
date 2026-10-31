@@ -34,6 +34,10 @@
     justify-content: space-between;
     user-select: none;
 
+    .name {
+      font: inherit;
+    }
+
     .period {
       display: inline-flex;
       align-items: center;

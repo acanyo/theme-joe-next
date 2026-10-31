@@ -36,9 +36,10 @@ const FALLBACK = "#theme.assets('/images/hot_cover' + (iter.index % 4 + 1) + '.j
   <div class="joe_index__title">
     <ul class="joe_index__title-title pl-15">
       <li class="item active">
-        <span
+        <h1
+          class="joe_index__heading"
           th:text={`\${${cfg("title")} ?: '${CONFIG.defaultTitle}'}`}
-        ></span>
+        ></h1>
         <span class="totals" th:text="${#lists.size(termList)}"></span>
       </li>
     </ul>

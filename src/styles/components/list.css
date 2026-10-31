@@ -37,6 +37,12 @@
       color: var(--text-title);
     }
 
+    /* 分类 / 标签页的标题行：一级标题放在标签位置里，和后面的数量排在同一行 */
+    .joe_index__heading {
+      display: inline;
+      font: inherit;
+    }
+
     /* 当前标签：标题色加粗，下方一小段主题色（与导航的下划线一致） */
     &.active {
       position: relative;
@@ -392,6 +398,7 @@
 .joe_archive__title-title {
   display: flex;
   align-items: center;
+  font-weight: 400;
 
   .muted {
     position: relative;
