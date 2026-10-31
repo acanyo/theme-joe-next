@@ -1,4 +1,8 @@
-# Joe Next
+<p align="center">
+  <img src="public/assets/logo/logo.svg" alt="Joe Next" width="96" />
+</p>
+
+<h1 align="center">Joe Next</h1>
 
 基于 [Joe3](https://github.com/jiewenhuang/halo-theme-joe3.0) 重构的 [Halo](https://www.halo.run/) 2 博客主题。保留 Joe 的样子和功能，前端用 Astro + TypeScript 重写：不再依赖 jQuery，页面之间无刷新切换，深浅色、手机端和无障碍都重新做过一遍。
 
@@ -156,7 +160,7 @@ src/
 ├── styles/             原生 CSS（嵌套语法），按 base / components / layout / content / pages 拆分，目录即级联层
 ├── config/             前后端共享的配置契约与 SpEL 表达式
 └── data/               社交图标、内联 SVG 等静态数据
-public/assets/          运行时按路径引用的资源（头像框、鼠标皮肤、字体、默认图片）
+public/assets/          运行时按路径引用的资源（Logo、头像框、鼠标皮肤、字体、默认图片）
 integrations/           Astro 构建后处理（Thymeleaf 标签还原、CSS 级联层、模块预加载）
 docs/screenshots/       README 截图（不进主题包）
 ```

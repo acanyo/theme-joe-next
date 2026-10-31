@@ -8,7 +8,7 @@ spec:
     name: Handsome
     website: https://github.com/acanyo
   description: 基于 Joe3 重构的 Halo 2 主题，使用 Astro + TypeScript 构建。
-  logo: https://wmimg.com/i/70/2023/08/64d3c41d5bde2.webp
+  logo: /themes/theme-joe-next/assets/logo/logo.png
   homepage: https://github.com/acanyo/theme-joe-next
   repo: https://github.com/acanyo/theme-joe-next
   issues: https://github.com/acanyo/theme-joe-next/issues
