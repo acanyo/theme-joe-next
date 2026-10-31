@@ -214,6 +214,110 @@ spec:
                 - $el: span
                   attrs:
                     style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 音乐播放器
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 导航右侧的音符按钮，点开是播放面板；开启无刷新切页（swup）时换页不中断
+        - $formkit: switch
+          name: music
+          id: music
+          key: music
+          label: 音乐播放器
+          value: false
+        - $formkit: toggle
+          if: $get(music).value === true
+          name: music_source
+          id: music_source
+          key: music_source
+          label: 歌曲来源
+          value: list
+          options:
+            - value: list
+              label: 自己填写
+            - value: meting
+              label: 网易云歌单
+        - $formkit: array
+          if: $get(music).value === true && $get(music_source).value === 'list'
+          name: music_list
+          id: music_list
+          key: music_list
+          label: 歌单
+          value: []
+          itemLabels:
+            - type: image
+              label: $value.cover
+            - type: text
+              label: $value.title
+            - type: text
+              label: $value.artist
+          children:
+            - $formkit: text
+              name: title
+              id: title
+              key: title
+              label: 歌名
+              validation: required
+            - $formkit: text
+              name: artist
+              id: artist
+              key: artist
+              label: 歌手
+            - $formkit: attachment
+              name: url
+              id: url
+              key: url
+              label: 音频文件
+              validation: required
+              help: 上传到附件或填写直链（mp3 / m4a / ogg）
+            - $formkit: attachment
+              name: cover
+              id: cover
+              key: cover
+              label: 封面
+            - $formkit: attachment
+              name: lrc
+              id: lrc
+              key: lrc
+              label: 歌词文件
+              help: 可选，LRC 格式
+        - $formkit: text
+          if: $get(music).value === true && $get(music_source).value === 'meting'
+          name: music_playlist
+          id: music_playlist
+          key: music_playlist
+          label: 网易云歌单 ID
+          value: ""
+          help: 歌单地址 music.163.com/#/playlist?id= 后面的数字
+        - $formkit: text
+          if: $get(music).value === true && $get(music_source).value === 'meting'
+          name: music_api
+          id: music_api
+          key: music_api
+          label: Meting 接口地址
+          value: https://api.injahow.cn/meting/
+          help: 第三方公开接口，可换成自己部署的 Meting API；部分歌曲因版权限制无法播放
+        - $formkit: number
+          if: $get(music).value === true
+          name: music_volume
+          id: music_volume
+          key: music_volume
+          label: 默认音量
+          value: 60
+          help: 0–100；访客调过音量后按访客的来
+          min: 0
+          max: 100
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
                 - 经典样式
             - $el: div
               attrs:

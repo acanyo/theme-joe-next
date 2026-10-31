@@ -71,6 +71,3 @@ declare module "*?url" {
   export default url;
 }
 
-declare module "hls.js/light" {
-  export { default } from "hls.js";
-}

@@ -23,6 +23,7 @@ import { initNavigation, refreshNavigation } from "./features/navigation";
 import { initNavChapter } from "./features/nav-chapter";
 import { initReveal } from "./features/reveal";
 import { initShortcuts } from "./features/shortcuts";
+import { initMusic, refreshMusic } from "./features/music";
 import { cleanExcerpts } from "./content/excerpt";
 import { hideReadBadges } from "./features/freshness";
 import { dedupeCommenters, initCommenterCards } from "./features/commenters";
@@ -34,6 +35,7 @@ function initShell(): void {
   initContextMenu();
   initConsole();
   initShortcuts();
+  initMusic();
 }
 
 async function initPage(): Promise<void> {
@@ -46,6 +48,7 @@ async function initPage(): Promise<void> {
   refreshNavigation();
   refreshColorMode();
   refreshConsole();
+  refreshMusic();
   initActions();
   initLinkBehavior();
   initReveal();
