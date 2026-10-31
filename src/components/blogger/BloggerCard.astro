@@ -20,7 +20,7 @@ const STAT_LABEL = {
 } as const;
 const STAT_VALUE = {
   category: "stats.category",
-  tag: "#lists.size(tagFinder.listAll())",
+  tag: "tagCount",
   post: "stats.post",
   comment: "stats.comment",
 } as const;
@@ -85,7 +85,7 @@ const STAT_VALUE = {
     />
   </div>
 
-  <div class="count" th:with="stats = ${siteStatsFinder.getStats()}">
+  <div class="count" th:with="stats = ${siteStats}">
     <th-block th:switch="${theme.config.blogger.stats ?: 'category-post-comment'}">
       {Object.entries(OVERVIEW).map(([type, items]) => (
         <th-block th:case={`'${type}'`}>

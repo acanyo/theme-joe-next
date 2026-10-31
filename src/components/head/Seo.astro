@@ -1,0 +1,119 @@
+---
+/**
+ * SEO / GEO 模块（设置分组「SEO」）：放在 <head> 里，按页面类型（config/seo.ts）输出
+ *
+ *   - 页面元数据（seo.metadata）：canonical、Open Graph、Twitter Card
+ *   - 结构化数据（seo.structured_data）：JSON-LD @graph —— 站点 WebSite、博主 Person，
+ *     加上本页的 BlogPosting / WebPage / CollectionPage / ProfilePage / ImageGallery / SocialMediaPosting，文章页再加面包屑
+ *   - 订阅发现（seo.feed_discovery）：<link rel="alternate">，需要 RSS 插件
+ *   - AI 训练抓取（seo.ai_crawl）：不允许时输出 robots 的 noai / noimageai
+ *
+ * description、keywords、robots（屏蔽搜索引擎）由 Halo 注入，这里不重复。
+ * 地址都用站点设置里的「外部访问地址」拼成绝对地址；分页列表第 2 页起 canonical 是当前页。
+ * JSON-LD 用 Thymeleaf 的 JavaScript 内联把 SpEL 的 Map / List 输出成 JSON，字符串里的引号、</script> 都会转义。
+ */
+import { SITE_URL } from "../../config/expressions";
+import { SEO_PAGES, type SeoPage } from "../../config/seo";
+
+interface Props {
+  page: SeoPage;
+}
+
+const { page } = Astro.props;
+const spec = page === "none" ? undefined : SEO_PAGES[page];
+
+/** 站内路径 → 绝对地址（已经是 http(s) 的保持不变） */
+const abs = (expr: string) => `(#strings.startsWith((${expr}), 'http') ? (${expr}) : #vars.siteUrl + (${expr}))`;
+const SITE_IMAGE = "theme.config.seo?.share_image ?: site.logo";
+const BLOGGER = "theme.config.blogger?.name ?: site.title";
+const BLOGGER_AVATAR = "theme.config.blogger?.avatar ?: site.logo";
+
+const vars = spec
+  ? [
+      `siteUrl = \${${SITE_URL}}`,
+      `seoPage = \${${spec.page ?? "1"} ?: 1}`,
+      `seoPath = \${${spec.path}}`,
+      `seoTitle = \${${spec.title}}`,
+      // 自动摘要会把代码块也算进去：和列表页的摘要一样（content/excerpt.ts），去掉第一处换行之后的内容，
+      // 以及结尾残留的代码片段（export / function / const … 之后没有中文的部分）
+      `seoDesc = \${#strings.abbreviate(#strings.trim((${spec.description ?? "''"} ?: (site.seo?.description ?: site.subtitle ?: '')).replaceAll('\\s*\\n[\\s\\S]*$', '').replaceAll('\\s+(export|import|const|let|var|function|class|return|def|public|private|package|</?[a-z])[^\\u4e00-\\u9fa5]*$', '')), 200)}`,
+      `seoImage = \${${spec.image ? `${spec.image} ?: ` : ""}${SITE_IMAGE}}`,
+    ].join(", ")
+  : "";
+/** 当前页的绝对地址：第 2 页起加 /page/n */
+const URL = `#vars.siteUrl + (seoPage > 1 ? (seoPath == '/' ? '' : seoPath) + '/page/' + seoPage : seoPath)`;
+const IMAGE = `#strings.isEmpty(seoImage) ? null : ${abs("seoImage")}`;
+
+// ---------- JSON-LD ----------
+/** 博主（Person），站点、文章的作者与发布者都指向它 */
+const PERSON = `{'@type': 'Person', '@id': #vars.siteUrl + '/#person', 'name': ${BLOGGER}, 'url': #vars.siteUrl + '/', 'image': #strings.isEmpty(${BLOGGER_AVATAR}) ? null : ${abs(BLOGGER_AVATAR)}, 'description': theme.config.blogger?.motto, 'sameAs': (theme.config.blogger?.social_links ?: {}).!['' + url].?[#this.startsWith('http')]}`;
+const WEBSITE = `{'@type': 'WebSite', '@id': #vars.siteUrl + '/#website', 'url': #vars.siteUrl + '/', 'name': site.title, 'description': site.seo?.description ?: site.subtitle, 'inLanguage': site.language ?: 'zh-CN', 'publisher': {'@id': #vars.siteUrl + '/#person'}}`;
+/** 文章作者：文章自己的作者（Halo 用户），不是博主时也照实写 */
+const POST_AUTHOR = `{'@type': 'Person', 'name': post.owner?.displayName ?: ${BLOGGER}, 'url': #strings.isEmpty(post.owner?.permalink) ? #vars.siteUrl + '/' : ${abs("post.owner.permalink")}}`;
+const ISO = (expr: string) => `${expr} == null ? null : ${expr}.toString()`;
+
+const MAIN: Record<string, string> = {
+  WebSite: "",
+  BlogPosting: `{'@type': 'BlogPosting', '@id': ${URL} + '#article', 'mainEntityOfPage': ${URL}, 'url': ${URL}, 'headline': post.spec.title, 'description': seoDesc, 'image': ${IMAGE}, 'datePublished': ${ISO("post.spec.publishTime")}, 'dateModified': ${ISO("post.status.lastModifyTime ?: post.spec.publishTime")}, 'author': ${POST_AUTHOR}, 'publisher': {'@id': #vars.siteUrl + '/#person'}, 'isPartOf': {'@id': #vars.siteUrl + '/#website'}, 'inLanguage': site.language ?: 'zh-CN', 'articleSection': #lists.isEmpty(post.categories) ? null : post.categories[0].spec.displayName, 'keywords': #lists.isEmpty(post.tags) ? null : #strings.listJoin(post.tags.![spec.displayName], ', '), 'commentCount': post.stats?.comment, 'interactionStatistic': {'@type': 'InteractionCounter', 'interactionType': 'https://schema.org/ReadAction', 'userInteractionCount': post.stats?.visit ?: 0}}`,
+  WebPage: `{'@type': 'WebPage', '@id': ${URL}, 'url': ${URL}, 'name': seoTitle, 'description': seoDesc, 'image': ${IMAGE}, 'datePublished': ${ISO("singlePage.spec.publishTime")}, 'dateModified': ${ISO("singlePage.status.lastModifyTime")}, 'isPartOf': {'@id': #vars.siteUrl + '/#website'}, 'inLanguage': site.language ?: 'zh-CN'}`,
+  CollectionPage: `{'@type': 'CollectionPage', '@id': ${URL}, 'url': ${URL}, 'name': seoTitle, 'description': seoDesc, 'isPartOf': {'@id': #vars.siteUrl + '/#website'}, 'inLanguage': site.language ?: 'zh-CN'}`,
+  ProfilePage: `{'@type': 'ProfilePage', '@id': ${URL}, 'url': ${URL}, 'name': seoTitle, 'isPartOf': {'@id': #vars.siteUrl + '/#website'}, 'mainEntity': {'@type': 'Person', 'name': author.spec.displayName, 'description': author.spec.bio, 'image': ${IMAGE}, 'url': ${URL}}}`,
+  SocialMediaPosting: `{'@type': 'SocialMediaPosting', '@id': ${URL}, 'url': ${URL}, 'headline': seoTitle, 'articleBody': seoDesc, 'image': ${IMAGE}, 'datePublished': ${ISO("moment.spec.releaseTime")}, 'author': {'@id': #vars.siteUrl + '/#person'}, 'isPartOf': {'@id': #vars.siteUrl + '/#website'}}`,
+  ImageGallery: `{'@type': 'ImageGallery', '@id': ${URL}, 'url': ${URL}, 'name': seoTitle, 'description': seoDesc, 'isPartOf': {'@id': #vars.siteUrl + '/#website'}}`,
+};
+
+/** 文章面包屑：首页 › 第一个分类 › 文章（与页面上的面包屑一致） */
+const BREADCRUMB = `{'@type': 'BreadcrumbList', 'itemListElement': #lists.isEmpty(post.categories) ? {{'@type': 'ListItem', 'position': 1, 'name': '首页', 'item': #vars.siteUrl + '/'}, {'@type': 'ListItem', 'position': 2, 'name': post.spec.title}} : {{'@type': 'ListItem', 'position': 1, 'name': '首页', 'item': #vars.siteUrl + '/'}, {'@type': 'ListItem', 'position': 2, 'name': post.categories[0].spec.displayName, 'item': ${abs("post.categories[0].status.permalink")}}, {'@type': 'ListItem', 'position': 3, 'name': post.spec.title}}}`;
+
+const graph = spec
+  ? [WEBSITE, PERSON, MAIN[spec.schema], spec.schema === "BlogPosting" ? BREADCRUMB : ""].filter(Boolean).join(", ")
+  : "";
+const LD_SCRIPT = spec ? `{"@context": "https://schema.org", "@graph": /*[[\${ {${graph}} }]]*/ []}` : "";
+---
+
+{spec && (
+  <th-block th:with={vars}>
+    <th-block th:if="${theme.config.seo?.metadata != false}">
+      <link rel="canonical" th:href={`\${${URL}}`} />
+      <meta property="og:site_name" th:content="${site.title}" />
+      <meta property="og:type" content={spec.ogType} />
+      <meta property="og:title" th:content="${seoTitle}" />
+      <meta property="og:url" th:content={`\${${URL}}`} />
+      <meta property="og:description" th:if="${not #strings.isEmpty(seoDesc)}" th:content="${seoDesc}" />
+      <meta property="og:locale" th:content="${#strings.replace(site.language ?: 'zh-CN', '-', '_')}" />
+      <meta property="og:image" th:if="${not #strings.isEmpty(seoImage)}" th:content={`\${${IMAGE}}`} />
+      {spec.ogType === "article" && page === "post" && (
+        <th-block>
+          <meta property="article:published_time" th:content="${post.spec.publishTime}" />
+          <meta property="article:modified_time" th:if="${post.status.lastModifyTime != null}" th:content="${post.status.lastModifyTime}" />
+          <meta property="article:author" th:content={`\${post.owner?.displayName ?: (${BLOGGER})}`} />
+          <meta property="article:section" th:unless="${#lists.isEmpty(post.categories)}" th:content="${post.categories[0].spec.displayName}" />
+          <meta property="article:tag" th:each="tag : ${post.tags}" th:content="${tag.spec.displayName}" />
+        </th-block>
+      )}
+      <meta name="twitter:card" th:content="${#strings.isEmpty(seoImage) ? 'summary' : 'summary_large_image'}" />
+      <meta name="twitter:title" th:content="${seoTitle}" />
+      <meta name="twitter:description" th:if="${not #strings.isEmpty(seoDesc)}" th:content="${seoDesc}" />
+      <meta name="twitter:image" th:if="${not #strings.isEmpty(seoImage)}" th:content={`\${${IMAGE}}`} />
+      <meta name="twitter:site" th:if="${not #strings.isEmpty(theme.config.seo?.twitter_site)}" th:content="${theme.config.seo.twitter_site}" />
+    </th-block>
+
+    <script
+      is:inline
+      type="application/ld+json"
+      th:if="${theme.config.seo?.structured_data != false}"
+      th:inline="javascript"
+      set:html={LD_SCRIPT}
+    />
+
+    <th-block th:if="${theme.config.seo?.feed_discovery != false and pluginFinder.available('PluginFeed')}">
+      <link rel="alternate" type="application/rss+xml" th:title="${site.title}" th:href="@{/rss.xml}" />
+      {spec.feed && (
+        <link rel="alternate" type="application/rss+xml" th:title="|${seoTitle} - ${site.title}|" th:href={`@{\${${spec.feed}}}`} />
+      )}
+    </th-block>
+  </th-block>
+)}
+
+<!-- 不允许内容被用于训练 AI：noai / noimageai 是 DeviantArt 提出、多家抓取工具遵守的声明，不影响搜索收录 -->
+<meta name="robots" content="noai, noimageai" th:if="${theme.config.seo?.ai_crawl == 'deny'}" />

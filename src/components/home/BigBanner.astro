@@ -32,11 +32,20 @@ const WAVES =
     th:src="${theme.config.home.hero_video}"
   ></video>
   <div class="infomation">
-    <div
-      id="EvanBigBanner_Title"
-      class="title"
-      th:text={`\${theme.config.home.hero_title ?: ${title}}`}
-    ></div>
+    <!-- 首页：大图标题就是页面的一级标题；列表页的大图只是装饰，一级标题在内容区 -->
+    {fullscreen ? (
+      <h1
+        id="EvanBigBanner_Title"
+        class="title"
+        th:text={`\${theme.config.home.hero_title ?: ${title}}`}
+      ></h1>
+    ) : (
+      <div
+        id="EvanBigBanner_Title"
+        class="title"
+        th:text={`\${theme.config.home.hero_title ?: ${title}}`}
+      ></div>
+    )}
     <div class="desctitle hitokoto_desctitle">
       <div id="HitokotoText" class="motto joe_motto hitokoto_text"></div>
       <div id="HitokotoForm" class="motto joe_motto hitokoto_form"></div>

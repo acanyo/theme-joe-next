@@ -17,12 +17,13 @@ const { name, description } = Astro.props;
 <div class="joe_main">
   <div class="joe_archive">
     <div class="joe_archive__title">
-      <div class="joe_archive__title-title">
+      <!-- 页面的一级标题：样式与原来的 div 相同（normalize 已把 h1 的字号、外边距重置） -->
+      <h1 class="joe_archive__title-title">
         <Icon name="feather" class="joe_archive__title-icon" />
         以下是
         <span class="muted ellipsis" th:text={`\${${name}}`}></span>
         <span>相关的文章</span>
-      </div>
+      </h1>
       <span class="joe_archive__title-total">共 <em th:text="${posts.total}">0</em> 篇</span>
     </div>
     {description && (

@@ -6,17 +6,17 @@ import { responsiveImage, SIZES } from "../config/images";
 import "../styles/pages/photos.css";
 ---
 
-<BaseLayout
+<BaseLayout seo="photos"
   pageScript="photos"
   title="(theme.config.pages.photos_title ?: '我的图库') + ' - ' + site.title"
   pageClass="page-photos"
 >
   <div class="joe_main">
     <div class="joe_photos__type">
-      <div class="joe_photos__type-title">
+      <h1 class="joe_photos__type-title">
         <Icon name="image" />&nbsp;
         <span th:text="${theme.config.pages.photos_title ?: '我的图库'}"></span>
-      </div>
+      </h1>
       <nav class="joe_photos__filter" aria-label="图库分组">
         <ul>
           <li class="active">

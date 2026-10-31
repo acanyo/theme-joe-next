@@ -13,7 +13,7 @@ const SITE =
       <span>版权归属：</span>
       <span
         class="text"
-        th:text="${contributorFinder.getContributor(post.spec.owner)?.displayName}"
+        th:text="${post.owner?.displayName}"
       ></span>
     </div>
     <div class="item">

@@ -28,6 +28,20 @@ export const LIKE_ENABLED = "theme.config.post.like";
 export const SHARE_ENABLED = "theme.config.share.enabled";
 export const DONATE_ENABLED = "theme.config.share.donate";
 
+/**
+ * 全站共用的统计：布局（BaseLayout、layout.astro）在 <div id="Joe"> 上查一次，存为 siteStats / tagCount，
+ * 导航抽屉、博主卡片、页脚、归档页都用这两个变量，不再各自查询。
+ * tagCount 用分页查询的 total，不把所有标签取出来再数。
+ */
+export const SHARED_STATS = "siteStats = ${siteStatsFinder.getStats()}, tagCount = ${tagFinder.list(1, 1).total}";
+
+/**
+ * 文章页的相关文章：同分类（没有分类时同标签），多取一篇以便去掉当前这篇。
+ * 文章页在正文与侧栏外面查一次（pages/post.astro 的 relatedList），正文下方的卡片和侧栏列表共用。
+ */
+export const RELATED_POSTS =
+  "#lists.isEmpty(post.categories) ? (#lists.isEmpty(post.tags) ? {} : postFinder.listByTag(1, #conversions.convert((theme.config.post.related_count ?: 5) + 1, 'java.lang.Integer'), post.tags[0].metadata.name).items) : postFinder.listByCategory(1, #conversions.convert((theme.config.post.related_count ?: 5) + 1, 'java.lang.Integer'), post.categories[0].metadata.name).items";
+
 /** 包裹为 `${...}` */
 export const el = (expr: string): string => `\${${expr}}`;
 

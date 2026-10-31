@@ -1,14 +1,12 @@
 ---
 /**
- * 正文下方的相关文章（设置 post.related_cards）：同分类（没有分类时同标签）的文章，
+ * 正文下方的相关文章（设置 post.related_cards）：同分类（没有分类时同标签）的文章（外层查好的 relatedList），
  * 不足 4 篇时用最新文章补足（去掉重复的和当前这篇）。带封面的卡片，横向排列，窄屏可横向滑动。
  * 侧栏的相关文章列表在手机上看不到，这里补上。
  */
 import { coverOf } from "../../config/expressions";
 import RelatedCard from "./RelatedCard.astro";
 
-const SIZE = "#conversions.convert((theme.config.post.related_count ?: 5) + 1, 'java.lang.Integer')";
-const QUERY = `#lists.isEmpty(post.categories) ? (#lists.isEmpty(post.tags) ? {} : postFinder.listByTag(1, ${SIZE}, post.tags[0].metadata.name).items) : postFinder.listByCategory(1, ${SIZE}, post.categories[0].metadata.name).items`;
 /** 补位用的最新文章：排除当前这篇和已经在相关文章里的 */
 const FILLER = "postFinder.list({page: 1, size: 8}).items.?[metadata.name != #vars.post.metadata.name and !#vars.relatedNames.contains(metadata.name)]";
 const MAX = 4;
@@ -19,7 +17,7 @@ const COVER = coverOf("item");
   class="joe_related"
   aria-label="相关文章"
   th:if="${theme.config.post.related_cards}"
-  th:with={`relatedPosts = \${(${QUERY}).?[metadata.name != #vars.post.metadata.name]}`}
+  th:with="relatedPosts = ${relatedList}"
 >
   <!-- th:if / th:unless 先于同一元素上的 th:with 求值，判断要放在里层 -->
   <th-block th:with={`relatedNames = \${relatedPosts.![metadata.name]}, fillerPosts = \${relatedPosts.size() >= ${MAX} ? {} : ${FILLER}}`}>

@@ -12,6 +12,7 @@ import Head from "../components/head/Head.astro";
 import Navbar from "../components/navbar/Navbar.astro";
 import Footer from "../components/layout/Footer.astro";
 import Actions from "../components/layout/Actions.astro";
+import { SHARED_STATS } from "../config/expressions";
 ---
 
 <!doctype html>
@@ -25,7 +26,7 @@ import Actions from "../components/layout/Actions.astro";
     <th-block th:if="${head != null}" th:replace="${head}"></th-block>
   </head>
   <body>
-    <div id="Joe">
+    <div id="Joe" th:with={SHARED_STATS}>
       <Navbar />
       <div class="joe_container joe_main_container page-plugin">
         <div class="joe_main">

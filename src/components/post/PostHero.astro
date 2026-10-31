@@ -17,7 +17,7 @@ const AUTHOR_LINK =
   class="joe_post_hero"
   th:if="${(theme.config.post.header_style ?: 'immersive') == 'immersive'}"
   th:classappend={`\${#strings.isEmpty(${COVER}) ? 'is-plain' : 'has-cover'}`}
-  th:with="author = ${contributorFinder.getContributor(post.spec.owner)}"
+  th:with="author = ${post.owner}"
 >
   <div
     class="joe_post_hero__bg"
@@ -59,11 +59,12 @@ const AUTHOR_LINK =
           th:attr="data-text-avatar=${author?.displayName}"
           data-fallback="avatar"
         />
-        <a th:href={el(AUTHOR_LINK)} th:text="${author?.displayName}"></a>
+        <a rel="author" th:href={el(AUTHOR_LINK)} th:text="${author?.displayName}"></a>
       </li>
       <li>
+        <!-- datetime 写完整时间（带时区），搜索引擎与 AI 摘录时能准确标出发布时间 -->
         <time
-          th:datetime="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
+          th:datetime="${post.spec.publishTime}"
           th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
         ></time>
       </li>

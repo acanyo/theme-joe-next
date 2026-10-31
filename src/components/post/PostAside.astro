@@ -5,9 +5,8 @@ import AsideCard from "../aside/AsideCard.astro";
 import PostAds from "./PostAds.astro";
 import Icon from "../common/Icon.astro";
 
-const RELATED_SIZE =
-  "#conversions.convert(theme.config.post.related_count ?: 5, 'java.lang.Integer')";
-const RELATED = `#lists.isEmpty(post.categories) ? postFinder.listByTag(1, ${RELATED_SIZE}, post.tags[0].metadata.name) : postFinder.listByCategory(1, ${RELATED_SIZE}, post.categories[0].metadata.name)`;
+/** 侧栏最多列几篇（relatedList 由 pages/post.astro 查好，比这个多一篇） */
+const RELATED_SIZE = "#conversions.convert(theme.config.post.related_count ?: 5, 'java.lang.Integer')";
 ---
 
 <aside class="joe_aside">
@@ -27,11 +26,11 @@ const RELATED = `#lists.isEmpty(post.categories) ? postFinder.listByTag(1, ${REL
     <th-block th:if="${theme.config.post.related and (not #lists.isEmpty(post.categories) or not #lists.isEmpty(post.tags))}">
       <AsideCard variant="newest" icon="hot" title="相关文章">
         <div class="joe_aside__item-contain">
-          <ul class="list" th:with={`related = \${${RELATED}}`}>
+          <ul class="list">
             <li
               class="item"
-              th:each="item : ${related.items}"
-              th:if="${item.metadata.name != post.metadata.name}"
+              th:each="item, iter : ${relatedList}"
+              th:if={`\${iter.index < ${RELATED_SIZE}}`}
             >
               <a
                 class="link"

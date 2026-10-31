@@ -8,7 +8,7 @@ import Icon from "../../components/common/Icon.astro";
 const RECENT = "postFinder.list({page: 1, size: 5, sort: {'spec.publishTime,desc'}}).items";
 ---
 
-<BaseLayout title="'页面未找到 - ' + site.title" pageClass="page-404">
+<BaseLayout seo="none" title="'页面未找到 - ' + site.title" pageClass="page-404">
   <div class="joe_main">
     <div class="joe_page_404">
       <img

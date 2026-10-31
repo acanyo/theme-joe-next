@@ -3125,6 +3125,74 @@ spec:
           value: 300
           help: 超出后折叠，默认 300，最小 100
           min: 100
+    - group: seo
+      label: SEO
+      formSchema:
+        - $el: div
+          attrs:
+            style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"
+          children:
+            - $el: div
+              attrs:
+                style: "display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: rgb(15 23 42);"
+              children:
+                - $el: span
+                  attrs:
+                    style: "flex: none; width: 4px; height: 14px; border-radius: 2px; background: #fb6c28;"
+                - 搜索引擎与 AI 搜索
+            - $el: div
+              attrs:
+                style: "margin: 2px 0 0 12px; font-size: 12px; line-height: 18px; color: rgb(100 116 139);"
+              children: 页面描述、关键词、robots.txt、站点地图由 Halo 和插件提供，这里只补充 Halo 没有的部分；装了 SEO 插件时，把插件也提供的那项关掉，避免重复
+        - $formkit: switch
+          name: metadata
+          id: metadata
+          key: metadata
+          label: 页面元数据
+          value: true
+          help: 规范链接（canonical）与社交分享卡片（Open Graph、Twitter Card），分享到微信、X、Telegram 等时显示标题、摘要和封面
+        - $formkit: switch
+          name: structured_data
+          id: structured_data
+          key: structured_data
+          label: 结构化数据
+          value: true
+          help: JSON-LD：站点与作者、文章（BlogPosting）、页面、列表页和面包屑。Google 与 AI 搜索用它识别作者、时间和出处
+        - $formkit: attachment
+          if: $get(metadata).value === true
+          name: share_image
+          id: share_image
+          key: share_image
+          label: 默认分享图
+          value: ""
+          help: 页面没有封面时使用；留空用站点 Logo。建议 1200×630
+        - $formkit: text
+          if: $get(metadata).value === true
+          name: twitter_site
+          id: twitter_site
+          key: twitter_site
+          label: X（Twitter）账号
+          value: ""
+          help: 例如 @handsome，分享卡片上显示的站点账号；没有可留空
+        - $formkit: switch
+          name: feed_discovery
+          id: feed_discovery
+          key: feed_discovery
+          label: 订阅地址发现
+          value: true
+          help: 在页面头部声明 RSS 地址（需要 RSS 插件），阅读器和 AI 抓取工具能直接找到全文
+        - $formkit: select
+          name: ai_crawl
+          id: ai_crawl
+          key: ai_crawl
+          label: AI 训练抓取
+          value: allow
+          help: 只影响是否允许内容被用于训练 AI 模型（输出 robots 的 noai 声明）；不影响普通搜索引擎和 AI 搜索的收录与引用
+          options:
+            - value: allow
+              label: 允许
+            - value: deny
+              label: 不允许用于训练
     - group: footer
       label: 页脚与高级
       formSchema:

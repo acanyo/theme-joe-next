@@ -51,7 +51,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
 
     <ul
       class="joe_header__slideout-count"
-      th:with="stats = ${siteStatsFinder.getStats()}"
+      th:with="stats = ${siteStats}"
     >
       <li class="item">
         <Icon name="archive" />
@@ -63,7 +63,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
         <Icon name="hot" />
         <span>
           累计创建{" "}
-          <strong th:text="${#lists.size(tagFinder.listAll())}">0</strong>{" "}
+          <strong th:text="${tagCount}">0</strong>{" "}
           个标签
         </span>
       </li>

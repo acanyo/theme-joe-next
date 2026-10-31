@@ -13,12 +13,13 @@ import PostOperate from "../components/post/PostOperate.astro";
 import PostNav from "../components/post/PostNav.astro";
 import RelatedPosts from "../components/post/RelatedPosts.astro";
 import OnThisDay from "../components/post/OnThisDay.astro";
+import { RELATED_POSTS, el } from "../config/expressions";
 import "../styles/pages/post.css";
 import "../styles/pages/post-hero.css";
 import "../styles/content/poster.css";
 ---
 
-<BaseLayout
+<BaseLayout seo="post"
   pageScript="post"
   readingProgress
   title="post.spec.title + ' - ' + site.title"
@@ -36,6 +37,8 @@ import "../styles/content/poster.css";
   <PostHero slot="before" />
   <Breadcrumb slot="before" />
 
+  <!-- 相关文章只查一次：正文下方的卡片（RelatedPosts）和侧栏列表（PostAside）共用 relatedList -->
+  <th-block th:with={`relatedList = ${el(`(${RELATED_POSTS}).?[metadata.name != #vars.post.metadata.name]`)}`}>
   <div class="joe_main joe_post">
     <AsideOperate />
     <ArticleBody subject="post">
@@ -56,6 +59,7 @@ import "../styles/content/poster.css";
 
   <th-block th:if="${theme.config.aside.on_post}">
     <PostAside />
+  </th-block>
   </th-block>
 
   <div
