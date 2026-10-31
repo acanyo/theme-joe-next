@@ -2,11 +2,19 @@
  * 文章卡片的评论者头像与悬停资料卡（components/list/PostItem.astro、features/commenters.ts）。
  * 只有文章列表页需要，由 PostItem 引入，不放进全局样式。
  */
-/* 文章卡片的评论者头像（设置 home.card_commenters）：叠放，后一个压住前一个的边 */
+/* 文章卡片的评论者头像（设置 home.card_commenters）：叠放，后一个压住前一个的边。
+   头像由脚本按需加载：先占好一个头像的高度不跳动，加载后淡入 */
 .joe_list__item .meta .commenters {
   display: inline-flex;
   flex: none;
   align-items: center;
+  min-height: 22px;
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+
+  &.is-loaded {
+    opacity: 1;
+  }
   /* 紧跟统计数字，把分类推到最右 */
   margin-right: auto;
   margin-left: 12px;
