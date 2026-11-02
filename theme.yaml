@@ -14,7 +14,7 @@ spec:
   issues: https://github.com/acanyo/theme-joe-next/issues
   settingName: theme-joe-next-setting
   configMapName: theme-joe-next-configMap
-  version: 0.1.0
+  version: 1.0.0
   requires: ">=2.27.0"
   license:
     - name: CC BY-NC-SA 4.0
