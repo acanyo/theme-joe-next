@@ -962,6 +962,16 @@
           transition: all var(--dur-base) var(--ease-out);
           max-height: 48px;
 
+          .joe-comment-preview__emote {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin: 0 2px;
+            object-fit: contain;
+            vertical-align: -4px;
+            border-radius: 0;
+          }
+
           &:hover {
             color: var(--theme);
           }

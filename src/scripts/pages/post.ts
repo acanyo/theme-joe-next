@@ -1,6 +1,5 @@
 /** 文章页入口 */
 import { initPoster } from "../content/poster";
-import { initCodeBlocks } from "../content/code-block";
 import { initGallery } from "../content/gallery";
 import { initAsideOperate } from "../content/aside-operate";
 import { recordReading } from "../features/visitor";
@@ -32,6 +31,5 @@ export default function init(): void {
   initCopyright();
   initProgressBar();
   initGallery();
-  initCodeBlocks();
   scrollToHash();
 }

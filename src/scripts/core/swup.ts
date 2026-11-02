@@ -15,6 +15,7 @@ import SwupProgressPlugin from "@swup/progress-plugin";
 import SwupA11yPlugin from "@swup/a11y-plugin";
 import { headerOffset } from "./dom";
 import { runCleanups } from "./lifecycle";
+import { notifyCommentAnchor } from "../features/comment-anchors";
 
 /** 这些路径由 Halo 后台或插件处理，必须整页加载 */
 const FULL_RELOAD_PATHS =
@@ -156,6 +157,7 @@ export function initSwup({
   });
 
   swup.hooks.on("page:view", () => void onPageView());
+  swup.hooks.on("link:anchor", () => notifyCommentAnchor());
 
   return swup;
 }

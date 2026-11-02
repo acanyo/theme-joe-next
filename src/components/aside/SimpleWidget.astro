@@ -140,8 +140,13 @@ const SUBJECT_LINK = COMMENT_LINK;
           </div>
         </div>
         <div class="reply">
-          <!-- 纯文本预览：评论 HTML 中的表情图片换成 alt 文字，标签去掉，最多两行 -->
-          <a class="link aside-reply-content" th:href={el(SUBJECT_LINK)} th:text={el(COMMENT_TEXT)}></a>
+          <!-- 原始 HTML 通过转义后的属性传给摘要脚本；只展示文字与表情，保留两行限制。 -->
+          <a class="link aside-reply-content" th:href={el(SUBJECT_LINK)}>
+            <span
+              th:attr="data-comment-preview=${comment.spec.content ?: ''}"
+              th:text={el(COMMENT_TEXT)}
+            ></span>
+          </a>
         </div>
       </li>
     </ul>

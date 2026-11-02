@@ -4,16 +4,17 @@
  */
 import ConfigScript from "./ConfigScript.astro";
 import DynamicStyle from "./DynamicStyle.astro";
+import { pageTitle } from "../../config/page-title";
 import "../../styles/index.css";
 
 interface Props {
-  /** 页面标题的 SpEL 表达式（不含 `${}`），为空时使用站点标题 */
+  /** 页面标题的 SpEL 表达式（不含站点名及 `${}`），为空时使用站点主副标题 */
   title?: string;
   /** 额外的输出条件（布局契约中 head 由调用方提供时不输出标题） */
   titleIf?: string;
 }
 
-const { title = "site.title", titleIf } = Astro.props;
+const { title, titleIf } = Astro.props;
 ---
 
 <meta charset="utf-8" />
@@ -25,7 +26,7 @@ const { title = "site.title", titleIf } = Astro.props;
 <meta name="format-detection" content="telephone=no,email=no" />
 <title
   th:if={titleIf ? `\${${titleIf}}` : undefined}
-  th:text={`\${${title}}`}
+  th:text={`\${${pageTitle(title)}}`}
 ></title>
 <!-- 网站图标：Halo「系统设置 → 基本设置」的站点图标，没有设置时用站点 Logo -->
 <th-block th:with="siteIcon = ${not #strings.isEmpty(site.favicon) ? site.favicon : site.logo}">

@@ -24,7 +24,11 @@ const COUNT =
       </ul>
       <a class="more" th:href="@{/moments}">全部瞬间</a>
     </div>
-    <ul class="joe_moments_stack__list" tabindex="0">
+    <ul
+      class="joe_moments_stack__list"
+      tabindex="0"
+      th:style="|--n: ${#lists.size(stackMoments)}|"
+    >
       <li
         th:each="moment, iter : ${stackMoments}"
         th:style="|--i: ${iter.index}|"

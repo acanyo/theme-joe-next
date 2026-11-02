@@ -29,6 +29,10 @@
       color: var(--brand, currentColor);
     }
 
+    > .joe-configured-icon {
+      font-size: 22px;
+    }
+
     &:hover {
       transform: scale(1);
     }

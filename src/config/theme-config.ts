@@ -58,16 +58,6 @@ export const SERVER_CONFIG_FIELDS = {
   // 旧版「文字头像样式」（一段对象字面量），拆成上面三项之后仍读取，作为回退
   generateAvatarOpts: "theme.config.blogger?.text_avatar",
   linksDefaultLogo: "theme.config.pages.links_fallback_logo",
-  enableCodeTitle: "theme.config.code.title",
-  enableCodeHr: "theme.config.code.title_divider",
-  enableCodeMacdot: "theme.config.code.mac_dots",
-  enableCodeCopy: "theme.config.code.copy",
-  enableCodeLineNumber: "theme.config.code.line_numbers",
-  enableCodeNewline: "theme.config.code.wrap",
-  enableCodeExpander: "theme.config.code.collapsible",
-  enableFoldLongCode: "theme.config.code.fold_long",
-  longCodeHeight: "theme.config.code.fold_height",
-  showToolsWhenHover: "theme.config.code.tools_on_hover",
   enableToc: "theme.config.post.toc",
   tocDepth: "theme.config.post.toc_depth",
   enableProgressBar: "theme.config.post.progress",
@@ -143,18 +133,6 @@ export interface ThemeConfig {
   defaultAvatar: string;
   avatarOptions: AvatarOptions;
   linksDefaultLogo: string;
-  code: {
-    title: boolean;
-    hr: boolean;
-    macdot: boolean;
-    copy: boolean;
-    lineNumber: boolean;
-    newline: boolean;
-    expander: boolean;
-    foldLong: boolean;
-    longHeight: number;
-    toolsOnHover: boolean;
-  };
   post: {
     toc: boolean;
     tocDepth: number;
@@ -283,18 +261,6 @@ export function normalizeThemeConfig(
     defaultAvatar: toStr(raw.defaultAvatar),
     avatarOptions: avatarOptions(raw),
     linksDefaultLogo: toStr(raw.linksDefaultLogo),
-    code: {
-      title: toBool(raw.enableCodeTitle, true),
-      hr: toBool(raw.enableCodeHr, true),
-      macdot: toBool(raw.enableCodeMacdot, true),
-      copy: toBool(raw.enableCodeCopy, true),
-      lineNumber: toBool(raw.enableCodeLineNumber, true),
-      newline: toBool(raw.enableCodeNewline),
-      expander: toBool(raw.enableCodeExpander),
-      foldLong: toBool(raw.enableFoldLongCode),
-      longHeight: toNumber(raw.longCodeHeight, 800),
-      toolsOnHover: toBool(raw.showToolsWhenHover, true),
-    },
     post: {
       toc: toBool(raw.enableToc, true),
       tocDepth: toNumber(raw.tocDepth, 0),

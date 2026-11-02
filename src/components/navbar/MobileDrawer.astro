@@ -15,6 +15,7 @@ import { BLOGGER_NAME, COMMENT_ENABLED, el } from "../../config/expressions";
       height="150"
       class="joe_header__slideout-image"
       th:src="${theme.config.blogger.cover ?: #theme.assets('/images/author_bg.jpg')}"
+      th:srcset="${theme.config.blogger.cover ?: #theme.assets('/images/author_bg.jpg')}"
       sizes="(max-width: 768px) 80vw, 400px"
       alt=""
       data-fallback="image"

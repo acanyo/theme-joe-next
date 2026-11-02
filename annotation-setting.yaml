@@ -10,9 +10,9 @@ spec:
     - $formkit: "iconify"
       name: "icon"
       label: "图标"
-      format: "svg"
+      format: "name"
       value-only: true
-      help: "主题设置中开启「菜单图标」后显示；未选择时显示默认图标"
+      help: "主题设置中开启「菜单图标」后显示；未选择时仅显示菜单文字"
 
 ---
 apiVersion: v1alpha1
@@ -27,6 +27,7 @@ spec:
     - $formkit: "text"
       name: "link_group_sort_seq"
       label: "链接分类排序序号，数字越大越靠前，如果<=0，则按照默认排序方式进行排序"
+      help: "仅选择创建时间排序时应用此序号；选择「友链插件中的顺序」时完整保留后台排列"
       value: "0"
     - $formkit: "switch"
       name: "link_group_enable_show"
@@ -48,6 +49,7 @@ spec:
     - $formkit: "text"
       name: "link_sort_seq"
       label: "同一分类内链接排序序号，数字越大越靠前，如果<=0，则按照默认排序方式进行排序"
+      help: "仅选择创建时间排序时应用此序号；选择「友链插件中的顺序」时完整保留后台排列"
       value: "0"
     - $formkit: "switch"
       name: "link_enable_show"

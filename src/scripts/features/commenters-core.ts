@@ -2,12 +2,24 @@
 
 /** Halo 公开评论接口返回的单条评论里用到的字段 */
 export interface PublicComment {
+  metadata?: { deletionTimestamp?: string | null };
   owner?: { displayName?: string; avatar?: string; kind?: string };
   spec?: {
+    approved?: boolean;
+    hidden?: boolean;
     content?: string;
     creationTime?: string;
     owner?: { annotations?: Record<string, string> };
   };
+}
+
+/** 与 Comment Next 相同：已有头像优先，邮箱访客使用公开哈希获取 WeAvatar。 */
+export function commentAvatar(comment: PublicComment): string {
+  const avatar = comment.owner?.avatar?.trim();
+  if (avatar) return avatar;
+  const hash = comment.spec?.owner?.annotations?.["email-hash"]?.trim();
+  if (comment.owner?.kind !== "Email" || !hash || !/^(?:[a-f\d]{32}|[a-f\d]{64})$/i.test(hash)) return "";
+  return `https://weavatar.com/avatar/${hash.toLowerCase()}?d=404&f=webp&s=96`;
 }
 
 export interface CommenterData {
@@ -43,13 +55,18 @@ export function toCommenters(items: PublicComment[], max: number): CommenterData
   const out: CommenterData[] = [];
   const seen = new Set<string>();
   for (const c of items) {
+    // 管理员或评论者本人访问接口时也可能拿到私有数据；资料卡只展示已审核且未隐藏的评论。
+    if (c.spec?.approved !== true || c.spec.hidden !== false || c.metadata?.deletionTimestamp) continue;
     const name = c.owner?.displayName?.trim();
-    if (!name || seen.has(name)) continue;
-    seen.add(name);
+    if (!name) continue;
     const kind = c.owner?.kind ?? "Email";
+    const hash = c.spec.owner?.annotations?.["email-hash"]?.trim().toLowerCase();
+    const identity = JSON.stringify([kind, hash || [name, c.owner?.avatar?.trim() || ""]]);
+    if (seen.has(identity)) continue;
+    seen.add(identity);
     out.push({
       name,
-      avatar: c.owner?.avatar ?? "",
+      avatar: commentAvatar(c),
       kind,
       site: kind === "Email" ? c.spec?.owner?.annotations?.website : undefined,
       text: commentText(c.spec?.content ?? "") || undefined,

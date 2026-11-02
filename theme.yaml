@@ -7,7 +7,7 @@ spec:
   author:
     name: Handsome&Jevon
     website: https://www.xhhao.com
-  description: 基于 Joe3 重构的 Halo 2 主题，使用 Astro + TypeScript 构建。
+  description: 一款轻快、功能完整的 Halo 博客主题，延续 Joe 的风格，页面无刷新切换，深浅色与手机端都细致适配。
   logo: /themes/theme-joe-next/assets/logo/logo.png
   homepage: https://www.xhhao.com
   repo: https://github.com/acanyo/theme-joe-next

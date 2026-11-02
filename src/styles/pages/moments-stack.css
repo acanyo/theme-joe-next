@@ -2,7 +2,8 @@
  * 首页「瞬间叠放卡片」（components/home/MomentsStack.astro）。
  *
  * 收起：最新一条在最前，后面的每张缩小 4%、向上移 7px 只露出一条带主题色的边，叠成一摞，整摞只占一张卡片的高度。
- * 展开（悬停 / 键盘聚焦）：各张恢复原大小、依次排开，高度随之撑开；带弹性缓动，后面的稍晚一点到位。
+ * 展开（悬停 / 键盘聚焦）：卡片保留在同一网格位置，仅平移到各自的行，容器同步增高。
+ * 最前面的卡片始终停在原位，避免切换网格行时卡片先跳位再播放动画。
  * 触屏设备与「减少动态效果」下直接显示展开状态。
  */
 .joe_moments_stack {
@@ -32,23 +33,27 @@
 
 .joe_moments_stack__list {
   --n: 4;
+  --stack-peek: calc((var(--n) - 1) * 7px);
   position: relative;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: var(--card-h);
+  height: calc(var(--card-h) + var(--stack-peek));
   margin: 0;
-  padding: 16px 0 0; /* 给后面露出的边留空间 */
+  padding: var(--stack-peek) 0 0;
   list-style: none;
   outline: none;
-  transition: padding var(--dur-slow) var(--ease-spring);
+  transition: height var(--dur-slow) var(--ease-out);
 
   li {
     grid-area: 1 / 1; /* 所有卡片叠在同一格 */
     z-index: calc(10 - var(--i));
-    transform: translateY(calc(var(--i) * -7px)) scale(calc(1 - var(--i) * 0.04));
+    transform: translateY(calc(var(--i) * -7px))
+      scale(calc(1 - var(--i) * 0.04));
     transform-origin: top center;
     transition:
-      transform var(--dur-slow) var(--ease-spring),
+      transform var(--dur-slow) var(--ease-out),
       opacity var(--dur-base) var(--ease-out);
-    transition-delay: calc(var(--i) * 30ms);
   }
 
   li:nth-child(n + 2) .card > * {
@@ -58,7 +63,11 @@
 
   /* 后面的卡片带一点主题色，越往后越深，露出的边才看得出是一摞 */
   li:nth-child(n + 2) .card {
-    background: color-mix(in srgb, var(--theme) calc(4% + var(--i) * 4%), var(--bg-page));
+    background: color-mix(
+      in srgb,
+      var(--theme) calc(4% + var(--i) * 4%),
+      var(--bg-page)
+    );
     box-shadow: 0 -1px 0 color-mix(in srgb, var(--theme) 18%, transparent);
     transition:
       background var(--dur-base) var(--ease-out),
@@ -112,20 +121,17 @@
   }
 }
 
-/* 展开：改为逐行排列 */
+/* 展开时不改变网格行、间距或起点，避免不可插值的布局跳变。 */
 .joe_moments_stack__list:hover,
 .joe_moments_stack__list:focus-within {
-  padding-top: 0;
+  height: calc(
+    var(--stack-peek) + var(--n) * var(--card-h) + (var(--n) - 1) * var(--gap)
+  );
 
   li {
-    grid-area: auto;
     opacity: 1;
-    transform: none;
-    margin-bottom: var(--gap);
-
-    &:last-child {
-      margin-bottom: 0;
-    }
+    transform: translateY(calc(var(--i) * (var(--card-h) + var(--gap))))
+      scale(1);
   }
 
   li:nth-child(n + 2) .card > * {
@@ -154,13 +160,23 @@
 /* 触屏没有悬停：直接以展开状态显示；减少动态效果时同样不做叠放 */
 @media (hover: none), (prefers-reduced-motion: reduce) {
   .joe_moments_stack__list {
-    padding-top: 0;
+    height: auto;
+    padding: 0;
+    row-gap: var(--gap);
+    transition: none;
 
-    li {
+    &:hover,
+    &:focus-within {
+      height: auto;
+    }
+
+    li,
+    &:hover li,
+    &:focus-within li {
       grid-area: auto;
       opacity: 1;
       transform: none;
-      margin-bottom: var(--gap);
+      transition: none;
     }
 
     li:nth-child(n + 2) .card > * {

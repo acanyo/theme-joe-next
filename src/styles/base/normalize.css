@@ -10,13 +10,14 @@ html {
   --halo-comment-widget-base-font-family: var(--font-default);
   --halo-search-widget-base-font-family: var(--font-default);
   text-size-adjust: 100%;
+  /* 始终保留滚动条占位，弹层隐藏滚动条或切换到短页面时，正文和固定导航不会横向跳动。 */
+  scrollbar-gutter: stable;
   /*
    * 抽屉 / 弹窗打开时锁定页面滚动：body 固定在打开前的位置（top 由 features/navigation.ts 写入），
-   * 页面看起来不动，window.scrollY 也不会被重置为 0；关闭时恢复到原位置。
+   * 页面视觉位置保持不动；关闭时恢复原来的 window.scrollY。
    */
   &.disable-scroll {
     overflow: hidden;
-    scrollbar-gutter: stable;
 
     body {
       position: fixed;

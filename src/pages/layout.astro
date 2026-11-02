@@ -22,7 +22,7 @@ import { SHARED_STATS } from "../config/expressions";
   th:fragment="html (head, content)"
 >
   <head>
-    <Head title="site.title" titleIf="head == null" />
+    <Head titleIf="head == null" />
     <th-block th:if="${head != null}" th:replace="${head}"></th-block>
   </head>
   <body>

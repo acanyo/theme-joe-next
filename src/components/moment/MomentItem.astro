@@ -24,8 +24,7 @@ import { COMMENT_ENABLED, el } from "../../config/expressions";
   <div class="joe_journal_block">
     <div
       class="joe_journal_body"
-      th:style="|max-height: ${theme.config.pages.moments_max_height ?: 300}px|"
-      th:classappend="${theme.config.code.line_numbers and !theme.config.code.wrap ? 'line-numbers' : ''}"
+      th:style="|--moment-max-height: ${theme.config.pages.moments_max_height ?: 300}px|"
     >
       <div class="content-wrp">
         <th-block th:utext="${content.html}"></th-block>
@@ -55,7 +54,10 @@ import { COMMENT_ENABLED, el } from "../../config/expressions";
         type="button"
         class="joe_journal_operate_item journal_content_expander"
         aria-label="展开全文"
+        aria-expanded="false"
+        hidden
       >
+        <span>展开全文</span>
         <Icon name="chevron-down" />
       </button>
     </div>
