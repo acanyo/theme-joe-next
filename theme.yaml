@@ -5,11 +5,11 @@ metadata:
 spec:
   displayName: Joe Next
   author:
-    name: Handsome
-    website: https://github.com/acanyo
+    name: Handsome&Jevon
+    website: https://www.xhhao.com
   description: 基于 Joe3 重构的 Halo 2 主题，使用 Astro + TypeScript 构建。
   logo: /themes/theme-joe-next/assets/logo/logo.png
-  homepage: https://github.com/acanyo/theme-joe-next
+  homepage: https://www.xhhao.com
   repo: https://github.com/acanyo/theme-joe-next
   issues: https://github.com/acanyo/theme-joe-next/issues
   settingName: theme-joe-next-setting
