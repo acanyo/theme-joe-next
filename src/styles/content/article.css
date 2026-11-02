@@ -207,20 +207,6 @@
 
   &.uncopy {
     user-select: none !important;
-
-    code:not([class]) {
-      user-select: none !important;
-    }
-
-    .code-toolbar {
-      pre[class*="language-"] {
-        user-select: none !important;
-
-        code {
-          user-select: none !important;
-        }
-      }
-    }
   }
 
   &.indent {
@@ -242,12 +228,6 @@
     white-space: break-spaces;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
-  }
-
-  &.single_code_select {
-    code:not([class]) {
-      user-select: all;
-    }
   }
 
   h1,

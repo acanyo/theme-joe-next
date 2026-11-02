@@ -62,16 +62,6 @@
         word-break: break-word;
         line-height: 24px;
         color: #fff;
-
-        pre code {
-          white-space: pre;
-          word-break: break-all;
-          font-size: 13px;
-          color: var(--text-primary);
-          background: var(--border-light);
-          text-shadow: unset;
-          border-radius: 4px;
-        }
       }
     }
 

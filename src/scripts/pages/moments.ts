@@ -1,25 +1,14 @@
-/** 瞬间页：内容展开、点赞、评论展开、代码高亮、图片灯箱、相对时间 */
+/** 瞬间页：内容展开、点赞、评论展开、图片灯箱、相对时间 */
 import { $, $$ } from "../core/dom";
-import { initCodeBlocks } from "../content/code-block";
 import { initGallery } from "../content/gallery";
+import { initMomentContent } from "../content/moment-content";
 import { bindUpvoteButton } from "../features/upvote";
 import { timeAgo } from "../core/time";
 
 function initItems(): void {
   $$<HTMLElement>(".joe_journal__item").forEach((item) => {
     const name = item.dataset.cid ?? "";
-    const body = $(".joe_journal_body", item);
-    const content = $(".content-wrp", item);
-    const expander = $(".journal_content_expander", item);
-    // 内容未超出最大高度时不需要展开按钮
-    if (
-      body &&
-      content &&
-      expander &&
-      content.scrollHeight <= body.clientHeight
-    )
-      expander.hidden = true;
-    expander?.addEventListener("click", () => body?.classList.toggle("open"));
+    initMomentContent(item);
 
     const like = $("[data-joe-moment-like]", item);
     if (like)
@@ -41,5 +30,4 @@ function initItems(): void {
 export default function init(): void {
   initItems();
   initGallery(".joe_journal_body img");
-  initCodeBlocks({ foldLong: false });
 }

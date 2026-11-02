@@ -9,14 +9,14 @@
  *   └ 歌单列表（点一首开始播放）     ┘
  *
  * 导航在 swup 容器（#swup）之外，开启无刷新切页时 <audio> 不会被替换，换页不中断。
- * 歌单数据：「自己填写」时由服务端输出到 window.__JOE_MUSIC__；「网易云歌单」时由脚本请求 Meting 接口（features/music.ts）。
+ * 歌单数据：「自己填写」时由服务端输出到 window.__JOE_MUSIC__；「在线音乐」时由脚本请求 Meting 接口（features/music.ts）。
  * 播放中按钮上的音符跳动，表示有声音。
  */
 import Icon from "../common/Icon.astro";
 
 /**
  * 「自己填写」的歌单：用 Thymeleaf 的 JavaScript 内联输出（和 ConfigScript 的主题配置一样），
- * 歌名、地址里的引号与 </script> 都会被转义。网易云歌单时不输出。
+ * 歌名、地址里的引号与 </script> 都会被转义。在线音乐时不输出。
  */
 const LIST_SCRIPT = `window.__JOE_MUSIC__ = /*[[\${theme.config.navbar.music_source == 'meting' ? null : theme.config.navbar.music_list}]]*/ null;`;
 ---
@@ -41,7 +41,7 @@ const LIST_SCRIPT = `window.__JOE_MUSIC__ = /*[[\${theme.config.navbar.music_sou
     aria-label="音乐播放器"
     hidden
     data-joe-music
-    th:attr="data-source=${theme.config.navbar.music_source ?: 'list'}, data-playlist=${theme.config.navbar.music_playlist}, data-api=${theme.config.navbar.music_api ?: 'https://api.injahow.cn/meting/'}, data-volume=${theme.config.navbar.music_volume ?: 60}"
+    th:attr="data-source=${theme.config.navbar.music_source ?: 'list'}, data-playlist=${theme.config.navbar.music_playlist}, data-api=${theme.config.navbar.music_api ?: 'https://api.injahow.cn/meting/'}, data-server=${theme.config.navbar.music_server ?: 'netease'}, data-type=${theme.config.navbar.music_type ?: 'playlist'}, data-params=${theme.config.navbar.music_params}, data-volume=${theme.config.navbar.music_volume ?: 60}"
   >
     <div class="joe_music__sheet">
       <div class="now">

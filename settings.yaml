@@ -155,7 +155,7 @@ spec:
           key: style
           label: 导航样式
           value: islands
-          help: 阅读条：页面顶部时透明，滚动后是一整条玻璃条，底边显示阅读进度；文章页向下阅读时中间显示当前章节，点击可展开目录跳转。经典：Joe 原来的通栏导航
+          help: 阅读条：大图顶部完全透明，滚动后跟随明暗模式显示玻璃条，底边显示阅读进度；文章页向下阅读时中间显示当前章节，点击可展开目录跳转。经典：Joe 原来的通栏导航
           options:
             - value: islands
               label: 阅读条
@@ -187,7 +187,7 @@ spec:
           id: icons
           key: icons
           label: 菜单图标
-          help: 显示菜单项在后台配置的图标
+          help: 显示菜单项在后台选择的 Iconify 图标；未选择时只显示文字
           value: false
         - $formkit: switch
           name: login
@@ -236,7 +236,7 @@ spec:
             - value: list
               label: 自己填写
             - value: meting
-              label: 网易云歌单
+              label: 在线音乐（Meting）
         - $formkit: array
           if: $get(music).value === true && $get(music_source).value === 'list'
           name: music_list
@@ -286,9 +286,42 @@ spec:
           name: music_playlist
           id: music_playlist
           key: music_playlist
-          label: 网易云歌单 ID
+          label: 资源 ID / 搜索关键词
           value: ""
-          help: 歌单地址 music.163.com/#/playlist?id= 后面的数字
+          help: 对应接口的 id 参数；歌单、单曲或歌手填写资源 ID，搜索填写关键词。原网易云歌单 ID 可继续使用
+        - $formkit: select
+          if: $get(music).value === true && $get(music_source).value === 'meting'
+          name: music_server
+          id: music_server
+          key: music_server
+          label: 音乐平台（server）
+          value: netease
+          options:
+            - value: netease
+              label: 网易云音乐
+            - value: tencent
+              label: QQ 音乐
+            - value: kugou
+              label: 酷狗音乐
+            - value: kuwo
+              label: 酷我音乐
+        - $formkit: select
+          if: $get(music).value === true && $get(music_source).value === 'meting'
+          name: music_type
+          id: music_type
+          key: music_type
+          label: 资源类型（type）
+          value: playlist
+          help: 接口需返回包含歌曲地址的 JSON 列表；url、lrc、pic 为单独的音频、歌词、封面接口，不作为歌单来源
+          options:
+            - value: playlist
+              label: 歌单
+            - value: song
+              label: 单曲
+            - value: artist
+              label: 歌手
+            - value: search
+              label: 搜索
         - $formkit: text
           if: $get(music).value === true && $get(music_source).value === 'meting'
           name: music_api
@@ -296,7 +329,15 @@ spec:
           key: music_api
           label: Meting 接口地址
           value: https://api.injahow.cn/meting/
-          help: 第三方公开接口，可换成自己部署的 Meting API；部分歌曲因版权限制无法播放
+          help: 可填写自建接口（如 https://example.com/api/meting），支持地址自带查询参数；可用平台和资源类型以该接口为准
+        - $formkit: textarea
+          if: $get(music).value === true && $get(music_source).value === 'meting'
+          name: music_params
+          id: music_params
+          key: music_params
+          label: 额外查询参数
+          value: ""
+          help: 自由填写接口需要的查询参数，格式为 key=value&key2=value2，例如 limit=30；平台、类型、资源 ID 以上方独立设置为准
         - $formkit: number
           if: $get(music).value === true
           name: music_volume
@@ -1486,6 +1527,9 @@ spec:
           key: cover
           label: 卡片背景图
           value: ""
+          accepts:
+            - image/*
+          help: 支持 GIF 动图；使用原图显示以保留动画
         - $formkit: switch
           value: false
           name: level
@@ -1655,13 +1699,15 @@ spec:
               key: url
               label: 链接
               validation: required
-            - $formkit: text
+            - $formkit: iconify
               name: icon
               id: icon
               key: icon
               label: 图标
               validation: required
-              help: SVG 代码，或完整的 <img> 标签
+              format: name
+              value-only: false
+              help: 从 Iconify 图标库选择，支持搜索图标和调整颜色
     - group: aside
       label: 侧边栏
       formSchema:
@@ -2695,85 +2741,6 @@ spec:
           value: null
           language: html
           help: HTML，显示在收款码下方
-    - group: code
-      label: 代码块
-      formSchema:
-        - $el: div
-          attrs:
-            style: "margin-bottom: 4px; padding: 10px 14px; border: 0; border-radius: 8px; font-size: 13px; line-height: 20px; color: rgb(30 64 175); background: rgb(59 130 246 / 8%);"
-          children: 语法高亮由 Halo 代码高亮插件（推荐应用市场中的 Shiki）提供，主题只负责下面的代码块外观与交互；未安装插件时代码块不着色。Shiki 支持行标注：在行尾写注释 [!code highlight] 高亮、[!code ++] / [!code --] 增删、[!code focus] 聚焦、[!code error] / [!code warning] 错误与警告，例如 // [!code highlight]。
-        - $formkit: switch
-          value: false
-          name: title
-          id: title
-          key: title
-          label: 标题栏
-          help: 默认显示语言名
-        - $formkit: switch
-          value: false
-          name: title_divider
-          id: title_divider
-          key: title_divider
-          label: 标题栏分隔线
-        - $formkit: switch
-          value: false
-          name: mac_dots
-          id: mac_dots
-          key: mac_dots
-          label: Mac 风格圆点
-        - $formkit: switch
-          value: false
-          name: copy
-          id: copy
-          key: copy
-          label: 复制按钮
-        - $formkit: switch
-          value: false
-          name: line_numbers
-          id: line_numbers
-          key: line_numbers
-          label: 行号
-          help: 开启自动换行时不显示
-        - $formkit: switch
-          value: false
-          name: wrap
-          id: wrap
-          key: wrap
-          label: 自动换行
-          help: 开启后不再横向滚动，也不显示行号
-        - $formkit: switch
-          value: false
-          name: collapsible
-          id: collapsible
-          key: collapsible
-          label: 可折叠
-        - $formkit: switch
-          value: false
-          name: fold_long
-          id: fold_long
-          key: fold_long
-          label: 自动折叠长代码
-          help: 需先开启「可折叠」，仅文章页生效
-        - $formkit: number
-          name: fold_height
-          id: fold_height
-          key: fold_height
-          label: 折叠高度（px）
-          value: 800
-          help: 默认 800，填 0 折叠所有代码块
-          min: 0
-        - $formkit: switch
-          value: false
-          name: tools_on_hover
-          id: tools_on_hover
-          key: tools_on_hover
-          label: 悬停时才显示按钮
-        - $formkit: switch
-          value: false
-          name: inline_select
-          id: inline_select
-          key: inline_select
-          label: 点击行内代码全选
     - group: pages
       label: 页面
       formSchema:
@@ -3009,8 +2976,8 @@ spec:
           id: links_group_order
           key: links_group_order
           label: 分组排序
-          value: created_asc
-          help: 分组排序序号大于 0 时优先按序号
+          value: original
+          help: 默认跟随后台排列；选择创建时间排序时，正数排序序号优先，数字越大越靠前
           options:
             - value: created_asc
               label: 创建时间升序
@@ -3023,8 +2990,8 @@ spec:
           id: links_link_order
           key: links_link_order
           label: 组内排序
-          value: created_asc
-          help: 链接排序序号大于 0 时优先按序号
+          value: original
+          help: 默认跟随后台排列；选择创建时间排序时，正数排序序号优先，数字越大越靠前
           options:
             - value: created_asc
               label: 创建时间升序
@@ -3128,6 +3095,18 @@ spec:
     - group: seo
       label: SEO
       formSchema:
+        - $formkit: select
+          name: title_separator
+          id: title_separator
+          key: title_separator
+          label: 标题分隔符
+          value: dash
+          help: 首页显示「站点主标题 + 分隔符 + 副标题」，副标题为空时只显示主标题；其他页面显示「页面标题 + 分隔符 + 站点主标题」。主副标题在 Halo「系统设置 → 基本设置」中填写
+          options:
+            - value: dash
+              label: 主标题 - 副标题
+            - value: pipe
+              label: 主标题｜副标题
         - $el: div
           attrs:
             style: "margin-top: 4px; padding: 12px 14px; border: 0; border-radius: 8px; background: rgb(148 163 184 / 9%);"

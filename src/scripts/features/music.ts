@@ -2,7 +2,7 @@
  * 音乐播放器（components/navbar/MusicPlayer.astro）：导航中的按钮 + 弹出面板 + 一个 <audio>。
  *
  * - 整个会话只初始化一次：面板和 <audio> 移到 <body> 下（swup 容器之外），切页时不会被替换，播放不中断。
- * - 歌单：「自己填写」读 window.__JOE_MUSIC__；「网易云歌单」请求 Meting 接口，首次打开面板时才请求。
+ * - 歌单：「自己填写」读 window.__JOE_MUSIC__；「在线音乐」请求 Meting 接口，首次打开面板时才请求。
  * - 记住访客的音量、播放顺序、播到哪一首和第几秒（localStorage）。整页刷新后不会自动出声
  *   （浏览器不允许），面板里显示上次那首，点播放从上次的位置接着放。
  * - 歌词：有 LRC 地址时首次播放这首才下载，面板里显示当前一句。
@@ -131,7 +131,11 @@ export function initMusic(): void {
           tracks = [];
         } else {
           try {
-            const response = await fetch(metingUrl(root.dataset.api ?? "", playlist));
+            const response = await fetch(metingUrl(root.dataset.api ?? "", playlist, {
+              server: root.dataset.server,
+              type: root.dataset.type,
+              params: root.dataset.params,
+            }));
             tracks = response.ok ? fromMeting(await response.json()) : [];
             if (!response.ok) showEmpty("歌单加载失败，稍后再试");
           } catch {
@@ -142,7 +146,7 @@ export function initMusic(): void {
         }
       }
       if (!tracks.length) {
-        if (ui.empty.hidden) showEmpty(source === "meting" ? "歌单是空的，或者歌单 ID 不对" : "还没有添加歌曲");
+        if (ui.empty.hidden) showEmpty(source === "meting" ? "没有找到歌曲，请检查平台、资源类型和 ID / 关键词" : "还没有添加歌曲");
         return;
       }
       if (saved.key === listKey() && typeof saved.index === "number" && saved.index < tracks.length) {
@@ -376,7 +380,7 @@ export function initMusic(): void {
   syncMode();
   syncPlaying();
   root.classList.toggle("is-muted", audio.muted || audio.volume === 0);
-  // 自己填写的歌单直接显示上次那首；网易云歌单等打开面板时再请求接口
+  // 自己填写的歌单直接显示上次那首；在线音乐等打开面板时再请求接口
   if (source === "list") void loadTracks();
 }
 

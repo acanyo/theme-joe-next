@@ -4,8 +4,8 @@
  * 桌面端最多渲染三级菜单，移动端侧栏同样三级。
  *
  * 样式由设置 navbar.style 决定：
- * - islands（默认，「阅读条」）：页面顶部透明盖在大图上；滚动后是一整条玻璃条，
- *   Logo · 菜单 · 工具三段以细线分隔，底边是阅读进度线（styles/layout/islands.css）
+ * - islands（默认，「阅读条」）：大图顶部完全透明；滚动后跟随明暗模式显示玻璃条，
+ *   Logo · 菜单 · 工具三段，底边是阅读进度线（styles/layout/islands.css）
  * - classic：Joe 原来的通栏
  * 文章页向下阅读时，中间一段由菜单换成「当前章节」，点击展开迷你目录（features/nav-chapter.ts）。
  */
@@ -80,12 +80,18 @@ const MENU =
           />
           <div
             class="joe_dropdown"
-            data-trigger="hover"
             th:unless="${#lists.isEmpty(menuItem.children)}"
           >
             <div class="joe_dropdown__link">
               <MenuLink item="menuItem" withIcon />
-              <Icon name="chevron-down" class="joe_dropdown__link-icon" />
+              <button
+                type="button"
+                class="joe_dropdown__toggle"
+                th:attr="aria-label=|展开 ${menuItem.status.displayName} 子菜单|"
+                aria-expanded="false"
+              >
+                <Icon name="chevron-down" class="joe_dropdown__link-icon" />
+              </button>
             </div>
             <ul class="joe_dropdown__menu">
               <li
@@ -236,6 +242,7 @@ const MENU =
           width="100%"
           height="150"
           th:src="${theme.config.blogger.cover ?: #theme.assets('/images/context_bg.png')}"
+          th:srcset="${theme.config.blogger.cover ?: #theme.assets('/images/context_bg.png')}"
           sizes="(max-width: 768px) 80vw, 400px"
           alt=""
           data-fallback="image"

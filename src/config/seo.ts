@@ -7,6 +7,7 @@
  * 所有表达式都是 SpEL（不含 `${}`），在 Halo 渲染模板时求值。
  * Halo 已经输出的 description / keywords / robots 不在这里重复（见 Halo 文档「主题 SEO」）。
  */
+import { SITE_TITLE } from "./page-title.ts";
 
 export type SeoPage =
   | "home"
@@ -51,7 +52,7 @@ const MOMENT_TEXT = (n: number) =>
   `#strings.abbreviate(#strings.trim((moment.spec.content.html ?: '').replaceAll('<[^>]+>', ' ').replaceAll('&nbsp;', ' ').replaceAll('\\s+', ' ')), ${n})`;
 
 export const SEO_PAGES: Record<Exclude<SeoPage, "none">, SeoSpec> = {
-  home: { ogType: "website", title: "site.title", description: SITE_DESC, path: "'/'", page: "posts?.page", schema: "WebSite" },
+  home: { ogType: "website", title: SITE_TITLE, description: SITE_DESC, path: "'/'", page: "posts?.page", schema: "WebSite" },
   post: {
     ogType: "article",
     title: "post.spec.title",

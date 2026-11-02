@@ -22,7 +22,7 @@ import type { PageScript } from "../scripts/core/page-scripts";
 import { SHARED_STATS } from "../config/expressions";
 
 interface Props {
-  /** 页面标题 SpEL 表达式（不含 `${}`） */
+  /** 页面标题 SpEL 表达式（不含站点名及 `${}`） */
   title?: string;
   /** 主体容器附加类名，例如 "page-index"、"page-post" */
   pageClass: string;

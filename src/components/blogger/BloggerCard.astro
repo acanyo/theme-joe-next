@@ -27,12 +27,14 @@ const STAT_VALUE = {
 ---
 
 <section class="joe_aside__item author" data-joe-blogger-card>
+  <!-- 原图 srcset 同时防止 Halo 自动补缩略图，保留 GIF 动画（包括无扩展名的图片链接）。 -->
   <img
     width="100%"
     height="120"
     class="image"
     loading="lazy"
-    {...responsiveImage("theme.config.blogger.cover ?: #theme.assets('/images/author_bg.jpg')", SIZES.aside, ["s", "m"])}
+    th:src="${theme.config.blogger.cover ?: #theme.assets('/images/author_bg.jpg')}"
+    th:srcset="${theme.config.blogger.cover ?: #theme.assets('/images/author_bg.jpg')}"
     alt=""
     data-fallback="image"
   />

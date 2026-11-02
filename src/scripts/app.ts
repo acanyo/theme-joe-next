@@ -25,10 +25,17 @@ import { initReveal } from "./features/reveal";
 import { initShortcuts } from "./features/shortcuts";
 import { initMusic, refreshMusic } from "./features/music";
 import { cleanExcerpts } from "./content/excerpt";
+import { renderCommentPreviews } from "./content/comment-preview";
 import { hideReadBadges } from "./features/freshness";
 import { initCommenterCards } from "./features/commenters";
+import {
+  initCommentAnchors,
+  refreshCommentAnchors,
+} from "./features/comment-anchors";
+import "iconify-icon";
 
 function initShell(): void {
+  initCommentAnchors();
   initColorMode();
   initNavigation();
   initFooter();
@@ -39,6 +46,7 @@ function initShell(): void {
 }
 
 async function initPage(): Promise<void> {
+  renderCommentPreviews();
   cleanExcerpts();
   fillEmptyImages();
   hideReadBadges();
@@ -53,6 +61,7 @@ async function initPage(): Promise<void> {
   initReveal();
   initAsideWidgets();
   await runPageScript();
+  refreshCommentAnchors();
 }
 
 initImageFallback();

@@ -2,7 +2,7 @@
  * 图片加载失败回退与文字头像生成（原 Joe.errorImg / loadedPlaceholderReplaceImg）。
  *
  * 模板中的 <img> 通过 data 属性声明回退策略，不再使用内联 onerror：
- *   data-fallback="thumbnail" | "avatar" | "link" | "image"
+ *   data-fallback="thumbnail" | "avatar" | "link" | "image" | "text"（表情失败时显示 alt）
  *   data-fallback-src   优先使用的回退地址
  *   data-text-avatar    无可用回退时用于生成文字头像的文字
  */
@@ -117,6 +117,10 @@ function fallbackFor(img: HTMLImageElement, kind: FallbackKind): string {
 function handleError(event: Event): void {
   const img = event.target;
   if (!(img instanceof HTMLImageElement)) return;
+  if (img.dataset.fallback === "text") {
+    img.replaceWith(document.createTextNode(`[${img.alt || "表情"}]`));
+    return;
+  }
   if (img.dataset.fallbackApplied === "true") return;
   const kind = (img.dataset.fallback as FallbackKind | undefined) ?? "image";
   img.dataset.fallbackApplied = "true";

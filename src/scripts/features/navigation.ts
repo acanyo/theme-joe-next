@@ -6,6 +6,7 @@
  */
 import { $, $$, isMobile, throttle } from "../core/dom";
 import { getThemeConfig } from "../core/config";
+import { initNavDropdowns, resetNavDropdowns } from "./nav-dropdown";
 
 declare global {
   interface Window {
@@ -15,14 +16,19 @@ declare global {
 
 function highlightCurrentMenu(): void {
   const { pathname } = location;
-  $$(".joe_header .current").forEach((el) => el.classList.remove("current"));
+  $$(".joe_header .current").forEach((el) => {
+    el.classList.remove("current");
+    el.removeAttribute("aria-current");
+  });
   const links = $$<HTMLAnchorElement>(".joe_header__above-nav a.item");
   let best: HTMLAnchorElement | undefined;
   let bestLength = -1;
   for (const link of links) {
     const href = link.getAttribute("href");
     if (!href) continue;
-    const path = new URL(href, location.origin).pathname;
+    const url = new URL(href, location.origin);
+    if (url.origin !== location.origin) continue;
+    const path = url.pathname;
     const matches =
       path === "/"
         ? pathname === "/"
@@ -35,36 +41,13 @@ function highlightCurrentMenu(): void {
   }
   if (!best) return;
   best.classList.add("current");
+  best.setAttribute("aria-current", "page");
   best
     .closest(".joe_dropdown")
     ?.querySelector(".joe_dropdown__link a")
     ?.classList.add("current");
   const index = links.indexOf(best);
   $$(".panel-side-menu .link")[index]?.classList.add("current");
-}
-
-function initDropdowns(): void {
-  $$(".joe_dropdown").forEach((dropdown) => {
-    const trigger = dropdown.dataset.trigger ?? "click";
-    if (trigger === "hover") {
-      dropdown.addEventListener("mouseenter", () =>
-        dropdown.classList.add("active"),
-      );
-      dropdown.addEventListener("mouseleave", () =>
-        dropdown.classList.remove("active"),
-      );
-      return;
-    }
-    dropdown.addEventListener("click", (event) => {
-      event.stopPropagation();
-      dropdown.classList.toggle("active");
-      document.addEventListener(
-        "click",
-        () => dropdown.classList.remove("active"),
-        { once: true },
-      );
-    });
-  });
 }
 
 let savedScroll = 0;
@@ -190,8 +173,11 @@ function initIslandsScroll(): void {
     header.classList.toggle("is-top", y < 24);
     // 忽略细微抖动，避免触控板惯性滚动时来回切换
     if (Math.abs(delta) > 4) {
-      const hasChapter = !$(".joe_header__chapter")?.hidden;
-      header.classList.toggle("is-reading", hasChapter && delta > 0 && y > 240);
+      const chapter = $(".joe_header__chapter");
+      const hasChapter = !!chapter && !chapter.hidden;
+      const reading = hasChapter && delta > 0 && y > 240;
+      header.classList.toggle("is-reading", reading);
+      if (reading) resetNavDropdowns();
       lastY = y;
     }
     if (y < 24) {
@@ -269,7 +255,7 @@ function initSearch(): void {
 }
 
 export function initNavigation(): void {
-  initDropdowns();
+  initNavDropdowns();
   initDrawer();
   initHeaderScroll();
   initSearch();
@@ -280,6 +266,7 @@ export function initNavigation(): void {
 
 /** 切页后同步导航状态 */
 export function refreshNavigation(): void {
+  resetNavDropdowns();
   highlightCurrentMenu();
   syncProgress();
   refreshIslands();

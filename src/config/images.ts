@@ -40,8 +40,6 @@ export const SIZES = {
   card: "(max-width: 500px) 50vw, (max-width: 992px) 33vw, 240px",
   /** 文章沉浸头图背景：整宽 */
   hero: "100vw",
-  /** 侧栏 / 抽屉中的博主卡片背景：侧栏宽度 */
-  aside: "280px",
   /** 头像（最大 75px，按 2 倍屏取 150px） */
   avatar: "75px",
   /** 图库网格 */

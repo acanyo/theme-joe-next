@@ -86,17 +86,25 @@
   box-sizing: content-box;
   /* 访客在控制中心调整字号时随之缩放（styles/layout/console.css） */
   font-size: calc(14px * var(--reading-scale, 1));
-  max-height: 300px;
+  /* 仅在脚本确认超高后折叠；脚本未加载时仍能阅读完整内容。 */
+  max-height: none;
   overflow: hidden;
   padding: 10px 12px;
   background: var(--background-journal-block);
   border-radius: var(--radius-inner);
   transition: height var(--dur-fast) var(--ease-out);
 
+  &.is-collapsible {
+    max-height: var(--moment-max-height, 300px);
+  }
+
   &.open {
-    max-height: unset;
+    max-height: none;
 
     .journal_content_expander {
+      position: static;
+      margin-top: 8px;
+      padding: 6px 0;
       background: none;
 
       i {
@@ -106,6 +114,7 @@
   }
 
   .content-wrp {
+    display: flow-root;
     h1,
     h2,
     h3,
@@ -423,10 +432,6 @@
     video {
       max-width: 100% !important;
     }
-
-    .code-toolbar {
-      margin: 10px 0;
-    }
   }
 }
 
@@ -497,21 +502,38 @@
     }
   }
 
+  &.like[aria-pressed="true"] {
+    .journal-like {
+      display: none;
+    }
+
+    .journal-unlike {
+      display: inline-flex;
+      color: #f15c43;
+    }
+  }
+
   &.journal_content_expander {
-    pointer-events: none;
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     margin-right: 0;
-    padding-top: 10px;
-    text-align: right;
-    background: var(--background-journal-gradient);
+    min-height: 42px;
+    padding: 10px 12px 6px;
+    font-size: 13px;
+    background: linear-gradient(to top, var(--background-journal-block) 65%, transparent);
+
+    &[hidden] {
+      display: none;
+    }
 
     i {
-      pointer-events: auto;
-      font-size: 20px;
+      font-size: 16px;
     }
   }
 }

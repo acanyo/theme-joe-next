@@ -29,7 +29,6 @@ export const ICONS = {
   "chevrons-down": "lucide:chevrons-down",
   user: "lucide:circle-user",
   home: "lucide:house",
-  "menu-item": "lucide:hash",
   console: "lucide:layout-dashboard",
   sun: "lucide:sun",
   moon: "lucide:moon",

@@ -215,7 +215,12 @@ export function ensureHeadingIds(): void {
 }
 
 export function scrollToHash(): void {
-  const hash = decodeURIComponent(location.hash);
+  let hash: string;
+  try {
+    hash = decodeURIComponent(location.hash);
+  } catch {
+    return;
+  }
   if (!hash) return;
   const target = document.getElementById(hash.slice(1));
   if (target)

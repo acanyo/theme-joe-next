@@ -12,6 +12,31 @@
   margin-left: -12px;
 }
 
+.joe_dropdown__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 28px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-regular);
+  cursor: pointer;
+
+  .joe_dropdown__link-icon {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  &:hover {
+    color: var(--theme-text);
+    background: var(--tint);
+  }
+}
+
 .joe_dropdown__menu {
   position: absolute;
   left: 50%;
@@ -276,7 +301,7 @@
     &.active {
       .joe_dropdown__link {
         a,
-        i {
+        button {
           color: var(--theme);
 
           &::after {
@@ -295,7 +320,8 @@
       vertical-align: bottom;
     }
 
-    &:hover {
+    &:hover,
+    &:focus-within {
       .joe_nav_sub {
         visibility: visible;
         opacity: 1;

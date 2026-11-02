@@ -49,11 +49,28 @@ export function fromMeting(items: unknown): Track[] {
     .filter((t) => t.url);
 }
 
-/** Meting 接口的歌单地址：在接口地址后拼 server / type / id */
-export function metingUrl(api: string, playlist: string): string {
+export interface MetingOptions {
+  server?: string;
+  type?: string;
+  params?: string;
+}
+
+/** 合并接口地址与额外参数，独立设置优先，避免同名参数重复或查询串落到片段后。 */
+export function metingUrl(api: string, id: string, options: MetingOptions = {}): string {
   const base = api.trim() || "https://api.injahow.cn/meting/";
-  const sep = base.includes("?") ? "&" : "?";
-  return `${base}${sep}server=netease&type=playlist&id=${encodeURIComponent(playlist.trim())}`;
+  const hashAt = base.indexOf("#");
+  const hash = hashAt < 0 ? "" : base.slice(hashAt);
+  const address = hashAt < 0 ? base : base.slice(0, hashAt);
+  const queryAt = address.indexOf("?");
+  const path = queryAt < 0 ? address : address.slice(0, queryAt);
+  const params = new URLSearchParams(queryAt < 0 ? "" : address.slice(queryAt + 1));
+  for (const [key, value] of new URLSearchParams(options.params?.trim().replace(/^[?&]+/, ""))) {
+    params.set(key, value);
+  }
+  params.set("server", options.server?.trim() || "netease");
+  params.set("type", options.type?.trim() || "playlist");
+  params.set("id", id.trim());
+  return `${path}?${params}${hash}`;
 }
 
 /**

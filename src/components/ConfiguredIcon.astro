@@ -1,0 +1,30 @@
+---
+/** Iconify 设置值：兼容旧版 SVG 字符串和带颜色的新图标配置。 */
+interface Props {
+  /** 返回图标设置的 Thymeleaf 表达式，不包含 ${}。 */
+  value: string;
+  class?: string;
+}
+
+const { value, class: className } = Astro.props;
+---
+
+<th-block
+  th:with={`configuredIcon=\${${value}}, iconValue=\${configuredIcon instanceof T(java.lang.String) ? configuredIcon : configuredIcon?.value}, iconColor=\${configuredIcon instanceof T(java.lang.String) ? '' : configuredIcon?.color}`}
+>
+  <i
+    class:list={["joe-font", "joe-configured-icon", className]}
+    aria-hidden="true"
+    th:if="${not #strings.isEmpty(iconValue)}"
+  >
+    <th-block
+      th:if="${#strings.startsWith(iconValue, '<svg')}"
+      th:utext="${iconValue}"
+    ></th-block>
+    <iconify-icon
+      th:unless="${#strings.startsWith(iconValue, '<svg')}"
+      th:attr="icon=${iconValue}"
+      th:style="${not #strings.isEmpty(iconColor) ? 'color: ' + iconColor : null}"
+    ></iconify-icon>
+  </i>
+</th-block>

@@ -5,49 +5,20 @@
  * - 同一人多次评论只留一个头像（取最近一条），最多显示 4 个
  * - 悬停或键盘聚焦头像时弹出资料卡：头像、昵称、站内用户 / 访客、访客留下的网址、最近一条评论
  *
- * 资料来自评论本身：Halo 不公开登录用户的用户名，评论里带的昵称、头像就是能拿到的全部。
- * 同一人的资料按昵称缓存在本次会话中，不同卡片上的同一个人显示一致（取最先读到的那份）。
+ * 资料来自当前文章的公开评论，只展示已审核且未隐藏的内容，不跨文章按昵称缓存资料。
  */
 import { $$ } from "../core/dom";
 import { listen, observe, onCleanup } from "../core/lifecycle";
 import { escapeHtml } from "../core/html";
 import { relativeTime } from "./console-content";
 import { fillEmptyImages } from "./image-fallback";
-import { toCommenters, type PublicComment } from "./commenters-core";
+import { toCommenters, type CommenterData as Commenter, type PublicComment } from "./commenters-core";
 
 const API = "/apis/api.halo.run/v1alpha1/comments";
 /** 每篇取几条评论来挑头像（去重后最多显示 MAX 个） */
 const FETCH = 8;
 
 const MAX = 4;
-const CACHE_KEY = "joe-next:commenters";
-
-interface Commenter {
-  name: string;
-  avatar: string;
-  /** User：站内登录用户；Email：填写邮箱评论的访客 */
-  kind: string;
-  site?: string;
-  text?: string;
-  time?: string;
-}
-
-/** 本次会话的资料缓存：昵称 → 资料 */
-function readCache(): Record<string, Commenter> {
-  try {
-    return JSON.parse(sessionStorage.getItem(CACHE_KEY) ?? "{}") as Record<string, Commenter>;
-  } catch {
-    return {};
-  }
-}
-
-function writeCache(cache: Record<string, Commenter>): void {
-  try {
-    sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache));
-  } catch {
-    // ignore
-  }
-}
 
 /** 只接受 http(s) 网址，其余（javascript: 等）一律丢弃 */
 function safeUrl(value?: string): string | undefined {
@@ -96,14 +67,15 @@ async function fill(box: HTMLElement): Promise<void> {
   box.dataset.loaded = "true";
   try {
     const query = new URLSearchParams({ group: "content.halo.run", kind: "Post", version: "v1alpha1", name, page: "1", size: String(FETCH) });
-    const response = await fetch(`${API}?${query}`, { headers: { Accept: "application/json" } });
+    const response = await fetch(`${API}?${query}`, {
+      credentials: "omit",
+      cache: "no-store",
+      headers: { Accept: "application/json" },
+    });
     if (!response.ok) return;
     const { items = [] } = (await response.json()) as { items?: PublicComment[] };
     const commenters = toCommenters(items, MAX);
     if (!commenters.length) return;
-    const cache = readCache();
-    for (const c of commenters) cache[c.name] ??= { ...c, site: safeUrl(c.site) };
-    writeCache(cache);
     box.innerHTML = commenters.map((c) => avatarHtml({ ...c, site: safeUrl(c.site) })).join("");
     box.removeAttribute("aria-hidden");
     fillEmptyImages(box);
@@ -138,19 +110,19 @@ export function loadCommenters(root: ParentNode = document): void {
   boxes.forEach((box) => io.observe(box));
 }
 
-function cardHtml(c: Commenter, latest: Commenter): string {
+function cardHtml(c: Commenter): string {
   const badge =
     c.kind === "User" ? `<span class="tag tag--user">站内用户</span>` : `<span class="tag">访客</span>`;
   const site = c.site
     ? `<a class="site" href="${escapeHtml(c.site)}" target="_blank" rel="noopener noreferrer nofollow">${escapeHtml(new URL(c.site).host)}</a>`
     : "";
-  const time = latest.time ? new Date(latest.time) : null;
-  const quote = latest.text
-    ? `<p class="quote">${escapeHtml(latest.text)}</p>${time && !Number.isNaN(time.getTime()) ? `<time>${relativeTime(time)}评论</time>` : ""}`
+  const time = c.time ? new Date(c.time) : null;
+  const quote = c.text
+    ? `<p class="quote">${escapeHtml(c.text)}</p>${time && !Number.isNaN(time.getTime()) ? `<time>${relativeTime(time)}评论</time>` : ""}`
     : "";
   return `
     <div class="head">
-      <img src="${escapeHtml(c.avatar)}" alt="" width="40" height="40" />
+      <img src="${escapeHtml(c.avatar)}" alt="${escapeHtml(c.name)}" width="40" height="40" data-fallback="avatar" data-text-avatar="${escapeHtml(c.name)}" />
       <div class="who"><strong>${escapeHtml(c.name)}</strong>${badge}</div>
     </div>
     ${site}${quote}`;
@@ -183,10 +155,9 @@ export function initCommenterCards(): void {
     clearTimeout(hideTimer);
     if (current === img && !card.hidden) return;
     current = img;
-    const name = img.dataset.name || img.alt;
-    const cached = readCache()[name];
-    // 资料用缓存（同一人各处一致），评论内容用这张卡片对应的那条
-    card.innerHTML = cardHtml(cached ?? fromImage(img), fromImage(img));
+    // 复用列表头像实际加载成功的地址（包含错误回退），避免资料卡再次加载失效的原地址。
+    card.innerHTML = cardHtml(fromImage(img));
+    fillEmptyImages(card);
     card.hidden = false;
     card.classList.remove("is-shown");
     place(img);
