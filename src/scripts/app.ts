@@ -26,7 +26,7 @@ import { initShortcuts } from "./features/shortcuts";
 import { initMusic, refreshMusic } from "./features/music";
 import { cleanExcerpts } from "./content/excerpt";
 import { hideReadBadges } from "./features/freshness";
-import { dedupeCommenters, initCommenterCards } from "./features/commenters";
+import { initCommenterCards } from "./features/commenters";
 
 function initShell(): void {
   initColorMode();
@@ -42,7 +42,6 @@ async function initPage(): Promise<void> {
   cleanExcerpts();
   fillEmptyImages();
   hideReadBadges();
-  dedupeCommenters();
   initCommenterCards();
   initNavChapter();
   refreshNavigation();

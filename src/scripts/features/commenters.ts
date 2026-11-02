@@ -1,16 +1,23 @@
 /**
  * 文章卡片的评论者头像（components/list/PostItem.astro，设置 home.card_commenters）：
+ * - 服务端只输出占位（文章名、评论数）。卡片滚到屏幕附近时请求 Halo 的公开评论接口（每篇一次），
+ *   填入头像——列表页渲染时不再为每篇文章查一次评论
  * - 同一人多次评论只留一个头像（取最近一条），最多显示 4 个
  * - 悬停或键盘聚焦头像时弹出资料卡：头像、昵称、站内用户 / 访客、访客留下的网址、最近一条评论
  *
- * 资料来自评论本身（模板写在 data-* 上），不额外请求接口：Halo 不公开登录用户的用户名，
- * 评论里带的昵称、头像就是能拿到的全部。同一人的资料按昵称缓存在本次会话中，
- * 不同卡片上的同一个人显示一致（取最先读到的那份）。
+ * 资料来自评论本身：Halo 不公开登录用户的用户名，评论里带的昵称、头像就是能拿到的全部。
+ * 同一人的资料按昵称缓存在本次会话中，不同卡片上的同一个人显示一致（取最先读到的那份）。
  */
 import { $$ } from "../core/dom";
-import { listen, onCleanup } from "../core/lifecycle";
+import { listen, observe, onCleanup } from "../core/lifecycle";
 import { escapeHtml } from "../core/html";
 import { relativeTime } from "./console-content";
+import { fillEmptyImages } from "./image-fallback";
+import { toCommenters, type PublicComment } from "./commenters-core";
+
+const API = "/apis/api.halo.run/v1alpha1/comments";
+/** 每篇取几条评论来挑头像（去重后最多显示 MAX 个） */
+const FETCH = 8;
 
 const MAX = 4;
 const CACHE_KEY = "joe-next:commenters";
@@ -65,19 +72,70 @@ function fromImage(img: HTMLImageElement): Commenter {
   };
 }
 
-export function dedupeCommenters(root: ParentNode = document): void {
-  const cache = readCache();
-  $$<HTMLElement>(".joe_list__item .commenters", root).forEach((box) => {
-    const seen = new Set<string>();
-    $$<HTMLImageElement>("img", box).forEach((img) => {
-      const key = img.dataset.name || img.src;
-      if (seen.has(key) || seen.size >= MAX) return img.remove();
-      seen.add(key);
-      img.setAttribute("aria-label", `${key} 的资料`);
-      if (!cache[key]) cache[key] = fromImage(img);
-    });
-  });
-  writeCache(cache);
+/** 一个占位里的头像：资料写在 data-* 上，资料卡从这里读 */
+function avatarHtml(c: Commenter): string {
+  const attrs: Record<string, string | undefined> = {
+    "data-name": c.name,
+    "data-kind": c.kind,
+    "data-site": c.site,
+    "data-text": c.text,
+    "data-time": c.time,
+    "data-text-avatar": c.name,
+    "aria-label": `${c.name} 的资料`,
+  };
+  const extra = Object.entries(attrs)
+    .filter(([, v]) => v)
+    .map(([k, v]) => ` ${k}="${escapeHtml(v!)}"`)
+    .join("");
+  return `<img width="22" height="22" loading="lazy" tabindex="0" src="${escapeHtml(c.avatar)}" alt="${escapeHtml(c.name)}" data-fallback="avatar"${extra} />`;
+}
+
+async function fill(box: HTMLElement): Promise<void> {
+  const name = box.dataset.post;
+  if (!name || box.dataset.loaded) return;
+  box.dataset.loaded = "true";
+  try {
+    const query = new URLSearchParams({ group: "content.halo.run", kind: "Post", version: "v1alpha1", name, page: "1", size: String(FETCH) });
+    const response = await fetch(`${API}?${query}`, { headers: { Accept: "application/json" } });
+    if (!response.ok) return;
+    const { items = [] } = (await response.json()) as { items?: PublicComment[] };
+    const commenters = toCommenters(items, MAX);
+    if (!commenters.length) return;
+    const cache = readCache();
+    for (const c of commenters) cache[c.name] ??= { ...c, site: safeUrl(c.site) };
+    writeCache(cache);
+    box.innerHTML = commenters.map((c) => avatarHtml({ ...c, site: safeUrl(c.site) })).join("");
+    box.removeAttribute("aria-hidden");
+    fillEmptyImages(box);
+    requestAnimationFrame(() => box.classList.add("is-loaded"));
+  } catch {
+    // 头像不是必需的，失败就不显示
+  }
+}
+
+/**
+ * 给 root 里还没加载的占位排队：滚到屏幕附近（上下 200px）时加载。
+ * 首次进入页面、加载更多、切换分类标签后都调用一次。
+ */
+export function loadCommenters(root: ParentNode = document): void {
+  const boxes = $$<HTMLElement>(".joe_list__item .commenters[data-post]:not([data-loaded])", root);
+  if (!boxes.length) return;
+  if (!("IntersectionObserver" in window)) {
+    boxes.forEach((box) => void fill(box));
+    return;
+  }
+  // observe() 在离开页面（swup 切页）时自动断开
+  const io = observe(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        io.unobserve(entry.target);
+        void fill(entry.target as HTMLElement);
+      }
+    },
+    { rootMargin: "200px 0px" },
+  );
+  boxes.forEach((box) => io.observe(box));
 }
 
 function cardHtml(c: Commenter, latest: Commenter): string {
@@ -101,6 +159,7 @@ function cardHtml(c: Commenter, latest: Commenter): string {
 /** 资料卡：整页只有一个，悬停头像时移过去 */
 export function initCommenterCards(): void {
   if (!$$(".joe_list__item .commenters").length) return;
+  loadCommenters();
   const card = document.createElement("div");
   card.className = "joe_commenter_card";
   card.setAttribute("role", "tooltip");
