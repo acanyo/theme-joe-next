@@ -8,6 +8,13 @@
 
 > 本主题由 Joe3 衍生，已获得原作者授权。Joe3 的前身为 qinhua 的 halo-theme-joe2.0。
 
+
+## 演示与交流
+
+- **演示站**：[xhhao.com](https://www.xhhao.com/)（Handsome）
+- **文档**：[docs.lik.cc](https://docs.lik.cc/)
+- **QQ 交流群**：[![QQ群](https://www.xhhao.com/upload/iShot_2025-03-03_16.03.00.png)](https://www.xhhao.com/upload/iShot_2025-03-03_16.03.00.png)
+
 ![首页](docs/screenshots/home-list.webp)
 
 <table>
