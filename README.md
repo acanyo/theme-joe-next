@@ -75,7 +75,7 @@
 
 ## 安装
 
-需要 Halo `2.22.8` 或更高版本。
+需要 Halo `2.27.0` 或更高版本。
 
 1. 在 [Releases](https://github.com/acanyo/theme-joe-next/releases) 下载最新的 `theme-joe-next-<版本>.zip`
 2. 在 Halo 控制台的「主题」页面点右上角「主题管理」，再点「安装主题」上传 zip 文件，安装后启用

@@ -14,7 +14,7 @@
  * 若干条隐藏的记录，脚本按时间合并排序（features/console-content.ts）。
  */
 import Icon from "../common/Icon.astro";
-import { COLOR_MODE, COMMENT_ENABLED, COMMENT_TEXT, el } from "../../config/expressions";
+import { COLOR_MODE, COMMENT_ENABLED, COMMENT_LINK, COMMENT_TEXT, el } from "../../config/expressions";
 
 /** 时间线每类最多取的条数 */
 const PER_KIND = 8;
@@ -24,8 +24,8 @@ const MOMENT_TEXT =
   "#strings.abbreviate(#strings.trim((moment.spec.content.html ?: '')" +
   ".replaceAll('<[^>]+>', ' ').replaceAll('&nbsp;', ' ').replaceAll('\\s+', ' ')), 60)";
 /**
- * 评论所属文章 / 页面的标题。评论的链接直接用 comment.permalink（评论列表已经带上，不用再查）；
- * 标题需要查一次文章，只给时间线显示的前 PER_KIND 条查。
+ * 评论所属文章 / 页面的标题，只给时间线显示的前 PER_KIND 条查。
+ * 评论的链接用评论自带的 permalink（COMMENT_LINK），不用再查。
  */
 const SUBJECT_TITLE =
   "comment.spec.subjectRef.kind == 'Post' ? postFinder.getByName(comment.spec.subjectRef.name)?.spec?.title : (comment.spec.subjectRef.kind == 'SinglePage' ? singlePageFinder.getByName(comment.spec.subjectRef.name)?.spec?.title : null)";
@@ -116,7 +116,7 @@ const ISO = (expr: string) => `#dates.format(${expr}, 'yyyy-MM-dd''T''HH:mm:ssXX
               <li
                 th:with={`subjectTitle = \${${SUBJECT_TITLE}}`}
                 data-kind="comment"
-                th:attr={`data-time=\${${ISO("comment.metadata.creationTimestamp")}}, data-who=\${comment.owner.displayName}, data-href=\${comment.permalink}, data-title=\${subjectTitle}`}
+                th:attr={`data-time=\${${ISO("comment.metadata.creationTimestamp")}}, data-who=\${comment.owner.displayName}, data-href=\${${COMMENT_LINK}}, data-title=\${subjectTitle}`}
                 th:text={el(COMMENT_TEXT)}
               ></li>
             </th-block>
@@ -143,11 +143,11 @@ const ISO = (expr: string) => `#dates.format(${expr}, 'yyyy-MM-dd''T''HH:mm:ssXX
           <p class="joe_cc__empty" data-console-history-empty hidden>看过的文章会出现在这里</p>
 
           <!-- 「我的评论」候选：最近的公开评论（含邮箱哈希） -->
-          <!-- 不查所属文章：「我的评论」显示评论内容并链接到这条评论（comment.permalink），不显示文章标题 -->
+          <!-- 「我的评论」显示评论内容并链接到这条评论，不查所属文章，也不显示文章标题 -->
           <ul hidden data-console-pool th:unless="${#lists.isEmpty(ccComments)}">
             <li
               th:each="comment : ${ccComments}"
-              th:attr={`data-email-hash=\${comment.spec.owner.annotations?.get('email-hash')}, data-owner=\${comment.owner.displayName}, data-owner-kind=\${comment.owner.kind}, data-time=\${${ISO("comment.metadata.creationTimestamp")}}, data-href=\${comment.permalink}`}
+              th:attr={`data-email-hash=\${comment.spec.owner.annotations?.get('email-hash')}, data-owner=\${comment.owner.displayName}, data-owner-kind=\${comment.owner.kind}, data-time=\${${ISO("comment.metadata.creationTimestamp")}}, data-href=\${${COMMENT_LINK}}`}
               th:text={el(COMMENT_TEXT)}
             ></li>
           </ul>

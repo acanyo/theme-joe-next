@@ -42,6 +42,12 @@ export const SHARED_STATS = "siteStats = ${siteStatsFinder.getStats()}, tagCount
 export const RELATED_POSTS =
   "#lists.isEmpty(post.categories) ? (#lists.isEmpty(post.tags) ? {} : postFinder.listByTag(1, #conversions.convert((theme.config.post.related_count ?: 5) + 1, 'java.lang.Integer'), post.tags[0].metadata.name).items) : postFinder.listByCategory(1, #conversions.convert((theme.config.post.related_count ?: 5) + 1, 'java.lang.Integer'), post.categories[0].metadata.name).items";
 
+/**
+ * 评论的访问地址：评论列表自带 permalink（文章 / 页面里这条评论的位置，Halo 2.27 起），不用再查一次所属内容；
+ * 瞬间、友链等插件的评论没有时退回对应页面。
+ */
+export const COMMENT_LINK = "comment.permalink ?: (comment.spec.subjectRef.kind == 'Moment' ? '/moments' : '/links')";
+
 /** 包裹为 `${...}` */
 export const el = (expr: string): string => `\${${expr}}`;
 
