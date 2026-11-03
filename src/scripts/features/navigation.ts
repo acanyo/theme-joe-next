@@ -6,6 +6,7 @@
  */
 import { $, $$, isMobile, throttle } from "../core/dom";
 import { getThemeConfig } from "../core/config";
+import { isTypingEvent } from "../core/keyboard";
 import { initNavDropdowns, resetNavDropdowns } from "./nav-dropdown";
 
 declare global {
@@ -247,6 +248,7 @@ function initSearch(): void {
   if (!/Mac|iPhone|iPad/.test(navigator.platform))
     $$(".joe_header__kbd").forEach((kbd) => (kbd.textContent = "Ctrl K"));
   document.addEventListener("keydown", (event) => {
+    if (event.defaultPrevented || event.altKey || isTypingEvent(event)) return;
     if (event.key.toLowerCase() !== "k" || !(event.metaKey || event.ctrlKey))
       return;
     event.preventDefault();

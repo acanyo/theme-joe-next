@@ -14,6 +14,7 @@
 import { $ } from "../core/dom";
 import { getThemeConfig } from "../core/config";
 import { iconHtml } from "../core/icons";
+import { isTypingEvent } from "../core/keyboard";
 import { openRandomPost } from "./random-post";
 import { toggleColorModeAt } from "./color-mode";
 
@@ -66,14 +67,6 @@ const SHORTCUTS: Shortcut[] = [
   },
 ];
 
-function isTyping(target: EventTarget | null): boolean {
-  const el = target as HTMLElement | null;
-  if (!el) return false;
-  if (el.isContentEditable) return true;
-  const tag = el.tagName;
-  return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || !!el.closest("[contenteditable='true']");
-}
-
 let dialog: HTMLDialogElement | null = null;
 
 function renderHelp(): HTMLDialogElement {
@@ -112,7 +105,7 @@ export function initShortcuts(): void {
   if (!getThemeConfig().enableShortcuts) return;
   document.addEventListener("keydown", (event) => {
     if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) return;
-    if (isTyping(event.target)) return;
+    if (isTypingEvent(event)) return;
     if (event.key === "?") {
       event.preventDefault();
       toggleHelp();
