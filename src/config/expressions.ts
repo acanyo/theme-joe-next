@@ -26,7 +26,7 @@ export const POST_URL = `(${SITE_URL}) + post.status.permalink`;
 /** 文章页操作项开关：全局设置 + 文章元数据 */
 export const LIKE_ENABLED = "theme.config.post.like";
 export const SHARE_ENABLED = "theme.config.share.enabled";
-export const DONATE_ENABLED = "theme.config.share.donate";
+export const DONATE_ENABLED = "theme.config.share.donate and #annotations.getOrDefault(post, 'disable_donate', 'false') != 'true'";
 
 /**
  * 全站共用的统计：布局（BaseLayout、layout.astro）在 <div id="Joe"> 上查一次，存为 siteStats / tagCount，

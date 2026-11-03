@@ -434,6 +434,74 @@ html[data-mode="dark"] .joe_cc::before {
   }
 }
 
+.joe_cc__bookmarks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  a {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 8px;
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--text-regular);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--theme-text);
+      background: var(--tint);
+    }
+  }
+
+  .text {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  time {
+    flex: none;
+    font-size: 11px;
+    color: var(--text-placeholder);
+  }
+
+  button {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    font-size: 18px;
+    color: var(--text-secondary);
+    background: transparent;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--theme-text);
+      background: var(--tint);
+    }
+  }
+}
+
+.joe_cc__saved-note {
+  margin: 4px 8px 12px;
+  font-size: 11px;
+  color: var(--text-placeholder);
+}
+
 /* —— 底部：分段页签 + 图标按钮 —— */
 .joe_cc__foot {
   display: flex;

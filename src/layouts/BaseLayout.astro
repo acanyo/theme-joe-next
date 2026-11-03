@@ -20,6 +20,7 @@ import BigBanner from "../components/home/BigBanner.astro";
 import "../styles/pages/big-banner.css";
 import type { PageScript } from "../scripts/core/page-scripts";
 import { SHARED_STATS } from "../config/expressions";
+import { PAGE_LAYOUT_ATTRIBUTES, pageReadingWidth } from "../config/content-options";
 
 interface Props {
   /** 页面标题 SpEL 表达式（不含站点名及 `${}`） */
@@ -98,6 +99,8 @@ const {
         {container ? (
           <div
             class:list={["joe_container joe_main_container", pageClass]}
+            th:attr={seo === "page" ? PAGE_LAYOUT_ATTRIBUTES : undefined}
+            th:style={seo === "page" ? `|--reading-width: \${${pageReadingWidth("'none'")}}|` : undefined}
             th:classappend="|${theme.config.effects.reveal ? 'animated showInUp' : ''} ${theme.config.aside.position == 'left' ? 'revert' : ''}|"
           >
             <slot />

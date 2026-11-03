@@ -120,17 +120,26 @@ const SUBJECT_LINK = COMMENT_LINK;
     >
       <li class="item" th:each="comment : ${replies.items}">
         <div class="user">
-          <img
-            width="35"
-            height="35"
-            class="avatar"
-            loading="lazy"
-            th:src="${comment.owner.avatar}"
-            sizes="35px"
-            alt="头像"
-            th:attr="data-text-avatar=${comment.owner.displayName}"
-            data-fallback="avatar"
-          />
+          <button
+            type="button"
+            class="joe_commenter_trigger"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            th:attr={`aria-label=|查看 \${comment.owner.displayName} 的资料|, data-name=\${comment.owner.displayName}, data-kind=\${comment.owner.kind}, data-site=\${comment.spec.owner.annotations?.get('website')}, data-text=\${${COMMENT_TEXT}}, data-time=\${comment.spec.creationTime}`}
+          >
+            <img
+              width="35"
+              height="35"
+              class="avatar"
+              loading="lazy"
+              th:src="${#strings.isEmpty(comment.owner.avatar) ? null : comment.owner.avatar}"
+              sizes="35px"
+              alt="头像"
+              th:attr="data-text-avatar=${comment.owner.displayName}, data-owner-kind=${comment.owner.kind}, data-email-hash=${comment.spec.owner.annotations?.get('email-hash')}"
+              data-comment-avatar
+              data-fallback="avatar"
+            />
+          </button>
           <div class="info">
             <div class="author" th:text="${comment.owner.displayName}" />
             <time

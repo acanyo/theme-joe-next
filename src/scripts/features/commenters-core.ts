@@ -31,6 +31,18 @@ export interface CommenterData {
   time?: string;
 }
 
+/** 评论者自填网站只接受 http(s)，未写协议时使用 https。 */
+export function commenterWebsite(value?: string): string | undefined {
+  const input = value?.trim();
+  if (!input || (/^[a-z][a-z\d+.-]*:/i.test(input) && !/^https?:\/\//i.test(input))) return undefined;
+  try {
+    const url = new URL(input.startsWith("//") ? `https:${input}` : /^https?:\/\//i.test(input) ? input : `https://${input}`);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.href : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /**
  * 评论 HTML → 纯文本预览（与模板里的 COMMENT_TEXT 一致）：
  * 表情图片换成 alt 文字，其余标签、&nbsp; 与多余空白去掉，最多 120 字。

@@ -14,6 +14,7 @@ import PostNav from "../components/post/PostNav.astro";
 import RelatedPosts from "../components/post/RelatedPosts.astro";
 import OnThisDay from "../components/post/OnThisDay.astro";
 import { RELATED_POSTS, el } from "../config/expressions";
+import { POST_ASIDE_ENABLED } from "../config/content-options";
 import "../styles/pages/post.css";
 import "../styles/pages/post-hero.css";
 import "../styles/content/poster.css";
@@ -57,7 +58,7 @@ import "../styles/content/poster.css";
     <CommentSection subject="post" kind="Post" />
   </div>
 
-  <th-block th:if="${theme.config.aside.on_post}">
+  <th-block th:if={el(POST_ASIDE_ENABLED)}>
     <PostAside />
   </th-block>
   </th-block>

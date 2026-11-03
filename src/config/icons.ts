@@ -50,6 +50,7 @@ export const ICONS = {
   "volume-off": "lucide:volume-x",
   share: "lucide:share-2",
   pinned: "lucide:pin",
+  bookmark: "lucide:bookmark",
   "fresh-new": "lucide:sparkles",
   "fresh-updated": "lucide:refresh-cw",
   reward: "lucide:gift",

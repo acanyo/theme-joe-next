@@ -1,0 +1,17 @@
+---
+import Icon from "../common/Icon.astro";
+import "../../styles/content/bookmarks.css";
+---
+
+<button
+  type="button"
+  class="joe_bookmark"
+  data-joe-bookmark
+  aria-pressed="false"
+  aria-label="收藏文章，稍后阅读"
+  title="收藏，稍后阅读"
+  th:attr="data-bookmark-id=${post.metadata.name}, data-bookmark-href=${post.status.permalink}, data-bookmark-title=${post.spec.title}"
+>
+  <Icon name="bookmark" />
+  <span data-bookmark-label>收藏</span>
+</button>

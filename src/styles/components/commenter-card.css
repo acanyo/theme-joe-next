@@ -1,0 +1,169 @@
+/* 评论者资料卡：文章列表与侧栏共用，整页只有一个。 */
+.joe_commenter_trigger {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--theme);
+    outline-offset: 3px;
+  }
+
+  img {
+    display: block;
+  }
+}
+
+.joe_commenter_card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 240px;
+  max-width: calc(100vw - 16px);
+  max-height: calc(100dvh - 16px);
+  overflow: auto;
+  padding: 12px 14px;
+  border-radius: var(--radius-wrap);
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--bg-page);
+  box-shadow:
+    var(--shadow-hover),
+    0 0 0 1px var(--border-lighter);
+  opacity: 0;
+  translate: 0 4px;
+  pointer-events: none;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    translate var(--dur-base) var(--ease-spring);
+
+  &[data-side="bottom"] {
+    translate: 0 -4px;
+  }
+
+  &.is-shown {
+    opacity: 1;
+    translate: 0 0;
+    pointer-events: auto;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  .close {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    font-size: 20px;
+    color: var(--text-secondary);
+    background: transparent;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--bg-hover);
+    }
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-right: 14px;
+
+    img {
+      flex: none;
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
+
+  .who {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+
+    strong {
+      overflow: hidden;
+      font-size: 14px;
+      color: var(--text-title);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .tag {
+    justify-self: start;
+    padding: 0 6px;
+    font-size: 11px;
+    line-height: 18px;
+    border-radius: 4px;
+    background: var(--bg-hover);
+  }
+
+  .tag--user {
+    color: var(--theme-text);
+    background: color-mix(in srgb, var(--theme) 12%, transparent);
+  }
+
+  .site {
+    display: block;
+    margin-top: 10px;
+    overflow: hidden;
+    color: var(--theme-text);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    &::before {
+      content: "🔗 ";
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .quote {
+    display: -webkit-box;
+    margin: 10px 0 0;
+    padding-left: 8px;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-height: 1.6;
+    color: var(--text-regular);
+    border-left: 2px solid color-mix(in srgb, var(--theme) 40%, transparent);
+  }
+
+  time {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .joe_commenter_card {
+    transition: none;
+    translate: none;
+  }
+
+  .joe_list__item .meta .commenters .joe_commenter_trigger {
+    transform: none !important;
+  }
+}

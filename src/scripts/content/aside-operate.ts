@@ -10,7 +10,7 @@ const MIN_GUTTER = 75;
 /** 低于此宽度时侧栏折叠、布局改为单栏，悬浮栏会遮挡导航与正文 */
 const MIN_VIEWPORT = 1200;
 const BOTTOM_DUPLICATES =
-  ".joe_detail__agree, .joe_detail__operate-share, .joe_detail__operate .joe_donate";
+  ".joe_detail__agree, .joe_detail__operate-share, .joe_detail__operate .joe_donate, .joe_detail__operate .joe_bookmark";
 
 export function initAsideOperate(): void {
   const rail = $("[data-joe-aside-operate]");

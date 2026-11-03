@@ -1,0 +1,17 @@
+---
+/** 自定义页面的侧栏：保留各模板的全局开关，页面扩展可单独关闭。 */
+import Aside from "./Aside.astro";
+import { el } from "../../config/expressions";
+import "../../styles/pages/page-layout.css";
+
+interface Props {
+  setting?: "on_page" | "on_links" | "on_friends";
+}
+
+const { setting = "on_page" } = Astro.props;
+const ENABLED = `theme.config.aside.${setting} and #annotations.getOrDefault(singlePage, 'disable_sidebar', 'false') != 'true'`;
+---
+
+<th-block th:if={el(ENABLED)}>
+  <Aside />
+</th-block>

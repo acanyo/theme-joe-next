@@ -2,9 +2,10 @@
 /** 自定义页面模板「留言板」：最近留言以可拖拽便签展示，下方为评论区 */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Actions from "../components/layout/Actions.astro";
-import Aside from "../components/aside/Aside.astro";
+import PageAside from "../components/aside/PageAside.astro";
 import CommentSection from "../components/post/CommentSection.astro";
 import { COMMENT_ENABLED, el } from "../config/expressions";
+import { PAGE_TITLE_VISIBLE } from "../config/content-options";
 import "../styles/content/leaving.css";
 
 /** 留言来源：全站最新评论，或仅当前页面的评论 */
@@ -21,6 +22,7 @@ const COMMENTS =
     <div class="joe_detail">
       <h1
         class="joe_detail__title"
+        th:if={el(PAGE_TITLE_VISIBLE)}
         th:classappend="${theme.config.post.title_shadow ? 'txt-shadow' : ''}"
         th:text="${singlePage.spec.title}"
       ></h1>
@@ -39,9 +41,10 @@ const COMMENTS =
                 <img
                   class="avatar"
                   loading="lazy"
-                  th:src="${note.owner.avatar}"
+                  th:src="${#strings.isEmpty(note.owner.avatar) ? null : note.owner.avatar}"
                   alt=""
-                  th:attr="data-text-avatar=${note.owner.displayName}"
+                  th:attr="data-text-avatar=${note.owner.displayName}, data-owner-kind=${note.owner.kind}, data-email-hash=${note.spec.owner.annotations?.get('email-hash')}"
+                  data-comment-avatar
                   data-fallback="avatar"
                 />
                 <div class="nickname" th:text="${note.owner.displayName}"></div>
@@ -67,8 +70,6 @@ const COMMENTS =
     </div>
     <CommentSection subject="singlePage" kind="SinglePage" />
   </div>
-  <th-block th:if="${theme.config.aside.on_page}">
-    <Aside />
-  </th-block>
+  <PageAside />
   <Actions slot="actions" editKind="page" />
 </BaseLayout>

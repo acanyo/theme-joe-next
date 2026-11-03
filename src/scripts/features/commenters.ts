@@ -8,40 +8,16 @@
  * 资料来自当前文章的公开评论，只展示已审核且未隐藏的内容，不跨文章按昵称缓存资料。
  */
 import { $$ } from "../core/dom";
-import { listen, observe, onCleanup } from "../core/lifecycle";
+import { observe } from "../core/lifecycle";
 import { escapeHtml } from "../core/html";
-import { relativeTime } from "./console-content";
 import { fillEmptyImages } from "./image-fallback";
-import { toCommenters, type CommenterData as Commenter, type PublicComment } from "./commenters-core";
+import { commenterWebsite, toCommenters, type CommenterData as Commenter, type PublicComment } from "./commenters-core";
 
 const API = "/apis/api.halo.run/v1alpha1/comments";
 /** 每篇取几条评论来挑头像（去重后最多显示 MAX 个） */
 const FETCH = 8;
 
 const MAX = 4;
-
-/** 只接受 http(s) 网址，其余（javascript: 等）一律丢弃 */
-function safeUrl(value?: string): string | undefined {
-  if (!value) return undefined;
-  try {
-    const url = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`);
-    return url.protocol === "http:" || url.protocol === "https:" ? url.href : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-function fromImage(img: HTMLImageElement): Commenter {
-  const d = img.dataset;
-  return {
-    name: d.name ?? img.alt,
-    avatar: img.currentSrc || img.src,
-    kind: d.kind ?? "Email",
-    site: safeUrl(d.site),
-    text: d.text?.trim() || undefined,
-    time: d.time,
-  };
-}
 
 /** 一个占位里的头像：资料写在 data-* 上，资料卡从这里读 */
 function avatarHtml(c: Commenter): string {
@@ -58,7 +34,7 @@ function avatarHtml(c: Commenter): string {
     .filter(([, v]) => v)
     .map(([k, v]) => ` ${k}="${escapeHtml(v!)}"`)
     .join("");
-  return `<img width="22" height="22" loading="lazy" tabindex="0" src="${escapeHtml(c.avatar)}" alt="${escapeHtml(c.name)}" data-fallback="avatar"${extra} />`;
+  return `<button type="button" class="joe_commenter_trigger" aria-haspopup="dialog" aria-expanded="false"${extra}><img width="22" height="22" loading="lazy" src="${escapeHtml(c.avatar)}" alt="${escapeHtml(c.name)}" data-text-avatar="${escapeHtml(c.name)}" data-fallback="avatar" /></button>`;
 }
 
 async function fill(box: HTMLElement): Promise<void> {
@@ -76,7 +52,7 @@ async function fill(box: HTMLElement): Promise<void> {
     const { items = [] } = (await response.json()) as { items?: PublicComment[] };
     const commenters = toCommenters(items, MAX);
     if (!commenters.length) return;
-    box.innerHTML = commenters.map((c) => avatarHtml({ ...c, site: safeUrl(c.site) })).join("");
+    box.innerHTML = commenters.map((c) => avatarHtml({ ...c, site: commenterWebsite(c.site) })).join("");
     box.removeAttribute("aria-hidden");
     fillEmptyImages(box);
     requestAnimationFrame(() => box.classList.add("is-loaded"));
@@ -108,95 +84,4 @@ export function loadCommenters(root: ParentNode = document): void {
     { rootMargin: "200px 0px" },
   );
   boxes.forEach((box) => io.observe(box));
-}
-
-function cardHtml(c: Commenter): string {
-  const badge =
-    c.kind === "User" ? `<span class="tag tag--user">站内用户</span>` : `<span class="tag">访客</span>`;
-  const site = c.site
-    ? `<a class="site" href="${escapeHtml(c.site)}" target="_blank" rel="noopener noreferrer nofollow">${escapeHtml(new URL(c.site).host)}</a>`
-    : "";
-  const time = c.time ? new Date(c.time) : null;
-  const quote = c.text
-    ? `<p class="quote">${escapeHtml(c.text)}</p>${time && !Number.isNaN(time.getTime()) ? `<time>${relativeTime(time)}评论</time>` : ""}`
-    : "";
-  return `
-    <div class="head">
-      <img src="${escapeHtml(c.avatar)}" alt="${escapeHtml(c.name)}" width="40" height="40" data-fallback="avatar" data-text-avatar="${escapeHtml(c.name)}" />
-      <div class="who"><strong>${escapeHtml(c.name)}</strong>${badge}</div>
-    </div>
-    ${site}${quote}`;
-}
-
-/** 资料卡：整页只有一个，悬停头像时移过去 */
-export function initCommenterCards(): void {
-  if (!$$(".joe_list__item .commenters").length) return;
-  loadCommenters();
-  const card = document.createElement("div");
-  card.className = "joe_commenter_card";
-  card.setAttribute("role", "tooltip");
-  card.hidden = true;
-  document.body.appendChild(card);
-
-  let current: HTMLImageElement | null = null;
-  let hideTimer = 0;
-
-  const place = (img: HTMLImageElement) => {
-    const r = img.getBoundingClientRect();
-    const w = card.offsetWidth, h = card.offsetHeight;
-    const left = Math.min(window.innerWidth - w - 8, Math.max(8, r.left + r.width / 2 - w / 2));
-    const above = r.top - h - 10;
-    const top = above > 64 ? above : r.bottom + 10;
-    card.style.transform = `translate(${Math.round(left)}px, ${Math.round(top + window.scrollY)}px)`;
-    card.dataset.side = above > 64 ? "top" : "bottom";
-  };
-
-  const show = (img: HTMLImageElement) => {
-    clearTimeout(hideTimer);
-    if (current === img && !card.hidden) return;
-    current = img;
-    // 复用列表头像实际加载成功的地址（包含错误回退），避免资料卡再次加载失效的原地址。
-    card.innerHTML = cardHtml(fromImage(img));
-    fillEmptyImages(card);
-    card.hidden = false;
-    card.classList.remove("is-shown");
-    place(img);
-    img.setAttribute("aria-describedby", "joe-commenter-card");
-    requestAnimationFrame(() => card.classList.add("is-shown"));
-  };
-
-  const hide = (delay = 120) => {
-    clearTimeout(hideTimer);
-    hideTimer = window.setTimeout(() => {
-      card.classList.remove("is-shown");
-      current?.removeAttribute("aria-describedby");
-      current = null;
-      window.setTimeout(() => {
-        if (!current) card.hidden = true;
-      }, 160);
-    }, delay);
-  };
-
-  card.id = "joe-commenter-card";
-  const target = (event: Event) => (event.target as HTMLElement).closest?.<HTMLImageElement>(".commenters img") ?? null;
-  listen(document, "pointerover", (event: PointerEvent) => {
-    const img = target(event);
-    if (img) show(img);
-  });
-  listen(document, "pointerout", (event: PointerEvent) => {
-    if (target(event)) hide();
-  });
-  listen(document, "focusin", (event: FocusEvent) => {
-    const img = target(event);
-    if (img) show(img);
-  });
-  listen(document, "focusout", (event: FocusEvent) => {
-    if (target(event)) hide(0);
-  });
-  // 鼠标移到资料卡上（点网址）时保持显示
-  card.addEventListener("pointerenter", () => clearTimeout(hideTimer));
-  card.addEventListener("pointerleave", () => hide());
-  listen(document, "keydown", (event: KeyboardEvent) => event.key === "Escape" && hide(0));
-  listen(window, "scroll", () => hide(0), { passive: true });
-  onCleanup(() => card.remove());
 }

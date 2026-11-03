@@ -1,12 +1,14 @@
 ---
 /** 文章版权声明 */
 import { POST_ICONS } from "../../data/post-icons";
+import { POST_COPYRIGHT_ENABLED } from "../../config/content-options";
+import { el } from "../../config/expressions";
 
 const SITE =
   "#strings.endsWith(site.url, '/') ? #strings.substring(site.url, 0, #strings.length(site.url) - 1) : site.url";
 ---
 
-<div class="joe_detail__copyright">
+<div class="joe_detail__copyright" th:if={el(POST_COPYRIGHT_ENABLED)}>
   <div class="content">
     <div class="item">
       <Fragment set:html={POST_ICONS.copyrightAuthor} />

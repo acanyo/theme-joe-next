@@ -1,0 +1,11 @@
+/* 页面独立布局，属性与变量均位于 swup 内容区，切页时自然恢复。 */
+.joe_main_container[data-page-transparent="true"] .joe_main > .joe_detail {
+  background: transparent;
+  box-shadow: none;
+}
+
+.joe_main_container[data-page-width] .joe_friends__list,
+.joe_main_container[data-page-width] .joe_friends__who {
+  max-width: var(--reading-width, none);
+  margin-inline: auto;
+}

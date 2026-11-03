@@ -1,6 +1,16 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { commentAvatar, commentText, toCommenters, type PublicComment } from "../src/scripts/features/commenters-core.ts";
+import { commentAvatar, commentText, commenterWebsite, toCommenters, type PublicComment } from "../src/scripts/features/commenters-core.ts";
+
+describe("commenterWebsite", () => {
+  it("supports normal sites and rejects executable or malformed links", () => {
+    assert.equal(commenterWebsite(" example.com/about "), "https://example.com/about");
+    assert.equal(commenterWebsite("//example.com"), "https://example.com/");
+    assert.equal(commenterWebsite("http://example.com"), "http://example.com/");
+    for (const value of [undefined, "", "javascript:alert(1)", "data:text/html,test", "mailto:a@example.com", "https://", "not a site"])
+      assert.equal(commenterWebsite(value), undefined);
+  });
+});
 
 describe("commentText", () => {
   it("turns emoji images into their alt text and strips tags", () => {

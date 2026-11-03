@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Actions from "../components/layout/Actions.astro";
-import Aside from "../components/aside/Aside.astro";
+import PageAside from "../components/aside/PageAside.astro";
 import ArticleBody from "../components/post/ArticleBody.astro";
 import CommentSection from "../components/post/CommentSection.astro";
 import "../styles/pages/post.css";
@@ -16,8 +16,6 @@ import "../styles/pages/post.css";
     <ArticleBody subject="singlePage" />
     <CommentSection subject="singlePage" kind="SinglePage" />
   </div>
-  <th-block th:if="${theme.config.aside.on_page}">
-    <Aside />
-  </th-block>
+  <PageAside />
   <Actions slot="actions" editKind="page" />
 </BaseLayout>

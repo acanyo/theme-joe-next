@@ -93,7 +93,7 @@ function showResumeHint(position: number): void {
 /** 文章页调用：记录本次阅读，并随滚动更新进度；读到一半回来时提示「上次读到这里」 */
 export function recordReading(): void {
   const resumed = resumePosition();
-  const title = $("h1")?.textContent?.trim() || document.title.split(" - ")[0]!.trim();
+  const title = $<HTMLElement>(".joe_detail[data-title]")?.dataset.title || $("h1")?.textContent?.trim() || document.title.split(" - ")[0]!.trim();
   const href = location.pathname;
   const now = Date.now();
   const list = readHistory();

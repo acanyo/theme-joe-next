@@ -21,6 +21,91 @@ metadata:
   generateName: annotation-setting-
 spec:
   targetRef:
+    group: content.halo.run
+    kind: SinglePage
+  formSchema:
+    - $formkit: "switch"
+      name: "disable_sidebar"
+      label: "关闭侧边栏"
+      value: "false"
+      onValue: "true"
+      offValue: "false"
+      help: "仅关闭当前页面的侧边栏，正文自动铺满；适用于默认页面、留言板、友链和朋友圈模板"
+    - $formkit: "switch"
+      name: "hide_title"
+      label: "隐藏页面标题"
+      value: "false"
+      onValue: "true"
+      offValue: "false"
+      help: "隐藏正文上方的标题，浏览器标题与分享信息仍保留"
+    - $formkit: "switch"
+      name: "hide_meta"
+      label: "隐藏作者与日期"
+      value: "false"
+      onValue: "true"
+      offValue: "false"
+      help: "仅影响页面顶部的信息栏，留言与朋友圈动态中的作者信息仍显示"
+    - $formkit: "select"
+      name: "content_width"
+      label: "正文宽度"
+      value: "default"
+      options:
+        - label: "跟随主题"
+          value: "default"
+        - label: "紧凑（640px）"
+          value: "narrow"
+        - label: "宽版（960px）"
+          value: "wide"
+        - label: "铺满内容区"
+          value: "full"
+      help: "在可用空间内限制正文宽度；与关闭侧边栏配合可获得更宽的内容区"
+    - $formkit: "switch"
+      name: "transparent_background"
+      label: "透明正文背景"
+      value: "false"
+      onValue: "true"
+      offValue: "false"
+      help: "去掉正文卡片的底色与阴影，适合导航、作品与自定义排版页面"
+
+---
+apiVersion: v1alpha1
+kind: AnnotationSetting
+metadata:
+  generateName: annotation-setting-
+spec:
+  targetRef:
+    group: content.halo.run
+    kind: Post
+  formSchema:
+    - $formkit: "switch"
+      name: "disable_sidebar"
+      label: "关闭侧边栏"
+      value: "false"
+      onValue: "true"
+      offValue: "false"
+      help: "仅关闭当前文章的侧边栏，正文自动铺满"
+    - $formkit: "switch"
+      name: "disable_donate"
+      label: "关闭打赏"
+      value: "false"
+      onValue: "true"
+      offValue: "false"
+      help: "隐藏当前文章底部和悬浮操作栏中的打赏入口"
+    - $formkit: "switch"
+      name: "disable_copyright"
+      label: "关闭版权声明"
+      value: "false"
+      onValue: "true"
+      offValue: "false"
+      help: "隐藏当前文章正文下方的版权声明"
+
+---
+apiVersion: v1alpha1
+kind: AnnotationSetting
+metadata:
+  generateName: annotation-setting-
+spec:
+  targetRef:
     group: core.halo.run
     kind: LinkGroup
   formSchema:

@@ -8,7 +8,7 @@ import { $ } from "../core/dom";
 import { escapeHtml } from "../core/html";
 import { iconHtml } from "../core/icons";
 import { readHistory } from "./visitor";
-import { relativeTime } from "./console-content";
+import { relativeTime } from "../core/time";
 
 const DISMISS_KEY = "joe-next:resume-dismissed";
 

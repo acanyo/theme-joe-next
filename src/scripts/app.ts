@@ -27,7 +27,10 @@ import { initMusic, refreshMusic } from "./features/music";
 import { cleanExcerpts } from "./content/excerpt";
 import { renderCommentPreviews } from "./content/comment-preview";
 import { hideReadBadges } from "./features/freshness";
-import { initCommenterCards } from "./features/commenters";
+import { loadCommenters } from "./features/commenters";
+import { initCommenterCards } from "./features/commenter-card";
+import { fillCommentAvatars } from "./features/comment-avatars";
+import { initBookmarks } from "./features/bookmarks";
 import {
   initCommentAnchors,
   refreshCommentAnchors,
@@ -48,9 +51,12 @@ function initShell(): void {
 async function initPage(): Promise<void> {
   renderCommentPreviews();
   cleanExcerpts();
+  fillCommentAvatars();
   fillEmptyImages();
   hideReadBadges();
+  loadCommenters();
   initCommenterCards();
+  initBookmarks();
   initNavChapter();
   refreshNavigation();
   refreshColorMode();

@@ -1,0 +1,54 @@
+/* 收藏入口在正文下方与悬浮栏共用，状态由 aria-pressed 表达。 */
+.joe_bookmark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+  cursor: pointer;
+
+  &[aria-pressed="true"] {
+    color: var(--theme-text);
+    background: var(--tint);
+
+    svg {
+      fill: color-mix(in srgb, var(--theme) 25%, transparent);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--theme);
+    outline-offset: 3px;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.aside_operations .post-operate-bookmark > .joe_bookmark {
+  display: grid;
+  padding: 0;
+
+  &[aria-pressed="true"] {
+    color: var(--theme-text);
+    background: var(--tint);
+  }
+}
+
+@media (max-width: 500px) {
+  .joe_detail__operate {
+    flex-wrap: wrap;
+  }
+
+  .joe_detail__operate-actions {
+    flex-wrap: wrap;
+  }
+}

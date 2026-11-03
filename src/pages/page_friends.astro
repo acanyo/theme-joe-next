@@ -10,8 +10,10 @@
  * - 发布时间由 pages/friends.ts 换成相对时间。
  */
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Aside from "../components/aside/Aside.astro";
+import PageAside from "../components/aside/PageAside.astro";
 import Icon from "../components/common/Icon.astro";
+import { PAGE_TITLE_VISIBLE } from "../config/content-options";
+import { el } from "../config/expressions";
 import "../styles/pages/friends.css";
 
 const PAGE_SIZE = 20;
@@ -33,6 +35,7 @@ const NO_TITLE = "#strings.isEmpty(item.title) or #strings.contains(item.title, 
     >
       <h1
         class="joe_detail__title txt-shadow"
+        th:if={el(PAGE_TITLE_VISIBLE)}
         th:text="${theme.config.pages.feed_title ?: '朋友圈'}"
       ></h1>
       <a
@@ -150,7 +153,5 @@ const NO_TITLE = "#strings.isEmpty(item.title) or #strings.contains(item.title, 
       </p>
     </div>
   </div>
-  <th-block th:if="${theme.config.aside.on_friends}">
-    <Aside />
-  </th-block>
+  <PageAside setting="on_friends" />
 </BaseLayout>

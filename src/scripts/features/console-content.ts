@@ -7,21 +7,9 @@
  */
 import { $, $$ } from "../core/dom";
 import { escapeHtml } from "../core/html";
+import { relativeTime } from "../core/time";
 import { commentIdentity, readHistory } from "./visitor";
-
-/** 「3 天前」「刚刚」；超过 30 天显示日期 */
-export function relativeTime(date: Date, now = Date.now()): string {
-  const diff = Math.max(0, now - date.getTime());
-  const min = 60_000, hour = 60 * min, day = 24 * hour;
-  if (diff < min) return "刚刚";
-  if (diff < hour) return `${Math.floor(diff / min)} 分钟前`;
-  if (diff < day) return `${Math.floor(diff / hour)} 小时前`;
-  if (diff < 2 * day) return "昨天";
-  if (diff < 30 * day) return `${Math.floor(diff / day)} 天前`;
-  const y = date.getFullYear(), m = date.getMonth() + 1, d = date.getDate();
-  const sameYear = new Date(now).getFullYear() === y;
-  return `${sameYear ? "" : `${y}-`}${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-}
+import { renderBookmarks } from "./bookmarks";
 
 /** 今年已过去的比例 */
 export function yearProgress(now = new Date()): number {
@@ -226,4 +214,5 @@ export function renderConsoleContent(root: HTMLElement): void {
 /** 每次打开时刷新与浏览状态相关的部分 */
 export function refreshConsoleContent(root: HTMLElement): void {
   renderHistory(root);
+  renderBookmarks(root);
 }

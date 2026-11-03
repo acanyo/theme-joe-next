@@ -133,6 +133,10 @@ const ISO = (expr: string) => `#dates.format(${expr}, 'yyyy-MM-dd''T''HH:mm:ssXX
 
         <section class="joe_cc__page" data-console-view="me" aria-label="我的足迹" hidden>
           <div class="joe_cc__resume" data-console-resume hidden></div>
+          <h3 class="joe_cc__label" data-bookmarks-heading tabindex="-1">收藏与稍后阅读<span data-bookmarks-count></span></h3>
+          <ol class="joe_cc__bookmarks" data-console-bookmarks></ol>
+          <p class="joe_cc__empty" data-console-bookmarks-empty>点击文章中的「收藏」，把想读的文章留在这里</p>
+          <p class="joe_cc__saved-note">收藏保存在当前浏览器中</p>
           <h3 class="joe_cc__label">我的评论</h3>
           <ol class="joe_cc__feed" data-console-mine></ol>
           <p class="joe_cc__empty" data-console-mine-empty hidden>
