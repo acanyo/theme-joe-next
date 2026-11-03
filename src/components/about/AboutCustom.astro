@@ -1,0 +1,45 @@
+---
+/** 可重复添加的自由内容卡，正文保持纯文本，链接遵守统一白名单。 */
+import Icon from "../common/Icon.astro";
+import { aboutLinkAllowed } from "../../config/about-links";
+import { el } from "../../config/expressions";
+import { responsiveImage } from "../../config/images";
+---
+
+<section
+  class="joe_about__custom"
+  th:aria-label="${aboutModule.title ?: '更多关于我'}"
+>
+  <img
+    class="joe_about__custom-image"
+    loading="lazy"
+    th:if="${not #strings.isEmpty(aboutModule.image)}"
+    {...responsiveImage("aboutModule.image", "(max-width: 768px) 90vw, 600px", [
+      "s",
+      "m",
+    ])}
+    alt=""
+    data-fallback="image"
+  />
+  <div class="joe_about__section-heading">
+    <span
+      class="joe_about__eyebrow"
+      th:unless="${#strings.isEmpty(aboutModule.subtitle)}"
+      th:text="${aboutModule.subtitle}"
+    ></span>
+    <h2 th:text="${aboutModule.title ?: '更多关于我'}"></h2>
+  </div>
+  <p
+    class="joe_about__custom-text"
+    th:unless="${#strings.isEmpty(aboutModule.text)}"
+    th:text="${aboutModule.text}"
+  ></p>
+  <a
+    class="joe_about__custom-button"
+    th:if={el(aboutLinkAllowed("aboutModule.url"))}
+    th:href="${aboutModule.url}"
+  >
+    <span th:text="${aboutModule.button ?: '了解更多'}"></span>
+    <Icon name="external" />
+  </a>
+</section>

@@ -1,0 +1,32 @@
+---
+import SocialLinks from "../../blogger/SocialLinks.astro";
+import AboutModules from "../AboutModules.astro";
+import AboutStats from "../AboutStats.astro";
+---
+
+<div class="joe_author__profile">
+  <section class="joe_author__bio" aria-labelledby="author-bio-title">
+    <h2 id="author-bio-title">简述</h2>
+    <p th:text="${theme.config.about?.profile_bio ?: (theme.config.about?.intro ?: theme.config.blogger.motto)}"></p>
+    <SocialLinks enabled="true" labels />
+  </section>
+  <div class="joe_author__facts">
+    <section
+      th:each="group : ${theme.config.about?.facts}"
+      th:unless="${#lists.isEmpty(group.items)}"
+    >
+      <h2 th:text="${group.title}"></h2>
+      <dl>
+        <div th:each="fact : ${group.items}">
+          <dt th:text="${fact.label}"></dt>
+          <dd th:text="${fact.value}"></dd>
+        </div>
+      </dl>
+    </section>
+    <section class="joe_author__numbers" th:if="${theme.config.about?.stats}">
+      <h2>在这里</h2>
+      <AboutStats />
+    </section>
+  </div>
+  <AboutModules />
+</div>

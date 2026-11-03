@@ -6,11 +6,18 @@
 import { SOCIAL_PLATFORMS } from "../../data/social-platforms";
 import { iconSvg } from "../../config/icons";
 import ConfiguredIcon from "../ConfiguredIcon.astro";
+
+interface Props {
+  enabled?: string;
+  labels?: boolean;
+}
+
+const { enabled = "theme.config.blogger.social", labels = false } = Astro.props;
 ---
 
 <div
   class="social-account"
-  th:if="${theme.config.blogger.social and (not #lists.isEmpty(theme.config.blogger.social_links) or not #lists.isEmpty(theme.config.blogger.social_custom))}"
+  th:if={`\${(${enabled}) and ((theme.config.blogger.social_source != 'custom' and not #lists.isEmpty(theme.config.blogger.social_links)) or (theme.config.blogger.social_source == 'custom' and not #lists.isEmpty(theme.config.blogger.social_custom)))}`}
 >
   <th-block
     th:if="${theme.config.blogger.social_source != 'custom'}"
@@ -27,8 +34,10 @@ import ConfiguredIcon from "../ConfiguredIcon.astro";
           aria-label={platform.title}
           rel="noopener noreferrer nofollow"
           style={`--brand: ${platform.color}`}
-          set:html={iconSvg(platform.name)}
-        />
+        >
+          <Fragment set:html={iconSvg(platform.name)} />
+          {labels && <span class="social-label">{platform.title}</span>}
+        </a>
       ))}
     </th-block>
   </th-block>
@@ -43,6 +52,7 @@ import ConfiguredIcon from "../ConfiguredIcon.astro";
       rel="noopener noreferrer nofollow"
     >
       <ConfiguredIcon value="social.icon" />
+      {labels && <span class="social-label" th:text="${social.name}"></span>}
     </a>
   </th-block>
 </div>

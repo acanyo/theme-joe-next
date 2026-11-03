@@ -29,6 +29,7 @@ import { renderCommentPreviews } from "./content/comment-preview";
 import { hideReadBadges } from "./features/freshness";
 import { loadCommenters } from "./features/commenters";
 import { initCommenterCards } from "./features/commenter-card";
+import { initCommentColors } from "./features/comment-colors";
 import { fillCommentAvatars } from "./features/comment-avatars";
 import { initBookmarks } from "./features/bookmarks";
 import {
@@ -40,6 +41,7 @@ import "iconify-icon";
 function initShell(): void {
   initCommentAnchors();
   initColorMode();
+  initCommentColors();
   initNavigation();
   initFooter();
   initContextMenu();

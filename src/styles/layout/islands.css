@@ -586,6 +586,8 @@
 /* 大图上的一级导航保持白字；下拉面板始终使用自己的明暗配色。 */
 .joe_header--islands:has(+ #swup .evan-big-banner) .joe_header__above.is-top,
 .joe_header--islands:has(+ #swup .joe_post_hero.has-cover)
+  .joe_header__above.is-top,
+.joe_header:has(+ #swup .joe_about[data-style="author"])
   .joe_header__above.is-top {
   .joe_header_container {
     background: transparent;

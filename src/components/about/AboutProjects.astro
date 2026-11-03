@@ -1,0 +1,113 @@
+---
+/** 精选作品：有地址时整张卡片可点，未填地址时保持普通展示。 */
+import Icon from "../common/Icon.astro";
+import { responsiveImage } from "../../config/images";
+
+const VALID_LINK =
+  "not #strings.isEmpty(project.url) and (project.url.matches('^https?://[^\\s]+$') or (project.url.startsWith('/') and !project.url.startsWith('//')))";
+---
+
+<section
+  class="joe_about__projects"
+  id="about-projects"
+  aria-labelledby="about-projects-title"
+  th:unless="${#lists.isEmpty(theme.config.about?.projects)}"
+>
+  <div class="joe_about__section-heading">
+    <span
+      class="joe_about__eyebrow"
+      th:text="${aboutModule.subtitle ?: '开发与开源'}"
+    ></span>
+    <h2
+      id="about-projects-title"
+      th:text="${aboutModule.title ?: '把想法，做成作品'}"
+    ></h2>
+    <p>做过的、在维护的，还有慢慢完善中的。</p>
+  </div>
+  <div
+    class="joe_about__project-filters"
+    role="group"
+    aria-label="筛选作品"
+    data-about-project-filters
+    hidden
+  ></div>
+  <p
+    class="joe_about__filter-status"
+    aria-live="polite"
+    data-about-project-status
+  ></p>
+  <div class="joe_about__project-grid">
+    <th-block
+      th:each="project : ${theme.config.about?.projects}"
+      th:with={`projectLinked = \${${VALID_LINK}}`}
+    >
+      <article
+        class="joe_about__project"
+        th:classappend="${not #strings.isEmpty(project.cover) ? 'has-cover' : ''}"
+        th:attr="data-project-category=${project.category ?: ''}"
+      >
+        <div
+          class="joe_about__project-cover"
+          th:unless="${#strings.isEmpty(project.cover)}"
+        >
+          <img
+            loading="lazy"
+            {...responsiveImage(
+              "project.cover",
+              "(max-width: 768px) 90vw, 460px",
+              ["s", "m"],
+            )}
+            th:alt="${project.name}"
+            data-fallback="image"
+          />
+        </div>
+        <div
+          class="joe_about__project-art"
+          aria-hidden="true"
+          th:if="${#strings.isEmpty(project.cover)}"
+        >
+          <span class="joe_about__project-art-icon">
+            <Icon name="console" />
+          </span>
+          <span
+            class="joe_about__project-art-name"
+            th:text="${project.name}"
+          ></span>
+          <span
+            class="joe_about__project-art-label"
+            th:text="${project.category ?: '作品'}"
+          ></span>
+        </div>
+        <div class="joe_about__project-content">
+          <p
+            class="joe_about__project-category"
+            th:unless="${#strings.isEmpty(project.category)}"
+            th:text="${project.category}"
+          ></p>
+          <h3>
+            <a
+              th:if="${projectLinked}"
+              th:href="${project.url}"
+              th:target="${project.url.startsWith('http') ? '_blank' : '_self'}"
+              rel="noopener noreferrer"
+              th:text="${project.name}"
+            ></a>
+            <span th:unless="${projectLinked}" th:text="${project.name}"></span>
+          </h3>
+          <p
+            class="joe_about__project-description"
+            th:unless="${#strings.isEmpty(project.description)}"
+            th:text="${project.description}"
+          ></p>
+          <span
+            class="joe_about__project-arrow"
+            th:if="${projectLinked}"
+            aria-hidden="true"
+          >
+            <Icon name="external" />
+          </span>
+        </div>
+      </article>
+    </th-block>
+  </div>
+</section>

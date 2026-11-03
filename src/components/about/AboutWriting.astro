@@ -1,0 +1,42 @@
+---
+/** 展示最近公开发布的文章，跟随站点内容自动更新。 */
+import Icon from "../common/Icon.astro";
+---
+
+<th-block
+  th:if="${theme.config.about?.writing != false}"
+  th:with="aboutPosts = ${postFinder.list({page: 1, size: 3, sort: {'spec.publishTime,desc', 'metadata.creationTimestamp,asc'}}).items}"
+>
+  <section
+    class="joe_about__writing"
+    aria-labelledby="about-writing-title"
+    th:unless="${#lists.isEmpty(aboutPosts)}"
+  >
+    <div class="joe_about__section-heading">
+      <a class="joe_about__eyebrow" href="/archives">
+        全部文章 <Icon name="external" />
+      </a>
+      <h2
+        id="about-writing-title"
+        th:text="${aboutModule.title ?: '写下来的，都是日常'}"
+      ></h2>
+    </div>
+    <ul class="joe_about__writing-list">
+      <li th:each="note : ${aboutPosts}" data-about-note>
+        <a th:href="@{${note.status.permalink}}">
+          <span class="joe_about__note-icon" aria-hidden="true">
+            <Icon name="feather" />
+          </span>
+          <span class="joe_about__note-body">
+            <time
+              th:datetime="${note.spec.publishTime}"
+              th:text="${#temporals.format(note.spec.publishTime, 'yyyy.MM.dd')}"
+            ></time>
+            <h3 th:text="${note.spec.title}"></h3>
+          </span>
+          <Icon name="external" />
+        </a>
+      </li>
+    </ul>
+  </section>
+</th-block>

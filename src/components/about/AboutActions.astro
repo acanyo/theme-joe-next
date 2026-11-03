@@ -1,0 +1,35 @@
+---
+/** 两种关于页首屏共用主、副按钮的配置和链接校验。 */
+import Icon from "../common/Icon.astro";
+import { el } from "../../config/expressions";
+import { aboutLinkAllowed } from "../../config/about-links";
+---
+
+<div class="joe_about__actions" data-about-intro>
+  <a
+    class="joe_about__button"
+    th:if={el(
+      "theme.config.about?.primary and " +
+        aboutLinkAllowed(
+          "theme.config.about?.primary_url ?: '#about-projects'",
+        ),
+    )}
+    th:href="${theme.config.about?.primary_url ?: '#about-projects'}"
+  >
+    <span th:text="${theme.config.about?.primary_label ?: '我的作品'}"></span>
+    <Icon name="external" />
+  </a>
+  <a
+    class="joe_about__text-link"
+    th:if={el(
+      "theme.config.about?.secondary and " +
+        aboutLinkAllowed(
+          "theme.config.about?.secondary_url ?: '#about-contact'",
+        ),
+    )}
+    th:href="${theme.config.about?.secondary_url ?: '#about-contact'}"
+  >
+    <span th:text="${theme.config.about?.secondary_label ?: '联系我'}"></span>
+    <Icon name="chevron-right" />
+  </a>
+</div>

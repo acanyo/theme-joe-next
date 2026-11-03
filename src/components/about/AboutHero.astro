@@ -1,0 +1,153 @@
+---
+import Icon from "../common/Icon.astro";
+import AboutStats from "./AboutStats.astro";
+import AboutActions from "./AboutActions.astro";
+import { el } from "../../config/expressions";
+import { PAGE_TITLE_VISIBLE } from "../../config/content-options";
+import { responsiveImage } from "../../config/images";
+const NAME =
+  "theme.config.about?.profile_name ?: (theme.config.blogger.name ?: (singlePage.owner?.displayName ?: site.title))";
+const AVATAR =
+  "theme.config.about?.profile_avatar ?: (theme.config.blogger.avatar ?: (singlePage.owner?.avatar ?: theme.config.blogger.fallback_avatar))";
+const INTRO =
+  "theme.config.about?.intro ?: (singlePage.status.excerpt ?: theme.config.blogger.motto)";
+---
+
+<header
+  class="joe_about__hero"
+  th:with={`aboutName = ${el(NAME)}, aboutRoles = ${el("theme.config.about?.roles")}`}
+>
+  <div class="joe_about__hello" data-about-hero-card>
+    <img
+      class="joe_about__hero-background"
+      th:if="${not #strings.isEmpty(theme.config.about?.hero_background)}"
+      th:src="${theme.config.about?.hero_background}"
+      alt=""
+      aria-hidden="true"
+    />
+    <div
+      class="joe_about__hero-orb joe_about__hero-orb--one"
+      aria-hidden="true"
+      data-about-orb
+    ></div>
+    <div
+      class="joe_about__hero-orb joe_about__hero-orb--two"
+      aria-hidden="true"
+      data-about-orb
+    ></div>
+    <p class="joe_about__eyebrow" data-about-intro>
+      <Icon name="fresh-new" />
+      <span th:text="${theme.config.about?.eyebrow ?: '关于我'}"></span>
+    </p>
+    <p class="joe_about__greeting" data-about-intro>
+      你好，我是 <strong th:text="${aboutName}"></strong>
+      <span class="joe_about__wave" aria-hidden="true">
+        👋
+      </span>
+    </p>
+    <h1
+      class="joe_about__title"
+      data-about-headline
+      th:if={el(PAGE_TITLE_VISIBLE)}
+      th:text="${theme.config.about?.headline ?: '把想法，慢慢做成作品。'}"
+    ></h1>
+    <p
+      class="joe_about__intro"
+      data-about-intro
+      th:unless={`\${#strings.isEmpty(${INTRO})}`}
+      th:text={el(INTRO)}
+    ></p>
+    <div
+      class="joe_about__roles"
+      data-about-intro
+      th:unless="${#strings.isEmpty(aboutRoles)}"
+    >
+      <span class="joe_about__role-symbol" aria-hidden="true">
+        ✳
+      </span>
+      <div class="joe_about__role-window">
+        <ul data-about-roles>
+          <li
+            th:each="role : ${(aboutRoles ?: '').split('[,，]')}"
+            th:text="${#strings.trim(role)}"
+          ></li>
+        </ul>
+      </div>
+    </div>
+    <AboutActions />
+  </div>
+  <div class="joe_about__stage" data-about-stage>
+    <p class="joe_about__profile-status">
+      <span class="joe_about__status-dot" aria-hidden="true"></span>
+      <span th:text="${theme.config.about?.status_text ?: '持续折腾中'}"></span>
+    </p>
+    <div class="joe_about__stage-inner" data-about-stage-inner>
+      <div
+        class="joe_about__orbit joe_about__orbit--outer"
+        data-about-orbit
+        aria-hidden="true"
+      ></div>
+      <div
+        class="joe_about__orbit joe_about__orbit--inner"
+        aria-hidden="true"
+      ></div>
+      <div class="joe_about__avatar-float" data-about-avatar-float>
+        <button
+          type="button"
+          class="joe_about__avatar-button"
+          data-about-greet
+          aria-label="打个招呼"
+          title="点击头像，打个招呼"
+        >
+          <img
+            class="joe_about__avatar"
+            width="164"
+            height="164"
+            {...responsiveImage(AVATAR, "180px", ["s"])}
+            th:alt="${aboutName}"
+            th:attr="data-text-avatar=${aboutName}"
+            data-fallback="avatar"
+          />
+          <span class="joe_about__avatar-badge" aria-hidden="true">
+            ✦
+          </span>
+        </button>
+      </div>
+      <ul
+        class="joe_about__tags"
+        aria-label="我的关键词"
+        th:unless="${#strings.isEmpty(theme.config.about?.tags)}"
+      >
+        <li
+          th:each="tag, stat : ${(theme.config.about?.tags ?: '').split('[,，]')}"
+          th:if="${stat.index < 6 and not #strings.isEmpty(#strings.trim(tag))}"
+          data-about-tag
+        >
+          <span th:text="${#strings.trim(tag)}"></span>
+        </li>
+      </ul>
+      <span class="joe_about__spark joe_about__spark--one" aria-hidden="true">
+        ✳
+      </span>
+      <span class="joe_about__spark joe_about__spark--two" aria-hidden="true">
+        ✦
+      </span>
+    </div>
+    <p
+      class="joe_about__stage-note"
+      th:text="${theme.config.about?.profile_caption ?: theme.config.blogger.motto}"
+    ></p>
+    <p class="joe_about__stage-hint">
+      戳戳头像，打个招呼 <span aria-hidden="true">↗</span>
+    </p>
+    <span
+      class="joe_about__greet-message"
+      data-about-greet-message
+      role="status"
+      aria-live="polite"
+      hidden
+      th:text="${theme.config.about?.greeting_message ?: '你好呀，很高兴认识你！'}"
+    ></span>
+  </div>
+  <AboutStats />
+</header>

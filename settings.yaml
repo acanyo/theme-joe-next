@@ -2741,6 +2741,808 @@ spec:
           value: null
           language: html
           help: HTML，显示在收款码下方
+    - group: about
+      label: 关于我
+      formSchema:
+        - $el: p
+          children: 新建或编辑页面时选择「关于我」模板。昵称、头像和社交账号沿用「博主卡片」配置，故事正文直接在页面编辑器中填写。建议在页面扩展设置中关闭侧边栏。
+        - $formkit: textarea
+          name: headline
+          id: headline
+          key: headline
+          label: 开场标题
+          value: 把想法，慢慢做成作品。
+          help: 支持换行；页面扩展中的「隐藏页面标题」也会隐藏这段标题
+        - $formkit: textarea
+          name: intro
+          id: intro
+          key: intro
+          label: 一句话介绍
+          value: ""
+          help: 留空使用当前页面的摘要，再回退到博主签名
+        - $formkit: text
+          name: tags
+          id: tags
+          key: tags
+          label: 我的关键词
+          value: ""
+          help: 使用逗号分隔，例如「开发,开源,摄影」；头像旁最多显示 6 个，留空不显示
+        - $formkit: text
+          name: eyebrow
+          id: eyebrow
+          key: eyebrow
+          label: 开场小标题
+          value: 关于我
+        - $formkit: text
+          name: profile_name
+          id: profile_name
+          key: profile_name
+          label: 关于页昵称
+          value: ""
+          help: 留空沿用博主卡片昵称
+        - $formkit: attachment
+          name: profile_avatar
+          id: profile_avatar
+          key: profile_avatar
+          label: 关于页头像
+          value: ""
+          accepts:
+            - image/*
+          help: 留空沿用博主卡片或页面作者头像
+        - $formkit: text
+          name: status_text
+          id: status_text
+          key: status_text
+          label: 个人状态
+          value: 持续折腾中
+        - $formkit: text
+          name: roles
+          id: roles
+          key: roles
+          label: 轮换短句
+          value: 写一点代码,做一些作品,记录普通日常
+          help: 使用逗号分隔，开启动画时依次轮换
+        - $formkit: text
+          name: profile_caption
+          id: profile_caption
+          key: profile_caption
+          label: 头像下方签名
+          value: 喜欢折腾，也认真生活。
+        - $formkit: text
+          name: greeting_message
+          id: greeting_message
+          key: greeting_message
+          label: 点击头像的招呼语
+          value: 你好呀，很高兴认识你！
+        - $formkit: attachment
+          name: hero_background
+          id: hero_background
+          key: hero_background
+          label: 开场背景图
+          value: ""
+          accepts:
+            - image/*
+          help: 可选；留空使用所选配色
+        - $formkit: text
+          name: primary_label
+          id: primary_label
+          key: primary_label
+          label: 主按钮文字
+          value: 我的作品
+        - $formkit: text
+          name: primary_url
+          id: primary_url
+          key: primary_url
+          label: 主按钮地址
+          value: "#about-projects"
+          help: "支持 http(s)、站内路径或 # 锚点"
+        - $formkit: text
+          name: secondary_label
+          id: secondary_label
+          key: secondary_label
+          label: 次按钮文字
+          value: 联系我
+        - $formkit: text
+          name: secondary_url
+          id: secondary_url
+          key: secondary_url
+          label: 次按钮地址
+          value: "#about-contact"
+          help: "支持 http(s)、站内路径或 # 锚点"
+        - $formkit: switch
+          name: primary
+          id: primary
+          key: primary
+          label: 显示主按钮
+          value: true
+        - $formkit: switch
+          name: secondary
+          id: secondary
+          key: secondary
+          label: 显示次按钮
+          value: true
+        - $formkit: switch
+          name: stats
+          id: stats
+          key: stats
+          label: 展示站点记录
+          value: true
+          help: 在开场下方显示实际的文章、分类与标签数量
+        - $formkit: array
+          name: toolkit
+          id: toolkit
+          key: toolkit
+          label: 常用工具
+          value: []
+          max: 4
+          itemLabels:
+            - type: text
+              label: $value.title
+          children:
+            - $formkit: text
+              name: title
+              id: title
+              key: title
+              label: 分组名称
+              validation: required
+              help: 例如「前端与界面」「后端与工具」
+            - $formkit: iconify
+              name: icon
+              id: toolkit_group_icon
+              key: toolkit_group_icon
+              label: 分组图标
+              format: name
+              value-only: false
+              value:
+                value: lucide:layout-dashboard
+                name: lucide:layout-dashboard
+                color: ""
+            - $formkit: array
+              name: tools
+              id: toolkit_tools
+              key: toolkit_tools
+              label: 工具列表
+              value: []
+              max: 10
+              help: 逐项添加工具，每个工具可单独选择图标和颜色
+              itemLabels:
+                - type: text
+                  label: $value.name
+              children:
+                - $formkit: text
+                  name: name
+                  id: toolkit_tool_name
+                  key: toolkit_tool_name
+                  label: 工具名称
+                  value: ""
+                  validation: required
+                - $formkit: iconify
+                  name: icon
+                  id: toolkit_tool_icon
+                  key: toolkit_tool_icon
+                  label: 工具图标
+                  format: name
+                  value-only: false
+                  value: ""
+                  help: 自选图标优先；未选择时按工具名称匹配默认图标
+            - $formkit: hidden
+              name: items
+              id: toolkit_legacy_items
+              key: toolkit_legacy_items
+              value: ""
+        - $formkit: array
+          name: focus
+          id: focus
+          key: focus
+          label: 最近在忙什么
+          value: []
+          max: 4
+          itemLabels:
+            - type: text
+              label: $value.title
+          children:
+            - $formkit: text
+              name: title
+              id: title
+              key: title
+              label: 标题
+              validation: required
+            - $formkit: textarea
+              name: description
+              id: description
+              key: description
+              label: 简短说明
+              value: ""
+        - $formkit: array
+          name: projects
+          id: projects
+          key: projects
+          label: 精选作品
+          value: []
+          max: 8
+          itemLabels:
+            - type: text
+              label: $value.name
+          children:
+            - $formkit: text
+              name: name
+              id: name
+              key: name
+              label: 作品名称
+              validation: required
+            - $formkit: text
+              name: category
+              id: category
+              key: category
+              label: 类型或技术
+              value: ""
+              help: 例如「Halo 主题」或「Vue · TypeScript」
+            - $formkit: textarea
+              name: description
+              id: description
+              key: description
+              label: 作品介绍
+              value: ""
+            - $formkit: text
+              name: url
+              id: url
+              key: url
+              label: 访问地址
+              value: ""
+              help: 完整的 http(s) 地址或 / 开头的站内路径；留空只展示，不跳转
+            - $formkit: attachment
+              name: cover
+              id: cover
+              key: cover
+              label: 作品封面
+              value: ""
+              accepts:
+                - image/*
+        - $formkit: array
+          name: interests
+          id: interests
+          key: interests
+          label: 生活的另一面
+          value: []
+          max: 6
+          itemLabels:
+            - type: text
+              label: $value.title
+          children:
+            - $formkit: iconify
+              name: symbol
+              id: symbol
+              key: symbol
+              label: 小图案
+              format: name
+              value-only: false
+              value:
+                value: lucide:sparkles
+                name: lucide:sparkles
+                color: ""
+              help: 从 Iconify 选择图标，可搜索图标并调整颜色
+            - $formkit: text
+              name: title
+              id: title
+              key: title
+              label: 兴趣名称
+              validation: required
+            - $formkit: textarea
+              name: description
+              id: description
+              key: description
+              label: 一句话说明
+              value: ""
+        - $formkit: switch
+          name: writing
+          id: writing
+          key: writing
+          label: 展示最近的文字
+          value: true
+          help: 自动展示最近公开发布的三篇文章，无文章时不显示
+        - $formkit: attachment
+          name: hero_foreground
+          id: hero_foreground
+          key: hero_foreground
+          label: 主视觉前景人物
+          value: ""
+          accepts:
+            - image/*
+          help: 可选的透明人物图片，与开场背景图分层显示；留空只展示背景照片
+        - $formkit: text
+          name: hero_word
+          id: hero_word
+          key: hero_word
+          label: 主视觉背景文字
+          value: ""
+          help: 例如昵称或域名，留空使用关于页昵称；建议使用简短英文
+        - $formkit: textarea
+          name: profile_bio
+          id: profile_bio
+          key: profile_bio
+          label: 资料页简介
+          value: ""
+          help: 写真实的个人介绍；留空沿用一句话介绍或博主签名
+        - $formkit: array
+          name: facts
+          id: facts
+          key: facts
+          label: 个人资料分组
+          value: []
+          max: 6
+          itemLabels:
+            - type: text
+              label: $value.title
+          children:
+            - $formkit: text
+              name: title
+              id: title
+              key: title
+              label: 分组名称
+              value: ""
+              validation: required
+            - $formkit: array
+              name: items
+              id: items
+              key: items
+              label: 资料项
+              value: []
+              max: 6
+              itemLabels:
+                - type: text
+                  label: $value.label
+                - type: text
+                  label: $value.value
+              children:
+                - $formkit: text
+                  name: label
+                  id: label
+                  key: label
+                  label: 名称
+                  value: ""
+                  validation: required
+                - $formkit: text
+                  name: value
+                  id: value
+                  key: value
+                  label: 内容
+                  value: ""
+                  validation: required
+    - group: aboutdesign
+      label: 关于页设计
+      formSchema:
+        - $el: p
+          children: 仅影响关于页。模块可拖动排序、设置宽度、配色、标题或关闭；内置模块每种展示一次，自由内容卡可重复添加。
+        - $formkit: select
+          name: author_tab
+          if: $get(style).value === 'author'
+          id: author_tab
+          key: author_tab
+          label: 作者页默认内容
+          value: profile
+          options:
+            - value: profile
+              label: 个人资料
+            - value: activity
+              label: 站内动态
+        - $formkit: number
+          name: hero_height
+          if: $get(style).value === 'author'
+          id: hero_height
+          key: hero_height
+          label: 作者页首屏高度
+          value: 100
+          min: 45
+          max: 100
+          help: 占视口高度的百分比，100 为全屏，手机同步适配
+        - $formkit: number
+          name: photo_position
+          if: $get(style).value === 'author'
+          id: photo_position
+          key: photo_position
+          label: 照片横向焦点
+          value: 65
+          min: 0
+          max: 100
+          help: 0 靠左、50 居中、100 靠右
+        - $formkit: number
+          name: photo_shade
+          if: $get(style).value === 'author'
+          id: photo_shade
+          key: photo_shade
+          label: 照片暗部遮罩
+          value: 35
+          min: 0
+          max: 80
+          help: 百分比；根据照片明暗调整文字可读性
+        - $formkit: select
+          name: style
+          id: style
+          key: style
+          label: 整体风格
+          value: author
+          options:
+            - value: author
+              label: 影像作者页
+            - value: colorful
+              label: 彩色卡片
+            - value: theme
+              label: 跟随 Joe 主题配色
+        - $formkit: select
+          name: hero_palette
+          if: $get(style).value !== 'author'
+          id: hero_palette
+          key: hero_palette
+          label: 开场配色
+          value: indigo
+          options:
+            - value: indigo
+              label: 鸢尾紫
+            - value: blue
+              label: 海盐蓝
+            - value: rose
+              label: 莓果粉
+            - value: dark
+              label: 深空黑
+            - value: theme
+              label: 跟随主题色
+        - $formkit: color
+          name: hero_color
+          if: $get(style).value !== 'author'
+          id: hero_color
+          key: hero_color
+          label: 自定义开场背景色
+          value: ""
+          help: 留空沿用开场配色
+        - $formkit: color
+          name: hero_ink
+          if: $get(style).value !== 'author'
+          id: hero_ink
+          key: hero_ink
+          label: 自定义开场文字色
+          value: ""
+          help: 留空沿用开场配色
+        - $formkit: color
+          name: profile_color
+          if: $get(style).value !== 'author'
+          id: profile_color
+          key: profile_color
+          label: 自定义头像卡背景色
+          value: ""
+          help: 留空沿用开场配色
+        - $formkit: select
+          name: avatar_shape
+          if: $get(style).value !== 'author'
+          id: avatar_shape
+          key: avatar_shape
+          label: 头像形状
+          value: rounded
+          options:
+            - value: circle
+              label: 圆形
+            - value: rounded
+              label: 大圆角
+            - value: square
+              label: 小圆角
+        - $formkit: number
+          name: avatar_size
+          if: $get(style).value !== 'author'
+          id: avatar_size
+          key: avatar_size
+          label: 头像大小
+          value: 164
+          min: 96
+          max: 220
+          help: 单位 px，手机端自动缩放
+        - $formkit: number
+          name: radius
+          id: radius
+          key: radius
+          label: 卡片圆角
+          value: 22
+          min: 0
+          max: 40
+        - $formkit: number
+          name: gap
+          id: gap
+          key: gap
+          label: 卡片间距
+          value: 18
+          min: 8
+          max: 40
+        - $formkit: number
+          name: title_size
+          id: title_size
+          key: title_size
+          label: 开场标题大小
+          value: 50
+          min: 28
+          max: 72
+        - $formkit: select
+          name: toolkit_layout
+          if: $get(style).value !== 'author'
+          id: toolkit_layout
+          key: toolkit_layout
+          label: 技能展示方式
+          value: tiles
+          options:
+            - value: tiles
+              label: 彩色图标方块
+            - value: compact
+              label: 紧凑标签
+        - $formkit: select
+          name: project_columns
+          if: $get(style).value !== 'author'
+          id: project_columns
+          key: project_columns
+          label: 作品列数
+          value: "3"
+          options:
+            - value: "2"
+              label: 两列
+            - value: "3"
+              label: 三列
+        - $formkit: select
+          name: motion_mode
+          id: motion_mode
+          key: motion_mode
+          label: 动效强度
+          value: lively
+          options:
+            - value: lively
+              label: 活泼，明显的弹性与位移
+            - value: soft
+              label: 轻柔，较小的位移
+            - value: "off"
+              label: 关闭动效
+        - $formkit: number
+          name: motion_speed
+          id: motion_speed
+          key: motion_speed
+          label: 动效速度
+          value: 1
+          min: 0.5
+          max: 2
+          step: 0.1
+          help: 1 为标准速度，数值越大播放越快
+        - $formkit: switch
+          name: entrance
+          id: entrance
+          key: entrance
+          label: 内容入场（卡片风格含拆字）
+          value: true
+        - $formkit: switch
+          name: hover
+          id: hover
+          key: hover
+          label: 鼠标跟随、卡片倾斜与高光
+          value: true
+        - $formkit: switch
+          name: ambient
+          if: $get(style).value !== 'author'
+          id: ambient
+          key: ambient
+          label: 头像轨道与短句轮换
+          value: true
+        - $formkit: switch
+          name: skill_drift
+          if: $get(style).value !== 'author'
+          id: skill_drift
+          key: skill_drift
+          label: 技能图标浮动
+          value: true
+        - $formkit: switch
+          name: parallax
+          id: parallax
+          key: parallax
+          label: 照片与作品滚动视差
+          value: true
+        - $formkit: switch
+          name: particles
+          if: $get(style).value !== 'author'
+          id: particles
+          key: particles
+          label: 点击头像时绽放粒子
+          value: true
+        - $formkit: array
+          name: modules
+          id: modules
+          key: modules
+          label: 页面模块
+          value:
+            - type: toolkit
+              title: 常用工具
+              subtitle: ""
+              span: "7"
+              tone: paper
+              background: ""
+              foreground: ""
+              enabled: true
+            - type: focus
+              title: 近况
+              subtitle: ""
+              span: "5"
+              tone: paper
+              background: ""
+              foreground: ""
+              enabled: true
+            - type: projects
+              title: 作品
+              subtitle: ""
+              span: "12"
+              tone: paper
+              background: ""
+              foreground: ""
+              enabled: true
+            - type: interests
+              title: 兴趣
+              subtitle: ""
+              span: "5"
+              tone: paper
+              background: ""
+              foreground: ""
+              enabled: true
+            - type: writing
+              title: 最近文章
+              subtitle: ""
+              span: "7"
+              tone: paper
+              background: ""
+              foreground: ""
+              enabled: true
+            - type: story
+              title: 关于我
+              subtitle: ""
+              span: "12"
+              tone: paper
+              background: ""
+              foreground: ""
+              enabled: true
+            - type: contact
+              title: 联系方式
+              subtitle: ""
+              span: "12"
+              tone: paper
+              background: ""
+              foreground: ""
+              enabled: true
+          max: 12
+          itemLabels:
+            - type: text
+              label: $value.title
+            - type: text
+              label: $value.type
+          help: 拖动条目调整顺序。移除或关闭模块即可隐藏；没有内容的模块自动收起。
+          children:
+            - $formkit: select
+              name: type
+              id: type
+              key: type
+              label: 模块类型
+              value: toolkit
+              options:
+                - value: custom
+                  label: 自由内容卡
+                - value: toolkit
+                  label: 工具箱
+                - value: focus
+                  label: 近况
+                - value: projects
+                  label: 作品
+                - value: interests
+                  label: 生活兴趣
+                - value: writing
+                  label: 最近文章
+                - value: story
+                  label: 故事正文
+                - value: contact
+                  label: 联系入口
+            - $formkit: text
+              name: title
+              id: title
+              key: title
+              label: 模块标题
+              value: ""
+            - $formkit: text
+              name: subtitle
+              id: subtitle
+              key: subtitle
+              label: 模块小标题
+              value: ""
+            - $formkit: select
+              name: span
+              id: span
+              key: span
+              label: 桌面宽度
+              value: "6"
+              options:
+                - value: "4"
+                  label: 三分之一
+                - value: "5"
+                  label: 五分之十二
+                - value: "6"
+                  label: 二分之一
+                - value: "7"
+                  label: 十二分之七
+                - value: "8"
+                  label: 三分之二
+                - value: "12"
+                  label: 整行
+            - $formkit: select
+              name: tone
+              id: tone
+              key: tone
+              label: 卡片配色
+              value: paper
+              options:
+                - value: paper
+                  label: 主题白 / 深色
+                - value: lavender
+                  label: 浅紫
+                - value: blue
+                  label: 浅蓝
+                - value: mint
+                  label: 薄荷绿
+                - value: peach
+                  label: 蜜桃橙
+                - value: yellow
+                  label: 奶油黄
+                - value: dark
+                  label: 深空黑
+                - value: indigo
+                  label: 鸢尾紫
+            - $formkit: color
+              name: background
+              id: background
+              key: background
+              label: 自定义背景色
+              value: ""
+              help: 留空使用上方配色
+            - $formkit: color
+              name: foreground
+              id: foreground
+              key: foreground
+              label: 自定义文字色
+              value: ""
+              help: 自定义背景时请搭配可读的文字色
+            - $formkit: textarea
+              name: text
+              if: $value.type === 'custom'
+              id: text
+              key: text
+              label: 自由卡片正文
+              value: ""
+              help: 仅自由内容卡使用，支持换行，按纯文本显示
+            - $formkit: attachment
+              name: image
+              if: $value.type === 'custom'
+              id: image
+              key: image
+              label: 自由卡片图片
+              value: ""
+              accepts:
+                - image/*
+            - $formkit: text
+              name: url
+              if: $value.type === 'custom'
+              id: url
+              key: url
+              label: 自由卡片跳转地址
+              value: ""
+              help: 支持 http(s)、站内路径或
+            - $formkit: text
+              name: button
+              if: $value.type === 'custom'
+              id: button
+              key: button
+              label: 自由卡片按钮文字
+              value: 了解更多
+            - $formkit: switch
+              name: enabled
+              id: enabled
+              key: enabled
+              label: 展示此模块
+              value: true
     - group: pages
       label: 页面
       formSchema:
@@ -3417,7 +4219,6 @@ spec:
           label: 公安备案号
           value: false
           help: 打开后在下方填写备案号
-        # 子项的 id 不能与上面的开关（icp / police）重名，否则 $get(icp) 读到的是输入框的值，整组永远不显示
         - $formkit: group
           name: filing
           id: filing

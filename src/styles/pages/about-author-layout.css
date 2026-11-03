@@ -1,0 +1,34 @@
+/* 影像作者页独占内容宽度，背景延伸到浮动导航下方；切页后自动恢复普通布局。 */
+#Joe:has(.joe_about[data-style="author"]) {
+  > .joe_header {
+    height: 0;
+  }
+
+  .joe_header__above.is-top {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .joe_header__above.active {
+    transform: translate3d(0, -100%, 0);
+  }
+
+  .page-about {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    animation: none;
+  }
+
+  .page-about > .joe_main {
+    padding-bottom: 0;
+  }
+
+  .page-about > .joe_aside {
+    display: none;
+  }
+}

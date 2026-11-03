@@ -1,0 +1,72 @@
+---
+/** 工具箱按实际填写的分组展示，不使用虚构的熟练度进度条。 */
+import Icon from "../common/Icon.astro";
+import ConfiguredIcon from "../ConfiguredIcon.astro";
+import AboutTool from "./AboutTool.astro";
+import { ABOUT_TOOL_SYMBOLS } from "../../config/about-icons";
+---
+
+<section
+  class="joe_about__toolkit"
+  aria-labelledby="about-toolkit-title"
+  th:unless="${#lists.isEmpty(theme.config.about?.toolkit)}"
+>
+  <svg class="joe_about__symbol-defs" aria-hidden="true" focusable="false">
+    <defs>
+      {ABOUT_TOOL_SYMBOLS.map((icon) => (
+        <symbol id={`joe-about-tool-${icon.name}`} viewBox={icon.viewBox}>
+          <Fragment set:html={icon.body} />
+        </symbol>
+      ))}
+    </defs>
+  </svg>
+  <div class="joe_about__section-heading">
+    <span
+      class="joe_about__eyebrow"
+      th:text="${aboutModule.subtitle ?: '我的工具箱'}"
+    ></span>
+    <h2
+      id="about-toolkit-title"
+      th:text="${aboutModule.title ?: '正在使用，也在探索'}"
+    ></h2>
+  </div>
+  <div class="joe_about__tool-groups">
+    <div
+      class="joe_about__tool-group"
+      th:each="group : ${theme.config.about?.toolkit}"
+      th:with="tools=${group['tools']}, groupIcon=${group['icon']}"
+    >
+      <h3>
+        <th-block th:if="${groupIcon != null}">
+          <ConfiguredIcon value="groupIcon" />
+        </th-block>
+        <th-block th:unless="${groupIcon != null}">
+          <Icon name="console" />
+        </th-block>
+        <span th:text="${group.title}"></span>
+      </h3>
+      <ul>
+        <th-block th:unless="${#lists.isEmpty(tools)}">
+          <th-block
+            th:each="tool, iter : ${tools}"
+            th:if="${iter.index < 10 and not #strings.isEmpty(#strings.trim(tool['name']))}"
+          >
+            <AboutTool
+              name="tool['name']"
+              icon="tool['icon']"
+              index="iter.index"
+            />
+          </th-block>
+        </th-block>
+        <th-block th:if="${#lists.isEmpty(tools)}">
+          <th-block
+            th:each="tool, iter : ${(group['items'] ?: '').split('[,，]')}"
+            th:if="${iter.index < 10 and not #strings.isEmpty(#strings.trim(tool))}"
+          >
+            <AboutTool name="tool" index="iter.index" />
+          </th-block>
+        </th-block>
+      </ul>
+    </div>
+  </div>
+</section>

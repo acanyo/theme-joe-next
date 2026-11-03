@@ -14,13 +14,16 @@ spec:
   issues: https://github.com/acanyo/theme-joe-next/issues
   settingName: theme-joe-next-setting
   configMapName: theme-joe-next-configMap
-  version: 1.0.2
+  version: 1.0.3
   requires: ">=2.27.0"
   license:
     - name: CC BY-NC-SA 4.0
       url: https://creativecommons.org/licenses/by-nc-sa/4.0/
   customTemplates:
     page:
+      - name: 关于我
+        description: 个人介绍、近况、作品与联系方式
+        file: page_about.html
       - name: 留言板
         description: 留言板页面
         file: page_leaving.html

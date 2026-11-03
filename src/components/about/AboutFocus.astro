@@ -1,0 +1,35 @@
+---
+/** 近况列表：内容手动维护，不把站点文章日期当成个人状态。 */
+import Icon from "../common/Icon.astro";
+---
+
+<section
+  class="joe_about__focus"
+  aria-labelledby="about-focus-title"
+  th:unless="${#lists.isEmpty(theme.config.about?.focus)}"
+>
+  <div class="joe_about__section-heading">
+    <span
+      class="joe_about__eyebrow"
+      th:text="${aboutModule.subtitle ?: '持续进行中'}"
+    ></span>
+    <h2
+      id="about-focus-title"
+      th:text="${aboutModule.title ?: '最近在折腾'}"
+    ></h2>
+  </div>
+  <ul class="joe_about__focus-list">
+    <li th:each="item : ${theme.config.about?.focus}">
+      <span class="joe_about__focus-icon" aria-hidden="true">
+        <Icon name="feather" />
+      </span>
+      <div>
+        <h3 th:text="${item.title}"></h3>
+        <p
+          th:unless="${#strings.isEmpty(item.description)}"
+          th:text="${item.description}"
+        ></p>
+      </div>
+    </li>
+  </ul>
+</section>

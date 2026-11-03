@@ -1,0 +1,72 @@
+/* 搜索插件的弹层位于页面外壳之外，变量直接写在宿主上，覆盖插件自己的暗色默认值。 */
+search-modal {
+  color-scheme: light;
+  --halo-search-widget-base-font-family: var(--font-default);
+  --halo-search-widget-base-rounded: var(--radius-wrap);
+  --halo-search-widget-base-bg-color: var(--bg-page);
+  --halo-search-widget-primary-color: var(--theme-solid);
+  --halo-search-widget-muted-color: var(--text-secondary);
+  --halo-search-widget-content-color: var(--text-title);
+  --halo-search-widget-modal-bg-color: var(--bg-page);
+  --halo-search-widget-modal-layer-color: rgb(15 23 42 / 45%);
+  --halo-search-widget-hit-bg-color: var(--fill-base);
+  --halo-search-widget-divider-color: var(--border-light);
+  --halo-search-widget-kbd-border-color: var(--border-base);
+  --halo-search-widget-kbd-shadow: 0 2px 0 rgb(15 23 42 / 8%);
+
+  /* 兼容仍使用旧变量名的搜索插件。 */
+  --halo-search-widget-base-border-radius: var(
+    --halo-search-widget-base-rounded
+  );
+  --halo-search-widget-color-modal-layer: var(
+    --halo-search-widget-modal-layer-color
+  );
+  --halo-search-widget-color-modal-content-bg: var(
+    --halo-search-widget-modal-bg-color
+  );
+  --halo-search-widget-color-form-input-bg: var(
+    --halo-search-widget-base-bg-color
+  );
+  --halo-search-widget-color-form-input: var(
+    --halo-search-widget-content-color
+  );
+  --halo-search-widget-color-form-input-placeholder: var(
+    --halo-search-widget-muted-color
+  );
+  --halo-search-widget-color-form-divider: var(
+    --halo-search-widget-divider-color
+  );
+  --halo-search-widget-color-result-empty: var(
+    --halo-search-widget-muted-color
+  );
+  --halo-search-widget-color-result-item-bg: var(
+    --halo-search-widget-hit-bg-color
+  );
+  --halo-search-widget-color-result-item-hover-bg: var(--tint);
+  --halo-search-widget-color-result-item-title: var(
+    --halo-search-widget-content-color
+  );
+  --halo-search-widget-color-result-item-content: var(
+    --halo-search-widget-muted-color
+  );
+  --halo-search-widget-color-command-kbd-item: var(
+    --halo-search-widget-content-color
+  );
+  --halo-search-widget-color-command-kbd-border: var(
+    --halo-search-widget-kbd-border-color
+  );
+}
+
+html[data-mode="dark"] search-modal {
+  color-scheme: dark;
+  --halo-search-widget-primary-color: color-mix(
+    in oklab,
+    var(--theme) 80%,
+    #000
+  );
+  --halo-search-widget-primary-color: oklch(
+    from var(--theme) clamp(0.56, l, 0.62) c h
+  );
+  --halo-search-widget-modal-layer-color: rgb(0 0 0 / 65%);
+  --halo-search-widget-kbd-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+}

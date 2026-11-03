@@ -1,0 +1,56 @@
+---
+/** 动态只使用真实公开文章，照片、摘要和链接均来自 Halo。 */
+import { responsiveImage } from "../../../config/images";
+import Icon from "../../common/Icon.astro";
+---
+
+<div
+  class="joe_author__activity"
+  th:with="authorPosts = ${postFinder.list({page:1, size:6, sort:{'spec.publishTime,desc','metadata.creationTimestamp,asc'}}).items}"
+>
+  <div class="joe_author__panel-heading">
+    <h2>最近文章</h2>
+    <a href="/archives">
+      全部文章 <Icon name="external" />
+    </a>
+  </div>
+  <div class="joe_author__post-grid">
+    <article class="joe_author__post" th:each="note : ${authorPosts}">
+      <a
+        class="joe_author__post-image"
+        th:if="${not #strings.isEmpty(note.spec.cover)}"
+        th:href="${note.status.permalink}"
+      >
+        <img
+          loading="lazy"
+          {...responsiveImage(
+            "note.spec.cover",
+            "(max-width:768px) 90vw, 550px",
+            ["s", "m"],
+          )}
+          th:alt="${note.spec.title}"
+          data-fallback="image"
+        />
+      </a>
+      <div class="joe_author__post-body">
+        <time
+          th:datetime="${note.spec.publishTime}"
+          th:text="${#temporals.format(note.spec.publishTime,'yyyy-MM-dd')}"
+        ></time>
+        <h3>
+          <a
+            th:href="${note.status.permalink}"
+            th:text="${note.spec.title}"
+          ></a>
+        </h3>
+        <p
+          th:unless="${#strings.isEmpty(note.status.excerpt)}"
+          th:text="${note.status.excerpt}"
+        ></p>
+      </div>
+    </article>
+  </div>
+  <p class="joe_author__empty" th:if="${#lists.isEmpty(authorPosts)}">
+    还没有公开文章
+  </p>
+</div>

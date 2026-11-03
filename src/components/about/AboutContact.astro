@@ -1,0 +1,23 @@
+---
+/** 关于页复用博主社交账号；无需开启侧栏卡片的社交入口。 */
+import SocialLinks from "../blogger/SocialLinks.astro";
+---
+
+<section
+  class="joe_about__contact"
+  id="about-contact"
+  aria-labelledby="about-contact-title"
+>
+  <div>
+    <span
+      class="joe_about__eyebrow"
+      th:text="${aboutModule.subtitle ?: '保持联系'}"
+    ></span>
+    <h2
+      id="about-contact-title"
+      th:text="${aboutModule.title ?: '一起做点有趣的事？'}"
+    ></h2>
+    <p>关于作品、共同的兴趣，或只是想说声你好。</p>
+  </div>
+  <SocialLinks enabled="true" labels />
+</section>

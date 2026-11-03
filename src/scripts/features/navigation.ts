@@ -60,7 +60,8 @@ let savedScroll = 0;
 document.addEventListener(
   "scroll",
   (event) => {
-    if (document.documentElement.classList.contains("disable-scroll")) event.stopImmediatePropagation();
+    if (document.documentElement.classList.contains("disable-scroll"))
+      event.stopImmediatePropagation();
   },
   { capture: true },
 );
@@ -86,7 +87,8 @@ export function closeOverlays(restoreScroll = true): void {
     (el) => el.classList.remove("active"),
   );
   // 立即回到原位置（不走平滑滚动），之后的目录跳转再平滑滚动到目标标题
-  if (restoreScroll && wasLocked) window.scrollTo({ top: savedScroll, behavior: "instant" });
+  if (restoreScroll && wasLocked)
+    window.scrollTo({ top: savedScroll, behavior: "instant" });
 }
 
 /** 打开移动端目录抽屉（供文章页使用） */
@@ -134,16 +136,30 @@ function initDrawer(): void {
 }
 
 function initHeaderScroll(): void {
-  // 浮岛样式不整体隐藏导航，由 initIslandsScroll 处理
-  if (isMobile() || getThemeConfig().enableFixedHeader || isIslands()) return;
   const header = $(".joe_header__above");
   if (!header) return;
-  const headerHeight = header.offsetHeight;
-  let lastY = 0;
+  const autoHide =
+    !isMobile() && !getThemeConfig().enableFixedHeader && !isIslands();
+  let lastY = window.scrollY;
+  refreshHeader = () => {
+    lastY = Math.max(0, window.scrollY);
+    header.classList.remove("active");
+    header.classList.toggle("is-top", lastY < 24);
+  };
+  refreshHeader();
   document.addEventListener(
     "scroll",
     throttle(() => {
-      const y = window.scrollY;
+      const y = Math.max(0, window.scrollY);
+      // 影像作者页在两种导航样式和手机上均按滚动方向收起。
+      const authorPage = !!$('.joe_about[data-style="author"]');
+      if (!isIslands()) header.classList.toggle("is-top", y < 24);
+      if (!autoHide && !authorPage) {
+        lastY = y;
+        return;
+      }
+      if (y >= 24 && Math.abs(y - lastY) <= 4) return;
+      const headerHeight = header.offsetHeight;
       const hide = y > lastY && y > headerHeight;
       header.classList.toggle("active", hide);
       // 侧栏吸顶元素随页面替换，每次滚动时重新查询
@@ -154,6 +170,8 @@ function initHeaderScroll(): void {
     }, 100),
   );
 }
+
+let refreshHeader = (): void => {};
 
 /**
  * 阅读条导航（navbar.style = islands）的附加交互，经典样式下不执行：
@@ -225,12 +243,18 @@ function initNavBar(): void {
     const link = $<HTMLElement>("a.item.current", nav);
     return link?.closest<HTMLElement>(".joe_dropdown") ?? link;
   };
-  for (const item of $$<HTMLElement>(":scope > a.item, :scope > .joe_dropdown", nav))
+  for (const item of $$<HTMLElement>(
+    ":scope > a.item, :scope > .joe_dropdown",
+    nav,
+  ))
     item.addEventListener("mouseenter", () => moveTo(item));
   nav.addEventListener("mouseleave", () => moveTo(current()));
   barToCurrent = () => moveTo(current());
   void document.fonts?.ready.then(() => barToCurrent());
-  window.addEventListener("resize", throttle(() => barToCurrent(), 150));
+  window.addEventListener(
+    "resize",
+    throttle(() => barToCurrent(), 150),
+  );
 }
 
 let barToCurrent = (): void => {};
@@ -270,6 +294,7 @@ export function initNavigation(): void {
 export function refreshNavigation(): void {
   resetNavDropdowns();
   highlightCurrentMenu();
+  refreshHeader();
   syncProgress();
   refreshIslands();
   barToCurrent();

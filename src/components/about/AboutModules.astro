@@ -1,0 +1,52 @@
+---
+/** 按条目顺序排版模块；重复类型只显示第一个，避免重复内容和锚点。 */
+import AboutToolkit from "./AboutToolkit.astro";
+import AboutFocus from "./AboutFocus.astro";
+import AboutProjects from "./AboutProjects.astro";
+import AboutInterests from "./AboutInterests.astro";
+import AboutWriting from "./AboutWriting.astro";
+import AboutStory from "./AboutStory.astro";
+import AboutContact from "./AboutContact.astro";
+import AboutCustom from "./AboutCustom.astro";
+---
+
+<div
+  class="joe_about__modules"
+  th:with="aboutModules = ${theme.config.aboutdesign?.modules}"
+>
+  <th-block th:with="aboutModuleTypes = ${aboutModules.![type]}">
+    <th-block th:each="aboutModule, moduleIndex : ${aboutModules}">
+      <div
+        class="joe_about__module"
+        data-about-module
+        th:if="${aboutModule.enabled != false and (aboutModule.type == 'custom' or aboutModuleTypes.indexOf(aboutModule.type) == moduleIndex.index)}"
+        th:attr="data-kind=${aboutModule.type}, data-span=${aboutModule.span}, data-tone=${aboutModule.tone}, data-card-background=${aboutModule.background}, data-card-foreground=${aboutModule.foreground}"
+      >
+        <th-block th:if="${aboutModule.type == 'custom'}">
+          <AboutCustom />
+        </th-block>
+        <th-block th:if="${aboutModule.type == 'toolkit'}">
+          <AboutToolkit />
+        </th-block>
+        <th-block th:if="${aboutModule.type == 'focus'}">
+          <AboutFocus />
+        </th-block>
+        <th-block th:if="${aboutModule.type == 'projects'}">
+          <AboutProjects />
+        </th-block>
+        <th-block th:if="${aboutModule.type == 'interests'}">
+          <AboutInterests />
+        </th-block>
+        <th-block th:if="${aboutModule.type == 'writing'}">
+          <AboutWriting />
+        </th-block>
+        <th-block th:if="${aboutModule.type == 'story'}">
+          <AboutStory />
+        </th-block>
+        <th-block th:if="${aboutModule.type == 'contact'}">
+          <AboutContact />
+        </th-block>
+      </div>
+    </th-block>
+  </th-block>
+</div>

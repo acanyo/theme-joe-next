@@ -1,0 +1,130 @@
+---
+/** 影像作者页：照片主视觉、固定身份栏、资料与动态。 */
+import AuthorProfile from "./AuthorProfile.astro";
+import AuthorActivity from "./AuthorActivity.astro";
+import AboutActions from "../AboutActions.astro";
+import Icon from "../../common/Icon.astro";
+import { el } from "../../../config/expressions";
+import { PAGE_TITLE_VISIBLE } from "../../../config/content-options";
+const NAME =
+  "theme.config.about?.profile_name ?: (theme.config.blogger.name ?: (singlePage.owner?.displayName ?: site.title))";
+const AVATAR =
+  "theme.config.about?.profile_avatar ?: (theme.config.blogger.avatar ?: (singlePage.owner?.avatar ?: theme.config.blogger.fallback_avatar))";
+const PHOTO = `theme.config.about?.hero_background ?: (${AVATAR})`;
+---
+
+<div class="joe_author" th:with={`authorName = ${el(NAME)}`}>
+  <div class="joe_author__scene" aria-hidden="true">
+    <div class="joe_author__scene-sticky" data-author-scene>
+      <img
+        class="joe_author__backdrop"
+        th:src={el(PHOTO)}
+        alt=""
+        fetchpriority="high"
+        data-author-backdrop
+      />
+      <span
+        class="joe_author__word"
+        th:text="${theme.config.about?.hero_word ?: authorName}"
+        data-author-word
+      ></span>
+      <img
+        class="joe_author__foreground"
+        th:if="${not #strings.isEmpty(theme.config.about?.hero_foreground)}"
+        th:src="${theme.config.about?.hero_foreground}"
+        alt=""
+        fetchpriority="high"
+        data-author-foreground
+      />
+      <div class="joe_author__shade"></div>
+    </div>
+  </div>
+  <header class="joe_author__hero" data-author-hero>
+    <div class="joe_author__intro">
+      <h1
+        th:if={el(PAGE_TITLE_VISIBLE)}
+        th:aria-label="|你好，我是 ${authorName}|"
+      >
+        <span>你好，</span>
+        <strong>
+          我是 <span th:text="${authorName}"></span>
+        </strong>
+      </h1>
+      <AboutActions />
+    </div>
+    <div class="joe_author__hero-note">
+      <span th:text="${theme.config.about?.profile_caption ?: theme.config.blogger.motto}"></span>
+      <a href="#author-content" aria-label="查看个人资料">
+        <Icon name="chevrons-down" />
+      </a>
+    </div>
+  </header>
+  <div class="joe_author__content" id="author-content" data-author-content>
+    <aside class="joe_author__rail">
+      <div class="joe_author__identity">
+        <img
+          th:src={el(AVATAR)}
+          th:alt="${authorName}"
+          width="48"
+          height="48"
+          data-fallback="avatar"
+        />
+        <p>
+          <strong th:text="${authorName}"></strong>
+          <span th:text="${theme.config.blogger.motto}"></span>
+        </p>
+      </div>
+      <nav class="joe_author__tabs" role="tablist" aria-label="作者内容">
+        <button
+          type="button"
+          id="author-tab-profile"
+          role="tab"
+          aria-selected="true"
+          th:attr="aria-selected=${theme.config.aboutdesign?.author_tab != 'activity'}"
+          aria-controls="author-panel-profile"
+          data-author-tab="profile"
+        >
+          <Icon name="user" />
+          <span>个人资料</span>
+        </button>
+        <button
+          type="button"
+          id="author-tab-activity"
+          role="tab"
+          aria-selected="false"
+          th:attr="aria-selected=${theme.config.aboutdesign?.author_tab == 'activity'}"
+          aria-controls="author-panel-activity"
+          tabindex="-1"
+          data-author-tab="activity"
+        >
+          <Icon name="archive" />
+          <span>站内动态</span>
+        </button>
+      </nav>
+      <p
+        class="joe_author__rail-note"
+        th:text="${theme.config.about?.status_text}"
+      ></p>
+    </aside>
+    <div class="joe_author__panels">
+      <div
+        id="author-panel-profile"
+        role="tabpanel"
+        aria-labelledby="author-tab-profile"
+        data-author-panel="profile"
+        th:attr="hidden=${theme.config.aboutdesign?.author_tab == 'activity' ? 'hidden' : null}"
+      >
+        <AuthorProfile />
+      </div>
+      <div
+        id="author-panel-activity"
+        role="tabpanel"
+        aria-labelledby="author-tab-activity"
+        data-author-panel="activity"
+        th:attr="hidden=${theme.config.aboutdesign?.author_tab != 'activity' ? 'hidden' : null}"
+      >
+        <AuthorActivity />
+      </div>
+    </div>
+  </div>
+</div>

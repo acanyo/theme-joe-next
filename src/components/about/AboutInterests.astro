@@ -1,0 +1,41 @@
+---
+/** 兴趣图标使用 Iconify，旧 emoji 配置映射为对应图标。 */
+import ConfiguredIcon from "../ConfiguredIcon.astro";
+const LEGACY_ICONS =
+  "{'⌨️':'lucide:keyboard','⌨':'lucide:keyboard','🎧':'lucide:headphones','📷':'lucide:camera','📸':'lucide:camera','✦':'lucide:sparkles','✳':'lucide:asterisk','📖':'lucide:book-open','📚':'lucide:book-open','☕':'lucide:coffee'}";
+const INTEREST_ICON = `interest.symbol instanceof T(java.lang.String) ? (${LEGACY_ICONS}.get(interest.symbol) ?: (interest.symbol.matches('^[a-z0-9-]+:[a-z0-9-]+$') ? interest.symbol : 'lucide:sparkles')) : (interest.symbol ?: 'lucide:sparkles')`;
+---
+
+<section
+  class="joe_about__interests"
+  aria-labelledby="about-interests-title"
+  th:unless="${#lists.isEmpty(theme.config.about?.interests)}"
+>
+  <div class="joe_about__section-heading">
+    <span
+      class="joe_about__eyebrow"
+      th:text="${aboutModule.subtitle ?: '不止代码'}"
+    ></span>
+    <h2
+      id="about-interests-title"
+      th:text="${aboutModule.title ?: '生活也有自己的颜色'}"
+    ></h2>
+  </div>
+  <ul class="joe_about__interest-list">
+    <li
+      th:each="interest : ${theme.config.about?.interests}"
+      data-about-interest
+    >
+      <span class="joe_about__interest-icon" aria-hidden="true">
+        <ConfiguredIcon value={INTEREST_ICON} />
+      </span>
+      <div>
+        <h3 th:text="${interest.title}"></h3>
+        <p
+          th:unless="${#strings.isEmpty(interest.description)}"
+          th:text="${interest.description}"
+        ></p>
+      </div>
+    </li>
+  </ul>
+</section>

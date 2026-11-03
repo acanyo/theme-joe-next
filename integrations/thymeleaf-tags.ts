@@ -28,13 +28,16 @@ export function restoreNamespacedTags(html: string): string {
 }
 
 const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const settingPaths = (keys: string[]) =>
+  keys.map((key) => key.split(".").map(escapeRegExp).join("\\??\\.")).join("|");
+const settingKey = (reference: string) => reference.replaceAll("?.", ".");
 const BOOLEAN_REF = new RegExp(
-  `(?<![\\w.])theme\\.config\\.(${Object.keys(BOOLEAN_DEFAULTS).map(escapeRegExp).join("|")})(?![\\w.(])(?!\\s*(?:==|!=))`,
+  `(?<![\\w.])theme\\.config\\.(${settingPaths(Object.keys(BOOLEAN_DEFAULTS))})(?![\\w.(])(?!\\s*(?:==|!=))`,
   "g",
 );
 /** 非布尔设置的裸引用（后面没有紧跟 `?:`、属性访问或调用） */
 const VALUE_REF = new RegExp(
-  `(?<![\\w.])theme\\.config\\.(${Object.keys(VALUE_DEFAULTS).map(escapeRegExp).join("|")})(?![\\w.(])(?!\\s*\\?:)`,
+  `(?<![\\w.])theme\\.config\\.(${settingPaths(Object.keys(VALUE_DEFAULTS))})(?![\\w.(])(?!\\s*\\?:)`,
   "g",
 );
 /** JS 值 → SpEL 字面量：字符串加引号，对象写成 SpEL 内联 map `{'k':v}`，数组写成内联列表 `{a, b}` */
@@ -50,7 +53,7 @@ function spelLiteral(v: unknown): string {
   return "null";
 }
 const LIST_REF = new RegExp(
-  `(?<![\\w.])theme\\.config\\.(${Object.keys(LIST_DEFAULTS).map(escapeRegExp).join("|")})(?![\\w.(])(?!\\s*\\?:)`,
+  `(?<![\\w.])theme\\.config\\.(${settingPaths(Object.keys(LIST_DEFAULTS))})(?![\\w.(])(?!\\s*\\?:)`,
   "g",
 );
 
@@ -62,15 +65,19 @@ export function normalizeBooleanSettings(html: string): string {
   const fix = (expr: string) =>
     expr
       .replace(BOOLEAN_REF, (ref, key: string) =>
-        BOOLEAN_DEFAULTS[key] ? `(${ref} != false)` : `(${ref} == true)`,
+        BOOLEAN_DEFAULTS[settingKey(key)]
+          ? `(${ref} != false)`
+          : `(${ref} == true)`,
       )
       .replace(
         VALUE_REF,
-        (ref, key: string) => `(${ref} ?: ${spelLiteral(VALUE_DEFAULTS[key]!)})`,
+        (ref, key: string) =>
+          `(${ref} ?: ${spelLiteral(VALUE_DEFAULTS[settingKey(key)]!)})`,
       )
       .replace(
         LIST_REF,
-        (ref, key: string) => `(${ref} ?: ${spelLiteral(LIST_DEFAULTS[key]!)})`,
+        (ref, key: string) =>
+          `(${ref} ?: ${spelLiteral(LIST_DEFAULTS[settingKey(key)]!)})`,
       );
   return html
     .replace(

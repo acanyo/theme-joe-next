@@ -1,6 +1,6 @@
 /*
  * 评论组件跟随主题：组件在 Shadow DOM 中，通过它公开的 CSS 变量换色与圆角。
- * PluginCommentWidget 与 CommentNext 都读 --halo-cw-*，变量写在 .joe_comment 上向下继承；
+ * PluginCommentWidget 与 CommentNext 都读 --halo-cw-*，变量写在 body 上覆盖文章、页面和瞬间；
  * 两个插件都只读取、不定义这组变量，随主题的明暗 token 自动切换。
  *
  * --halo-cw-primary-1 既是按钮底色（上面是白字），又是选中标签、链接的文字色，
@@ -8,10 +8,18 @@
  * primary-2 / primary-3 按插件约定是「较浅 / 最浅」的主题色（焦点描边、选中的浅底）。
  * muted-1 / 2 / 3：边框、浅分隔与悬停底、面板底色。
  */
-.joe_comment {
+body {
   --halo-cw-primary-1-color: var(--theme-solid);
-  --halo-cw-primary-2-color: color-mix(in srgb, var(--theme) 45%, var(--bg-page));
-  --halo-cw-primary-3-color: color-mix(in srgb, var(--theme) 12%, var(--bg-page));
+  --halo-cw-primary-2-color: color-mix(
+    in srgb,
+    var(--theme) 45%,
+    var(--bg-page)
+  );
+  --halo-cw-primary-3-color: color-mix(
+    in srgb,
+    var(--theme) 12%,
+    var(--bg-page)
+  );
   --halo-cw-text-1-color: var(--text-title);
   --halo-cw-text-2-color: var(--text-regular);
   --halo-cw-text-3-color: var(--text-secondary);
@@ -21,10 +29,11 @@
   --halo-cw-base-rounded: var(--radius-wrap);
   --halo-cw-avatar-rounded: 50%;
   --halo-cw-base-font-family: var(--font-default);
-  --halo-cw-emoji-picker-rgb-accent: 251, 108, 40;
+  --halo-cw-emoji-picker-color-border: var(--border-light);
+  --halo-cw-emoji-picker-color-border-over: var(--border-base);
 }
 
-html[data-mode="dark"] .joe_comment {
+html[data-mode="dark"] body {
   --halo-cw-primary-1-color: color-mix(in oklab, var(--theme) 80%, #000);
   --halo-cw-primary-1-color: oklch(from var(--theme) clamp(0.56, l, 0.62) c h);
 }
@@ -33,7 +42,7 @@ html[data-mode="dark"] .joe_comment {
  * CommentNext 有几处颜色是固定的蓝色或白色，不读 --halo-cw-*，只能覆盖它自己的 --comment-next-* 变量。
  * 插件把这些变量直接写在组件元素上且不在级联层里，所以这里加 !important（层内的 !important 优先于层外）。
  */
-.joe_comment comment-widget {
+:is(comment-widget, comment-next, comment-ranking, comment-ranking-sidebar) {
   --comment-next-focus-shadow-color: var(--tint) !important;
   --comment-next-reaction-hover-bg-color: var(--tint) !important;
   --comment-next-modal-bg-color: var(--bg-page) !important;
@@ -42,6 +51,28 @@ html[data-mode="dark"] .joe_comment {
   --comment-next-emote-head-bg-color: var(--fill-base) !important;
   --comment-next-emote-tabs-bg-color: var(--fill-base) !important;
   --comment-next-tooltip-bg-color: var(--bg-raised) !important;
+  --comment-next-link-color: var(--theme-text) !important;
+  --comment-next-link-hover-color: var(--theme-text) !important;
+  --comment-next-ai-control-bg-color: var(--fill-base) !important;
+  --comment-next-ai-panel-bg-color: var(--bg-raised) !important;
+  --comment-next-ai-panel-surface-bg: linear-gradient(
+    var(--bg-raised),
+    var(--bg-page)
+  ) !important;
+  --comment-next-ai-suggestion-bg-color: var(--bg-raised) !important;
+  --comment-next-ai-suggestion-surface-bg: linear-gradient(
+    var(--bg-raised),
+    var(--bg-page)
+  ) !important;
+  --comment-next-editor-ai-surface-bg: linear-gradient(
+    var(--bg-raised),
+    var(--bg-page)
+  ) !important;
+  --comment-next-skeleton-highlight-color: var(--bg-raised) !important;
+  --comment-next-skeleton-editor-bg: linear-gradient(
+    var(--fill-base),
+    var(--bg-page)
+  ) !important;
 }
 
 .joe_comment_box {

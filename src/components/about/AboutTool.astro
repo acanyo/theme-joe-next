@@ -1,0 +1,41 @@
+---
+/** 单个工具：显式配置的图标优先，未选择时才使用名称匹配或首字。 */
+import ConfiguredIcon from "../ConfiguredIcon.astro";
+import { ABOUT_TOOL_KEYS } from "../../config/about-icons";
+
+interface Props {
+  name: string;
+  icon?: string;
+  index: string;
+}
+const { name, icon = "null", index } = Astro.props;
+---
+
+<li
+  data-about-tool
+  th:attr={`data-accent=\${${index} % 5}`}
+  th:with={`toolName=\${#strings.trim(${name})}, toolIcon=\${${icon}}, toolKey=\${#strings.toLowerCase(toolName).replaceAll('[^a-z0-9]', '')}, hasToolIcon=\${toolIcon instanceof T(java.lang.String) ? not #strings.isEmpty(toolIcon) : (toolIcon != null and not #strings.isEmpty(toolIcon['value']))}`}
+>
+  <span
+    class="joe_about__tool-mark"
+    aria-hidden="true"
+    th:attr="data-tool=${toolKey}"
+  >
+    <th-block th:if="${hasToolIcon}">
+      <ConfiguredIcon value="toolIcon" />
+    </th-block>
+    <th-block th:unless="${hasToolIcon}">
+      <svg
+        th:if={`\${${ABOUT_TOOL_KEYS}.contains(toolKey)}`}
+        aria-hidden="true"
+      >
+        <use th:href="|#joe-about-tool-${toolKey}|"></use>
+      </svg>
+      <span
+        th:unless={`\${${ABOUT_TOOL_KEYS}.contains(toolKey)}`}
+        th:text="${#strings.toUpperCase(#strings.substring(toolName, 0, 1))}"
+      ></span>
+    </th-block>
+  </span>
+  <span th:text="${toolName}"></span>
+</li>

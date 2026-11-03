@@ -33,9 +33,25 @@ describe("normalizeBooleanSettings", () => {
     );
   });
   it("keeps explicit boolean comparisons", () => {
-    const html =
-      '<p th:if="${theme.config.pages.moments_like == true}"></p>';
+    const html = '<p th:if="${theme.config.pages.moments_like == true}"></p>';
     assert.equal(normalizeBooleanSettings(html), html);
+  });
+  it("applies defaults through optional group navigation", () => {
+    assert.equal(
+      normalizeBooleanSettings(
+        '<p th:if="${theme.config.aboutdesign?.ambient}"></p>',
+      ),
+      '<p th:if="${(theme.config.aboutdesign?.ambient != false)}"></p>',
+    );
+    const result = normalizeBooleanSettings(
+      '<div th:with="items = ${theme.config.aboutdesign?.modules}"></div>',
+    );
+    assert.ok(
+      result.includes(
+        "theme.config.aboutdesign?.modules ?: {{'type':'toolkit'",
+      ),
+    );
+    assert.ok(result.includes("'type':'contact'"));
   });
   it("adds settings.yaml defaults to bare value settings", () => {
     assert.equal(

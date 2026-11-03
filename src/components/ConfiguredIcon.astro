@@ -10,7 +10,7 @@ const { value, class: className } = Astro.props;
 ---
 
 <th-block
-  th:with={`configuredIcon=\${${value}}, iconValue=\${configuredIcon instanceof T(java.lang.String) ? configuredIcon : configuredIcon?.value}, iconColor=\${configuredIcon instanceof T(java.lang.String) ? '' : configuredIcon?.color}`}
+  th:with={`configuredIcon=\${${value}}, iconValue=\${configuredIcon instanceof T(java.lang.String) ? configuredIcon : (configuredIcon != null ? configuredIcon['value'] : null)}, iconColor=\${configuredIcon instanceof T(java.lang.String) ? '' : (configuredIcon != null ? configuredIcon['color'] : null)}`}
 >
   <i
     class:list={["joe-font", "joe-configured-icon", className]}

@@ -1,0 +1,36 @@
+---
+/** 直接复用布局中的站点统计，不以手填数字充当个人成就。 */
+import Icon from "../common/Icon.astro";
+---
+
+<div
+  class="joe_about__stats"
+  aria-label="在这里留下的记录"
+  th:if="${theme.config.about?.stats != false}"
+>
+  <a href="/archives" data-about-stat>
+    <Icon name="feather" />
+    <span>
+      <strong th:text="${siteStats.post}">0</strong>
+      <span>篇文章</span>
+    </span>
+  </a>
+  <a href="/categories" data-about-stat>
+    <Icon name="folder" />
+    <span>
+      <strong th:text="${siteStats.category}">0</strong>
+      <span>个分类</span>
+    </span>
+  </a>
+  <a href="/tags" data-about-stat>
+    <Icon name="tag" />
+    <span>
+      <strong th:text="${tagCount}">0</strong>
+      <span>个标签</span>
+    </span>
+  </a>
+  <p>
+    <span class="joe_about__status-dot" aria-hidden="true"></span>
+    把折腾的过程，认真记下来。
+  </p>
+</div>

@@ -8,6 +8,7 @@ type PageInit = () => void | Promise<void>;
 
 const PAGES: Record<string, () => Promise<{ default: PageInit }>> = {
   index: () => import("../pages/index"),
+  about: () => import("../pages/about"),
   post: () => import("../pages/post"),
   archives: () => import("../pages/archives"),
   moments: () => import("../pages/moments"),

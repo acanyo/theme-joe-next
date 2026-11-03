@@ -1,0 +1,37 @@
+---
+/** 关于页：可配置的首屏与模块编排，样式和动效仅作用于当前页面。 */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Actions from "../components/layout/Actions.astro";
+import PageAside from "../components/aside/PageAside.astro";
+import AboutHero from "../components/about/AboutHero.astro";
+import AboutModules from "../components/about/AboutModules.astro";
+import AboutAuthor from "../components/about/author/AboutAuthor.astro";
+import "../styles/pages/about.css";
+import "../styles/pages/about-sections.css";
+import "../styles/pages/about-author.css";
+import "../styles/pages/about-author-layout.css";
+---
+
+<BaseLayout
+  seo="page"
+  pageScript="about"
+  title="singlePage.spec.title"
+  pageClass="page-sheet page-about"
+>
+  <div class="joe_main">
+    <div
+      class="joe_about"
+      th:attr="data-about-motion=${!theme.config.footer.clean_mode}, data-style=${theme.config.aboutdesign?.style}, data-author-tab=${theme.config.aboutdesign?.author_tab}, data-hero-height=${theme.config.aboutdesign?.hero_height}, data-photo-position=${theme.config.aboutdesign?.photo_position}, data-photo-shade=${theme.config.aboutdesign?.photo_shade}, data-hero-color=${theme.config.aboutdesign?.hero_color}, data-hero-ink=${theme.config.aboutdesign?.hero_ink}, data-profile-color=${theme.config.aboutdesign?.profile_color}, data-hero-palette=${theme.config.aboutdesign?.hero_palette}, data-avatar-shape=${theme.config.aboutdesign?.avatar_shape}, data-avatar-size=${theme.config.aboutdesign?.avatar_size}, data-radius=${theme.config.aboutdesign?.radius}, data-gap=${theme.config.aboutdesign?.gap}, data-title-size=${theme.config.aboutdesign?.title_size}, data-toolkit-layout=${theme.config.aboutdesign?.toolkit_layout}, data-project-columns=${theme.config.aboutdesign?.project_columns}, data-motion-mode=${theme.config.aboutdesign?.motion_mode}, data-motion-speed=${theme.config.aboutdesign?.motion_speed}, data-entrance=${theme.config.aboutdesign?.entrance}, data-hover=${theme.config.aboutdesign?.hover}, data-ambient=${theme.config.aboutdesign?.ambient}, data-skill-drift=${theme.config.aboutdesign?.skill_drift}, data-parallax=${theme.config.aboutdesign?.parallax}, data-particles=${theme.config.aboutdesign?.particles}"
+    >
+      <th-block th:if="${theme.config.aboutdesign?.style == 'author'}">
+        <AboutAuthor />
+      </th-block>
+      <th-block th:unless="${theme.config.aboutdesign?.style == 'author'}">
+        <AboutHero />
+        <AboutModules />
+      </th-block>
+    </div>
+  </div>
+  <PageAside />
+  <Actions slot="actions" editKind="page" />
+</BaseLayout>

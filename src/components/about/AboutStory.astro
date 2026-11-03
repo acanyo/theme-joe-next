@@ -1,0 +1,41 @@
+---
+import {
+  DEFAULT_READING_WIDTH,
+  pageReadingWidth,
+} from "../../config/content-options";
+---
+
+<section
+  class="joe_about__story"
+  id="about-story"
+  aria-labelledby="about-story-title"
+  th:if="${not #strings.isEmpty(#strings.trim(singlePage.content.content ?: '')) or not #strings.isEmpty(singlePage.spec.cover)}"
+>
+  <div class="joe_about__section-heading">
+    <span
+      class="joe_about__eyebrow"
+      th:text="${aboutModule.subtitle ?: '关于我'}"
+    ></span>
+    <h2
+      id="about-story-title"
+      th:text="${aboutModule.title ?: '多认识我一点'}"
+    ></h2>
+  </div>
+  <div class="joe_about__story-layout">
+    <img
+      class="joe_about__photo"
+      loading="lazy"
+      th:if="${not #strings.isEmpty(singlePage.spec.cover)}"
+      th:src="${singlePage.spec.cover}"
+      th:srcset="${singlePage.spec.cover}"
+      alt="关于我的照片"
+      data-fallback="image"
+    />
+    <article
+      class="joe_detail__article"
+      th:style={`|--reading-width: \${${pageReadingWidth(DEFAULT_READING_WIDTH)}}|`}
+    >
+      <div id="post-inner" th:utext="${singlePage.content.content}"></div>
+    </article>
+  </div>
+</section>
