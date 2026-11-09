@@ -30,7 +30,7 @@ html[data-mode="light"] body::before { background-image: url("[(\${theme.config.
 [# th:if="\${not #strings.isEmpty(theme.config.appearance.background_dark)}"]
 html[data-mode="dark"] body::before { background-image: url("[(\${theme.config.appearance.background_dark})]"); }
 [/]
-[# th:if="\${not #strings.isEmpty(theme.config.home.hero_image)}"]
+[# th:if="\${#strings.isEmpty(theme.config.home.hero_video) and not #strings.isEmpty(theme.config.home.hero_image)}"]
 html body { --joe-big-banner-image: url("[(\${theme.config.home.hero_image})]"); }
 [/]
 `;

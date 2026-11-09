@@ -1,0 +1,44 @@
+/* 作者保存的写作记录，以一句话补充标题；空字段由模板省略。 */
+.joe_post_context {
+  width: fit-content;
+  max-width: min(100%, 720px);
+  margin: 0;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--border-lighter);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.9;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+
+  .joe_post_context__clause {
+    display: inline;
+  }
+
+  &.joe_post_context--hero {
+    width: auto;
+    margin: 20px 0 0;
+    padding: 0 0 0 12px;
+    border-top: 0;
+    border-left: 2px solid var(--theme);
+    color: rgb(255 255 255 / 82%);
+    font-size: 13px;
+    text-align: left;
+  }
+}
+
+.joe_detail-wrapper > .joe_post_context {
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .joe_post_context {
+    margin-inline: auto;
+    text-align: center;
+
+    &.joe_post_context--hero {
+      margin-inline: 0;
+      font-size: 12px;
+    }
+  }
+}

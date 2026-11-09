@@ -1,12 +1,11 @@
 ---
 /**
- * 文章页「沉浸头图」（设置 post.header_style = immersive）：
- * 整宽头图位于导航下方，背景为文章封面（模糊放大）或主题色渐变；
- * 分类、标题与作者 / 日期 / 字数 / 阅读等信息胶囊放在头图里，正文卡片向上叠在头图下沿。
- *
- * 经典样式时不渲染，标题与信息仍在正文卡片内（ArticleBody.astro）。
+ * 沉浸头图：左侧标题与写作记录，底部集中呈现作者和阅读信息。
+ * 经典样式的标题与信息仍由 ArticleBody.astro 渲染。
  */
 import { COMMENT_ENABLED, el } from "../../config/expressions";
+import Icon from "../common/Icon.astro";
+import PostContext from "./PostContext.astro";
 
 const COVER = "post.spec.cover";
 const AUTHOR_LINK =
@@ -26,51 +25,71 @@ const AUTHOR_LINK =
     aria-hidden="true"
   ></div>
   <div class="joe_post_hero__inner joe_container">
-    <div
-      class="joe_post_hero__cats"
-      th:unless="${#lists.isEmpty(post.categories)}"
-    >
-      <a
-        th:each="category, stat : ${post.categories}"
-        th:href="@{${category.status.permalink}}"
-        class="item"
-        th:classappend="${'item-' + (stat.index % 5)}"
-        th:text="${category.spec.displayName}"
-      ></a>
+    <div class="joe_post_hero__body">
+      <div
+        class="joe_post_hero__cats"
+        th:unless="${#lists.isEmpty(post.categories)}"
+      >
+        <a
+          th:each="category : ${post.categories}"
+          th:href="@{${category.status.permalink}}"
+          class="item"
+          th:text="${category.spec.displayName}"
+        ></a>
+      </div>
+      <h1
+        class="joe_post_hero__title"
+        th:classappend="${theme.config.post.title_shadow ? 'txt-shadow' : ''}"
+        th:text="${post.spec.title}"
+      ></h1>
+      <p
+        class="joe_post_hero__excerpt"
+        th:if="${not #strings.isEmpty(post.status.excerpt)}"
+        th:text="${post.status.excerpt}"
+        th:attr="data-joe-excerpt=${post.spec.excerpt?.autoGenerate != false ? 'auto' : null}"
+      ></p>
+      <PostContext variant="hero" />
     </div>
-    <h1
-      class="joe_post_hero__title"
-      th:classappend="${theme.config.post.title_shadow ? 'txt-shadow' : ''}"
-      th:text="${post.spec.title}"
-    ></h1>
-    <ul
-      class="joe_post_hero__meta"
-      th:if="${theme.config.post.meta}"
-    >
-      <li class="author">
-        <!-- 作者没有头像时用博主卡片的默认头像，避免空 src（不会触发加载失败兜底） -->
+    <div class="joe_post_hero__footer" th:if="${theme.config.post.meta}">
+      <div class="joe_post_hero__byline">
         <img
-          width="24"
-          height="24"
+          width="36"
+          height="36"
           loading="lazy"
           th:src="${#strings.isEmpty(author?.avatar) ? (theme.config.blogger.fallback_avatar ?: #theme.assets('/images/peeps-avatar.png')) : author.avatar}"
-          sizes="24px"
+          sizes="36px"
           th:alt="${author?.displayName}"
           th:attr="data-text-avatar=${author?.displayName}"
           data-fallback="avatar"
         />
-        <a rel="author" th:href={el(AUTHOR_LINK)} th:text="${author?.displayName}"></a>
-      </li>
-      <li>
-        <!-- datetime 写完整时间（带时区），搜索引擎与 AI 摘录时能准确标出发布时间 -->
-        <time
-          th:datetime="${post.spec.publishTime}"
-          th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"
-        ></time>
-      </li>
-      <li data-joe-word-count>0 字</li>
-      <li th:text="|${post.stats.visit} 阅读|"></li>
-      <li th:if={el(COMMENT_ENABLED)} th:text="|${post.stats.comment} 评论|"></li>
-    </ul>
+        <div class="joe_post_hero__author">
+          <a rel="author" th:href={el(AUTHOR_LINK)} th:text="${author?.displayName}"></a>
+          <time
+            th:datetime="${post.spec.publishTime}"
+            th:text="|发布于 ${#dates.format(post.spec.publishTime, 'yyyy年MM月dd日')}|"
+            th:title="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd HH:mm')}"
+          ></time>
+        </div>
+      </div>
+      <ul class="joe_post_hero__meta" aria-label="文章信息">
+        <li>
+          <Icon name="views" />
+          <span th:text="|${post.stats.visit} 次阅读|"></span>
+        </li>
+        <li>
+          <Icon name="hourglass" />
+          <span data-joe-word-count="compact">阅读时长</span>
+        </li>
+        <li th:if={el(COMMENT_ENABLED)}>
+          <Icon name="comment" />
+          <span th:text="${post.stats.comment == 0 ? '暂无评论' : post.stats.comment + ' 条评论'}"></span>
+        </li>
+        <li class="joe_post_hero__share">
+          <button type="button" data-joe-share-link title="复制文章链接" aria-label="复制文章链接">
+            <Icon name="share" />
+          </button>
+        </li>
+      </ul>
+    </div>
   </div>
 </header>

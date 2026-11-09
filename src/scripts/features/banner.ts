@@ -80,8 +80,9 @@ export async function initBanner(): Promise<void> {
       : false,
     pagination: { el: ".swiper-pagination", clickable: true },
     navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
+      nextEl: el.querySelector<HTMLElement>(".swiper-button-next"),
+      prevEl: el.querySelector<HTMLElement>(".swiper-button-prev"),
+      addIcons: false,
     },
   });
   onCleanup(() => swiper.destroy(true, true));

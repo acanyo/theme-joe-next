@@ -7,11 +7,16 @@
   background: var(--bg-page);
 
   .swiper {
+    position: relative;
     flex: 1;
     min-width: 0;
     height: 400px;
     border-radius: var(--radius-img);
     --swiper-theme-color: #fff;
+
+    &:not(.swiper-initialized) {
+      overflow: hidden;
+    }
 
     .swiper-slide {
       transform: translate3d(0, 0, 0);
@@ -110,8 +115,22 @@
 
     .swiper-button-next,
     .swiper-button-prev {
+      /* 按钮和图标由主题绘制，不依赖 Swiper 的异步样式或默认 SVG 尺寸。 */
+      position: absolute;
+      top: 50%;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 44px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      color: #fff;
       background: rgba(0, 0, 0, 0.1);
       border-radius: 2px;
+      transform: translateY(-50%);
       transition:
         background var(--dur-base) var(--ease-out),
         right var(--dur-base) var(--ease-out),
@@ -121,22 +140,26 @@
         background: rgba(0, 0, 0, 0.25);
       }
 
-      &::after {
+      .joe-font {
         font-size: 20px;
+        pointer-events: none;
       }
     }
 
     .swiper-button-next {
       opacity: 0;
       right: -15px;
+      left: auto;
     }
 
     .swiper-button-prev {
       opacity: 0;
       left: -15px;
+      right: auto;
     }
 
-    &:hover {
+    &:hover,
+    &:focus-within {
       .swiper-button-next {
         opacity: 1;
         right: 10px;
@@ -146,6 +169,14 @@
         opacity: 1;
         left: 10px;
       }
+
+      .swiper-button-disabled {
+        opacity: 0.35;
+      }
+    }
+
+    .swiper-button-lock {
+      display: none;
     }
   }
 }

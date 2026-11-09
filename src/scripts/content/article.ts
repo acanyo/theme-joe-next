@@ -145,7 +145,7 @@ export function initWordCount(): void {
   const { words, minutes } = readingStats(clone.textContent ?? "");
   const label = `${words.toLocaleString("zh-CN")} 字 · 约 ${minutes} 分钟`;
   targets.forEach((target) => {
-    target.textContent = label;
+    target.textContent = target.dataset.joeWordCount === "compact" ? `约 ${minutes} 分钟读完` : label;
     target.setAttribute("title", `${words} 字，预计阅读 ${minutes} 分钟`);
   });
 }

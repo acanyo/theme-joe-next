@@ -11,6 +11,9 @@ export default defineConfig({
   build: {
     assets: "assets",
     format: "file",
+    // 首屏样式随 HTML 输出，避免 CSS 请求失败或升级后的旧资源缓存让整页失去样式。
+    // Swiper、PhotoSwipe 等 ?url 按需样式仍单独加载。
+    inlineStylesheets: "always",
   },
   outDir: "./templates",
   // modulePreload 在 thymeleafTags 之后：入口脚本已移到 </body> 前

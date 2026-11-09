@@ -67,6 +67,9 @@ export const ICONS = {
   copy: "lucide:copy",
   download: "lucide:download",
   send: "lucide:send",
+  weather: "lucide:cloud-sun",
+  location: "lucide:map-pin",
+  mood: "lucide:smile",
   // 页面与侧栏
   hot: "lucide:flame",
   category: "lucide:layout-grid",

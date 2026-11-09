@@ -1,7 +1,7 @@
 /**
  * 首屏资源体积预算：pnpm build:templates 之后运行（pnpm qa:size）。
  *
- * 首屏 = 每个页面模板直接引用的 CSS / JS（按需加载的 chunk 不计），按 gzip 后大小计算；
+ * 首屏 = 每个页面模板内联及直接引用的 CSS / JS（按需加载的 chunk 不计），按 gzip 后大小计算；
  * 主题包 = dist/ 下 pnpm build 生成的 zip（存在时检查）。超出预算时以非零状态退出，CI 中用于防止体积回退。
  */
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
@@ -29,6 +29,14 @@ export function firstScreenAssets(html: string): { css: string[]; js: string[] }
   };
 }
 
+/** 内联样式随 HTML 传输，和样式文件一起计入首屏预算。 */
+export function inlineCssSize(html: string): number {
+  const css = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)]
+    .map((match) => match[1])
+    .join("\n");
+  return css ? gzipSync(css).length : 0;
+}
+
 /** JS 入口静态 import 的 chunk 也在首屏加载 */
 function withStaticImports(entry: string, seen = new Set<string>()): Set<string> {
   if (seen.has(entry)) return seen;
@@ -44,10 +52,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   let failed = false;
   const rows: string[] = [];
   for (const name of readdirSync(TEMPLATES).filter((f) => f.endsWith(".html"))) {
-    const { css, js } = firstScreenAssets(readFileSync(join(TEMPLATES, name), "utf8"));
+    const html = readFileSync(join(TEMPLATES, name), "utf8");
+    const { css, js } = firstScreenAssets(html);
     const jsAll = new Set<string>();
     js.forEach((e) => withStaticImports(e, jsAll));
-    const cssSize = css.reduce((s, f) => s + gz(join(ASSETS, f)), 0);
+    const cssSize = css.reduce((s, f) => s + gz(join(ASSETS, f)), inlineCssSize(html));
     const jsSize = [...jsAll].reduce((s, f) => s + gz(join(ASSETS, f)), 0);
     const over = kb(cssSize) > BUDGET.css || kb(jsSize) > BUDGET.js;
     failed ||= over;

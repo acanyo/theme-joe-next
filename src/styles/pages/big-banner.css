@@ -11,7 +11,7 @@
   flex-direction: column;
   overflow: hidden;
   transition: height 1.6s var(--ease-out);
-  /* 大图在上，下面垫一层主题色渐变：图片（尤其是外链随机图）到达前不会是一大块空白 */
+  /* 主题色渐变作为媒体加载占位；视频模式不设置图片变量，避免额外下载背景图。 */
   background-color: color-mix(in srgb, var(--theme) 55%, #1e293b);
   background-image:
     var(--joe-big-banner-image, none),

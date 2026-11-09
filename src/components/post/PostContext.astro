@@ -1,0 +1,37 @@
+---
+/** 文章扩展信息：作者填写的天气、位置与心情；经典标题和沉浸头图共用。 */
+import "../../styles/content/post-context.css";
+
+interface Props {
+  variant?: "classic" | "hero";
+}
+
+const { variant = "classic" } = Astro.props;
+const fields = [
+  { key: "location", variable: "postLocation", label: "写于" },
+  { key: "weather", variable: "postWeather", label: "天气" },
+  { key: "mood", variable: "postMood", label: "心情" },
+] as const;
+const values = fields.map(({ key, variable }) =>
+  `${variable} = \${#strings.trim(#annotations.getOrDefault(post, '${key}', ''))}`,
+).join(", ");
+const visible = fields.map(({ variable }) => `not #strings.isEmpty(${variable})`).join(" or ");
+---
+
+<th-block th:with={values}>
+  <p
+    class:list={["joe_post_context", variant === "hero" && "joe_post_context--hero"]}
+    th:if={`\${${visible}}`}
+    aria-label="写作记录"
+  >
+    {fields.map(({ variable, label }, index) => (
+      <span class="joe_post_context__clause" th:if={`\${not #strings.isEmpty(${variable})}`}>
+        {index > 0 && (
+          <span th:if={`\${${fields.slice(0, index).map(({ variable: previous }) => `not #strings.isEmpty(${previous})`).join(" or ")}}`}>，</span>
+        )}
+        <span>{label}</span><span th:text={`\${${variable}}`}></span>
+      </span>
+    ))}
+    <span>。</span>
+  </p>
+</th-block>

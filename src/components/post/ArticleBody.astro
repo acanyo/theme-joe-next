@@ -7,6 +7,7 @@ import { COMMENT_ENABLED, el } from "../../config/expressions";
 import { DEFAULT_READING_WIDTH, PAGE_TITLE_VISIBLE, PAGE_META_VISIBLE, pageReadingWidth } from "../../config/content-options";
 import PostSeries from "./PostSeries.astro";
 import PostAds from "./PostAds.astro";
+import PostContext from "./PostContext.astro";
 import Icon from "../common/Icon.astro";
 
 interface Props {
@@ -108,6 +109,7 @@ const ARTICLE_CLASS = [
         th:text={`\${#dates.format(${s}.status.lastModifyTime, 'MM/dd')}`}
       ></time>
     </div>
+    {isPost && <PostContext />}
     </th-block>
 
     <!-- 过期提醒（设置 post.outdated_notice）：文章超过设定天数未更新时，正文上方一行浅色提示；

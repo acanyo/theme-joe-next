@@ -1,6 +1,7 @@
 ---
 /** 首页轮播。数据来源：指定文章、热门文章、自定义项（设置 carousel.banner_data_group） */
 import BannerSlide from "./BannerSlide.astro";
+import Icon from "../common/Icon.astro";
 import { coverOf } from "../../config/expressions";
 
 const RANDOM_COVER = (key: string) =>
@@ -66,12 +67,16 @@ const HOT_QUERY =
         type="button"
         class="swiper-button-next"
         aria-label="下一张"
-      ></button>
+      >
+        <Icon name="chevron-right" />
+      </button>
       <button
         type="button"
         class="swiper-button-prev"
         aria-label="上一张"
-      ></button>
+      >
+        <Icon name="chevron-left" />
+      </button>
     </th-block>
   </div>
 </div>

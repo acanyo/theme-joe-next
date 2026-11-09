@@ -8,9 +8,10 @@
   },
   "scripts": {
     "dev": "nodemon --config nodemon.json --exec 'astro build'",
-    "build": "astro build && theme-package",
+    "build": "astro build && pnpm build:ui && theme-package",
+    "build:ui": "pnpm --dir ui-plugin build",
     "build:templates": "astro build",
-    "check": "astro check",
+    "check": "astro check && pnpm --dir ui-plugin check",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "settings:defaults": "node --experimental-strip-types scripts/settings-defaults.ts",
     "format": "prettier --write .",

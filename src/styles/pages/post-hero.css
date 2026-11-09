@@ -1,136 +1,208 @@
-/*
- * 文章页「沉浸头图」（components/post/PostHero.astro）。
- * 背景：有封面时用封面模糊放大并压暗；没有封面时用主题色渐变。
- * 正文卡片通过负外边距向上叠在头图下沿；面包屑在沉浸模式下隐藏（信息已在头图中）。
- */
+/* Joe Next 的文章封面：左侧叙述，底部信息横栏与正文卡片衔接。 */
 .joe_post_hero {
   --hero-fg: #fff;
   position: relative;
+  display: flex;
+  align-items: flex-end;
   isolation: isolate;
   overflow: hidden;
-  margin-top: -72px; /* 延伸到阅读条导航下方，导航压在头图上 */
-  padding: 128px 0 108px;
+  min-height: clamp(500px, 65svh, 760px);
+  margin-top: -72px;
+  padding: 160px 0 88px;
   color: var(--hero-fg);
   background:
-    radial-gradient(120% 140% at 15% 0%, color-mix(in srgb, var(--theme) 85%, #fff) 0%, transparent 55%),
-    linear-gradient(135deg, color-mix(in srgb, var(--theme) 92%, #000) 0%, color-mix(in srgb, var(--theme) 70%, #000) 100%);
+    radial-gradient(100% 140% at 100% 0%, color-mix(in srgb, var(--theme) 28%, #273638) 0%, transparent 65%),
+    linear-gradient(120deg, #172024, #253337);
 
-  /* 底部渐隐到页面底色，与叠上来的正文卡片自然衔接 */
-  &::after {
-    content: "";
-    position: absolute;
-    inset: auto 0 0;
-    height: 120px;
-    z-index: -1;
-    background: linear-gradient(to bottom, transparent, var(--bg-page));
-    opacity: 0.35;
+  &.is-plain {
+    min-height: 440px;
   }
 }
 
 .joe_post_hero__bg {
   position: absolute;
-  inset: -40px;
-  z-index: -2;
+  inset: 0;
+  z-index: -1;
   background-position: center;
   background-size: cover;
-  filter: blur(28px) saturate(140%);
-  transform: scale(1.1);
 
-  /* 压暗，保证白色标题的对比度 */
   &::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgb(0 0 0 / 35%), rgb(0 0 0 / 55%));
+    background:
+      linear-gradient(90deg, rgb(7 14 18 / 84%), rgb(7 14 18 / 42%) 58%, rgb(7 14 18 / 12%)),
+      linear-gradient(to bottom, rgb(7 14 18 / 12%) 35%, rgb(7 14 18 / 85%));
   }
 }
 
 .joe_post_hero__inner {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  text-align: center;
+  align-items: stretch;
+  gap: 36px;
+  max-width: var(--content-max-width, 1320px);
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.joe_post_hero__body {
+  width: min(76%, 820px);
+  min-width: 0;
 }
 
 .joe_post_hero__cats {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
+  gap: 8px 16px;
+  margin-bottom: 18px;
 
   .item {
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-size: 12.5px;
+    font-size: 12px;
     font-weight: 600;
-    color: var(--hero-fg);
-    background: rgb(255 255 255 / 16%);
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 22%);
-    backdrop-filter: blur(6px);
-    transition: background var(--dur-base) var(--ease-out);
+    letter-spacing: 0.08em;
+    color: rgb(255 255 255 / 75%);
+    text-underline-offset: 4px;
 
     &:hover {
-      background: rgb(255 255 255 / 26%);
+      color: #fff;
+      text-decoration: underline;
     }
   }
 }
 
 .joe_post_hero__title {
-  max-width: 880px;
   margin: 0;
-  font-size: clamp(26px, 2.2vw + 14px, 40px);
+  font-size: clamp(32px, 3vw + 8px, 52px);
   font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: 0.01em;
+  line-height: 1.35;
+  letter-spacing: 0.015em;
   text-wrap: balance;
-  word-break: break-word;
+  overflow-wrap: anywhere;
 
   &.txt-shadow {
     text-shadow: 0 2px 16px rgb(0 0 0 / 35%);
   }
 }
 
+.joe_post_hero__excerpt {
+  max-width: 660px;
+  margin: 18px 0 0;
+  color: rgb(255 255 255 / 72%);
+  font-size: 14px;
+  line-height: 1.9;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.joe_post_hero__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px 28px;
+  min-width: 0;
+  padding-top: 20px;
+  border-top: 1px solid rgb(255 255 255 / 18%);
+}
+
+.joe_post_hero__byline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+
+  img {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border: 2px solid rgb(255 255 255 / 30%);
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+.joe_post_hero__author {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+
+  a {
+    width: fit-content;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  time {
+    color: rgb(255 255 255 / 58%);
+    font-size: 11px;
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
 .joe_post_hero__meta {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  margin: 4px 0 0;
+  align-items: center;
+  gap: 12px 24px;
+  max-width: 100%;
+  margin: 0;
   padding: 0;
   list-style: none;
 
   li {
     display: flex;
     align-items: center;
-    gap: 6px;
-    height: 30px;
-    padding: 0 12px;
-    border-radius: 999px;
-    font-size: 13px;
-    color: rgb(255 255 255 / 92%);
-    background: rgb(0 0 0 / 18%);
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 14%);
+    gap: 7px;
+    max-width: 100%;
+    color: rgb(255 255 255 / 75%);
+    font-size: 12px;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+
+    .joe-font {
+      flex-shrink: 0;
+      font-size: 15px;
+      opacity: 0.7;
+    }
   }
 
-  .author {
-    padding-left: 4px;
+  .joe_post_hero__share button {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid rgb(255 255 255 / 25%);
+    border-radius: 11px;
+    color: #fff;
+    background: transparent;
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
 
-    img {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    a {
-      color: inherit;
-      font-weight: 600;
+    &:hover {
+      border-color: rgb(255 255 255 / 50%);
+      background: rgb(255 255 255 / 10%);
     }
   }
 }
 
-/* 沉浸模式：正文卡片叠在头图下沿；面包屑与原来的顶部间距不再需要 */
+.joe_post_hero :is(a, button):focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+/* 正文卡片轻叠在封面下沿，沿用主题已有的阅读层次。 */
 html:has(.joe_post_hero) {
   .joe_bread {
     display: none;
@@ -139,45 +211,74 @@ html:has(.joe_post_hero) {
   .page-post.joe_main_container {
     position: relative;
     z-index: 1;
-    margin-top: -64px;
+    margin-top: -32px;
   }
 }
 
 @media (max-width: 768px) {
   .joe_post_hero {
+    min-height: min(68svh, 680px);
     margin-top: -64px;
-    padding: 100px 0 84px;
+    padding: 132px 0 60px;
+
+    &.is-plain {
+      min-height: 400px;
+    }
   }
 
-  /* 窄屏不再隐藏阅读数和评论数：胶囊改成一行小字，用「·」隔开，五项都放得下 */
+  .joe_post_hero__inner {
+    gap: 28px;
+  }
+
+  .joe_post_hero__body {
+    width: 100%;
+  }
+
+  .joe_post_hero__title {
+    font-size: clamp(28px, 4vw + 10px, 38px);
+  }
+
+  .joe_post_hero__cats {
+    margin-bottom: 14px;
+  }
+
+  .joe_post_hero__excerpt {
+    margin-top: 14px;
+    font-size: 13px;
+    -webkit-line-clamp: 2;
+  }
+
+  .joe_post_hero__footer {
+    gap: 18px;
+    padding-top: 18px;
+  }
+
+  .joe_post_hero__byline {
+    flex-basis: 100%;
+  }
+
   .joe_post_hero__meta {
-    gap: 2px 0;
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
 
     li {
-      height: auto;
-      padding: 0;
-      font-size: 12.5px;
-      background: none;
-      box-shadow: none;
+      gap: 5px;
+      font-size: 11px;
 
-      & + li::before {
-        content: "·";
-        margin: 0 7px;
-        opacity: 0.7;
+      .joe-font {
+        font-size: 13px;
       }
     }
 
-    .author {
-      padding-left: 0;
-
-      img {
-        width: 18px;
-        height: 18px;
-      }
+    .joe_post_hero__share button {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
     }
   }
 
   html:has(.joe_post_hero) .page-post.joe_main_container {
-    margin-top: -48px;
+    margin-top: -20px;
   }
 }

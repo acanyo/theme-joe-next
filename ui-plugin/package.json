@@ -1,0 +1,23 @@
+{
+  "name": "joe-next-author-context",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "check": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@formkit/core": "2.1.2",
+    "@formkit/vue": "2.1.2",
+    "@halo-dev/components": "2.27.0",
+    "@halo-dev/ui-shared": "2.27.0",
+    "vue": "3.5.41"
+  },
+  "devDependencies": {
+    "@halo-dev/ui-plugin-bundler-kit": "2.27.0",
+    "@vitejs/plugin-vue": "6.0.10",
+    "@vueuse/core": "14.3.0",
+    "vite": "8.3.7",
+    "vue-tsc": "3.3.14"
+  }
+}
