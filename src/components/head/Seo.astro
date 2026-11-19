@@ -23,7 +23,7 @@ const { page } = Astro.props;
 const spec = page === "none" ? undefined : SEO_PAGES[page];
 
 /** 站内路径 → 绝对地址（已经是 http(s) 的保持不变） */
-const abs = (expr: string) => `(#strings.startsWith((${expr}), 'http') ? (${expr}) : #vars.siteUrl + (${expr}))`;
+const abs = (expr: string) => `(#strings.startsWith((${expr}), 'http') ? (${expr}) : siteUrl + (${expr}))`;
 const SITE_IMAGE = "theme.config.seo?.share_image ?: site.logo";
 const BLOGGER = "theme.config.blogger?.name ?: site.title";
 const BLOGGER_AVATAR = "theme.config.blogger?.avatar ?: site.logo";
@@ -41,29 +41,29 @@ const vars = spec
     ].join(", ")
   : "";
 /** 当前页的绝对地址：第 2 页起加 /page/n */
-const URL = `#vars.siteUrl + (seoPage > 1 ? (seoPath == '/' ? '' : seoPath) + '/page/' + seoPage : seoPath)`;
+const URL = `siteUrl + (seoPage > 1 ? (seoPath == '/' ? '' : seoPath) + '/page/' + seoPage : seoPath)`;
 const IMAGE = `#strings.isEmpty(seoImage) ? null : ${abs("seoImage")}`;
 
 // ---------- JSON-LD ----------
 /** 博主（Person），站点、文章的作者与发布者都指向它 */
-const PERSON = `{'@type': 'Person', '@id': #vars.siteUrl + '/#person', 'name': ${BLOGGER}, 'url': #vars.siteUrl + '/', 'image': #strings.isEmpty(${BLOGGER_AVATAR}) ? null : ${abs(BLOGGER_AVATAR)}, 'description': theme.config.blogger?.motto, 'sameAs': (theme.config.blogger?.social_links ?: {}).!['' + url].?[#this.startsWith('http')]}`;
-const WEBSITE = `{'@type': 'WebSite', '@id': #vars.siteUrl + '/#website', 'url': #vars.siteUrl + '/', 'name': site.title, 'description': site.seo?.description ?: site.subtitle, 'inLanguage': site.language ?: 'zh-CN', 'publisher': {'@id': #vars.siteUrl + '/#person'}}`;
+const PERSON = `{'@type': 'Person', '@id': siteUrl + '/#person', 'name': ${BLOGGER}, 'url': siteUrl + '/', 'image': #strings.isEmpty(${BLOGGER_AVATAR}) ? null : ${abs(BLOGGER_AVATAR)}, 'description': theme.config.blogger?.motto, 'sameAs': (theme.config.blogger?.social_links ?: {}).?[#strings.startsWith('' + url, 'http')].!['' + url]}`;
+const WEBSITE = `{'@type': 'WebSite', '@id': siteUrl + '/#website', 'url': siteUrl + '/', 'name': site.title, 'description': site.seo?.description ?: site.subtitle, 'inLanguage': site.language ?: 'zh-CN', 'publisher': {'@id': siteUrl + '/#person'}}`;
 /** 文章作者：文章自己的作者（Halo 用户），不是博主时也照实写 */
-const POST_AUTHOR = `{'@type': 'Person', 'name': post.owner?.displayName ?: ${BLOGGER}, 'url': #strings.isEmpty(post.owner?.permalink) ? #vars.siteUrl + '/' : ${abs("post.owner.permalink")}}`;
+const POST_AUTHOR = `{'@type': 'Person', 'name': post.owner?.displayName ?: ${BLOGGER}, 'url': #strings.isEmpty(post.owner?.permalink) ? siteUrl + '/' : ${abs("post.owner.permalink")}}`;
 const ISO = (expr: string) => `${expr} == null ? null : ${expr}.toString()`;
 
 const MAIN: Record<string, string> = {
   WebSite: "",
-  BlogPosting: `{'@type': 'BlogPosting', '@id': ${URL} + '#article', 'mainEntityOfPage': ${URL}, 'url': ${URL}, 'headline': post.spec.title, 'description': seoDesc, 'image': ${IMAGE}, 'datePublished': ${ISO("post.spec.publishTime")}, 'dateModified': ${ISO("post.status.lastModifyTime ?: post.spec.publishTime")}, 'author': ${POST_AUTHOR}, 'publisher': {'@id': #vars.siteUrl + '/#person'}, 'isPartOf': {'@id': #vars.siteUrl + '/#website'}, 'inLanguage': site.language ?: 'zh-CN', 'articleSection': #lists.isEmpty(post.categories) ? null : post.categories[0].spec.displayName, 'keywords': #lists.isEmpty(post.tags) ? null : #strings.listJoin(post.tags.![spec.displayName], ', '), 'commentCount': post.stats?.comment, 'interactionStatistic': {'@type': 'InteractionCounter', 'interactionType': 'https://schema.org/ReadAction', 'userInteractionCount': post.stats?.visit ?: 0}}`,
-  WebPage: `{'@type': 'WebPage', '@id': ${URL}, 'url': ${URL}, 'name': seoTitle, 'description': seoDesc, 'image': ${IMAGE}, 'datePublished': ${ISO("singlePage.spec.publishTime")}, 'dateModified': ${ISO("singlePage.status.lastModifyTime")}, 'isPartOf': {'@id': #vars.siteUrl + '/#website'}, 'inLanguage': site.language ?: 'zh-CN'}`,
-  CollectionPage: `{'@type': 'CollectionPage', '@id': ${URL}, 'url': ${URL}, 'name': seoTitle, 'description': seoDesc, 'isPartOf': {'@id': #vars.siteUrl + '/#website'}, 'inLanguage': site.language ?: 'zh-CN'}`,
-  ProfilePage: `{'@type': 'ProfilePage', '@id': ${URL}, 'url': ${URL}, 'name': seoTitle, 'isPartOf': {'@id': #vars.siteUrl + '/#website'}, 'mainEntity': {'@type': 'Person', 'name': author.spec.displayName, 'description': author.spec.bio, 'image': ${IMAGE}, 'url': ${URL}}}`,
-  SocialMediaPosting: `{'@type': 'SocialMediaPosting', '@id': ${URL}, 'url': ${URL}, 'headline': seoTitle, 'articleBody': seoDesc, 'image': ${IMAGE}, 'datePublished': ${ISO("moment.spec.releaseTime")}, 'author': {'@id': #vars.siteUrl + '/#person'}, 'isPartOf': {'@id': #vars.siteUrl + '/#website'}}`,
-  ImageGallery: `{'@type': 'ImageGallery', '@id': ${URL}, 'url': ${URL}, 'name': seoTitle, 'description': seoDesc, 'isPartOf': {'@id': #vars.siteUrl + '/#website'}}`,
+  BlogPosting: `{'@type': 'BlogPosting', '@id': ${URL} + '#article', 'mainEntityOfPage': ${URL}, 'url': ${URL}, 'headline': post.spec.title, 'description': seoDesc, 'image': ${IMAGE}, 'datePublished': ${ISO("post.spec.publishTime")}, 'dateModified': ${ISO("post.status.lastModifyTime ?: post.spec.publishTime")}, 'author': ${POST_AUTHOR}, 'publisher': {'@id': siteUrl + '/#person'}, 'isPartOf': {'@id': siteUrl + '/#website'}, 'inLanguage': site.language ?: 'zh-CN', 'articleSection': #lists.isEmpty(post.categories) ? null : post.categories[0].spec.displayName, 'keywords': #lists.isEmpty(post.tags) ? null : #strings.listJoin(post.tags.![spec.displayName], ', '), 'commentCount': post.stats?.comment, 'interactionStatistic': {'@type': 'InteractionCounter', 'interactionType': 'https://schema.org/ReadAction', 'userInteractionCount': post.stats?.visit ?: 0}}`,
+  WebPage: `{'@type': 'WebPage', '@id': ${URL}, 'url': ${URL}, 'name': seoTitle, 'description': seoDesc, 'image': ${IMAGE}, 'datePublished': ${ISO("singlePage.spec.publishTime")}, 'dateModified': ${ISO("singlePage.status.lastModifyTime")}, 'isPartOf': {'@id': siteUrl + '/#website'}, 'inLanguage': site.language ?: 'zh-CN'}`,
+  CollectionPage: `{'@type': 'CollectionPage', '@id': ${URL}, 'url': ${URL}, 'name': seoTitle, 'description': seoDesc, 'isPartOf': {'@id': siteUrl + '/#website'}, 'inLanguage': site.language ?: 'zh-CN'}`,
+  ProfilePage: `{'@type': 'ProfilePage', '@id': ${URL}, 'url': ${URL}, 'name': seoTitle, 'isPartOf': {'@id': siteUrl + '/#website'}, 'mainEntity': {'@type': 'Person', 'name': author.spec.displayName, 'description': author.spec.bio, 'image': ${IMAGE}, 'url': ${URL}}}`,
+  SocialMediaPosting: `{'@type': 'SocialMediaPosting', '@id': ${URL}, 'url': ${URL}, 'headline': seoTitle, 'articleBody': seoDesc, 'image': ${IMAGE}, 'datePublished': ${ISO("moment.spec.releaseTime")}, 'author': {'@id': siteUrl + '/#person'}, 'isPartOf': {'@id': siteUrl + '/#website'}}`,
+  ImageGallery: `{'@type': 'ImageGallery', '@id': ${URL}, 'url': ${URL}, 'name': seoTitle, 'description': seoDesc, 'isPartOf': {'@id': siteUrl + '/#website'}}`,
 };
 
 /** 文章面包屑：首页 › 第一个分类 › 文章（与页面上的面包屑一致） */
-const BREADCRUMB = `{'@type': 'BreadcrumbList', 'itemListElement': #lists.isEmpty(post.categories) ? {{'@type': 'ListItem', 'position': 1, 'name': '首页', 'item': #vars.siteUrl + '/'}, {'@type': 'ListItem', 'position': 2, 'name': post.spec.title}} : {{'@type': 'ListItem', 'position': 1, 'name': '首页', 'item': #vars.siteUrl + '/'}, {'@type': 'ListItem', 'position': 2, 'name': post.categories[0].spec.displayName, 'item': ${abs("post.categories[0].status.permalink")}}, {'@type': 'ListItem', 'position': 3, 'name': post.spec.title}}}`;
+const BREADCRUMB = `{'@type': 'BreadcrumbList', 'itemListElement': #lists.isEmpty(post.categories) ? {{'@type': 'ListItem', 'position': 1, 'name': '首页', 'item': siteUrl + '/'}, {'@type': 'ListItem', 'position': 2, 'name': post.spec.title}} : {{'@type': 'ListItem', 'position': 1, 'name': '首页', 'item': siteUrl + '/'}, {'@type': 'ListItem', 'position': 2, 'name': post.categories[0].spec.displayName, 'item': ${abs("post.categories[0].status.permalink")}}, {'@type': 'ListItem', 'position': 3, 'name': post.spec.title}}}`;
 
 const graph = spec
   ? [WEBSITE, PERSON, MAIN[spec.schema], spec.schema === "BlogPosting" ? BREADCRUMB : ""].filter(Boolean).join(", ")
